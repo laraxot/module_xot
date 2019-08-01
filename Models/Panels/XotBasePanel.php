@@ -173,6 +173,9 @@ abstract class XotBasePanel{
 	public function applySearch($query,$q){
 		//$q=$request->input('q'); 
         $search_fields=$this->search(); //campi di ricerca
+        if(count($search_fields)==0){ //se non gli passo nulla, cerco in tutti i fillable
+        	$search_fields=with(new $this::$model)->getFillable();
+        }
         //$user = $user->newQuery();
   		if(strlen($q)>1 ){
   			/*         

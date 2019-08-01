@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 
 use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-class XotBaseController extends Controller{
+abstract class XotBaseController extends Controller{
 
 	use CrudTrait;
 	/*

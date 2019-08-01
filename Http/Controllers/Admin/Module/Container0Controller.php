@@ -8,11 +8,11 @@ use Illuminate\Routing\Controller;
 
 use Illuminate\Support\Str;
 
-use Modules\Xot\Http\Controllers\Admin\BaseContainerController; 
+use Modules\Xot\Http\Controllers\Admin\XotBaseContainerController; 
 
 //use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-class Container0Controller extends BaseContainerController{
+class Container0Controller extends XotBaseContainerController{
 	/*
 	public function getController(){
         $params = \Route::current()->parameters();
