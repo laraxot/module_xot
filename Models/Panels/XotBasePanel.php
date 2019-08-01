@@ -232,7 +232,26 @@ abstract class XotBasePanel{
 		    //$this->out=json_encode($res);
 		    $this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
 		    //$this->out=\Modules\Progressioni\Transformers\ProgressioniResource::collection($ris);
+		    return ;
 		}
+		if($format=='typeahead'){
+			$ris=$data->select('area_id as id','area_define_name as label')
+						->paginate(10);
+			$this->force_exit=1;
+			$model_class=$this::$model;
+			//ddd($model_class);//Modules\LU\Models\Area
+			$model_class_name=class_basename($model_class);
+			$module_ns=Str::before($model_class,'\\Models\\');
+			$transformers_coll=$module_ns.'\\Transformers\\'.$model_class_name.'Collection';
+			$transformers_res=$module_ns.'\\Transformers\\'.$model_class_name.'Resource';
+			//Typeahead 
+			//ddd($transformers_coll);
+			//$this->out=new $transformers_coll($ris);
+		    $this->out=$transformers_res::collection($ris);
+		    return ;	
+
+		}
+
 		return $data;
 	}
 

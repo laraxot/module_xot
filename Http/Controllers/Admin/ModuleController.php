@@ -42,11 +42,11 @@ class ModuleController extends Controller
             if(class_exists($controller)){
                 $this->controller=$controller;
             }else{
-                $controller='\Modules\Xot\Http\Controllers\Admin\XotBaseController';
+                $controller='\Modules\Xot\Http\Controllers\Admin\XotController';
                 $this->controller=$controller;
             }
         }catch(\Exception $e){
-            $controller='\Modules\Xot\Http\Controllers\Admin\XotBaseController';
+            $controller='\Modules\Xot\Http\Controllers\Admin\XotController';
             $this->controller=$controller;
         }
         /*
@@ -83,7 +83,6 @@ class ModuleController extends Controller
         }
         //ddd($controller);
         return app($controller)->$method($request,$this->container_last,$this->item_last);
-
-    }
+    }//end __call
 
 }
