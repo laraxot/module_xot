@@ -128,28 +128,20 @@ abstract class XotBasePanel{
 		 //return $query->where('user_id', $request->user()->id);
 	}
 
+	public function applyJoin($query){
+		$model=$query->getModel();
+		if(method_exists($model,'scopeWithPost')){
+			$query=$query->withPost('a');
+		}
+		return $query;
+	}
+
 	public function applyFilter($query,$filters){
 		$lang=\App::getLocale();
         $filters_fields=$this->filters();
-        //ddd($filters);
-        /*
-        array:1 [▼
-  			"year" => "2019"
-		]
-		*/
-		//ddd($filters_fields);
-		/*
-		array:1 [▼
-  			0 => {#973 ▼
-    		+"param_name": "year"
-    		+"field_name": "anno"
-  		}
-		]
-		*/
 		$filters_fields=collect($filters_fields)->filter(function($item) use($filters){
 			return in_array($item->param_name,array_keys($filters));
 		})
-		//->dd()
 		->all();
 
 
@@ -171,6 +163,7 @@ abstract class XotBasePanel{
 	}
 
 	public function applySearch($query,$q){
+		//ddd($joins = $query->getQuery()->joins);
 		//$q=$request->input('q'); 
         $search_fields=$this->search(); //campi di ricerca
         if(count($search_fields)==0){ //se non gli passo nulla, cerco in tutti i fillable
@@ -276,6 +269,9 @@ abstract class XotBasePanel{
 
 		$query=$query->with($this->with());
 		$query=$this->indexQuery($request,$query);
+
+		//$query=$query->withPost('a');
+		$query=$this->applyJoin($query);
 		$query=$this->applyFilter($query,$filters);   
 		$query=$this->applySearch($query,$q);
 		
