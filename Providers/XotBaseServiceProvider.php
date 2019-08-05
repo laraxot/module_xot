@@ -118,4 +118,56 @@ abstract class XotBaseServiceProvider extends ServiceProvider{
     {
         return [];
     }
+
+    public function loadEventsFrom($path){
+
+        $events=[];
+        if(!\File::isDirectory($path)){
+            \File::makeDirectory($path, 0777, true, true);
+        }
+        $events_file=$path.'/_events.json';
+        $force=1;
+        if(!\File::exists($events_file) || $force){
+            foreach (\glob($path.'/*.php') as $filename) {
+                $info=pathinfo($filename); 
+
+                //$tmp->namespace='\\'.$vendor.'\\'.$pack.'\\Events\\'.$info['filename'];
+                $event_name=$info['filename'];
+                $str='Event';
+                if(ends_with($event_name,$str)){
+                    $listener_name=substr($event_name, 0,-strlen($str)).'Listener';
+
+                    $event      = $this->module_base_ns.'\\Events\\'.$event_name;
+                    $listener   = $this->module_base_ns.'\\Listeners\\'.$listener_name;
+                    $msg=[
+                        'event' => $event,
+                        'event_exists'=>class_exists($event),
+                        'listener' => $listener,
+                        'listener_exists' => class_exists($listener),
+
+                    ];
+                    if(class_exists($event) && class_exists($listener)){
+                        //\Event::listen($event, $listener);
+                        $tmp=new \StdClass();
+                        $tmp->event=$event;
+                        $tmp->listener=$listener;
+                        $events[]=$tmp;
+                    }
+                }
+            }
+            try{
+                \File::put($events_file,json_encode($events));
+            }catch(\Exception $e){
+                dd($e);
+            }
+
+        }else{
+            
+            $events=\File::get($events_file);
+            $events=json_decode($events);
+        }
+        foreach($events as $v){
+            \Event::listen($v->event, $v->listener);
+        }
+    }//end function
 }

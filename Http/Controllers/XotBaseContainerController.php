@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 
 use Modules\Extend\Services\StubService;
 
+use Illuminate\Support\Facades\Gate; //4 guestPolicy
+
 //use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
 abstract class XotBaseContainerController extends Controller{
@@ -52,41 +54,8 @@ abstract class XotBaseContainerController extends Controller{
         return 'init';
     }
 
-	public function __call_test($method, $args){
-        $params = \Route::current()->parameters();
-        $request=Request::capture();
-        $a=$this->init($params);
-        $controller = $this->controller;
-        $row=$this->last;
-        if(!is_object($row) && $row!=''){
-            $class=config('xra.model.'.$row);
-            $row=new $class;
-        }
-        //* -- da rimettere !
-        if(!\Auth::check() && is_object($row) && in_array($method,['update','create','edit','store']) ){
-            $method_name=$method.'SpecialCase';
-            if(method_exists($row, $method_name)){
-                return $row->$method_name();
-            }
-            ddd('non autorizzato ['.$method.']['.get_class($row).'][Not Logged]');
-            abort(403);
-        } 
-        if (\Auth::check() && is_object($row) && \Auth::user()->cannot($method, $row) && !in_array($method,['index','show']) ) {
-            ddd('non autorizzato ['.$method.']['.get_class($row).']');
-            abort(403);
-        }
-        //ddd(app($controller)->authorize('post'));
-        //ddd(get_class_methods(policy($row)));
-        //*/
-        //ddd($row);
-        return app($controller)->$method($request,$this->container_last,$this->item_last);
-
-    }
-
     public function __call($method, $args){
-        //ddd($method);//indexEdit
         $params = \Route::current()->parameters();
-        
         $request=Request::capture();
         $a=$this->init($params);
         $controller = $this->controller;
@@ -96,6 +65,7 @@ abstract class XotBaseContainerController extends Controller{
             $row=collect($params)->take(-2)->first();
         }
         */
+       // ddd($this->authorize($method,$row));
         if(!is_object($row) && $row!=''){
             $class=config('xra.model.'.$row);
             if($class==''){
@@ -112,17 +82,13 @@ abstract class XotBaseContainerController extends Controller{
             $policy=StubService::getByModel($row,'policy',$create = true); 
             //ddd(get_class($policy));
         }
-        /*
-        if (!\Auth::check() || \Auth::user()->cannot('indexEdit', $row)) {
-            //ddd('non autorizzato ['.$method.'][Not Logged]');  
-            $routename = \Route::current()->getName();
-            ddd($routename);
-            $route_next=str_replace('.index_edit','.index',$routename);
-            return redirect()->route($route_next,$params);
+        if(\Auth::check()){
+            $authorized=\Auth::user()->can($method, $row); 
+        }else{
+            $authorized=Gate::allows($method, $row);
+            //$authorized=\Auth::guest()->can($method, $row); 
         }
-        */
-        //*
-        if(!\Auth::check() && !in_array($method,['index','show']) ){
+        if(!$authorized){
             $method_name=$method.'SpecialCase';
             if(method_exists($panel, $method_name)){
                 return $panel->$method_name();
@@ -130,25 +96,17 @@ abstract class XotBaseContainerController extends Controller{
             $msg=[
                 'err_msg'=>'Not Authorized',
                 'row'=>get_class($row),
-                'user'=>'Not Logged',
+                'method'=>$method,
+                'logged'=>\Auth::check(),
                 'panel'=>get_class($panel),
+                'policy'=>get_class($policy),
                 'special_case'=>$method_name,
-                'special_case_exists'=>'NO',
+                //'special_case_exists'=>'NO',
                 'tips'=>'modify policy or create special case',
             ];
-            //ddd('non autorizzato ['.$method.']['.get_class($row).'][Not Logged] method not exist ['.get_class($panel).']['.$method_name.']');
             ddd($msg);
-            abort(403);
+            abort(403);    
         }
-        if (\Auth::check() && is_object($row) && \Auth::user()->cannot($method, $row) ){
-            ddd('non autorizzato ['.$method.']['.get_class($row).'][Logged]');
-            abort(403);
-        }
-        //*/
-        
-
-        //ddd($method);//indexEdit
-        //ddd($controller);
         return app($controller)->$method($request,$this->container_last,$this->item_last);        
     }
 
