@@ -12,6 +12,8 @@ Declaration of Modules\Blog\Models\Policies\EventPolicy::index(Modules\LU\Models
 trait XotBasePolicyTrait {
     use HandlesAuthorization;
 
+    
+
     public function before($user, $ability){
         if (is_object($user->perm) && $user->perm->perm_type >= 5) {  //superadmin
             return true;
@@ -19,16 +21,16 @@ trait XotBasePolicyTrait {
     }
 
    
-    public function index(User $user, Post $post){
+    public function index(?User $user, $post){
         return true;
     }
 
 
-    public function create(User $user){
+    public function create(User $user,$post){
         return true;
     }
 
-    public function edit(User $user,Post $post){
+    public function edit(User $user, $post){
 
         if($post->created_by==null){
             $post->created_by=$post->post->created_by;
@@ -46,7 +48,7 @@ trait XotBasePolicyTrait {
         return false;
     }
     
-    public function update(User $user,Post $post){
+    public function update(User $user, $post){
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -54,7 +56,7 @@ trait XotBasePolicyTrait {
         return false;
     }
 
-    public function store(User $user,Post $post){
+    public function store(User $user,$post){
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -62,33 +64,33 @@ trait XotBasePolicyTrait {
         return false;
     }
 
-    public function show(User $user,Post $post){
+    public function show(User $user, $post){
         return true; // perche' false ?? dovrei mettere lo status pubblicato
     }
 
-    public function indexAttach(User $user,Post $post){
+    public function indexAttach(User $user, $post){
         return true;
     }
 
     
-    public function indexEdit(User $user,Post $post){
+    public function indexEdit(User $user, $post){
         return true;
     }
 
 
-    public function updateTranslate(User $user,Post $post){
+    public function updateTranslate(User $user, $post){
         return false; //update-translate di @can()
     }
 
-    public function destroy(User $user,Post $post){
+    public function destroy(User $user, $post){
         return true;
     }
 
-    public function detach(User $user,Post $post){
+    public function detach(User $user, $post){
         return true;
     }
 
-    public function clone(User $user,Post $post){
+    public function clone(User $user, $post){
         return true;
     }
 
