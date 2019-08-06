@@ -34,7 +34,8 @@ class XotServiceProvider extends XotBaseServiceProvider{
     		$tmp=tenantConfig($v);
     		//ddd($tmp);
     	}
-        DB::purge('mysql');
+        //DB::purge('mysql');//Call to a member function prepare() on null
+        DB::purge('liveuser_general');
         DB::reconnect();
     }//end mergeConfigs
     
