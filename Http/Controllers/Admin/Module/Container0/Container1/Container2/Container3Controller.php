@@ -1,0 +1,15 @@
+<?php
+
+namespace Modules\Xot\Http\Controllers\Admin\Module\Container0\Container1\Container2;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Controller;
+
+use Illuminate\Support\Str;
+
+//use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
+use Modules\Xot\Http\Controllers\Admin\XotBaseContainerController; 
+
+class Container3Controller extends XotBaseContainerController{
+}
