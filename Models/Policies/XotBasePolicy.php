@@ -30,7 +30,7 @@ abstract class XotBasePolicy {
     }
 
     public function edit(User $user, $post){
-
+        /*
         if($post->created_by==null){
             $post->created_by=$post->post->created_by;
             $post->save();
@@ -40,6 +40,7 @@ abstract class XotBasePolicy {
             $post->updated_by=$post->post->updated_by;
             $post->save();
         }
+        */
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
