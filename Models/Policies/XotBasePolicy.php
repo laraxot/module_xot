@@ -11,17 +11,18 @@ use Modules\Xot\Traits\XotBasePolicyTrait;
 abstract class XotBasePolicy {
     use HandlesAuthorization;
 
-    
-
     public function before($user, $ability){
         if (is_object($user->perm) && $user->perm->perm_type >= 5) {  //superadmin
             return true;
         }
     }
 
-   
     public function index(?User $user, $post){
         return true;
+    }
+
+    public function show(?User $user, $post){
+        return true; 
     }
 
 
@@ -49,7 +50,8 @@ abstract class XotBasePolicy {
     }
     
     public function update(User $user, $post){
-        if ($post->created_by == $user->handle) {
+        
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
 
@@ -57,16 +59,14 @@ abstract class XotBasePolicy {
     }
 
     public function store(User $user,$post){
-        if ($post->created_by == $user->handle) {
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
 
         return false;
     }
 
-    public function show(?User $user, $post){
-        return true; // perche' false ?? dovrei mettere lo status pubblicato
-    }
+    
 
     public function indexAttach(User $user, $post){
         return true;
@@ -83,11 +83,19 @@ abstract class XotBasePolicy {
     }
 
     public function destroy(User $user, $post){
-        return true;
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
     }
 
     public function detach(User $user, $post){
-        return true;
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
     }
 
     public function clone(User $user, $post){
