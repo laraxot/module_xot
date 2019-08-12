@@ -54,8 +54,54 @@ abstract class XotBaseContainerController extends Controller{
         return 'init';
     }
 
+
     public function __call($method, $args){
         $params = \Route::current()->parameters();
+        list($containers,$items)=params2ContainerItem($params);
+        $request=Request::capture();
+        $a=$this->init($params);
+        $controller = $this->controller;
+        $last_container=last($containers);
+        $class=config('xra.model.'.$last_container);
+        try{ $row=new $class;
+        }catch(\Exception $e){ ddd('['.$row.']['.$class.'] not exists on config/xra.php'); }
+        $panel=StubService::getByModel($row,'panel',$create = true); 
+        $policy=StubService::getByModel($row,'policy',$create = true);
+        if(\Auth::check()){
+            $authorized=\Auth::user()->can($method, $row); 
+        }else{
+            $authorized=Gate::allows($method, $row);
+        }
+        if(!$authorized){
+            $method_name=$method.'SpecialCase';
+            if(method_exists($panel, $method_name)){
+                return $panel->$method_name();
+            }
+            $msg=[
+                'err_msg'=>'Not Authorized',
+                'row'=>get_class($row),
+                'method'=>$method,
+                'logged'=>\Auth::check(),
+                'panel'=>get_class($panel),
+                'policy'=>get_class($policy),
+                'special_case'=>$method_name,
+                //'special_case_exists'=>'NO',
+                'tips'=>'modify policy or create special case',
+            ];
+            ddd($msg);
+            abort(403);    
+        }
+        if($request->getMethod()!='GET'){
+            //ddd($panel->rules());
+            $request->validate($panel->rules(),$panel->rulesMessages());
+        }
+        return app($controller)->$method($request,$this->container_last,$this->item_last);        
+
+    }
+
+    public function __call_old($method, $args){
+        $params = \Route::current()->parameters();
+        list($containers,$items)=params2ContainerItem($params);
         $request=Request::capture();
         $a=$this->init($params);
         $controller = $this->controller;
@@ -66,7 +112,7 @@ abstract class XotBaseContainerController extends Controller{
         }
         */
        // ddd($this->authorize($method,$row));
-        if(!is_object($row) && $row!=''){
+        if(!is_object($row) && $row!='' && config('xra.model.'.$row)!=''){
             $class=config('xra.model.'.$row);
             if($class==''){
                 ddd('['.$row.'] not exists on config/xra.php');
@@ -78,14 +124,18 @@ abstract class XotBaseContainerController extends Controller{
             }
         } 
         if(is_object($row)){
-            $panel=StubService::getByModel($row,'panel',$create = true); 
-            $policy=StubService::getByModel($row,'policy',$create = true); 
-            //ddd(get_class($policy));
-        }
-        if(\Auth::check()){
-            $authorized=\Auth::user()->can($method, $row); 
+            $authorized_obj=$row; 
         }else{
-            $authorized=Gate::allows($method, $row);
+            $authorized_obj=last($containers);
+        }
+        ddd($authorized_obj);
+        //if(is_object($row)
+        $panel=StubService::getByModel($authorized_obj,'panel',$create = true); 
+        $policy=StubService::getByModel($authorized_obj,'policy',$create = true);
+        if(\Auth::check()){
+            $authorized=\Auth::user()->can($method, $authorized_obj); 
+        }else{
+            $authorized=Gate::allows($method, $authorized_obj);
             //$authorized=\Auth::guest()->can($method, $row); 
         }
         if(!$authorized){
@@ -95,7 +145,7 @@ abstract class XotBaseContainerController extends Controller{
             }
             $msg=[
                 'err_msg'=>'Not Authorized',
-                'row'=>get_class($row),
+                'authorized_obj'=>get_class($authorized_obj),
                 'method'=>$method,
                 'logged'=>\Auth::check(),
                 'panel'=>get_class($panel),
