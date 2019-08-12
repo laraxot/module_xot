@@ -12,6 +12,11 @@ abstract class XotBasePolicy {
     use HandlesAuthorization;
 
     public function before($user, $ability){
+        /*
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        */
         if (is_object($user->perm) && $user->perm->perm_type >= 5) {  //superadmin
             return true;
         }
@@ -41,7 +46,9 @@ abstract class XotBasePolicy {
             $post->updated_by=$post->post->updated_by;
             $post->save();
         }
+        return $user->isMine($post);
         */
+
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
