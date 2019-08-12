@@ -298,7 +298,9 @@ abstract class XotBasePanel{
 	public function indexFields(){
 		$fields=collect($this->fields())->filter(function($item){
 			if(!isset($item->except)) $item->except=[];
-			return ( !in_array($item->type,['Password']) && !in_array('index',$item->except) );
+			return ( 
+				!in_array($item->type,['Password']) && 
+				!in_array('index',$item->except) );
 		})->all();
 		return $fields;
 	}
@@ -314,6 +316,23 @@ abstract class XotBasePanel{
 			return ( 
 				//!in_array($item->type,['Password']) && 
 				!in_array('create',$item->except) &&
+				!in_array($item->name,$excepts)
+				);
+		})->all();
+		return $fields;
+	}
+
+	public function editFields(){
+		$excepts=[];
+		if(is_object($this->rows)){
+			$excepts[]=$this->rows->getForeignKeyName();
+		}
+		//ddd($excepts);
+		$fields=collect($this->fields())->filter(function($item) use ($excepts){
+			if(!isset($item->except)) $item->except=[];
+			return ( 
+				//!in_array($item->type,['Password']) && 
+				!in_array('edit',$item->except) &&
 				!in_array($item->name,$excepts)
 				);
 		})->all();
