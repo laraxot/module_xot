@@ -55,7 +55,7 @@ abstract class XotBaseContainerController extends Controller{
     }
 
 
-    public function __call($method, $args){
+    public function __call_test($method, $args){
         $params = \Route::current()->parameters();
         list($containers,$items)=params2ContainerItem($params);
         $request=Request::capture();
@@ -99,18 +99,13 @@ abstract class XotBaseContainerController extends Controller{
 
     }
 
-    public function __call_old($method, $args){
+    public function __call($method, $args){
         $params = \Route::current()->parameters();
         list($containers,$items)=params2ContainerItem($params);
         $request=Request::capture();
         $a=$this->init($params);
         $controller = $this->controller;
         $row=$this->last;
-        /*
-        if($row=='edit'){
-            $row=collect($params)->take(-2)->first();
-        }
-        */
        // ddd($this->authorize($method,$row));
         if(!is_object($row) && $row!='' && config('xra.model.'.$row)!=''){
             $class=config('xra.model.'.$row);
@@ -123,19 +118,12 @@ abstract class XotBaseContainerController extends Controller{
                 ddd('['.$row.']['.$class.'] not exists on config/xra.php');
             }
         } 
-        if(is_object($row)){
-            $authorized_obj=$row; 
-        }else{
-            $authorized_obj=last($containers);
-        }
-        ddd($authorized_obj);
-        //if(is_object($row)
-        $panel=StubService::getByModel($authorized_obj,'panel',$create = true); 
-        $policy=StubService::getByModel($authorized_obj,'policy',$create = true);
+        $panel=StubService::getByModel($row,'panel',$create = true); 
+        $policy=StubService::getByModel($row,'policy',$create = true);
         if(\Auth::check()){
-            $authorized=\Auth::user()->can($method, $authorized_obj); 
+            $authorized=\Auth::user()->can($method, $row); 
         }else{
-            $authorized=Gate::allows($method, $authorized_obj);
+            $authorized=Gate::allows($method, $row);
             //$authorized=\Auth::guest()->can($method, $row); 
         }
         if(!$authorized){
@@ -145,7 +133,7 @@ abstract class XotBaseContainerController extends Controller{
             }
             $msg=[
                 'err_msg'=>'Not Authorized',
-                'authorized_obj'=>get_class($authorized_obj),
+                'row'=>get_class($row),
                 'method'=>$method,
                 'logged'=>\Auth::check(),
                 'panel'=>get_class($panel),
