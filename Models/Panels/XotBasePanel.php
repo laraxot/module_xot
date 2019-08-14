@@ -110,6 +110,21 @@ abstract class XotBasePanel{
 	public function indexNav(){
 		return null;
 	}
+
+	public function containerActions(){
+		$actions=collect($this->actions())->filter(function($item){
+			return isset($item->onContainer) && $item->onContainer;
+		})->all();
+		return $actions;
+	}
+
+	public function itemActions(){
+		$actions=collect($this->actions())->filter(function($item){
+			return isset($item->onItem) && $item->onItem;
+		})->all();
+		return $actions;
+	}
+
 	/**
 	 * Build an "index" query for the given resource.
 	 *
@@ -264,13 +279,14 @@ abstract class XotBasePanel{
 
 	public function callAction($query,$act){
 		if($act==null) return $query;
-		$action=collect($this->actions())->firstWhere('name',$act);
+		$action=collect($this->actions())
+			->firstWhere('name',$act);
 		$action->setRows($query);
 		$this->out=$action->handle();
 		if($this->out!=null){ //se c'e' un risultato 
 			$this->force_exit=true;
 		}
-	} 
+	}//end callAction 
 
 	public function indexRows(Request $request,$query){
 		$data=$request->all();
@@ -294,6 +310,10 @@ abstract class XotBasePanel{
 		$formatted = $this->formaData($query, $out_format);
 		return $query;	
 	}
+
+
+
+
 
 	public function indexFields(){
 		$fields=collect($this->fields())->filter(function($item){
