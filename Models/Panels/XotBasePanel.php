@@ -328,7 +328,7 @@ abstract class XotBasePanel{
 	public function createFields(){
 		$excepts=[];
 		if(is_object($this->rows)){
-			$excepts[]=$this->rows->getForeignKeyName();
+			if(method_exists($this->rows, 'getForeignKeyName')) $excepts[]=$this->rows->getForeignKeyName();
 		}
 		//ddd($excepts);
 		$fields=collect($this->fields())->filter(function($item) use ($excepts){
