@@ -344,8 +344,14 @@ abstract class XotBasePanel{
 
 	public function editFields(){
 		$excepts=[];
+		$excepts[]='id'; //??
 		if(is_object($this->rows)){
-			$excepts[]=$this->rows->getForeignKeyName();
+			$getters=['getForeignKeyName','getMorphType','getForeignPivotKeyName','getRelatedPivotKeyName','getRelatedKeyName'];
+			foreach($getters as $k=>$v){
+				if(method_exists($this->rows, $v)){
+					$excepts[]=$this->rows->$v();
+				}
+			}
 		}
 		//ddd($excepts);
 		$fields=collect($this->fields())->filter(function($item) use ($excepts){
