@@ -242,7 +242,11 @@ abstract class XotBasePanel{
 
 
 
-	public function formaData($data, $format){
+	public function formatData($data, $params){
+		extract($params);
+		if(!isset($format)){
+			return $data;
+		}
 		if($format=='json'){ //potrei ficcare anche xls
 			//ddd($this->option_id());
 			//$res=$data->pluck('dest1','repar')->all();
@@ -251,13 +255,17 @@ abstract class XotBasePanel{
 			$ris=$data->paginate(20);
 			$this->force_exit=1;
 		    //$this->out=json_encode($res);
-		    $this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
+		    //$this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
+		    $this->out=$ris->toJson();
 		    //$this->out=\Modules\Progressioni\Transformers\ProgressioniResource::collection($ris);
 		    return ;
 		}
 		if($format=='typeahead'){
+			/*
 			$ris=$data->select('area_id as id','area_define_name as label')
 						->paginate(10);
+			*/
+			$ris=$data->paginate(20);
 			$this->force_exit=1;
 			$model_class=$this::$model;
 			//ddd($model_class);//Modules\LU\Models\Area
@@ -307,7 +315,7 @@ abstract class XotBasePanel{
 		
 		$this->callAction($query,$act);
 
-		$formatted = $this->formaData($query, $out_format);
+		$formatted = $this->formatData($query, $data);
 		return $query;	
 	}
 
