@@ -35,6 +35,7 @@ abstract class XotBaseContainerController extends Controller{
             };
         }
         $controller='\Modules\\'.$mod->name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        //ddd($controller);
         try{
             if(class_exists($controller)){
                 $this->controller=$controller;
@@ -77,7 +78,9 @@ abstract class XotBaseContainerController extends Controller{
         if(in_array($method,['update'])){
             $model=$this->item_last;
             $panel=StubService::getByModel($model,'panel',$create = true);
-            $request->validate($panel->rules(),$panel->rulesMessages());
+            if(is_object($panel)){
+                $request->validate($panel->rules(),$panel->rulesMessages());
+            }
         }
         //ddd($controller);
         return app($controller)->$method($request,$this->container_last,$this->item_last);
