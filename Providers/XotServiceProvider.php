@@ -22,7 +22,7 @@ class XotServiceProvider extends XotBaseServiceProvider{
         if(\Request::has('act') && \Request::input('act')=='migrate'){
             DB::purge();
         }
-        DB::purge();
+        //DB::purge(); //se lo lascio mi da' prepare on null 
         DB::reconnect();
     	/*
     	$auth=tenantConfig('auth');
