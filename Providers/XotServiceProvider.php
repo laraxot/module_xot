@@ -19,14 +19,11 @@ class XotServiceProvider extends XotBaseServiceProvider{
 
     public function bootCallback(){
     	$this->mergeConfigs();
-<<<<<<< HEAD
-=======
         if(\Request::has('act') && \Request::input('act')=='migrate'){
             DB::purge();
         }
         DB::purge();
         DB::reconnect();
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
     	/*
     	$auth=tenantConfig('auth');
     	$db=tenantConfig('database');
@@ -43,13 +40,8 @@ class XotServiceProvider extends XotBaseServiceProvider{
     		//ddd($tmp);
     	}
         //DB::purge('mysql');//Call to a member function prepare() on null
-<<<<<<< HEAD
-        DB::purge('liveuser_general');
-        DB::reconnect();
-=======
         //DB::purge('liveuser_general');
         //DB::reconnect();
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
     }//end mergeConfigs
     
 }//end class

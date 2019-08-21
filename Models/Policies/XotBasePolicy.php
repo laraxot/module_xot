@@ -10,9 +10,6 @@ use Modules\Xot\Traits\XotBasePolicyTrait;
 
 abstract class XotBasePolicy {
     use HandlesAuthorization;
-<<<<<<< HEAD
-    use XotBasePolicyTrait;
-=======
 
     public function before($user, $ability){
         /*
@@ -166,7 +163,6 @@ abstract class XotBasePolicy {
         //
     }
 
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 
 
 }

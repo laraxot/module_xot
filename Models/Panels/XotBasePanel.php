@@ -19,9 +19,6 @@ abstract class XotBasePanel{
 	public $out=null;
 	public $force_exit=false;
 	public $msg='msg from panel';
-<<<<<<< HEAD
-
-=======
 	public $row=null;
 	public $rows=null;
 
@@ -32,7 +29,6 @@ abstract class XotBasePanel{
 	public function setRows($rows){
 		$this->rows=$rows;
 	} 
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 
 	public function optionIdName(){
 		return 'id';
@@ -114,8 +110,6 @@ abstract class XotBasePanel{
 	public function indexNav(){
 		return null;
 	}
-<<<<<<< HEAD
-=======
 
 	public function containerActions(){
 		$actions=collect($this->actions())->filter(function($item){
@@ -131,7 +125,6 @@ abstract class XotBasePanel{
 		return $actions;
 	}
 
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 	/**
 	 * Build an "index" query for the given resource.
 	 *
@@ -180,15 +173,11 @@ abstract class XotBasePanel{
         	$filter_val=$filters[$v->param_name];
         	if($filter_val!=''){
         		if(!isset($v->op)) $v->op='=';
-<<<<<<< HEAD
-        		$query= $query->where($v->field_name,$v->op,$filter_val);
-=======
         		if(isset($v->where_method)){
         			$query= $query->{$v->where_method}($v->field_name,$filter_val);
         		}else{
         			$query= $query->where($v->field_name,$v->op,$filter_val);
         		}
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
         	}
         }
        
@@ -253,15 +242,11 @@ abstract class XotBasePanel{
 
 
 
-<<<<<<< HEAD
-	public function formaData($data, $format){
-=======
 	public function formatData($data, $params){
 		extract($params);
 		if(!isset($format)){
 			return $data;
 		}
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 		if($format=='json'){ //potrei ficcare anche xls
 			//ddd($this->option_id());
 			//$res=$data->pluck('dest1','repar')->all();
@@ -270,26 +255,17 @@ abstract class XotBasePanel{
 			$ris=$data->paginate(20);
 			$this->force_exit=1;
 		    //$this->out=json_encode($res);
-<<<<<<< HEAD
-		    $this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
-=======
 		    //$this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
 		    $this->out=$ris->toJson();
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 		    //$this->out=\Modules\Progressioni\Transformers\ProgressioniResource::collection($ris);
 		    return ;
 		}
 		if($format=='typeahead'){
-<<<<<<< HEAD
-			$ris=$data->select('area_id as id','area_define_name as label')
-						->paginate(10);
-=======
 			/*
 			$ris=$data->select('area_id as id','area_define_name as label')
 						->paginate(10);
 			*/
 			$ris=$data->paginate(20);
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 			$this->force_exit=1;
 			$model_class=$this::$model;
 			//ddd($model_class);//Modules\LU\Models\Area
@@ -311,22 +287,14 @@ abstract class XotBasePanel{
 
 	public function callAction($query,$act){
 		if($act==null) return $query;
-<<<<<<< HEAD
-		$action=collect($this->actions())->firstWhere('name',$act);
-=======
 		$action=collect($this->actions())
 			->firstWhere('name',$act);
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 		$action->setRows($query);
 		$this->out=$action->handle();
 		if($this->out!=null){ //se c'e' un risultato 
 			$this->force_exit=true;
 		}
-<<<<<<< HEAD
-	} 
-=======
 	}//end callAction 
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 
 	public function indexRows(Request $request,$query){
 		$data=$request->all();
@@ -347,16 +315,6 @@ abstract class XotBasePanel{
 		
 		$this->callAction($query,$act);
 
-<<<<<<< HEAD
-		$formatted = $this->formaData($query, $out_format);
-		return $query;	
-	}
-
-	public function indexFields(){
-		$fields=collect($this->fields())->filter(function($item){
-			if(!isset($item->except)) $item->except=[];
-			return ( !in_array($item->type,['Password']) && !in_array('index',$item->except) );
-=======
 		$formatted = $this->formatData($query, $data);
 		return $query;	
 	}
@@ -411,7 +369,6 @@ abstract class XotBasePanel{
 				!in_array('edit',$item->except) &&
 				!in_array($item->name,$excepts)
 				);
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 		})->all();
 		return $fields;
 	}
