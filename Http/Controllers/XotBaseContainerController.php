@@ -54,12 +54,64 @@ abstract class XotBaseContainerController extends Controller{
         return 'init';
     }
 
+<<<<<<< HEAD
     public function __call($method, $args){
         $params = \Route::current()->parameters();
+=======
+
+    public function __call_test($method, $args){
+        $params = \Route::current()->parameters();
+        list($containers,$items)=params2ContainerItem($params);
+        $request=Request::capture();
+        $a=$this->init($params);
+        $controller = $this->controller;
+        $last_container=last($containers);
+        $class=config('xra.model.'.$last_container);
+        try{ $row=new $class;
+        }catch(\Exception $e){ ddd('['.$row.']['.$class.'] not exists on config/xra.php'); }
+        $panel=StubService::getByModel($row,'panel',$create = true); 
+        $policy=StubService::getByModel($row,'policy',$create = true);
+        if(\Auth::check()){
+            $authorized=\Auth::user()->can($method, $row); 
+        }else{
+            $authorized=Gate::allows($method, $row);
+        }
+        if(!$authorized){
+            $method_name=$method.'SpecialCase';
+            if(method_exists($panel, $method_name)){
+                return $panel->$method_name();
+            }
+            $msg=[
+                'err_msg'=>'Not Authorized',
+                'row'=>get_class($row),
+                'method'=>$method,
+                'logged'=>\Auth::check(),
+                'panel'=>get_class($panel),
+                'policy'=>get_class($policy),
+                'special_case'=>$method_name,
+                //'special_case_exists'=>'NO',
+                'tips'=>'modify policy or create special case',
+            ];
+            ddd($msg);
+            abort(403);    
+        }
+        if($request->getMethod()!='GET'){
+            //ddd($panel->rules());
+            $request->validate($panel->rules(),$panel->rulesMessages());
+        }
+        return app($controller)->$method($request,$this->container_last,$this->item_last);        
+
+    }
+
+    public function __call($method, $args){
+        $params = \Route::current()->parameters();
+        list($containers,$items)=params2ContainerItem($params);
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
         $request=Request::capture();
         $a=$this->init($params);
         $controller = $this->controller;
         $row=$this->last;
+<<<<<<< HEAD
         /*
         if($row=='edit'){
             $row=collect($params)->take(-2)->first();
@@ -67,6 +119,10 @@ abstract class XotBaseContainerController extends Controller{
         */
        // ddd($this->authorize($method,$row));
         if(!is_object($row) && $row!=''){
+=======
+       // ddd($this->authorize($method,$row));
+        if(!is_object($row) && $row!='' && config('xra.model.'.$row)!=''){
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
             $class=config('xra.model.'.$row);
             if($class==''){
                 ddd('['.$row.'] not exists on config/xra.php');
@@ -77,11 +133,16 @@ abstract class XotBaseContainerController extends Controller{
                 ddd('['.$row.']['.$class.'] not exists on config/xra.php');
             }
         } 
+<<<<<<< HEAD
         if(is_object($row)){
             $panel=StubService::getByModel($row,'panel',$create = true); 
             $policy=StubService::getByModel($row,'policy',$create = true); 
             //ddd(get_class($policy));
         }
+=======
+        $panel=StubService::getByModel($row,'panel',$create = true); 
+        $policy=StubService::getByModel($row,'policy',$create = true);
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
         if(\Auth::check()){
             $authorized=\Auth::user()->can($method, $row); 
         }else{
@@ -107,6 +168,14 @@ abstract class XotBaseContainerController extends Controller{
             ddd($msg);
             abort(403);    
         }
+<<<<<<< HEAD
+=======
+        //if(in_array($method,['update','store'])){
+        if($request->getMethod()!='GET'){
+            //ddd($panel->rules());
+            $request->validate($panel->rules(),$panel->rulesMessages());
+        }
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
         return app($controller)->$method($request,$this->container_last,$this->item_last);        
     }
 

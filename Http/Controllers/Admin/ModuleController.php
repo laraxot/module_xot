@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
@@ -12,6 +15,7 @@ use Illuminate\Support\Str;
 
 use Modules\Extend\Services\ArtisanService;
 
+<<<<<<< HEAD
 class ModuleController extends Controller
 {
 
@@ -86,3 +90,11 @@ class ModuleController extends Controller
     }//end __call
 
 }
+=======
+use Modules\Xot\Http\Controllers\Admin\XotBaseContainerController;
+
+
+class ModuleController extends XotBaseContainerController{
+
+}
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd

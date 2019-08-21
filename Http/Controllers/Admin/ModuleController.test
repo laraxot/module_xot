@@ -5,14 +5,18 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
-use Illuminate\Support\Str;
-
-//---- services ---
-use Modules\Extend\Services\StubService;
-
 //use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller{
+use Illuminate\Support\Str;
+
+use Modules\Extend\Services\ArtisanService;
+
+use Modules\Xot\Http\Controllers\Admin\XotBaseContainerController;
+
+
+class ModuleController extends XotBaseContainerController{
+
+    //use CrudTrait;
 
     protected $controller;
     protected $row;
@@ -20,12 +24,12 @@ abstract class XotBaseContainerController extends Controller{
     protected $controller_exist;
 
     //public function __construct() { //o lo chiamavo "init".. etc etc
-    public function init($params) { //o lo chiamavo "init".. etc etc
+    public function init_old($params) { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
         list($containers,$items)=params2ContainerItem($params);
         $tmp=collect($containers)->map(function ($item){
-        	return Str::studly($item);
+            return Str::studly($item);
         })->implode('\\');
         if(!isset($params['module'])) return ;
         $mod=\Module::find($params['module']);
@@ -35,15 +39,11 @@ abstract class XotBaseContainerController extends Controller{
             };
         }
         $controller='\Modules\\'.$mod->name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
-<<<<<<< HEAD
-=======
-        //ddd($controller);
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
         try{
             if(class_exists($controller)){
                 $this->controller=$controller;
             }else{
-                $controller='\Modules\Xot\Http\Controllers\Admin\XotController'; 
+                $controller='\Modules\Xot\Http\Controllers\Admin\XotController';
                 $this->controller=$controller;
             }
         }catch(\Exception $e){
@@ -68,29 +68,22 @@ abstract class XotBaseContainerController extends Controller{
         $this->last=last($params);
     }
 
-	public function __call($method, $args){
+    public function __call_old($method, $args){
         $params = \Route::current()->parameters();
         $this->init($params);
         $controller = $this->controller;
         $row=$this->last;
-        if (is_object($row) && \Auth::user()->cannot($method, $row)) {
-            ddd('non autorizzato ['.$method.']['.get_class($row).']');
-            abort(403);
-        }
         $request=Request::capture();
-        if(in_array($method,['update'])){
-            $model=$this->item_last;
-            $panel=StubService::getByModel($model,'panel',$create = true);
-<<<<<<< HEAD
-            $request->validate($panel->rules(),$panel->rulesMessages());
-=======
-            if(is_object($panel)){
-                $request->validate($panel->rules(),$panel->rulesMessages());
-            }
->>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
+        if($method=='index'){
+            $out=ArtisanService::act($request->act);
+            if($out!='') return $out;
+        }
+        if (is_object($row) && \Auth::user()->cannot($method, $row)) {
+            ddd('non autorizzato');
+            abort(403);
         }
         //ddd($controller);
         return app($controller)->$method($request,$this->container_last,$this->item_last);
+    }//end __call
 
-    }
 }

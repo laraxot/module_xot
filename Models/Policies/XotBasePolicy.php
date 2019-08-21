@@ -10,7 +10,163 @@ use Modules\Xot\Traits\XotBasePolicyTrait;
 
 abstract class XotBasePolicy {
     use HandlesAuthorization;
+<<<<<<< HEAD
     use XotBasePolicyTrait;
+=======
+
+    public function before($user, $ability){
+        /*
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+        */
+        if (is_object($user->perm) && $user->perm->perm_type >= 5) {  //superadmin
+            return true;
+        }
+    }
+
+    public function index(?User $user, $post){
+        return true;
+    }
+
+    public function show(?User $user, $post){
+        return true; 
+    }
+
+
+    public function create(User $user,$post){
+        return true;
+    }
+
+    public function edit(User $user, $post){
+        //return true;
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public function update(User $user, $post){
+        
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function store(User $user,$post){
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    
+
+    public function indexAttach(User $user, $post){
+        return true;
+    }
+
+    
+    public function indexEdit(User $user, $post){
+        return true;
+    }
+
+
+    public function updateTranslate(User $user, $post){
+        return false; //update-translate di @can()
+    }
+
+    public function destroy(User $user, $post){
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Determine whether the user can delete the DocDummyModel.
+     *
+     * @param  \Modules\LU\Models\User  $user
+     * @param  \Modules\Blog\Models\Privacy  $dummyModel
+     * @return mixed
+     */
+    public function delete(User $user, Post $post)
+    {
+        if ($post->created_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine whether the user can restore the DocDummyModel.
+     *
+     * @param  \Modules\LU\Models\User  $user
+     * @param  \Modules\Blog\Models\Privacy  $dummyModel
+     * @return mixed
+     */
+    public function restore(User $user, Post $post)
+    {
+        if ($post->created_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the DocDummyModel.
+     *
+     * @param  \Modules\LU\Models\User  $user
+     * @param  \Modules\Blog\Models\Privacy  $dummyModel
+     * @return mixed
+     */
+    public function forceDelete(User $user, Post $post)
+    {
+        //
+    }
+
+    public function detach(User $user, $post){
+        if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function clone(User $user, $post){
+        return true;
+    }
+    /**
+     * Determine whether the user can view any DocDummyPluralModel.
+     *
+     * @param  \Modules\LU\Models\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can view the DocDummyModel.
+     *
+     * @param  \Modules\LU\Models\User  $user
+     * @param  \Modules\Blog\Models\Privacy  $dummyModel
+     * @return mixed
+     */
+    public function view(User $user, Post $post)
+    {
+        //
+    }
+
+>>>>>>> 5674012aa2b2ae988f0f1ef831085dfd4821b8cd
 
 
 }
