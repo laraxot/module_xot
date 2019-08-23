@@ -7,6 +7,8 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
+//use Modules\Extend\Traits\CrudContainerItemRepositoryTrait as CrudTrait;
+
 
 abstract class XotBaseController extends Controller{
 

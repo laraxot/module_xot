@@ -31,6 +31,11 @@ class XotServiceProvider extends XotBaseServiceProvider{
     	$map=config('xra.model');
     	Relation::morphMap($map);
     	//\DB::reconnect();
+        $this->commands([
+            \Modules\Xot\Console\CreateAllRepositoriesCommand::class,
+        ]);
+
+
     }//end bootCallback
 
     public function mergeConfigs(){
