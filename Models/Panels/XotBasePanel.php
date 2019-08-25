@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Collective\Html\FormFacade as Form;
 //----------  SERVICES --------------------------
 use Modules\Extend\Services\StubService;
 
@@ -461,6 +461,9 @@ abstract class XotBasePanel{
 		*/
 	}
 
-
+	//-- nella registrazione 1 tasto, nelle modifiche 3
+	public function btnSubmit(){
+		return Form::bsSubmit('save');
+	}
 
 }
