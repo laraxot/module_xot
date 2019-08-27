@@ -161,6 +161,7 @@ abstract class XotBasePanel{
 	}
 
 	public function applyFilter($query,$filters){
+		//https://github.com/spatie/laravel-query-builder
 		$lang=\App::getLocale();
         $filters_fields=$this->filters();
 		$filters_fields=collect($filters_fields)->filter(function($item) use($filters){
