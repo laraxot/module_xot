@@ -12,12 +12,7 @@ abstract class XotBasePolicy {
     use HandlesAuthorization;
 
     public function before($user, $ability){
-        /*
-        if ($user->isSuperAdmin()) {
-            return true;
-        }
-        */
-        if (is_object($user->perm) && $user->perm->perm_type >= 5) {  //superadmin
+        if (is_object($user) && $user->isSuperAdmin()) {
             return true;
         }
     }
