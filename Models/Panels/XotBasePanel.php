@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Collective\Html\FormFacade as Form;
+use Illuminate\Support\Facades\Validator;
 //----------  SERVICES --------------------------
 use Modules\Extend\Services\StubService;
 
@@ -164,6 +165,22 @@ abstract class XotBasePanel{
 		//https://github.com/spatie/laravel-query-builder
 		$lang=\App::getLocale();
         $filters_fields=$this->filters();
+
+        $filters_rules=collect($filters_fields)->filter(function($item){
+        	return isset($item->rules);
+        })->map(function($item){
+        	return [$item->param_name=>$item->rules];
+        })->collapse()
+        ->all();
+
+        $validator = Validator::make($filters, $filters_rules);
+        if ($validator->fails()) {
+        	\Session::flash('error', 'error');
+        	$id=$query->getModel()->getKeyName();
+        	return $query->whereNull($id); //restituisco query vuota
+        }
+
+
 		$filters_fields=collect($filters_fields)->filter(function($item) use($filters){
 			return in_array($item->param_name,array_keys($filters));
 		})
@@ -181,13 +198,7 @@ abstract class XotBasePanel{
         		}
         	}
         }
-       
-    	/*
-    	$year=$request->input('year');
-    	if(strlen($year)==4){
-    		$query=$query->where('anno',$year); //da generalizzare ..
-    	} 
-    	*/        
+    	 
 		return $query;
 	}
 
