@@ -1,14 +1,13 @@
 <?php
-
-
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSessionsTable extends Migration
-{
-    protected $table = 'sessions'; //name of pack +"_"+ name of table, but this is a standard table
+
+class CreateSessionsTable extends Migration{
+    public function getTable(){
+        return 'sessions';
+    }
 
     /**
      * Run the migrations.

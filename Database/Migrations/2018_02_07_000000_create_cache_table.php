@@ -1,15 +1,12 @@
 <?php
-
-
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCacheTable extends Migration
-{
-    protected $table = 'cache'; //name of pack +"_"+ name of table, but this is a standard table
-
+class CreateCacheTable extends Migration{
+    public function getTable(){
+        return 'cache';
+    }
     /**
      * Run the migrations.
      */

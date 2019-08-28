@@ -5,13 +5,6 @@ use Illuminate\Support\Facades\Schema;
 //----- models -----
 use Modules\Xot\Models\Image as MyModel;
 
-//--
-/* 2019_11_23_080004_
-https://phppot.com/php/php-star-rating-system-with-javascript/
-https://www.phpzag.com/star-rating-system-with-ajax-php-and-mysql/
-*/
-
-
 class CreateImageTable extends Migration{
 
     public function getTable(){
@@ -37,21 +30,6 @@ class CreateImageTable extends Migration{
         }
         //----- update -----
         Schema::table($this->getTable(), function (Blueprint $table) {
-            /*
-            if (!Schema::hasColumn($this->getTable(), 'post_id')) {
-                $table->morphs('post');
-            };
-            if (!Schema::hasColumn($this->getTable(), 'date_start')) {
-                $table->dateTime('date_start')->nullable();
-                $table->dateTime('date_end')->nullable();
-            };
-
-            if (!Schema::hasColumn($this->getTable(), 'created_by')) {
-                $table->string('created_by')->nullable();
-                $table->string('updated_by')->nullable();
-                $table->string('deleted_by')->nullable();
-            };
-            */
         });
     }
 
