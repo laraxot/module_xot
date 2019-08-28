@@ -15,8 +15,8 @@ class CreateCacheTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable($this->table)) {
-            Schema::create($this->table, function (Blueprint $table) {
+        if (!Schema::hasTable($this->getTable())) {
+            Schema::create($this->getTable(), function (Blueprint $table) {
                 $table->string('key', 64)->unique();
                 $table->text('value');
                 $table->integer('expiration');
@@ -29,6 +29,6 @@ class CreateCacheTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->table);
+        Schema::dropIfExists($this->getTable());
     }
 }

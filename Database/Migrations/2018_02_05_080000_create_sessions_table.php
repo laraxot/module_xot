@@ -15,8 +15,8 @@ class CreateSessionsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable($this->table)) {
-            Schema::create($this->table, function (Blueprint $table) {
+        if (!Schema::hasTable($this->getTable())) {
+            Schema::create($this->getTable(), function (Blueprint $table) {
                 $table->string('id', 191)->unique();
                 $table->unsignedInteger('user_id')->nullable();
                 $table->string('ip_address', 45)->nullable();
@@ -32,8 +32,8 @@ class CreateSessionsTable extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable($this->table)) {
-            Schema::dropIfExists($this->table);
+        if (Schema::hasTable($this->getTable())) {
+            Schema::dropIfExists($this->getTable());
         }
     }
 }
