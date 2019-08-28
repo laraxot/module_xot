@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 use Modules\Xot\Http\Controllers\XotBaseContainerController; 
 
-//use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
+//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
 class Container0Controller extends XotBaseContainerController{
 	

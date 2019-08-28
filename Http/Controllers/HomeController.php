@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 
 //---- services ---
 use Modules\Theme\Services\ThemeService;
-use Modules\Extend\Services\ArtisanService;
+use Modules\Xot\Services\ArtisanService;
 
 
 class HomeController extends Controller{

@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 //----------  SERVICES --------------------------
-use Modules\Extend\Services\StubService;
+use Modules\Xot\Services\StubService;
 
 //---- Traits ----
-//use Modules\Extend\Traits\Updater;
+//use Modules\Xot\Traits\Updater;
 
 abstract class XotBasePanelAction{
 

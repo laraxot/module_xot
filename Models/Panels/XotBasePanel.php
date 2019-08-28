@@ -10,10 +10,10 @@ use Illuminate\Http\Response;
 use Collective\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Validator;
 //----------  SERVICES --------------------------
-use Modules\Extend\Services\StubService;
+use Modules\Xot\Services\StubService;
 
 //---- Traits ----
-//use Modules\Extend\Traits\Updater;
+//use Modules\Xot\Traits\Updater;
 
 abstract class XotBasePanel{
 
@@ -95,7 +95,7 @@ abstract class XotBasePanel{
 		//ddd($trans_ns);//food::restaurant_owner__rules_messages
 		$rules_msg= trans($trans_ns);
 		if (!\is_array($rules_msg)) $rules_msg=[];
-		$rules_msg_generic = trans('extend::generic');
+		$rules_msg_generic = trans('theme::generic');
 		if (!\is_array($rules_msg_generic)) $rules_msg_generic=[];
 		$msg=[];
 		//$msg = \array_merge($msg,$rules_msg_generic); 

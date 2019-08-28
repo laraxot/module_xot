@@ -1,5 +1,5 @@
 <?php
-use Modules\Extend\Services\RouteService;
+use Modules\Xot\Services\RouteService;
 
 $namespace = '\Modules\Xot';//$this->getNamespace();
 $pack = class_basename($namespace);

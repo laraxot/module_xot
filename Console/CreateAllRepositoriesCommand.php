@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 //----------------------------------------------------
 use Illuminate\Support\Facades\Validator;
 
-use Modules\Extend\Services\StubService;
+use Modules\Xot\Services\StubService;
 
 /*
 -- CSV --

@@ -8,9 +8,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
 //---- services ---
-use Modules\Extend\Services\StubService;
+use Modules\Xot\Services\StubService;
 
-//use Modules\Extend\Traits\CrudContainerItemNoPostTrait as CrudTrait;
+//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
 abstract class XotBaseContainerController extends Controller{
 

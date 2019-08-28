@@ -3,7 +3,7 @@ namespace Modules\Xot\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 //use Modules\Food\Models\Profile;
-//use Modules\Extend\Traits\FormRequestTrait;
+//use Modules\Xot\Traits\FormRequestTrait;
 //--- Rules ---
 use Modules\Food\Rules\Slugify as SlugifyRule;
 

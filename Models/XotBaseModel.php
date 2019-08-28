@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
 //---- Traits ----
-use Modules\Extend\Traits\Updater;
+use Modules\Xot\Traits\Updater;
 
 abstract class XotBaseModel extends Model
 {
