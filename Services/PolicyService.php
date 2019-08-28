@@ -45,8 +45,6 @@ class PolicyService{
         $fillables=$model->getFillable();
         $fields=[];
         foreach($fillables as $input_name){
-        	//There is no column with name 'guid' on table 'blog_post_articles'.
-        	//Doctrine \ DBAL \ Schema \ SchemaException
         	try{
             	$input_type=$model->getConnection()->getDoctrineColumn($model->getTable(),$input_name)->getType();//->getName();
             }catch(\Exception $e){

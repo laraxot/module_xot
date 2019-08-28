@@ -11,6 +11,7 @@ use Collective\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Validator;
 //----------  SERVICES --------------------------
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\RouteService;
 
 //---- Traits ----
 //use Modules\Xot\Traits\Updater;
@@ -22,6 +23,11 @@ abstract class XotBasePanel{
 	public $msg='msg from panel';
 	public $row=null;
 	public $rows=null;
+
+
+	public function __construct($model = null){
+		$this->row=$model;
+	}
 
 	public function setRow($row){
 		$this->row=$row;
@@ -477,5 +483,30 @@ abstract class XotBasePanel{
 	public function btnSubmit(){
 		return Form::bsSubmit('save');
 	}
+
+
+
+	public function imageHtml($params){
+		/**
+		* mettere imageservice, o quello di spatie
+		*
+		**/
+		return $this->row->image_src;
+	}
+
+	public function microdataSchemaOrg(){
+		return '';
+	}
+
+	public function show_ldJson(){
+		return [];
+	}
+
+
+	public function url(){
+		return RouteService::urlModel(['model'=>$this->row,'act'=>'show']);
+	}
+
+
 
 }

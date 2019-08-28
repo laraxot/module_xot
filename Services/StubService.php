@@ -204,7 +204,6 @@ class StubService{
 			$fillables=collect($fillables)->except([
 				'created_at','updated_at','updated_by','created_by','deleted_at','deleted_by',
 				'deleted_ip','created_ip','updated_ip'])->all();
-			//errato..
 			$autoloader_reflector = new \ReflectionClass($model);
 			$class_filename = $autoloader_reflector->getFileName();
 			$fillables_str=chr(13).chr(10).'    protected $fillable=[\''.implode("','",$fillables)."'];".chr(13).chr(10);
@@ -212,16 +211,10 @@ class StubService{
 			$class_content_before=Str::before($class_content,'{');
 			$class_content_after=Str::after($class_content,'{');
 			$class_content_new=$class_content_before.'{'.$fillables_str.$class_content_after;
-			//ddd($class_content_new);
-			//ddd($fillables_str);
-			//ddd($class_filename);
-			//ddd('there are not fillable on ['.get_class($model).']');
 			File::put($class_filename,$class_content_new);
 		}
         $fields=[];
         foreach($fillables as $input_name){
-        	//There is no column with name 'guid' on table 'blog_post_articles'.
-        	//Doctrine \ DBAL \ Schema \ SchemaException
             $tmp=new \stdClass();
         	try{
             	$col=$model->getConnection()->getDoctrineColumn($model->getTable(),$input_name);//->getType();//->getName();

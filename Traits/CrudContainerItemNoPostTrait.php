@@ -49,6 +49,7 @@ trait CrudContainerItemNoPostTrait{
 		if($panel->force_exit){
 			return $panel->out;
 		}
+		$panel->setRow($row);
 		$rows=$rows->paginate(20);
 		return ThemeService::view()
 				->with('rows',$rows)
@@ -87,7 +88,7 @@ trait CrudContainerItemNoPostTrait{
 			$panel->setRows($rows);
         }
         $panel->setRow($item);
-		return ThemeService::view()
+		return ThemeService::view(['panel'=>$panel,'row'=>$item])
 				->with('row',$item)
 				->with('_panel',$panel)
 				;

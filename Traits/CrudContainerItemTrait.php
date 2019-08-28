@@ -1,7 +1,6 @@
 <?php
 namespace Modules\Xot\Traits;
 
-//use Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 //-------- services -----
@@ -12,38 +11,25 @@ use Modules\Blog\Models\PostRelated;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ScoutService;
 
-trait CrudContainerItemTrait
-{
+trait CrudContainerItemTrait {
     private $optionalParams = [];
-
-    /*
-    public function __construct(){
-        ddd('preso');
-    }
-    */
 
     public function getModel(){
         $namespace=get_class($this);
-        //$rc = new \ReflectionClass(\get_class($this));
-        //$namespace = $rc->getNamespaceName();
         $str = 'Http\\Controllers';
         $pos = \mb_strpos($namespace, $str);
         $namespace = \mb_substr($namespace, 0, $pos);
         $namespace .= 'Models\\';
-        //$class = class_basename(__CLASS__);
         $class = class_basename($this);
         $class = \str_replace('Controller', '', $class);
         $model = $namespace.$class;
-
         return new $model();
     }
 
-    public function getBindVar()
-    {
+    public function getBindVar() {
         $class = class_basename(__CLASS__);
         $class = \str_replace('Controller', '', $class);
         $class = \mb_strtolower($class);
-
         return $class;
     }
 
@@ -59,19 +45,8 @@ trait CrudContainerItemTrait
         if ($request->has('q') && ($request->ajax() || 1 == $request->ajax)) { //typeahead
             $start_time=microtime(true);
             $q = $request->input('q').'';
-            /*
-            $ris = $row->archive->filter(function ($item) use ($q) {
-                return false !== \mb_stristr($item->title, $q);
-            })->unique('title')->map(function ($item, $key) {
-                return ['title' => $item->title];
-            })->values();
-            */
             $rows=Post::ofSearch($q)->where('post_type',$row->post_type)->select('title')->distinct()->limit(10)->get();
             return $rows->toJson();
-            //return response($ris);
-            //$ris=[['title'=>'titolo'],['title'=>'co']];
-            $end_time=microtime(true);
-            //return response()->json($ris).'['.($end_time-$start_time).']';
         }
 
         if ('json' == $request->dataType /*&& $request->ajax() */) {

@@ -9,12 +9,51 @@ use Illuminate\Support\Facades\Storage;
 
 class PanelService{
 
+	private static $_instance = null;
+	private static $model;
+	private static $panel;
+
+
+
+	public static function getInstance(){
+		if (null === self::$_instance) {
+			self::$_instance = new self();
+		}
+		return self::$_instance;
+	}
+
+	public static function get($model){
+		return self::setModel($model)->panel();
+	}
+
+	public static function setModel($model){
+		self::$model=$model;
+		return self::getInstance();
+	}
+
+	public static function panel(){
+		$class_full=get_class(self::$model);
+		$class_name=class_basename(self::$model);
+		$class=Str::before($class_full,$class_name);
+		$panel_class=$class.'Panels\\'.$class_name.'Panel';
+		self::$panel=new $panel_class(self::$model);
+		return self::$panel;	
+	}
+
+	public function imageHtml($params){
+		return self::$model->image_src;
+	}
+
+	public function tabs(){
+		return self::panel()->tabs();
+	}
+
+
 	public static function getByModel($model){
 		$class_full=get_class($model);
 		$class_name=class_basename($model);
 		$class=Str::before($class_full,$class_name);
 		$panel=$class.'Panels\\'.$class_name.'Panel';
-		//ddd($panel);//  =  Modules\LU\Models\Panels\UserPanel
 		if(class_exists($panel)){
 			if(!method_exists($panel, 'tabs')){
 				self::updatePanel(['panel'=>$panel,'func'=>'tabs']);
@@ -23,8 +62,6 @@ class PanelService{
 			return new $panel;
 		}
 		self::createPanel($model);
-		//return new $panel;
-		//ddd('Panel is under creating , refresh page');
 		\Session::flash('status', 'panel created');
 		return redirect()->back();
 	}
@@ -45,8 +82,6 @@ class PanelService{
         $fillables=$model->getFillable();
         $fields=[];
         foreach($fillables as $input_name){
-        	//There is no column with name 'guid' on table 'blog_post_articles'.
-        	//Doctrine \ DBAL \ Schema \ SchemaException
         	try{
             	$input_type=$model->getConnection()->getDoctrineColumn($model->getTable(),$input_name)->getType();//->getName();
             }catch(\Exception $e){
