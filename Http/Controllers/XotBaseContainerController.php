@@ -131,13 +131,16 @@ abstract class XotBaseContainerController extends Controller{
             if(method_exists($panel, $method_name)){
                 return $panel->$method_name();
             }
+            $row_name=is_object($row)?get_class($row):$row;
+            $panel_name=is_object($panel)?get_class($panel):'---';
+            $policy_name=is_object($policy)?get_class($policy):'---';
             $msg=[
                 'err_msg'=>'Not Authorized',
-                'row'=>get_class($row),
+                'row'=>$row_name,
                 'method'=>$method,
                 'logged'=>\Auth::check(),
-                'panel'=>get_class($panel),
-                'policy'=>get_class($policy),
+                'panel'=>$panel_name,
+                'policy'=>$policy_name,
                 'special_case'=>$method_name,
                 //'special_case_exists'=>'NO',
                 'tips'=>'modify policy or create special case',

@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Xot\Providers;
 
 use Illuminate\Support\Facades\Route;
@@ -68,18 +67,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider{
             $router->bind($item_name, function ($value) use ($container_name,$lang,$i) {
                 $container_curr = request()->$container_name;
                 $types = camel_case(str_plural($container_curr));
-                //container e' il nome "singolare" della relazione, percio' il modello puo' essere diverso
-                /*
-                if($i>0){
-                    $item_prev = request()->{'item'.($i - 1)};
-                }else{
-                    $model=xotModel($container_curr); 
-                }
-                $pk=($model->getRouteKeyName());
-                $pk_full=$model->getTable().'.'.$pk;
-
-                if($pk=='guid') $pk_full='guid'; // pezza momentanea
-                */
+                
                 if ($i == 0) {
                     $model=xotModel($container_curr); 
                     if(method_exists($model, 'scopeWithPost')){
@@ -90,12 +78,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider{
                     $pk=($model->getRouteKeyName());
                     $pk_full=$model->getTable().'.'.$pk;                    
                     if($pk=='guid') $pk_full='guid'; // pezza momentanea
-
                     $rows=$rows->where([$pk_full=>$value]);
-                    //ddd($rows->toSql());
-                    //ddd($rows->toSql());
                     $row=$rows->first();                   
-                    //$row=$rows->find($value);
                 } else {
                     $item_prev = request()->{'item'.($i - 1)};
                     $types = camel_case(str_plural($container_curr));
