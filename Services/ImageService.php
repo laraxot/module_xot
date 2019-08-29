@@ -13,6 +13,14 @@ class ImageService
     private static $_instance = null;
     static $img=null,$width,$height,$src,$filename;
 
+    public static function getInstance($params=[]){
+        if (null === self::$_instance) {
+            self::$_instance = new self($params);
+        }
+
+        return self::$_instance;
+    }
+
 
     public function __construct($params=[]){
         $this->init($params);
@@ -24,9 +32,15 @@ class ImageService
             $func='set'.Str::studly($k);
             self::$func($v);
         }
+        //return self::getInstance(); 
     }
 
     public static function setImg($val){
+        if($val=='') $val=public_path('img/nophoto.jpg');
+        if(Str::startsWith($val,'//')){
+            $val='http:'.$val;
+        }
+
         self::$img = Image::make($val);
     }
 
@@ -46,6 +60,7 @@ class ImageService
     }
     
      public static function setSrc($val){
+        if($val=='') $val=public_path('img/nophoto.jpg');
         if(starts_with($val,url(''))){ //se e' una immagine locale
             $val=public_path(\substr($val,strlen(url(''))));
         }
@@ -54,13 +69,7 @@ class ImageService
     }
     //----------
 
-    public static function getInstance($params=[]){
-        if (null === self::$_instance) {
-            self::$_instance = new self($params);
-        }
-
-        return self::$_instance;
-    }
+    
 
     public static function toHtml()
     {

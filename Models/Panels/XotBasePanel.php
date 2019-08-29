@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 //----------  SERVICES --------------------------
 use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\RouteService;
+use Modules\Xot\Services\ImageService;
+use Intervention\Image\Facades\Image;
+
 
 //---- Traits ----
 //use Modules\Xot\Traits\Updater;
@@ -488,10 +491,15 @@ abstract class XotBasePanel{
 
 	public function imageHtml($params){
 		/**
-		* mettere imageservice, o quello di spatie
+		* mettere imageservice, o quello di spatie ?
 		*
 		**/
-		return $this->row->image_src;
+		$params['src']=$this->row->image_src;
+		$img=new ImageService($params);
+		$src=$img->fit()->save()->src();
+		
+
+		return '<img src="'.$src.'" >';
 	}
 
 	public function microdataSchemaOrg(){
