@@ -8,8 +8,7 @@ use Intervention\Image\Facades\Image;
 
 //---- services ----
 
-class ImageService
-{
+class ImageService{
     private static $_instance = null;
     static $img=null,$width,$height,$src,$filename;
 
@@ -63,6 +62,10 @@ class ImageService
         if($val=='') $val=public_path('img/nophoto.jpg');
         if(starts_with($val,url(''))){ //se e' una immagine locale
             $val=public_path(\substr($val,strlen(url(''))));
+        }
+        $str='/laravel-filemanager/';
+        if(starts_with($val,$str)){
+            $val=public_path(\substr($val,strlen($str)));
         }
         self::$src=$val;
         self::setImg($val);
