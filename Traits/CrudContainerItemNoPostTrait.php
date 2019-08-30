@@ -109,7 +109,11 @@ trait CrudContainerItemNoPostTrait{
 		$this->manageRelationships(['model'=>$item,'data'=>$data,'act'=>'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
         //return view('xot::test'); //4 debug
-        return ThemeService::action($request,$row);
+        if($request->ajax()){
+        	return json_encode(['msg'=>'ok']);
+        }else{
+        	return ThemeService::action($request,$row);
+        }
 	}
 
 	/**

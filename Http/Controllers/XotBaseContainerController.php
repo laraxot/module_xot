@@ -54,51 +54,6 @@ abstract class XotBaseContainerController extends Controller{
         return 'init';
     }
 
-
-    public function __call_test($method, $args){
-        $params = \Route::current()->parameters();
-        list($containers,$items)=params2ContainerItem($params);
-        $request=Request::capture();
-        $a=$this->init($params);
-        $controller = $this->controller;
-        $last_container=last($containers);
-        $class=config('xra.model.'.$last_container);
-        try{ $row=new $class;
-        }catch(\Exception $e){ ddd('['.$row.']['.$class.'] not exists on config/xra.php'); }
-        $panel=StubService::getByModel($row,'panel',$create = true); 
-        $policy=StubService::getByModel($row,'policy',$create = true);
-        if(\Auth::check()){
-            $authorized=\Auth::user()->can($method, $row); 
-        }else{
-            $authorized=Gate::allows($method, $row);
-        }
-        if(!$authorized){
-            $method_name=$method.'SpecialCase';
-            if(method_exists($panel, $method_name)){
-                return $panel->$method_name();
-            }
-            $msg=[
-                'err_msg'=>'Not Authorized',
-                'row'=>get_class($row),
-                'method'=>$method,
-                'logged'=>\Auth::check(),
-                'panel'=>get_class($panel),
-                'policy'=>get_class($policy),
-                'special_case'=>$method_name,
-                //'special_case_exists'=>'NO',
-                'tips'=>'modify policy or create special case',
-            ];
-            ddd($msg);
-            abort(403);    
-        }
-        if($request->getMethod()!='GET'){
-            //ddd($panel->rules());
-            $request->validate($panel->rules(),$panel->rulesMessages());
-        }
-        return app($controller)->$method($request,$this->container_last,$this->item_last);        
-
-    }
-
     public function __call($method, $args){
         $params = \Route::current()->parameters();
         list($containers,$items)=params2ContainerItem($params);
@@ -150,8 +105,9 @@ abstract class XotBaseContainerController extends Controller{
         }
         //if(in_array($method,['update','store'])){
         if($request->getMethod()!='GET'){
-            //ddd($panel->rules());
-            $request->validate($panel->rules(),$panel->rulesMessages());
+            if(!$request->ajax()){
+                $request->validate($panel->rules(),$panel->rulesMessages());
+            }
         }
         return app($controller)->$method($request,$this->container_last,$this->item_last);        
     }
