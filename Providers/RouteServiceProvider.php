@@ -34,23 +34,10 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider{
         //----------ROUTE PATTERN
             $pattern=collect(\array_keys($models))->implode('|');
             $pattern= '/|'.$pattern.'|/i';
-            
-            //$pattern= '/'.$pattern.'/i';
-            //*/
-            //ddd($pattern);
             for ($i = 0; $i < 4; $i++) {
                 $container_name = 'container'.$i;
-                //$re = '/^(?!edit).*$/'; //--- da controllare
-                //$re='/^((?!badword).)*$/';
-                //$pattern='/^|edit|/i';
-                //^(?:(?!\berror\b).)*$
-                //$router->pattern($container_name, $pattern);
                 $router->pattern($container_name, $pattern);
-                //Route::pattern($container_name, '[0-9]+'); 
-                //echo '<br>'.$container_name.'  '.$pattern;
             }
-            //$router->pattern('module','/blog/i');
-        
     }//end registerRoutePattern
 
      public function registerRouteBind(\Illuminate\Routing\Router $router){
@@ -70,26 +57,23 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider{
                 
                 if ($i == 0) {
                     $model=xotModel($container_curr); 
-                    if(method_exists($model, 'scopeWithPost')){
-                        $rows=$model->withPost($value);  //scopeGlobal ?
-                    }else{
-                        $rows=$model;
-                    }
-                    $pk=($model->getRouteKeyName());
-                    $pk_full=$model->getTable().'.'.$pk;                    
-                    if($pk=='guid') $pk_full='guid'; // pezza momentanea
-                    $rows=$rows->where([$pk_full=>$value]);
-                    $row=$rows->first();                   
+                    $rows=$model;
                 } else {
                     $item_prev = request()->{'item'.($i - 1)};
                     $types = camel_case(str_plural($container_curr));
                     $rows=$item_prev->$types();
-                    $related=$rows->getRelated();
-                    $pk=($related->getRouteKeyName());
-                    $pk_full=$related->getTable().'.'.$pk;                    
-
-                    $row= $rows->where([$pk_full=>$value])->first();
+                    $model=$rows->getRelated();
                 }
+                
+                if(method_exists($model, 'scopeWithPost')){
+                    $rows=$rows->withPost($value);  //scopeGlobal ?
+                }
+                $pk=($model->getRouteKeyName());
+                $pk_full=$model->getTable().'.'.$pk;                    
+                if($pk=='guid') $pk_full='guid'; // pezza momentanea
+                $rows=$rows->where([$pk_full=>$value]);
+                $row=$rows->first();
+
                 if (is_object($row)) {
                     return $row;
                 }

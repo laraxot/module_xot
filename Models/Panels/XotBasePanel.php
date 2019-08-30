@@ -1,8 +1,6 @@
 <?php
 namespace Modules\Xot\Models\Panels;
 
-//use Illuminate\Database\Eloquent\Model;
-//use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,8 +14,6 @@ use Modules\Xot\Services\ImageService;
 use Intervention\Image\Facades\Image;
 
 
-//---- Traits ----
-//use Modules\Xot\Traits\Updater;
 
 abstract class XotBasePanel{
 
@@ -79,11 +75,6 @@ abstract class XotBasePanel{
 	}
 
 	public function rulesMessages(){
-		//ddd(self::$model);//Access to undeclared static property: 
-		//ddd(static::$model);//Modules\Food\Models\RestaurantOwner
-		//ddd($this::$model);//Modules\Food\Models\RestaurantOwner
-		//ddd(collect(config('xra.model'))->search(static::$model));
-		
 		$lang=\App::getLocale();
 		$rules_msg_fields=collect($this->fields())->filter(function ($value, $key) use ($lang){
 			return (isset($value->rules_messages) && isset($value->rules_messages[$lang]));
@@ -212,61 +203,39 @@ abstract class XotBasePanel{
 	}
 
 	public function applySearch($query,$q){
-		
-        $search_fields=$this->search(); //campi di ricerca
-        if(count($search_fields)==0){ //se non gli passo nulla, cerco in tutti i fillable
-        	$search_fields=with(new $this::$model)->getFillable();
-        }
-        $table=with(new $this::$model)->getTable();
-        /*
-        $search_fields_to_implement=collect($search_fields)->map(function($item){
-        	$tmp=explode('.',$item);
-        	$obj=new \StdClass();
-        	if(count($tmp)==2){
-        		$obj->k=$tmp[0];
-        		$obj->v=$tmp[1];
-        	}else{
-				$obj->k='this';
-        		$obj->v=$tmp[0];
-        	}
-        	return $obj;
-        })
-        ->groupBy('k')
-        ->all();
-        */
-  		if(strlen($q)>1 ){
-  			/*         
-        	$query = $query->whereHas('post', function (Builder $subquery) use($q) {
-    			$subquery->where('title', 'like', '%'.$q.'%');
-			});
-			*/
-			///*
-			$query->where(function ($subquery) use ($search_fields,$q,$table){
-				foreach($search_fields as $k=>$v){
-					$subquery->orWhere($table.'.'.$v,'like','%'.$q.'%');
-				}
-			});
-			//*/
 
-			/*
-			foreach($search_fields as $has=>$sub_search){
-				if($has=='this'){
-					$query=$query->where(function ($subquery) use ($sub_search,$q,$table){
-						foreach($sub_search as $k=>$v){
-							$subquery->orWhere($table.'.'.$v->v,'like','%'.$q.'%');
+		$tipo=0; //0 a mano , 1 repository, 2 = scout
+
+		switch($tipo){
+			case 0:
+		        $search_fields=$this->search(); //campi di ricerca
+		        if(count($search_fields)==0){ //se non gli passo nulla, cerco in tutti i fillable
+		        	$search_fields=with(new $this::$model)->getFillable();
+		        }
+		        $table=with(new $this::$model)->getTable();
+		       if(strlen($q)>1 ){
+		  			$query->where(function ($subquery) use ($search_fields,$q,$table){
+						foreach($search_fields as $k=>$v){
+							if(!Str::contains($v,'.')){
+								$v=$table.'.'.$v;
+							}
+							$subquery->orWhere($v,'like','%'.$q.'%');
 						}
-						$subquery->orWhere('post.title','like','%'.$q.'%');
-						$subquery->orWhere('post.guid','like','%'.$q.'%');
-						
 					});
-				}else{
-					
 				}
-			}
-			*/
-    	}
-    	return $query;
-	}
+		    	return $query;
+		    	break;
+    		case 1:
+    			$repo=with(new \Modules\Food\Repositories\RestaurantRepository)->search('grom'); 
+    			//ddd($repo->paginate());
+    			return $repo;
+    		break;
+    		case 2:
+    			
+    		break;
+    	}//end switch
+    	
+	}//end applySearch
 
 	//-- da studiare --
 	protected static function applySearchNova($query, $search){
