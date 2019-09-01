@@ -85,6 +85,12 @@ if (!\function_exists('getConfig')) {
         return $data;
     }
 }
+if (!\function_exists('req_uri')) {
+    function req_uri(){
+        $req_uri=isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'';
+        return $req_uri;
+    }
+}
 
 if (!\function_exists('getConfigFile')) {
     function getConfigFiles($params)

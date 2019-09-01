@@ -28,7 +28,9 @@ class TranslatorService extends BaseTranslator{
         $translation = parent::get($key, $replace, $locale, $fallback);
         //echo '<br>['.$key.']['.$translation.']';
         $langs=ThemeService::__merge('langs', [$key=>$translation]);
-        $cache_key=str_slug($_SERVER['REQUEST_URI'].'_langs');
+        
+
+        $cache_key=str_slug(req_uri().'_langs');
         Cache::put($cache_key,$langs);
         //echo '<pre>';print_r($langs);echo '</pre>';
         /*

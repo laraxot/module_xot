@@ -1,20 +1,13 @@
 <?php
 namespace Modules\Xot\Traits;
 
-trait Getter
-{
-    public static function __merge($index, $value)
-    {
+trait Getter{
+    
+    public static function __merge($index, $value){
         $tmp = self::__getStatic($index);
-        /*
-        $value = \array_filter($value, function ($var) {
-            return null !== $var && '' != \trim($var);
-        });
-        */
-        //if(!is_array($tmp)) $tmp=[];
+        if(!is_array($tmp)) $tmp=[];
         $tmp = \array_merge($tmp, $value);
         self::__setStatic($index, $tmp);
-
         return $tmp;
     }
 
