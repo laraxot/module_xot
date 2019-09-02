@@ -2,6 +2,8 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\AliasLoader;
+
 use Illuminate\Database\Eloquent\Factory;
 
 use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph 
@@ -76,6 +78,9 @@ class XotServiceProvider extends XotBaseServiceProvider{
 
     public function registerCallback(){
         $this->loadHelpersFrom(__DIR__.'/../Helpers');
+        $loader = AliasLoader::getInstance();
+        $loader->alias('Panel','Modules\Xot\Services\PanelService');
+
     }
 
     public function loadHelpersFrom($path){
