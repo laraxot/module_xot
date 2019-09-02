@@ -502,7 +502,7 @@ abstract class XotBasePanel{
 		$src=$img->fit()->save()->src();
 		
 
-		return '<img src="'.$src.'" >';
+		return '<img src="'.asset($src).'" >';
 	}
 
 	public function microdataSchemaOrg(){
