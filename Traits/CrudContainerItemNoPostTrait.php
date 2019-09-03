@@ -191,7 +191,10 @@ trait CrudContainerItemNoPostTrait{
 		//ddd($res);
 		*/
 	}
- 
+
+	public function storeRelationshipsHasOne ($params){
+		//ddd($params);
+	} 
 
 	
 
