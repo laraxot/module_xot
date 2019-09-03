@@ -35,12 +35,16 @@ class ImageService{
     }
 
     public static function setImg($val){
-        if($val=='') $val=public_path('img/nophoto.jpg');
+        $nophoto_path=public_path('img/nophoto.jpg');
+        if($val=='') $val=$nophoto_path;
         if(Str::startsWith($val,'//')){
             $val='http:'.$val;
         }
-
-        self::$img = Image::make($val);
+        try{
+            self::$img = Image::make($val);
+        }catch(\Exception $e){
+            self::$img = Image::make($nophoto_path);
+        }
     }
 
     public static function setWxh($val){
