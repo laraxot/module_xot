@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 
 class PurchasePodcast extends Command /*implements SelfHandling */{
-    use Dispatchable;
+    //use Dispatchable;
     protected $user, $podcast;
 
     /**
@@ -19,6 +19,11 @@ class PurchasePodcast extends Command /*implements SelfHandling */{
      * @return void
      */
     public function __construct(User $user){
+        /*
+        Bus::map([
+            ProcessPodcast::class => ProcessPodcastHandler::class,
+        ]);
+        */
         $this->user = $user;
         //$this->podcast = $podcast;
     }
