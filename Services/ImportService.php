@@ -306,7 +306,7 @@ class ImportService
             }
         }
 
-        $file_path = (str_slug(self::$client_options['base_uri'], '_').'/'.str_slug($url, '_').'.json');
+        $file_path = (Str::slug(self::$client_options['base_uri'], '_').'/'.Str::slug($url, '_').'.json');
         //$params=['method'=>$method,'url'=>$url,'attrs'=>$attrs];
         //$key=json_encode(array_values($params));
         //$key=str_slug

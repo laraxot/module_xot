@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
 
 
 //namespace Modules\XRA\Helpers;
@@ -39,7 +41,7 @@ if (!\function_exists('getFilename')) {
         $class = class_basename($tmp[1]['class']);
         $func = $tmp[1]['function'];
         $params_list = collect($params)->except(['_token', '_method'])->implode('_');
-        $filename = str_slug(
+        $filename = Str::slug(
             \str_replace('Controller', '', $class).
                     '_'.\str_replace('do_', '', $func).
                     '_'.$params_list
@@ -110,7 +112,7 @@ if (!\function_exists('getConfigFile')) {
         if (!isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
             $_SERVER['SERVER_NAME'] = 'localhost';
         }
-        $server_name = str_slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
+        $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
         $config_file = base_path('config'.DIRECTORY_SEPARATOR.$server_name.DIRECTORY_SEPARATOR.$params['file']);
         if (!\file_exists($config_file)) {
             //ddd($config_file);
@@ -246,7 +248,7 @@ if (!\function_exists('tenantName')) {
         if (!isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
             $_SERVER['SERVER_NAME'] = 'localhost';
         }
-        $server_name = str_slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
+        $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
         if(!\File::exists(base_path('config/'.$server_name))){
             $server_name = 'localhost';
         }

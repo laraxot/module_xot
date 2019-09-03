@@ -1,10 +1,8 @@
 <?php
-
-
-
 namespace Modules\Xot\Traits;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Cache;
 use GuzzleHttp\Client as GuzzleClient;
 //use GuzzleHttp\Psr7\Request;
@@ -124,7 +122,7 @@ trait ImportTrait
 
     public function cacheRequestFile($method, $api_url, $attrs = [])
     { //--- uguale ma al posto di usare il sistema cache usa i file
-        $file_path = (str_slug($this->base_url, '_').'/'.str_slug($api_url, '_').'.json');
+        $file_path = (Str::slug($this->base_url, '_').'/'.Str::slug($api_url, '_').'.json');
         if (\Storage::disk('cache')->exists($file_path)) {
             $content = \Storage::disk('cache')->get($file_path);
             $this->client_options['headers']['referer'] = $api_url;

@@ -328,7 +328,7 @@ trait CrudContainerItemTrait {
         $data['lang']=$model->lang;
         $data['type']=$model->post_type; //retrocompatibilità
         if(!isset($data['guid']) && isset($data['title']) ){
-            $data['guid']=str_slug($data['title']);
+            $data['guid']=Str::slug($data['title']);
         }
         $row=$model->create($data);
         //ddd($row); // bisogna controllare se post_id e' creato

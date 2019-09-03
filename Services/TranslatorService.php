@@ -30,7 +30,7 @@ class TranslatorService extends BaseTranslator{
         $langs=ThemeService::__merge('langs', [$key=>$translation]);
         
 
-        $cache_key=str_slug(req_uri().'_langs');
+        $cache_key=Str::slug(req_uri().'_langs');
         Cache::put($cache_key,$langs);
         //echo '<pre>';print_r($langs);echo '</pre>';
         /*

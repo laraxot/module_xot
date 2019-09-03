@@ -286,7 +286,7 @@ class ImageService{
         try {
             $img = Image::make($image_path);
         } catch (\Intervention\Image\Exception\NotReadableException $e) {
-            $filename = str_slug(\basename($image_path)).'.'.$pathinfo['extension'];
+            $filename = Str::slug(\basename($image_path)).'.'.$pathinfo['extension'];
             /*
             if(!\Storage::disk('cache')->exists($filename)){
                 \Storage::disk('cache')->put($filename, fopen($image_path, 'r'));

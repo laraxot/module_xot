@@ -5,6 +5,8 @@ use Artisan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spipu\Html2Pdf\Html2Pdf;
+use Illuminate\Support\Str;
+
 use TeamTNT\TNTSearch\Indexer\TNTGeoIndexer;
 use TeamTNT\TNTSearch\TNTSearch;
 use Modules\Xot\library\Resource;
@@ -772,7 +774,7 @@ trait CrudSimpleTrait
         $rows = $model->filter($params);
 
         $parz = \array_merge(['name' => class_basename($model), 'cognome' => 'cognome', 'nome' => 'nome', 'id' => 0], $params);
-        $zipFileName = str_slug(class_basename($model).'_'.\implode('_', $params).'_'.\Carbon\Carbon::now()).'.zip';
+        $zipFileName = Str::slug(class_basename($model).'_'.\implode('_', $params).'_'.\Carbon\Carbon::now()).'.zip';
         $zipPath = 'C:/download/pdf/'.$zipFileName;
         $zipper = new \Chumper\Zipper\Zipper();
         $res = $zipper->make($zipPath);
@@ -784,7 +786,7 @@ trait CrudSimpleTrait
             $parz['cognome'] = $row->cognome;
             $parz['nome'] = $row->nome;
             $parz['id'] = $row->id;
-            $filename = str_slug(\implode('_', $parz)).'.pdf';
+            $filename = Str::slug(\implode('_', $parz)).'.pdf';
             $request->request->add([$pk => $row->id]);
             $content_pdf = $this->pdfrow($request, 'content_PDF');
             $res = \Storage::disk('download_pdf')->put($filename, $content_pdf);

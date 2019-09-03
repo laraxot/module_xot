@@ -1,15 +1,17 @@
 <?php
-
-
-
 namespace Modules\Xot\Services;
 
 use Cache;
+
+use Illuminate\Support\Str;
+
 use Goutte\Client as GoutteClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Cookie\CookieJar;
 //use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Cookie\FileCookieJar;
+
+
 
 class ImportGoutteService
 {
@@ -57,9 +59,9 @@ $cookieJar = new FileCookieJar($cookieFile, TRUE);
     public static function getID($method, $url, $attrs = [])
     {
         $url_parse = \parse_url($url);
-        $dir = str_slug(\str_replace('.', '-', $url_parse['host']));
-        $file = str_slug(\str_replace('.', '-', $url_parse['path']));
-        $path = $dir.'/'.$file.'-'.str_slug(\json_encode($attrs));
+        $dir = Str::slug(\str_replace('.', '-', $url_parse['host']));
+        $file = Str::slug(\str_replace('.', '-', $url_parse['path']));
+        $path = $dir.'/'.$file.'-'.Str::slug(\json_encode($attrs));
 
         return $path.'_3';
     }

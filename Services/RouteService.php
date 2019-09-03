@@ -184,7 +184,7 @@ class RouteService{
 
     public static function getCallback($v, $namespace, $curr)
     {
-        $as = str_slug($v['name']); //!!!!!! test da controllare
+        $as = Str::slug($v['name']); //!!!!!! test da controllare
         $uses = self::getUses($v, $namespace);
         if (null != $curr) {
             $uses = '\\'.self::$namespace_start.'\\'.$curr.'\\'.$uses;
