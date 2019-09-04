@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Modules\Xot\Services;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -20,13 +18,11 @@ use Symfony\Component\DomCrawler\Crawler;
 
 //-------------------
 
-class ProxyService
-{
+class ProxyService {
     protected $client;
     protected $client_options;
 
-    public function __construct()
-    {
+    public function __construct() {
         //die('['.__LINE__.']['.__FILE__.']');
         $jar = new \GuzzleHttp\Cookie\CookieJar();
         //dd(\Request::header());
@@ -48,8 +44,7 @@ class ProxyService
         //dd($this->client_options);
     }
 
-    public function dogdevProxys(Request $request)
-    {
+    public function dogdevProxys(Request $request) {
         //$url='http://spys.one/free-proxy-list/IT/';
         $url = 'http://dogdev.net/Proxy/IT';
 
@@ -82,8 +77,7 @@ class ProxyService
         return $proxys;
     }
 
-    public function xroxyProxys(Request $request)
-    {
+    public function xroxyProxys(Request $request) {
         $url = 'http://www.xroxy.com/proxylist.php?port=&type=&ssl=&country=IT&latency=&reliability=#table';
         try {
             $res = $this->client->request('GET', $url, $this->client_options);
@@ -126,8 +120,7 @@ class ProxyService
         return $proxys;
     }
 
-    public function firstProxyWorking(Request $request)
-    {
+    public function firstProxyWorking(Request $request) {
         \ini_set('max_execution_time', 300);
         $proxys = $this->xroxyProxys($request);
         $url = 'http://www.foodfriendfinder.com/ip.php';
@@ -159,8 +152,7 @@ class ProxyService
         return 'no proxy working';
     }
 
-    public function proxyrss(Request $request)
-    {
+    public function proxyrss(Request $request) {
         //$url = 'http://news.google.com/news?ned=us&topic=h&output=rss'; ! interessante per import
         $url = 'http://www.xroxy.com/proxyrss.xml';
         $feed = new \SimplePie();

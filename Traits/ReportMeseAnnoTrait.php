@@ -1,27 +1,26 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use Illuminate\Http\Request;
-use Modules\Xot\Library\Array_op;
-//--- services
 use Modules\Theme\Services\ThemeService;
+//--- services
+use Modules\Xot\Library\Array_op;
 
 //------models ----------
 //-- no models e' un trait
 
-trait ReportMeseAnnoTrait
-{
-    public function index(Request $request)
-    {
+trait ReportMeseAnnoTrait {
+    public function index(Request $request) {
         $model = $this->getModel();
         $params = \Route::current()->parameters();
         if (isset($params['matr']) && '' != $params['matr']) {
             return $this->dettaglio($request);
         }
-        if (!isset($params['mese'])) {
+        if (! isset($params['mese'])) {
             $params['mese'] = \date('m');
         }
-        if (!isset($params['anno'])) {
+        if (! isset($params['anno'])) {
             $params['anno'] = \date('Y');
         }
         $params['tipo'] = 1;
@@ -37,7 +36,6 @@ trait ReportMeseAnnoTrait
         'data' => $rows, 'key' => ['ente', 'matr'], 'add' => $model->getAddFields(), 'fields' => ['nome'],
     ]);
 
-
         $view = ThemeService::getView();
 
         return view($view)
@@ -50,8 +48,7 @@ trait ReportMeseAnnoTrait
 
     //end index
     //--------------------------------------------------
-    public function dettaglio(Request $request)
-    {
+    public function dettaglio(Request $request) {
         $model = $this->getModel();
         $params = \Route::current()->parameters();
         \extract($params);

@@ -1,20 +1,19 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-
-class CreateSessionsTable extends Migration{
-    public function getTable(){
+class CreateSessionsTable extends Migration {
+    public function getTable() {
         return 'sessions';
     }
 
     /**
      * Run the migrations.
      */
-    public function up()
-    {
-        if (!Schema::hasTable($this->getTable())) {
+    public function up() {
+        if (! Schema::hasTable($this->getTable())) {
             Schema::create($this->getTable(), function (Blueprint $table) {
                 $table->string('id', 191)->unique();
                 $table->unsignedInteger('user_id')->nullable();
@@ -29,8 +28,7 @@ class CreateSessionsTable extends Migration{
     /**
      * Reverse the migrations.
      */
-    public function down()
-    {
+    public function down() {
         if (Schema::hasTable($this->getTable())) {
             Schema::dropIfExists($this->getTable());
         }

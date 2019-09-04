@@ -1,23 +1,22 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use Cache;
 use Illuminate\Http\Request;
-use Route;
+use Modules\Blog\Models\Post;
 //--------- services--------
 use Modules\Theme\Services\ThemeService as Theme;
 //------traits-------
 use Modules\Xot\Traits\CrudSimpleTrait as CrudTrait;
 //------models----------
-use Modules\Blog\Models\Post;
+use Route;
 
 \error_reporting(E_ALL);
 \ini_set('display_errors', 1);
 
-trait FrontTrait
-{
-    public function getModel()
-    {
+trait FrontTrait {
+    public function getModel() {
         $rc = new \ReflectionClass(\get_class($this));
         $namespace = $rc->getNamespaceName();
         $str = 'Controllers';
@@ -31,8 +30,7 @@ trait FrontTrait
         return new $model();
     }
 
-    public function containerFunc(Request $request)
-    {
+    public function containerFunc(Request $request) {
         $lang = \App::getLocale();
         $params = \Route::current()->parameters();
         $containers = \array_keys(config('xra.model'));
@@ -141,8 +139,7 @@ trait FrontTrait
         }
     }
     */
-    public function containerFuncB(Request $request)
-    {
+    public function containerFuncB(Request $request) {
         $lang = \App::getLocale();
         $params = \Route::current()->parameters();
         $row = last($params); // meglio ultimo oggetto
@@ -161,8 +158,7 @@ trait FrontTrait
                 ;
     }
 
-    public function containerFuncCache(Request $request)
-    {
+    public function containerFuncCache(Request $request) {
         $params = \Route::current()->parameters();
         $key = ['params' => $params, 'data' => $request->all()];
         $key = \json_encode($key);
@@ -176,8 +172,7 @@ trait FrontTrait
         return $value;
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         //die('['.__LINE__.']['.__FILE__.']');
         return $this->containerFuncB($request);
     }
@@ -189,25 +184,21 @@ trait FrontTrait
     }
     */
 
-    public function show(Request $request)
-    {
+    public function show(Request $request) {
         //die('['.__LINE__.']['.__FILE__.']');
         return $this->containerFuncB($request);
     }
 
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         //die('['.__LINE__.']['.__FILE__.']');
         return $this->containerFuncB($request);
     }
 
-    public function attach(Request $request)
-    {
+    public function attach(Request $request) {
         return $this->containerFuncB($request);
     }
 
-    public function store_old(Request $request)
-    {
+    public function store_old(Request $request) {
         $data = $request->all();
         $data = \json_decode($data);
         $data['subtitle'] = \Request::format(); //html
@@ -259,8 +250,7 @@ trait FrontTrait
         return redirect($row->url); //->route($routename, $params);
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $params = \Route::current()->parameters();
         \extract($params);
         $data = $request->all();

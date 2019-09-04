@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 use Artisan;
@@ -9,10 +7,8 @@ use Artisan;
 //----- TODO
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
 
-trait ArtisanTrait
-{
-    public static function exe($command, array $arguments = [])
-    {
+trait ArtisanTrait {
+    public static function exe($command, array $arguments = []) {
         try {
             $output = '';
 

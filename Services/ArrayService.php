@@ -1,58 +1,50 @@
 <?php
+
 namespace Modules\Xot\Services;
 
 use Cache;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPExcel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+class ArrayService {
+    public static $export_processor = 1;
 
-
-class ArrayService
-{
-    public static $export_processor=1;
-    /*
-    
-    */
-
-    public static function toXLS($params){
-        require_once(__DIR__.'/vendor/autoload.php');
-        $data=$params['data'];
-        $res=[];
+    public static function toXLS($params) {
+        require_once __DIR__.'/vendor/autoload.php';
+        $data = $params['data'];
+        $res = [];
         foreach ($data as $k => $v) {
-            foreach($v as $k0 => $v0){
-                if(!is_array($v0)){
-                    $res[$k][$k0]=$v0;
+            foreach ($v as $k0 => $v0) {
+                if (! is_array($v0)) {
+                    $res[$k][$k0] = $v0;
                 }
             }
         }
-       $params['data']=$res;
+        $params['data'] = $res;
 
-        switch(self::$export_processor){
-            case 1:return self::toXLS_phpoffice($params);break;
-            case 2:return self::toXLS_Maatwebsite($params);break;
-            case 3:return self::toXLS_phpexcel($params);break;
+        switch (self::$export_processor) {
+            case 1:return self::toXLS_phpoffice($params); break;
+            case 2:return self::toXLS_Maatwebsite($params); break;
+            case 3:return self::toXLS_phpexcel($params); break;
             default:
                 ddd('unknown export_processor ['.$this->export_processor.']');
             break;
         }
-
-
     }
 
-    public static function toXLS_phpoffice($params)
-    {
+    public static function toXLS_phpoffice($params) {
         \extract($params);
-        if(!is_array($data)){
-            $data=[];
+        if (! is_array($data)) {
+            $data = [];
         }
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $firstrow = collect($data)->first();
-        if(!is_array($firstrow)){
-            $firstrow=[];
+        if (! is_array($firstrow)) {
+            $firstrow = [];
         }
         $sheet->fromArray(\array_keys($firstrow), null, 'A1');
         $sheet->fromArray(
@@ -65,11 +57,11 @@ class ArrayService
         $writer = new Xlsx($spreadsheet);
         $pathToFile = 'c:\\download\\xls\\'.$filename.'.xlsx';
         $writer->save($pathToFile); //$writer->save('php://output'); // per out diretto ?
-        if (!isset($out)) {
+        if (! isset($out)) {
             return response()->download($pathToFile);
         }
-        if(!isset($text)){
-            $text='text';
+        if (! isset($text)) {
+            $text = 'text';
         }
         switch ($out) {
             case 'link': return view('theme::download_icon')->with('file', $pathToFile)->with('ext', 'xls')->with('text', $text);
@@ -90,8 +82,7 @@ class ArrayService
     header('Cache-Control: max-age=0');
     */
 
-    public static function toXLS_Maatwebsite($params)
-    {
+    public static function toXLS_Maatwebsite($params) {
         \extract($params);
         Excel::create($filename, function ($excel) use ($data) {
             $excel->sheet('Excel sheet', function ($sheet) use ($data) {
@@ -102,8 +93,7 @@ class ArrayService
         })->export('xlsx');
     }
 
-    public static function toXLS_phpexcel($params)
-    {
+    public static function toXLS_phpexcel($params) {
         \Debugbar::disable();
         $objPHPExcel = new \PHPExcel();
         $text = '';
@@ -140,11 +130,11 @@ class ArrayService
         $caption = '';
         $caption .= '<br/>N Righe = <b>'.\count($data).'</b>';
         //FILE_OP::showDownloadLink($pathToFile, $caption);
-        if (!isset($out)) {
+        if (! isset($out)) {
             return response()->download($pathToFile);
         }
-        if(!isset($text)){
-            $text='testo ';
+        if (! isset($text)) {
+            $text = 'testo ';
         }
         switch ($out) {
             case 'link': return view('theme::download_icon')->with('file', $pathToFile)->with('ext', 'xls')->with('text', $text);
@@ -158,12 +148,11 @@ class ArrayService
         }
     }
 
-    public static function toXLS_pear($params)
-    {
+    public static function toXLS_pear($params) {
         //echo '<pre>';print_r($params); echo '</pre>';
         $caption = '';
         \extract($params);
-        if (!isset($nomefile) && isset($filename)) {
+        if (! isset($nomefile) && isset($filename)) {
             $nomefile = $filename;
         }
         \ini_set('max_execution_time', 3600);
@@ -208,7 +197,7 @@ class ArrayService
             }
             if (0 == $i) {
                 //$head = array_keys($my);
-                if (!isset($fieldlabels)) {
+                if (! isset($fieldlabels)) {
                     //self::print_x($v);
                     if (\is_object($v)) {
                         $fieldlabels = \array_keys(\get_object_vars($v));
@@ -253,16 +242,15 @@ class ArrayService
 
     //end function
 
-    public static function toCSV($params)
-    {
+    public static function toCSV($params) {
         //return self::toCSV_php($params);
         //return self::toCSV_phpexcel($params);
-        require_once(__DIR__.'/vendor/autoload.php');
+        require_once __DIR__.'/vendor/autoload.php';
+
         return self::toCSV_phpoffice($params);
     }
 
-    public static function toCSV_phpoffice($params)
-    {
+    public static function toCSV_phpoffice($params) {
         \extract($params);
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -282,7 +270,7 @@ class ArrayService
 
         $pathToFile = 'c:\\download\\xls\\'.$filename.'.csv';
         $writer->save($pathToFile); //$writer->save('php://output'); // per out diretto ?
-        if (!isset($out)) {
+        if (! isset($out)) {
             return response()->download($pathToFile);
         }
         switch ($out) {
@@ -296,7 +284,8 @@ class ArrayService
                 return [$link, $pathToFile];
         }
     }
-    /* -- obsolete 
+
+    /* -- obsolete
     public static function toCSV_phpexcel($params)
     {
         \Debugbar::disable();
@@ -331,8 +320,7 @@ class ArrayService
     }
     */
 
-    public static function toCSV_php($params)
-    {
+    public static function toCSV_php($params) {
         global $registry;
         $caption = '';
         $delimiter = ';';
@@ -370,8 +358,7 @@ class ArrayService
         }
     }
 
-    public static function toCSV_Maatwebsite($params)
-    {
+    public static function toCSV_Maatwebsite($params) {
         \Config::set('excel::csv.delimiter', ';');
         \Config::set('excel.csv.delimiter', ';');
         \Maatwebsite\Excel\Facades\Excel::setDelimiter(';');
@@ -388,8 +375,7 @@ class ArrayService
         })->download('csv');
     }
 
-
-    public static function diff_assoc_recursive($arr_1,$arr_2){
+    public static function diff_assoc_recursive($arr_1, $arr_2) {
         /*
         $ris=$arr_1;
         foreach($arr_2 as $v){
@@ -400,18 +386,16 @@ class ArrayService
         }
         ddd($ris);
         */
-        $coll_1=collect($arr_1);
-        $coll_2=collect($arr_2);
-        $ris=$coll_1->filter(function($value,$key) use($arr_2,$coll_2) {
-            return !in_array($value,$arr_2);
+        $coll_1 = collect($arr_1);
+        $coll_2 = collect($arr_2);
+        $ris = $coll_1->filter(function ($value, $key) use ($arr_2,$coll_2) {
+            return ! in_array($value, $arr_2);
         });
+
         return $ris->all();
-
-
     }
 
-    public static function rangeIntersect($a0, $b0, $a1, $b1)
-    {
+    public static function rangeIntersect($a0, $b0, $a1, $b1) {
         if ($a1 >= $a0 && $a1 <= $b0 && $b0 <= $b1) {
             return [$a1, $b0];
         }
@@ -429,13 +413,12 @@ class ArrayService
         return false;
     }
 
-    public static function raggruppa($params)
-    {
-        if (!isset($params['key_array']) && isset($params['key'])) {
+    public static function raggruppa($params) {
+        if (! isset($params['key_array']) && isset($params['key'])) {
             $params['key_array'] = $params['key'];
         }
         \extract($params);
-        if (!\is_array($data)) {
+        if (! \is_array($data)) {
             return [];
         }
         //*-- made with collection
@@ -456,7 +439,7 @@ class ArrayService
         $ris = [];
         //foreach($data as $k => $v) {
         foreach ($data as $k => $v) {
-            if (!\is_array($key_array)) {
+            if (! \is_array($key_array)) {
                 ddd($key_array);
             }
             \reset($key_array);
@@ -464,7 +447,7 @@ class ArrayService
             //while (list($k1, $v1) = each($key_array)) {
             foreach ($key_array as $k1 => $v1) {
                 if (\is_object($v)) {
-                    if (!isset($v->$v1)) {
+                    if (! isset($v->$v1)) {
                         //self::print_x($v1);
                         //self::print_x($v);
                         //ddd('qui');
@@ -481,7 +464,7 @@ class ArrayService
                 $skey[] = $v2;
             }
             $skey = \implode('-', $skey);
-            if (!isset($ris[$skey])) {
+            if (! isset($ris[$skey])) {
                 $ris[$skey] = [];
             }
             $ris[$skey][] = $v;
@@ -490,15 +473,14 @@ class ArrayService
         return $ris;
     }
 
-    public static function subtotale($params)
-    {
+    public static function subtotale($params) {
         $fields = [];
         \extract($params);
         $ris = [];
         $fields = \array_merge($fields, $key);
         $fields = \array_merge($fields, $add); //in piu forse
         $fields = \array_unique($fields);
-        if (!\is_array($data)) {
+        if (! \is_array($data)) {
             return $ris;
         }
 
@@ -541,7 +523,7 @@ class ArrayService
             $skey = [];
             \reset($key);
             foreach ($key as $kk => $vk) {
-                if (!isset($v->$vk)) {
+                if (! isset($v->$vk)) {
                     echo '<pre>[v]';
                     \print_r($v);
                     echo '[/v]</pre>';
@@ -553,11 +535,11 @@ class ArrayService
                 $skey[] = $v->$vk;
             }
             $skey = \implode('-', $skey);
-            if (!isset($ris[$skey])) {
+            if (! isset($ris[$skey])) {
                 $obj = new \stdclass();
                 \reset($fields);
                 foreach ($fields as $kf => $vf) {
-                    if (!isset($v->$vf)) {
+                    if (! isset($v->$vf)) {
                         $v->$vf = 0;
                     }
                     $obj->$vf = $v->$vf;
@@ -566,10 +548,10 @@ class ArrayService
             } else {
                 \reset($add);
                 foreach ($add as $ka => $va) {
-                    if (!isset($v->$va)) {
+                    if (! isset($v->$va)) {
                         $v->$va = 0;
                     }
-                    if (!isset($ris[$skey]->$va)) {
+                    if (! isset($ris[$skey]->$va)) {
                         $ris[$skey]->$va = 0;
                     }
                     $ris[$skey]->$va += $v->$va;
@@ -584,7 +566,7 @@ class ArrayService
         return $ris;
     }
 
-    public static function save($params){
+    public static function save($params) {
         //require_once(__DIR__.'/vendor/autoload.php');
         \extract($params);
         /*
@@ -596,11 +578,10 @@ class ArrayService
         //$content=str_replace("\\'","\'", $content);
         $content = \str_replace("'".storage_path(), 'storage_path()'.".'", $content);
         */
-        
-        $content='<'.'?php '.chr(13).'return '.var_export($data,true).';'.chr(13);
-        $content=str_replace('stdClass::__set_state','(object)',$content);
-         \File::makeDirectory(\dirname($filename), 0775, true, true);
+
+        $content = '<'.'?php '.chr(13).'return '.var_export($data, true).';'.chr(13);
+        $content = str_replace('stdClass::__set_state', '(object)', $content);
+        \File::makeDirectory(\dirname($filename), 0775, true, true);
         \File::put($filename, $content);
     }
-
 }//end class

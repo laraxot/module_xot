@@ -1,15 +1,17 @@
 <?php
+
 namespace Modules\Xot\Traits;
+
 use Carbon\Carbon;
 
 trait Updater {
-
-    public function myLog(){
+    public function myLog() {
         $mylog_path = \mb_substr(\get_class($this), 0, -\mb_strlen(class_basename($this))).'Mylog';
+
         return $this->hasMany($mylog_path, 'id_tbl', 'id')->where('tbl', $this->table)->whereRaw('id_approvaz!=""');
     }
 
-    public function cambiaStato($stato){
+    public function cambiaStato($stato) {
         if ('' == $stato) {
             $stato = 1;
         }
@@ -18,7 +20,7 @@ trait Updater {
         $log->id_approvaz = $stato;
         $log->tbl = $this->table;
         $log->save();
-        if (!\method_exists($this, 'myLog')) {
+        if (! \method_exists($this, 'myLog')) {
             echo '<hr/>mylog_path : ['.$mylog_path.']';
             ddd($this);
         }
@@ -33,12 +35,12 @@ trait Updater {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
     }
 
-    protected static function boot(){
+    protected static function boot() {
         parent::boot();
         /**
-        * During a model create Eloquent will also update the updated_at field so 
-        * need to have the updated_by field here as well 
-        **/
+         * During a model create Eloquent will also update the updated_at field so
+         * need to have the updated_by field here as well.
+         **/
         static::creating(function ($model) {
             if (null != \Auth::user()) {
                 $model->created_by = \Auth::user()->handle;
@@ -52,8 +54,8 @@ trait Updater {
             }
         });
         //-------------------------------------------------------------------------------------
-        /**
-         * Deleting a model is slightly different than creating or deleting. 
+        /*
+         * Deleting a model is slightly different than creating or deleting.
          * For deletes we need to save the model first with the deleted_by field
         **/
         /*
@@ -63,6 +65,7 @@ trait Updater {
         });
         */
         //----------------------
-    }//end function boot
-}//end trait Updater
+    }
 
+    //end function boot
+}//end trait Updater

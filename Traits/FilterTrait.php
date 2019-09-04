@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 //https://m.dotdev.co/writing-advanced-eloquent-search-query-filters-de8b6c2598db
@@ -10,10 +8,8 @@ namespace Modules\Xot\Traits;
 use Illuminate\Support\Facades\Schema;
 use TeamTNT\TNTSearch\TNTSearch;
 
-trait FilterTrait
-{
-    public static function fields()
-    {
+trait FilterTrait {
+    public static function fields() {
         $rows = new self();
         $schema = $rows->getConnection()->getSchemaBuilder();
         $tbl = $rows->getTable();
@@ -22,8 +18,7 @@ trait FilterTrait
         return $fields;
     }
 
-    public static function indexIfNotExistsStatic($index, $tbl = null, $conn = null)
-    { //viene chiamato all'interno di filtertrait che e' static ..
+    public static function indexIfNotExistsStatic($index, $tbl = null, $conn = null) { //viene chiamato all'interno di filtertrait che e' static ..
         if (null == $tbl) {
             $self = new self();
             $tbl = $self->getTable();
@@ -44,23 +39,22 @@ trait FilterTrait
                 $table->dropUnique('persons_body_unique');
             }
             */
-            /*-- altro metodo da testare 
+            /*-- altro metodo da testare
                 $indexesFound = $dbSchemaManager->listTableIndexes($tbl);
             */
-            try{
-                if (!$doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
+            try {
+                if (! $doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
                     Schema::connection($conn->getName())->table($tbl, function ($table) use ($index) {
                         $table->index($index);
                     });
                 }
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 echo '<small>'.$e->getMessage().'</small>';
             }
         }
     }
 
-    public function indexIfNotExists($index, $tbl = null, $conn = null)
-    {
+    public function indexIfNotExists($index, $tbl = null, $conn = null) {
         if (null == $tbl) {
             $tbl = $this->getTable();
         }
@@ -75,7 +69,7 @@ trait FilterTrait
             $dbSchemaManager = $conn->getDoctrineSchemaManager();
             $doctrineTable = $dbSchemaManager->listTableDetails($tbl);
             //faremo dei controlli per non aggiungere troppe chiavi
-            if (!$doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
+            if (! $doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
                 Schema::connection($conn->getName())->table($tbl, function ($table) use ($index) {
                     $table->index($index);
                 });
@@ -83,8 +77,7 @@ trait FilterTrait
         }
     }
 
-    public function scopeOfSearch($query, $q)
-    {
+    public function scopeOfSearch($query, $q) {
         $model = $query->getModel();
         $tbl = $model->getTable();
         $conn = $model->getConnection();
@@ -122,8 +115,7 @@ trait FilterTrait
         return $query->whereIn('id', $candyShops['ids']);
     }
 
-    public function scopeOfFilter1($query, $params)
-    {
+    public function scopeOfFilter1($query, $params) {
         $model = $query->getModel();
         $tbl = $model->getTable();
         $conn = $model->getConnection();
@@ -133,7 +125,7 @@ trait FilterTrait
         $trad = \explode('\\', __CLASS__);
         $trad = \mb_strtolower($trad[1]);
         $lang = trans($trad.'::link_'.$tbl);
-        if (!\is_array($lang)) {
+        if (! \is_array($lang)) {
             $lang = [];
         }
         $lang = \array_flip($lang);
@@ -156,7 +148,7 @@ trait FilterTrait
             if ('' != $key_link) {
                 $key = $key_link;
             }
-            if (!isset($params[$key])) {
+            if (! isset($params[$key])) {
                 echo '<h3>parametro non passato '.$key.'</h3><pre>';
                 \print_r($params);
                 echo '</pre>';
@@ -202,9 +194,7 @@ trait FilterTrait
         return $query;
     }
 
-    public static function filter($params)
-    {
-        
+    public static function filter($params) {
         \ini_set('max_execution_time', 6000);
         \set_time_limit(0);
         $rows = new self();
@@ -235,7 +225,7 @@ trait FilterTrait
         $lang = trans($trad.'::'.$tbl);
         //dd($lang);
 
-        if (!\is_array($lang)) {
+        if (! \is_array($lang)) {
             $lang = [];
         } //anche se non esiste
 
@@ -269,7 +259,7 @@ trait FilterTrait
             if ('' != $key_link) {
                 $key = $key_link;
             }
-            if (!isset($params[$key])) {
+            if (! isset($params[$key])) {
                 echo '<h3>parametro non passato '.$key.'</h3><pre>';
                 \print_r($params);
                 echo '</pre>';
@@ -300,14 +290,14 @@ trait FilterTrait
             if (\Lang::has($trad.'::'.$tbl.'.single_date')) {
                 $date_field = trans($trad.'::'.$tbl.'.single_date');
                 $rows = $rows->whereRaw(
-                $date_field.' between '.\date('Ymd', $from_time).' and '.\date('Ymd', $to_time)
-            );
+                    $date_field.' between '.\date('Ymd', $from_time).' and '.\date('Ymd', $to_time)
+                );
             } elseif (isset($lang['giorno']) && isset($lang['mese']) && isset($lang['anno'])) {
                 //die('so qua');
                 $date_field = '('.$lang['anno'].'*10000+'.$lang['mese'].'*100+'.$lang['giorno'].')';
                 $rows = $rows->whereRaw(
-                $date_field.' between '.\date('Ymd', $from_time).' and '.\date('Ymd', $to_time)
-            );
+                    $date_field.' between '.\date('Ymd', $from_time).' and '.\date('Ymd', $to_time)
+                );
             } else {
                 die('solo single_date ['.__LINE__.']['.__FILE__.']');
             }

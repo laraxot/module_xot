@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 // /laravel/app/Updater.php
@@ -11,10 +9,8 @@ namespace Modules\Xot\Traits;
 //studly_case() 'foo_bar' FooBar
 //title_case() 'a nice title uses the correct case'
 
-trait MyLogTrait
-{
-    protected static function boot()
-    {
+trait MyLogTrait {
+    protected static function boot() {
         parent::boot();
         /*
          \Event::listen(['eloquent.*'], function ($a){

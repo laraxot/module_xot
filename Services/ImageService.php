@@ -1,18 +1,23 @@
 <?php
+
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Str;
 use Cache;
+use Illuminate\Support\Str;
 use ImageOptimizer;
 use Intervention\Image\Facades\Image;
 
 //---- services ----
 
-class ImageService{
+class ImageService {
     private static $_instance = null;
-    static $img=null,$width,$height,$src,$filename;
+    public static $img = null;
+    public static $width;
+    public static $height;
+    public static $src;
+    public static $filename;
 
-    public static function getInstance($params=[]){
+    public static function getInstance($params = []) {
         if (null === self::$_instance) {
             self::$_instance = new self($params);
         }
@@ -20,70 +25,69 @@ class ImageService{
         return self::$_instance;
     }
 
-
-    public function __construct($params=[]){
+    public function __construct($params = []) {
         $this->init($params);
     }
 
     //---- setter
-    public static function init($params){
-        foreach($params as $k=>$v){
-            $func='set'.Str::studly($k);
+    public static function init($params) {
+        foreach ($params as $k => $v) {
+            $func = 'set'.Str::studly($k);
             self::$func($v);
         }
-        //return self::getInstance(); 
+        //return self::getInstance();
     }
 
-    public static function setImg($val){
-        $nophoto_path=public_path('img/nophoto.jpg');
-        if($val=='') $val=$nophoto_path;
-        if(Str::startsWith($val,'//')){
-            $val='http:'.$val;
+    public static function setImg($val) {
+        $nophoto_path = public_path('img/nophoto.jpg');
+        if ('' == $val) {
+            $val = $nophoto_path;
         }
-        try{
+        if (Str::startsWith($val, '//')) {
+            $val = 'http:'.$val;
+        }
+        try {
             self::$img = Image::make($val);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             self::$img = Image::make($nophoto_path);
         }
     }
 
-    public static function setWxh($val){
+    public static function setWxh($val) {
         list($w, $h) = \explode('x', $val);
         self::setWidth($w);
         self::setHeight($h);
-        
     }
 
-    public static function setWidth($val){
-        self::$width=$val;
+    public static function setWidth($val) {
+        self::$width = $val;
     }
 
-    public static function setHeight($val){
-        self::$height=$val;
+    public static function setHeight($val) {
+        self::$height = $val;
     }
-    
-     public static function setSrc($val){
-        if($val=='') $val=public_path('img/nophoto.jpg');
-        if(starts_with($val,url(''))){ //se e' una immagine locale
-            $val=public_path(\substr($val,strlen(url(''))));
+
+    public static function setSrc($val) {
+        if ('' == $val) {
+            $val = public_path('img/nophoto.jpg');
         }
-        $str='/laravel-filemanager/';
-        if(starts_with($val,$str)){
-            $val=public_path(\substr($val,strlen($str)));
+        if (starts_with($val, url(''))) { //se e' una immagine locale
+            $val = public_path(\substr($val, strlen(url(''))));
         }
-        self::$src=$val;
+        $str = '/laravel-filemanager/';
+        if (starts_with($val, $str)) {
+            $val = public_path(\substr($val, strlen($str)));
+        }
+        self::$src = $val;
         self::setImg($val);
     }
+
     //----------
 
-    
-
-    public static function toHtml()
-    {
+    public static function toHtml() {
     }
 
-    public static function image_resized_cropped($params)
-    {
+    public static function image_resized_cropped($params) {
         \extract($params);
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
@@ -98,18 +102,16 @@ class ImageService{
             $image_path = 'http:'.$image_path;
         }
 
-        if (!\File::exists($image_path)) {
-            
-
+        if (! \File::exists($image_path)) {
             //return false;
         }
 
         $allowedMimeTypes = ['image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/svg+xml'];
         $allowedExtensions = ['jpg', 'png', 'gif'];
-        if (!isset($pathinfo['extension'])) {
+        if (! isset($pathinfo['extension'])) {
             return $image_path;
         }
-        if (!\in_array($pathinfo['extension'], $allowedExtensions, true)) {
+        if (! \in_array($pathinfo['extension'], $allowedExtensions, true)) {
             return $image_path;
         }
         //if(!in_array($contentType,$allowedMimeTypes)) return $image_path;
@@ -146,28 +148,26 @@ class ImageService{
         return $image_resized;
     }
 
-     public static function fit($params=[]){
-        $me=self::getInstance($params);
-        
-        $img    =self::$img;
-        $width  =self::$width;
-        $height =self::$height;
+    public static function fit($params = []) {
+        $me = self::getInstance($params);
 
-        self::$img->fit($width,$height);
-        return self::getInstance(); 
+        $img = self::$img;
+        $width = self::$width;
+        $height = self::$height;
+
+        self::$img->fit($width, $height);
+
+        return self::getInstance();
     }
 
+    public static function crop($params = []) {
+        $me = self::getInstance($params);
 
-    public static function crop($params=[]){
-        $me=self::getInstance($params);
-        
-        $img    =self::$img;
-        $width  =self::$width;
-        $height =self::$height;
-        
+        $img = self::$img;
+        $width = self::$width;
+        $height = self::$height;
 
-        if($width>$height){
-
+        if ($width > $height) {
             $img->resize($width, null, function ($constraint) {
                 $constraint->aspectRatio();
             });
@@ -180,11 +180,11 @@ class ImageService{
                 */
                 $x0 = 0;
                 //$y0 = \rand(0, $img->height() - $height);
-                $y0 = round(($img->height() + $height)/2,0);
+                $y0 = round(($img->height() + $height) / 2, 0);
                 $img->crop($width, $height, $x0, $y0);
             }
-        }else{
-            $img->resize(null,$height, function ($constraint) {
+        } else {
+            $img->resize(null, $height, function ($constraint) {
                 $constraint->aspectRatio();
             });
 
@@ -195,7 +195,7 @@ class ImageService{
                 });
                 */
                 //$x0 = \rand(0, $img->width() - $width);
-                $x0 = round(($img->width() + $width)/2,0);
+                $x0 = round(($img->width() + $width) / 2, 0);
                 $y0 = 0;
                 $img->crop($width, $height, $x0, $y0);
             }
@@ -206,31 +206,31 @@ class ImageService{
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
         $canvas->insert($img, null, $x, $y);
-        self::$img=$canvas;
+        self::$img = $canvas;
+
         return self::getInstance(); /// per il fluent, o chaining
     }
 
-    public static function save($params=[]){
+    public static function save($params = []) {
         //extract($params);
-        $basename=basename(self::$src);
-        $basename=Str::before($basename,'?');
-        self::$filename=public_path('/imgz/'.self::$width.'x'.self::$height.'/'.$basename);
+        $basename = basename(self::$src);
+        $basename = Str::before($basename, '?');
+        self::$filename = public_path('/imgz/'.self::$width.'x'.self::$height.'/'.$basename);
         \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
-        $r=self::$img->save(self::$filename, 75);
+        $r = self::$img->save(self::$filename, 75);
+
         return self::getInstance();
     }
 
-    public static function out($params=[]){
+    public static function out($params = []) {
         return self::$img->encode('jpg', 60);
     }
 
-    public static function src($params=[]){
-        return str_replace(public_path(),'',self::$filename);
+    public static function src($params = []) {
+        return str_replace(public_path(), '', self::$filename);
     }
 
-
-    public static function image_resized_canvas($params)
-    {
+    public static function image_resized_canvas($params) {
         \extract($params);
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
@@ -245,7 +245,7 @@ class ImageService{
         }
         $allowedMimeTypes = ['image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/svg+xml'];
         $allowedExtensions = ['jpg', 'png', 'gif'];
-        if (!isset($pathinfo['extension'])) {
+        if (! isset($pathinfo['extension'])) {
             $pathinfo['extension'] = '';
         }
         $pos = \mb_strpos($pathinfo['extension'], '&');
@@ -253,10 +253,10 @@ class ImageService{
             $pathinfo['extension'] = \mb_substr($pathinfo['extension'], 0, $pos);
         }
 
-        if (!isset($pathinfo['extension'])) {
+        if (! isset($pathinfo['extension'])) {
             return $image_path;
         }
-        if (!\in_array($pathinfo['extension'], $allowedExtensions, true)) {
+        if (! \in_array($pathinfo['extension'], $allowedExtensions, true)) {
             return $image_path;
         }
         //if(!in_array($contentType,$allowedMimeTypes)) return $image_path;
@@ -280,7 +280,7 @@ class ImageService{
             //die($image_path);
         }
         if (starts_with($image_path, '/')) {
-            if (!starts_with($image_path, public_path('/'))) {
+            if (! starts_with($image_path, public_path('/'))) {
                 $image_path = public_path($image_path);
             }
         }

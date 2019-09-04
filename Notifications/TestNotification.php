@@ -1,23 +1,17 @@
 <?php
 
-
-
-use Modules\Xot\Notifications;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class TestNotification extends Notification implements ShouldQueue
-{
+class TestNotification extends Notification implements ShouldQueue {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
-    {
+    public function __construct() {
     }
 
     /**
@@ -27,13 +21,11 @@ class TestNotification extends Notification implements ShouldQueue
      *
      * @return array
      */
-    public function via($notifiable)
-    {
+    public function via($notifiable) {
         return ['slack'];
     }
 
-    public function toSlack($notifiable)
-    {
+    public function toSlack($notifiable) {
         return (new SlackMessage())
             ->content('This is my test message!');
     }

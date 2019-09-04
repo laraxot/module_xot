@@ -1,13 +1,14 @@
 <?php
+
 namespace Modules\Xot\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+
 //use Modules\Food\Models\Profile;
 //use Modules\Xot\Traits\FormRequestTrait;
 //--- Rules ---
-use Modules\Food\Rules\Slugify as SlugifyRule;
 
-abstract class XotBaseRequest extends FormRequest{
+abstract class XotBaseRequest extends FormRequest {
     //use FormRequestTrait;
 
     //public function __construct(){
@@ -20,7 +21,7 @@ abstract class XotBaseRequest extends FormRequest{
      *
      * @return bool
      */
-    public function authorize(){
+    public function authorize() {
         return true;
     }
 
@@ -29,9 +30,7 @@ abstract class XotBaseRequest extends FormRequest{
      *
      * @return array
      */
-    public function rules(){
-        
-
+    public function rules() {
         //return $rules;
     }
 

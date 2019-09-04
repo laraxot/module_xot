@@ -1,18 +1,14 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 use Illuminate\Http\Request;
 //----xot library---
 use Modules\Xot\Library\XmlMenu_op;
 
-trait TreeTrait
-{
-    public function index(Request $request)
-    {
-        if ($request->act=='routelist') {
+trait TreeTrait {
+    public function index(Request $request) {
+        if ('routelist' == $request->act) {
             return ArtisanTrait::exe('route:list');
         }
         $model = $this->getModel();
@@ -30,8 +26,7 @@ trait TreeTrait
         return view($plugin.$view)->with('href_create', $href_create)->with('titolo', $titolo)->with('rows', $rows);
     }
 
-    public function getView()
-    {
+    public function getView() {
         $tmp = \Route::current()->getName();
         $tmp = \explode('.', $tmp);
         \array_shift($tmp);
@@ -70,8 +65,7 @@ trait TreeTrait
     //        return $ris;
     //    }
 
-    public function getNodes(Request $request, $id_padre = 0)
-    {
+    public function getNodes(Request $request, $id_padre = 0) {
         $params = \Route::current()->parameters();
         $model = $this->getModel();
 
@@ -116,8 +110,7 @@ trait TreeTrait
         return $ris;
     }
 
-    public function getContextMenu(Request $request)
-    {
+    public function getContextMenu(Request $request) {
         $params = \Route::current()->parameters();
         $tmp = \debug_backtrace();
         $name = \explode('\\', $tmp[0]['class']);

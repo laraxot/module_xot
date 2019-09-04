@@ -1,19 +1,18 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
-use Artisan;
-use Illuminate\Http\Request;
-
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 //------services---------
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ScoutService;
+
 //use Laravel\Scout\Searchable;
 // il crud simple non ha il lock sui record, ne salva e continua, salva ed esci, ne esci e basta
 
-trait CrudBindTrait{
-    
-    public function getModel(){
+trait CrudBindTrait {
+    public function getModel() {
         $rc = new \ReflectionClass(\get_class($this));
         $namespace = $rc->getNamespaceName();
         $str = 'Controllers';
@@ -27,7 +26,7 @@ trait CrudBindTrait{
         return new $model();
     }
 
-    public function getBindVar(){
+    public function getBindVar() {
         $class = class_basename(__CLASS__);
         $class = \str_replace('Controller', '', $class);
         $class = \mb_strtolower($class);
@@ -35,8 +34,8 @@ trait CrudBindTrait{
         return $class;
     }
 
-    public function index(Request $request){
-        if ($request->act=='routelist') {
+    public function index(Request $request) {
+        if ('routelist' == $request->act) {
             return ArtisanTrait::exe('route:list');
         }
         $params = \Route::current()->parameters();
@@ -103,8 +102,7 @@ trait CrudBindTrait{
         }
     }
 
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $params = \Route::current()->parameters();
         \extract($params);
         if (isset($lang)) {
@@ -134,8 +132,7 @@ trait CrudBindTrait{
 
     //end edit
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         $params = \Route::current()->parameters();
         \extract($params);
         $data = $request->all();
@@ -148,10 +145,11 @@ trait CrudBindTrait{
         if (false === $row) {
             $row = $this->getModel();
         }
-        $row=$row->create($data);
+        $row = $row->create($data);
         $arr = \array_slice($row->toArray(), 0, 4);
         \Session::flash('status', 'creato ! '.\implode(' ', $arr).' '.Carbon::now());
-        return ThemeService::action($request,$row);
+
+        return ThemeService::action($request, $row);
         /*
         switch ($data['_action']) {
             case 'save_continue':
@@ -170,8 +168,7 @@ trait CrudBindTrait{
         */
     }
 
-    public function edit(Request $request)
-    {
+    public function edit(Request $request) {
         if (1 == $request->replicate) {
             return $this->replicate($request);
         }
@@ -201,8 +198,7 @@ trait CrudBindTrait{
 
     //end edit
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $params = \Route::current()->parameters();
         \extract($params);
         $data = $request->all();
@@ -216,12 +212,12 @@ trait CrudBindTrait{
         $arr = \array_slice($row->toArray(), 0, 4);
 
         \Session::flash('status', 'aggiornato! '.\implode(' ', $arr).' '.Carbon::now());
-        return ThemeService::action($request,$row);
+
+        return ThemeService::action($request, $row);
         //return back()->withInput();
     }
 
-    public function show(Request $request)
-    {
+    public function show(Request $request) {
         $params = \Route::current()->parameters();
         $row = last($params);
         $routename = \Route::current()->getName();
@@ -236,8 +232,7 @@ trait CrudBindTrait{
                 ;
     }
 
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request) {
         $params = \Route::current()->parameters();
         $row = last($params);
         //extract($params);
@@ -249,8 +244,7 @@ trait CrudBindTrait{
         */
     }
 
-    public static function getView($params = [])
-    {
+    public static function getView($params = []) {
         \extract($params);
         $tmp = \Route::currentRouteAction();
         //echo '<h3>'.$tmp.'</h3>';

@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use Illuminate\Filesystem\Filesystem;
@@ -6,24 +7,23 @@ use Illuminate\Foundation\AliasLoader;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Gate;
+
 //use Symfony\Component\HttpFoundation\Request;
 
 //use Symfony\Component\HttpFoundation\Cookie;
 
-trait ServiceProviderTrait
-{
+trait ServiceProviderTrait {
     /** https://www.larashout.com/service-providers-in-laravel
-    * Indicates if loading of the provider is deferred.
-    *
-    * @var bool
-    */
+     * Indicates if loading of the provider is deferred.
+     *
+     * @var bool
+     */
     //protected $defer = true;  mi da errore 500
+
     /**
      * Bootstrap the application services.
-     */  
-    public function boot(\Illuminate\Routing\Router $router)
-    {
-       
+     */
+    public function boot(\Illuminate\Routing\Router $router) {
         //$this->registerPolicies();  //in fase di register legge la cartella policy modello pluto policy plutoPolicy
         $seg01 = (\Request::segment(1)); //il primo segmento potrebbe essere o lingua o admin
         if (\is_array(config('xra.languages'))) {
@@ -41,7 +41,7 @@ trait ServiceProviderTrait
         $class = \mb_strtolower($class);
         $enable_packs = config('xra.enable_packs');
         if (\is_array($enable_packs)) {
-            if (!\in_array($class, $enable_packs, true)) {
+            if (! \in_array($class, $enable_packs, true)) {
                 return '';
             }
         }
@@ -114,20 +114,20 @@ trait ServiceProviderTrait
     	}
     }
     */
-    public function loadHelpersFrom($path){
+    public function loadHelpersFrom($path) {
         foreach (\glob($path.'/*.php') as $filename) {
             $filename = \str_replace('/', \DIRECTORY_SEPARATOR, $filename);
             require_once $filename;
         }
     }
 
-    public function loadPoliciesFrom($path){
-        $policies=[];
-        if(!\File::isDirectory($path)){
+    public function loadPoliciesFrom($path) {
+        $policies = [];
+        if (! \File::isDirectory($path)) {
             \File::makeDirectory($path, 0777, true, true);
         }
-        $policies_file=$path.'/_policies.json';
-        if(!\File::exists($policies_file)){
+        $policies_file = $path.'/_policies.json';
+        if (! \File::exists($policies_file)) {
             foreach (\glob($path.'/*.php') as $filename) {
                 $name = \str_replace('Policy.php', '', \basename($filename));
                 //if($name!=basename($filename)){
@@ -138,85 +138,78 @@ trait ServiceProviderTrait
                     $policy = $this->getNamespace().'\\Policies\\'.$name.'Policy';
                     //echo '<br>Policy ['.$model.']['.$policy.']'; //4 debug
                     //Gate::policy($model, $policy);
-                    $tmp=new \StdClass();
-                    $tmp->model=$model;
-                    $tmp->policy=$policy;
-                    $policies[]=$tmp;
+                    $tmp = new \StdClass();
+                    $tmp->model = $model;
+                    $tmp->policy = $policy;
+                    $policies[] = $tmp;
                 }
             }//end foreach
-            try{
-                \File::put($policies_file,json_encode($policies));
-            }catch(\Exception $e){
+            try {
+                \File::put($policies_file, json_encode($policies));
+            } catch (\Exception $e) {
                 dd($e);
             }
-        }else{
-            $policies=\File::get($policies_file);
-            $policies=json_decode($policies);
+        } else {
+            $policies = \File::get($policies_file);
+            $policies = json_decode($policies);
         }
-        foreach($policies as $v){
+        foreach ($policies as $v) {
             Gate::policy($v->model, $v->policy);
         }
-       
     }
 
-
-    public function loadEventsFrom($path){
-
-        $events=[];
-        if(!\File::isDirectory($path)){
+    public function loadEventsFrom($path) {
+        $events = [];
+        if (! \File::isDirectory($path)) {
             \File::makeDirectory($path, 0777, true, true);
         }
-        $events_file=$path.'/_events.json';
-        if(!\File::exists($events_file)){
+        $events_file = $path.'/_events.json';
+        if (! \File::exists($events_file)) {
             foreach (\glob($path.'/*.php') as $filename) {
-                $info=pathinfo($filename); 
+                $info = pathinfo($filename);
                 //$tmp->namespace='\\'.$vendor.'\\'.$pack.'\\Events\\'.$info['filename'];
-                $event_name=$info['filename'];
-                $str='Event';
-                if(ends_with($event_name,$str)){
-                    $listener_name=substr($event_name, 0,-strlen($str)).'Listener';
-                    $event      = $this->getNamespace().'\\Events\\'.$event_name;
-                    $listener   = $this->getNamespace().'\\Listeners\\'.$listener_name;
-                    if(class_exists($event) && class_exists($listener)){
+                $event_name = $info['filename'];
+                $str = 'Event';
+                if (ends_with($event_name, $str)) {
+                    $listener_name = substr($event_name, 0, -strlen($str)).'Listener';
+                    $event = $this->getNamespace().'\\Events\\'.$event_name;
+                    $listener = $this->getNamespace().'\\Listeners\\'.$listener_name;
+                    if (class_exists($event) && class_exists($listener)) {
                         //\Event::listen($event, $listener);
-                        $tmp=new \StdClass();
-                        $tmp->event=$event;
-                        $tmp->listener=$listener;
-                        $events[]=$tmp;
+                        $tmp = new \StdClass();
+                        $tmp->event = $event;
+                        $tmp->listener = $listener;
+                        $events[] = $tmp;
                     }
                 }
             }
-            try{
-                \File::put($events_file,json_encode($events));
-            }catch(\Exception $e){
+            try {
+                \File::put($events_file, json_encode($events));
+            } catch (\Exception $e) {
                 dd($e);
             }
-
-        }else{
-            
-            $events=\File::get($events_file);
-            $events=json_decode($events);
+        } else {
+            $events = \File::get($events_file);
+            $events = json_decode($events);
         }
-        foreach($events as $v){
+        foreach ($events as $v) {
             \Event::listen($v->event, $v->listener);
         }
-    }//end function
+    }
+
+    //end function
 
     /**
      * Register the application services.
      */
-    public function register()
-    {
+    public function register() {
         $rc = new \ReflectionClass(get_class($this));
         $dir = \dirname($rc->getFileName());
-
-        
 
         $this->loadHelpersFrom($dir.'/Helpers');
         //-- le policy ora sono "indovinate"
         //https://laraveldaily.com/laravel-5-8-automatic-policy-resolution/
         //$this->loadPoliciesFrom($dir.'/Policies');
-        
 
         foreach (\glob($dir.'/Commands/*.php') as $filename) {
             ddd($filename);
@@ -224,8 +217,7 @@ trait ServiceProviderTrait
     }
 
     //https://laracasts.com/discuss/channels/tips/example-on-how-to-use-multiple-locales-in-your-laravel-5-website
-    public function map(Router $router, Request $request)
-    {
+    public function map(Router $router, Request $request) {
         die('['.__LINE__.']['.__FILE__.']');
         $locale = $request->segment(1);
         $this->app->setLocale($locale);
@@ -235,8 +227,7 @@ trait ServiceProviderTrait
         });
     }
 
-    public function routes()
-    {
+    public function routes() {
         $locale = \Request::segment(1);
 
         if (\in_array($locale, ['it', 'en', 'de', 'fr'], true)) {
@@ -279,23 +270,22 @@ trait ServiceProviderTrait
 
     //end routes
 
-    public function getNamespace()
-    {
+    public function getNamespace() {
         $rc = new \ReflectionClass(\get_class($this));
 
         return $rc->getNamespaceName();
     }
 
-    public static function getPath(){
+    public static function getPath() {
         $reflector = new \ReflectionClass(__CLASS__);
         $fn = $reflector->getFileName();
-        return dirname($fn);      
+
+        return dirname($fn);
     }
 
     //end getNamespace
 
-    public function getMenuXml()
-    {
+    public function getMenuXml() {
         $rc = new \ReflectionClass(\get_class($this));
         $dir = \dirname($rc->getFileName());
         $menu_dir = $dir.\DIRECTORY_SEPARATOR.'_menuxml'.\DIRECTORY_SEPARATOR.'admin';

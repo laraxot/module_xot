@@ -1,17 +1,13 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 //------ PDF ------
 use Spipu\Html2Pdf\Html2Pdf;
 
-trait HtmlTrait
-{
+trait HtmlTrait {
     // same of substr but with string..
-    public static function substr($str, $str_start, $str_end)
-    {
+    public static function substr($str, $str_start, $str_end) {
         $pos_start = \mb_strpos($str, $str_start);
         $pos_end = \mb_strpos($str, $str_end, $pos_start);
         $length = $pos_end - $pos_start;
@@ -19,8 +15,7 @@ trait HtmlTrait
         return \mb_substr($str, $pos_start, $length);
     }
 
-    public static function toPdf($html, $orientation = 'L')
-    {
+    public static function toPdf($html, $orientation = 'L') {
         try {
             $html2pdf = new Html2Pdf($orientation, 'A4', 'it');
             $html2pdf->pdf->SetDisplayMode('fullpage');

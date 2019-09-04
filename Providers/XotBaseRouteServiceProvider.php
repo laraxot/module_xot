@@ -1,12 +1,12 @@
 <?php
-namespace Modules\Xot\Providers;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph 
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
-abstract class XotBaseRouteServiceProvider extends ServiceProvider{
+namespace Modules\Xot\Providers;
+
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider; // per dizionario morph
+use Illuminate\Support\Facades\Route;
+
+abstract class XotBaseRouteServiceProvider extends ServiceProvider {
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -18,10 +18,8 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider{
      * Called before routes are registered.
      *
      * Register any model bindings or pattern based filters.
-     *
-     * @return void
      */
-    public function boot(){
+    public function boot() {
         //*
         //ddd(\Request::segment(2));// trasferte_dip
         /*
@@ -44,7 +42,7 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider{
             $this->registerRoutePattern($router);
         }
         //*/
-        if(method_exists($this, 'bootCallback')){
+        if (method_exists($this, 'bootCallback')) {
             $this->bootCallback();
         }
         parent::boot();
@@ -72,11 +70,8 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider{
 
     /**
      * Define the routes for the application.
-     *
-     * @return void
      */
-    public function map()
-    {
+    public function map() {
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
@@ -86,28 +81,22 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider{
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
      */
-    protected function mapWebRoutes()
-    {
+    protected function mapWebRoutes() {
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
-            ->group($this->module_dir . '/../Routes/web.php');
+            ->group($this->module_dir.'/../Routes/web.php');
     }
 
     /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
-     *
-     * @return void
      */
-    protected function mapApiRoutes()
-    {
+    protected function mapApiRoutes() {
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->moduleNamespace)
-            ->group($this->module_dir . '/../Routes/api.php');
+            ->group($this->module_dir.'/../Routes/api.php');
     }
 }

@@ -1,12 +1,12 @@
 <?php
+
 namespace Modules\Xot\Repositories;
 
 //---base
-use Modules\Xot\Repositories\XotBaseRepository;
 
-class XotBaseModelRepository extends XotBaseRepository{
+class XotBaseModelRepository extends XotBaseRepository {
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */

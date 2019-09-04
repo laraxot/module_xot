@@ -1,29 +1,29 @@
 <?php
+
 namespace Modules\Xot\Repositories;
 
-/**
+/*
 * https://github.com/Torann/laravel-repository
 * http://lyften.com/projects/laravel-repository
 **/
 
-use Closure;
 use BadMethodCallException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\MessageBag;
 //use Modules\Xot\Traits\Cacheable;
 use Modules\Xot\Contracts\RepositoryContract;
 use Modules\Xot\Exceptions\RepositoryException;
 
-abstract class XotBaseRepository implements RepositoryContract{
+abstract class XotBaseRepository implements RepositoryContract {
     //use Cacheable;
 
     /**
-     * Cache expires constants
+     * Cache expires constants.
      */
     const EXPIRES_END_OF_DAY = 'eod';
 
@@ -43,7 +43,7 @@ abstract class XotBaseRepository implements RepositoryContract{
     protected $modelInstance;
 
     /**
-     * The errors message bag instance
+     * The errors message bag instance.
      *
      * @var \Illuminate\Support\MessageBag
      */
@@ -69,7 +69,7 @@ abstract class XotBaseRepository implements RepositoryContract{
     protected $orderable = [];
 
     /**
-     * Valid searchable columns
+     * Valid searchable columns.
      *
      * @return array
      */
@@ -101,12 +101,11 @@ abstract class XotBaseRepository implements RepositoryContract{
     ];
 
     /**
-     * Create a new Repository instance
+     * Create a new Repository instance.
      *
      * @throws RepositoryException
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->makeModel();
         $this->boot();
     }
@@ -114,9 +113,7 @@ abstract class XotBaseRepository implements RepositoryContract{
     /**
      * The "booting" method of the repository.
      */
-    public function boot()
-    {
-        //
+    public function boot() {
     }
 
     /**
@@ -124,18 +121,16 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return Model
      */
-    public function getModel()
-    {
+    public function getModel() {
         return $this->modelInstance;
     }
 
     /**
-     * Reset internal Query
+     * Reset internal Query.
      *
      * @return $this
      */
-    protected function scopeReset()
-    {
+    protected function scopeReset() {
         $this->scopeQuery = [];
 
         $this->query = $this->newQuery();
@@ -144,15 +139,14 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Get a new entity instance
+     * Get a new entity instance.
      *
      * @param array $attributes
      *
-     * @return  \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function getNew(array $attributes = [])
-    {
-        $this->errors = new MessageBag;
+    public function getNew(array $attributes = []) {
+        $this->errors = new MessageBag();
 
         return $this->modelInstance->newInstance($attributes);
     }
@@ -165,12 +159,11 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return self
      */
-    public function newQuery($skipOrdering = false)
-    {
+    public function newQuery($skipOrdering = false) {
         $this->query = $this->getNew()->newQuery();
 
         // Apply order by
-        if ($skipOrdering === false && $this->skipOrderingOnce === false) {
+        if (false === $skipOrdering && false === $this->skipOrderingOnce) {
             foreach ($this->getOrderBy() as $column => $dir) {
                 $this->query->orderBy($column, $dir);
             }
@@ -192,8 +185,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return Model|Collection
      */
-    public function find($id, $columns = ['*'])
-    {
+    public function find($id, $columns = ['*']) {
         $this->newQuery();
 
         return $this->query->find($id, $columns);
@@ -203,25 +195,24 @@ abstract class XotBaseRepository implements RepositoryContract{
      * Find a model by its primary key or throw an exception.
      *
      * @param string $id
-     * @param  array $columns
-     *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @param array  $columns
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *
+     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function findOrFail($id, $columns = ['*'])
-    {
+    public function findOrFail($id, $columns = ['*']) {
         $this->newQuery();
 
         if ($result = $this->query->find($id, $columns)) {
             return $result;
         }
 
-        throw (new ModelNotFoundException)->setModel($this->model);
+        throw (new ModelNotFoundException())->setModel($this->model);
     }
 
     /**
-     * Find data by field and value
+     * Find data by field and value.
      *
      * @param string $field
      * @param string $value
@@ -229,15 +220,14 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return Model|Collection
      */
-    public function findBy($field, $value, $columns = ['*'])
-    {
+    public function findBy($field, $value, $columns = ['*']) {
         $this->newQuery();
 
         return $this->query->where($field, '=', $value)->first($columns);
     }
 
     /**
-     * Find data by field
+     * Find data by field.
      *
      * @param string $attribute
      * @param mixed  $value
@@ -245,8 +235,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return mixed
      */
-    public function findAllBy($attribute, $value, $columns = ['*'])
-    {
+    public function findAllBy($attribute, $value, $columns = ['*']) {
         $this->newQuery();
 
         // Perform where in
@@ -258,23 +247,21 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Find data by multiple fields
+     * Find data by multiple fields.
      *
      * @param array $where
      * @param array $columns
      *
      * @return mixed
      */
-    public function findWhere(array $where, $columns = ['*'])
-    {
+    public function findWhere(array $where, $columns = ['*']) {
         $this->newQuery();
 
         foreach ($where as $field => $value) {
             if (is_array($value)) {
                 list($field, $condition, $val) = $value;
                 $this->query->where($field, $condition, $val);
-            }
-            else {
+            } else {
                 $this->query->where($field, '=', $value);
             }
         }
@@ -290,11 +277,10 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return self
      */
-    public function orderBy($column, $direction)
-    {
+    public function orderBy($column, $direction) {
         // Ensure the sort is valid
-        if (in_array($column, $this->orderable) === false
-            && array_key_exists($column, $this->orderable) === false
+        if (false === in_array($column, $this->orderable)
+            && false === array_key_exists($column, $this->orderable)
         ) {
             return $this;
         }
@@ -303,7 +289,6 @@ abstract class XotBaseRepository implements RepositoryContract{
         $this->skipOrderingOnce = true;
 
         return $this->addScopeQuery(function ($query) use ($column, $direction) {
-
             // Get valid sort order
             $direction = in_array(strtolower($direction), ['desc', 'asc']) ? $direction : 'asc';
 
@@ -319,8 +304,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return array
      */
-    public function getOrderBy()
-    {
+    public function getOrderBy() {
         return $this->orderBy;
     }
 
@@ -329,10 +313,9 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return array
      */
-    public function getSearchableKeys()
-    {
+    public function getSearchableKeys() {
         return array_values(array_map(function ($value, $key) {
-            return (is_array($value) || is_numeric($key) === false) ? $key : $value;
+            return (is_array($value) || false === is_numeric($key)) ? $key : $value;
         }, $this->searchable, array_keys($this->searchable)));
     }
 
@@ -343,8 +326,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return self
      */
-    public function search($queries)
-    {
+    public function search($queries) {
         // Adjust for simple search queries
         if (is_string($queries)) {
             $queries = [
@@ -364,20 +346,22 @@ abstract class XotBaseRepository implements RepositoryContract{
                 $value = Arr::get($queries, $param, '');
 
                 // Validate value
-                if ($value === '' || $value === null) continue;
+                if ('' === $value || null === $value) {
+                    continue;
+                }
 
                 // Columns should be an array
-                $columns = (array)$columns;
+                $columns = (array) $columns;
 
                 // Loop though the columns and look for relationships
                 foreach ($columns as $key => $column) {
                     @list($joining_table, $options) = explode(':', $column);
 
-                    if ($options !== null) {
+                    if (null !== $options) {
                         @list($column, $foreign_key, $related_key, $alias) = explode(',', $options);
 
                         // Join the table if it hasn't already been joined
-                        if (isset($joined[$joining_table]) == false) {
+                        if (false == isset($joined[$joining_table])) {
                             $joined[$joining_table] = $this->addSearchJoin(
                                 $query,
                                 $joining_table,
@@ -405,15 +389,14 @@ abstract class XotBaseRepository implements RepositoryContract{
                             $this->createSearchClause($q, $param, $column, $value, 'or');
                         }
                     });
-                }
-                else {
+                } else {
                     $this->createSearchClause($query, $param, $columns[0], $value);
                 }
             }
 
             // Ensure only the current model's table attributes are return
             $query->addSelect([
-                $this->getModel()->getTable() . '.*',
+                $this->getModel()->getTable().'.*',
             ]);
 
             return $query;
@@ -427,22 +410,20 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return self
      */
-    public function limit($limit)
-    {
+    public function limit($limit) {
         return $this->addScopeQuery(function ($query) use ($limit) {
             return $query->limit($limit);
         });
     }
 
     /**
-     * Retrieve all data of repository
+     * Retrieve all data of repository.
      *
      * @param array $columns
      *
      * @return Collection
      */
-    public function all($columns = ['*'])
-    {
+    public function all($columns = ['*']) {
         $this->newQuery();
 
         return $this->query->get($columns);
@@ -455,8 +436,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return int
      */
-    public function count($columns = ['*'])
-    {
+    public function count($columns = ['*']) {
         $this->newQuery();
 
         return $this->query->count($columns);
@@ -470,8 +450,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return array
      */
-    public function pluck($value, $key = null)
-    {
+    public function pluck($value, $key = null) {
         $this->newQuery();
 
         $lists = $this->query->pluck($value, $key);
@@ -484,17 +463,16 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Retrieve all data of repository, paginated
+     * Retrieve all data of repository, paginated.
      *
-     * @param int       $per_page
-     * @param array     $columns
-     * @param  string   $page_name
-     * @param  int|null $page
+     * @param int      $per_page
+     * @param array    $columns
+     * @param string   $page_name
+     * @param int|null $page
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($per_page = null, $columns = ['*'], $page_name = 'page', $page = null)
-    {
+    public function paginate($per_page = null, $columns = ['*'], $page_name = 'page', $page = null) {
         // Get the default per page when not set
         $per_page = $per_page ?: config('repositories.per_page', 15);
 
@@ -513,17 +491,16 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Retrieve all data of repository, paginated
+     * Retrieve all data of repository, paginated.
      *
-     * @param  int      $per_page
-     * @param  array    $columns
-     * @param  string   $page_name
-     * @param  int|null $page
+     * @param int      $per_page
+     * @param array    $columns
+     * @param string   $page_name
+     * @param int|null $page
      *
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
-    public function simplePaginate($per_page = null, $columns = ['*'], $page_name = 'page', $page = null)
-    {
+    public function simplePaginate($per_page = null, $columns = ['*'], $page_name = 'page', $page = null) {
         $this->newQuery();
 
         // Get the default per page when not set
@@ -533,14 +510,13 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Save a new entity in repository
+     * Save a new entity in repository.
      *
      * @param array $attributes
      *
      * @return Model|bool
      */
-    public function create(array $attributes)
-    {
+    public function create(array $attributes) {
         $entity = $this->getNew($attributes);
 
         if ($entity->save()) {
@@ -553,15 +529,14 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Update an entity with the given attributes and persist it
+     * Update an entity with the given attributes and persist it.
      *
      * @param Model $entity
      * @param array $attributes
      *
      * @return bool
      */
-    public function update(Model $entity, array $attributes)
-    {
+    public function update(Model $entity, array $attributes) {
         if ($entity->update($attributes)) {
             $this->flushCache();
 
@@ -572,17 +547,16 @@ abstract class XotBaseRepository implements RepositoryContract{
     }
 
     /**
-     * Delete a entity in repository
+     * Delete a entity in repository.
      *
      * @param mixed $entity
      *
-     * @return bool|null
-     *
      * @throws \Exception
+     *
+     * @return bool|null
      */
-    public function delete($entity)
-    {
-        if (($entity instanceof Model) === false) {
+    public function delete($entity) {
+        if (false === ($entity instanceof Model)) {
             $entity = $this->find($entity);
         }
 
@@ -598,25 +572,24 @@ abstract class XotBaseRepository implements RepositoryContract{
     /**
      * Create model instance.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
      * @throws RepositoryException
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function makeModel()
-    {
+    public function makeModel() {
         if (empty($this->model)) {
             throw new RepositoryException('The model class must be set on the repository.');
         }
 
-        return $this->modelInstance = new $this->model;
+        return $this->modelInstance = new $this->model();
     }
 
     /**
-     * Get the raw SQL statements for the request
+     * Get the raw SQL statements for the request.
      *
      * @return string
      */
-    public function toSql()
-    {
+    public function toSql() {
         $this->newQuery();
 
         return $this->query->toSql();
@@ -627,8 +600,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return array
      */
-    public function getScopeQuery()
-    {
+    public function getScopeQuery() {
         return $this->scopeQuery;
     }
 
@@ -639,20 +611,18 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return $this
      */
-    public function addScopeQuery(Closure $scope)
-    {
+    public function addScopeQuery(Closure $scope) {
         $this->scopeQuery[] = $scope;
 
         return $this;
     }
 
     /**
-     * Apply scope in current Query
+     * Apply scope in current Query.
      *
      * @return $this
      */
-    protected function applyScope()
-    {
+    protected function applyScope() {
         foreach ($this->scopeQuery as $callback) {
             if (is_callable($callback)) {
                 $this->query = $callback($this->query);
@@ -669,11 +639,8 @@ abstract class XotBaseRepository implements RepositoryContract{
      * Add a message to the repository's error messages.
      *
      * @param string $message
-     *
-     * @return null
      */
-    public function addError($message)
-    {
+    public function addError($message) {
         $this->getErrors()->add('message', $message);
 
         return null;
@@ -684,10 +651,9 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return \Illuminate\Support\MessageBag
      */
-    public function getErrors()
-    {
-        if ($this->errors === null) {
-            $this->errors = new MessageBag;
+    public function getErrors() {
+        if (null === $this->errors) {
+            $this->errors = new MessageBag();
         }
 
         return $this->errors;
@@ -700,8 +666,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return string
      */
-    public function getErrorMessage($default = '')
-    {
+    public function getErrorMessage($default = '') {
         return $this->getErrors()->first('message') ?: $default;
     }
 
@@ -712,15 +677,14 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return string
      */
-    protected function appendTableName($column)
-    {
+    protected function appendTableName($column) {
         // If missing prepend the table name
-        if (strpos($column, '.') === false) {
-            return $this->modelInstance->getTable() . '.' . $column;
+        if (false === strpos($column, '.')) {
+            return $this->modelInstance->getTable().'.'.$column;
         }
 
         // Remove alias prefix indicator
-        if (substr($column, 0, 2) === '_.') {
+        if ('_.' === substr($column, 0, 2)) {
             return preg_replace('/^_\./', '', $column);
         }
 
@@ -736,15 +700,12 @@ abstract class XotBaseRepository implements RepositoryContract{
      * @param string  $value
      * @param string  $boolean
      */
-    protected function createSearchClause(Builder $query, $param, $column, $value, $boolean = 'and')
-    {
-        if ($param === 'query') {
-            $query->where($this->appendTableName($column), self::$searchOperator, '%' . $value . '%', $boolean);
-        }
-        elseif (is_array($value)) {
+    protected function createSearchClause(Builder $query, $param, $column, $value, $boolean = 'and') {
+        if ('query' === $param) {
+            $query->where($this->appendTableName($column), self::$searchOperator, '%'.$value.'%', $boolean);
+        } elseif (is_array($value)) {
             $query->whereIn($this->appendTableName($column), $value, $boolean);
-        }
-        else {
+        } else {
             $query->where($this->appendTableName($column), '=', $value, $boolean);
         }
     }
@@ -760,8 +721,7 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return string
      */
-    protected function addSearchJoin(Builder $query, $joining_table, $foreign_key, $related_key, $alias)
-    {
+    protected function addSearchJoin(Builder $query, $joining_table, $foreign_key, $related_key, $alias) {
         // We need to join to the intermediate table
         $local_table = $this->getModel()->getTable();
 
@@ -786,10 +746,9 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return bool
      */
-    protected function createSearchRangeClause(Builder $query, $value, array $columns)
-    {
+    protected function createSearchRangeClause(Builder $query, $value, array $columns) {
         // Skip arrays
-        if (is_array($value) === true) {
+        if (true === is_array($value)) {
             return false;
         }
 
@@ -798,7 +757,7 @@ abstract class XotBaseRepository implements RepositoryContract{
 
         // Perform a range based query if the range is valid
         // and the separator matches.
-        if (substr($value, 2, 1) === ':' && in_array($range_type, $this->range_keys)) {
+        if (':' === substr($value, 2, 1) && in_array($range_type, $this->range_keys)) {
             // Get the true value
             $value = substr($value, 3);
 
@@ -814,7 +773,7 @@ abstract class XotBaseRepository implements RepositoryContract{
                     break;
                 case 'bt':
                     // Because this can only have two values
-                    if (count($values = explode(',', $value)) === 2) {
+                    if (2 === count($values = explode(',', $value))) {
                         $query->whereBetween($this->appendTableName($columns[0]), $values);
                     }
                     break;
@@ -834,10 +793,9 @@ abstract class XotBaseRepository implements RepositoryContract{
      *
      * @return mixed
      */
-    public function __call($method, $parameters)
-    {
+    public function __call($method, $parameters) {
         // Check for scope method and call
-        if (method_exists($this, $scope = 'scope' . ucfirst($method))) {
+        if (method_exists($this, $scope = 'scope'.ucfirst($method))) {
             return call_user_func_array([$this, $scope], $parameters);
         }
 

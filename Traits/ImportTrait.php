@@ -1,27 +1,26 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 use Cache;
 use GuzzleHttp\Client as GuzzleClient;
-//use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\GuzzleException;
+//use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 
 /*
 https://shanedowling.com/simple-api-mocking-guzzle-charles
 */
 
-trait ImportTrait
-{
+trait ImportTrait {
     protected $start_time;
     protected $client = null;
     protected $client_options = [];
     public $cacheType = 'cache'; //cache o file
 
-    public function importInit()
-    {
+    public function importInit() {
         \ini_set('max_execution_time', '3000');
         $route_current = \Route::current();
         if (\is_object($route_current)) {
@@ -50,8 +49,7 @@ trait ImportTrait
 
     //end __construct
 
-    public function getEffectiveUrl($method, $api_url, $attrs = [])
-    {
+    public function getEffectiveUrl($method, $api_url, $attrs = []) {
         $attrs['allow_redirects'] = [
             'max' => 10,        // allow at most 10 redirects.
             'strict' => true,      // use "strict" RFC compliant redirects.
@@ -65,8 +63,7 @@ trait ImportTrait
         return $res->getHeaderLine('X-Guzzle-Redirect-History');
     }
 
-    public function gRequest($method, $api_url, $attrs = [])
-    {
+    public function gRequest($method, $api_url, $attrs = []) {
         if (null == $this->client) {
             $this->importInit();
         }
@@ -102,8 +99,7 @@ trait ImportTrait
         return $res;
     }
 
-    public function cacheRequest($method, $api_url, $attrs = [])
-    {
+    public function cacheRequest($method, $api_url, $attrs = []) {
         $key = \json_encode(['method' => $method, 'api_url' => $api_url, 'attrs' => $attrs]);
         $key .= '_1';
         $value = Cache::rememberForever($key, function () use ($method,$api_url,$attrs) {
@@ -120,8 +116,7 @@ trait ImportTrait
         return $value;
     }
 
-    public function cacheRequestFile($method, $api_url, $attrs = [])
-    { //--- uguale ma al posto di usare il sistema cache usa i file
+    public function cacheRequestFile($method, $api_url, $attrs = []) { //--- uguale ma al posto di usare il sistema cache usa i file
         $file_path = (Str::slug($this->base_url, '_').'/'.Str::slug($api_url, '_').'.json');
         if (\Storage::disk('cache')->exists($file_path)) {
             $content = \Storage::disk('cache')->get($file_path);
@@ -155,8 +150,7 @@ trait ImportTrait
         return (string) $body;
     }
 
-    public function cacheUrl($url)
-    {//-- shortcut
+    public function cacheUrl($url) {//-- shortcut
         if ('file' == $this->cacheType) {
             return $this->cacheUrlFile($url);
         }
@@ -166,15 +160,13 @@ trait ImportTrait
 
     //end cacheUrl
 
-    public function cacheUrlFile($url)
-    {//-- shortcut
+    public function cacheUrlFile($url) {//-- shortcut
         return $this->cacheRequestFile('GET', $url);
     }
 
     //end cacheUrl
     ///------------ SIMPLE ENGINES  complex has controller model etc
-    public function pixabay($params)
-    {
+    public function pixabay($params) {
         $lang = \App::getLocale();
         $image_type = 'photo';
         //$q= necessary
@@ -186,7 +178,7 @@ trait ImportTrait
         $pixabay_url = \str_replace(' ', '%20', $pixabay_url);
         $json = $this->cacheRequest('GET', $pixabay_url);
         $json = \json_decode($json);
-        if (!isset($json->hits)) {
+        if (! isset($json->hits)) {
             return null;
         }
         $ris = collect($json->hits)->shuffle()->first();
@@ -194,8 +186,7 @@ trait ImportTrait
         return $ris;
     }
 
-    public function pexels($params)
-    {
+    public function pexels($params) {
         $lang = \App::getLocale();
         \extract($params);
         //--- devono mandare via mail api key ..
@@ -203,8 +194,7 @@ trait ImportTrait
         $url = 'https://api.pexels.com/v1/search?query='.$q.'&per_page=15&page=1';
     }
 
-    public function qwantImg($params)
-    {
+    public function qwantImg($params) {
         $lang = \App::getLocale();
         \extract($params);
         /*
@@ -224,10 +214,10 @@ trait ImportTrait
         $json = $this->cacheRequest('GET', $url);
         $json = \json_decode($json);
         //echo '<h3>['.$q.']</h3>';
-        if (!\is_object($json)) {
+        if (! \is_object($json)) {
             return null;
         }
-        if (!isset($json->data)) {
+        if (! isset($json->data)) {
             dd($json);
         }
         $items = $json->data->result->items;
@@ -275,8 +265,7 @@ trait ImportTrait
         return $img;
     }
 
-    public function wikiquote($params)
-    {
+    public function wikiquote($params) {
         //$q= necessary
         \extract($params);
         $wikiquote_url = 'https://it.wikiquote.org/wiki/'.$q;
@@ -309,8 +298,7 @@ trait ImportTrait
 
     //--- http://aforismi.meglio.it/ aforismi su altri alimenti..
 
-    public function trans($params)
-    {
+    public function trans($params) {
         $i = \rand(0, 20);
         if ($i > 0 && $i < 10) {
             return $this->googleTrans($params);
@@ -319,16 +307,14 @@ trait ImportTrait
         return $this->mymemoryTrans($params);
     }
 
-    public function apertiumTrans($params)
-    {
+    public function apertiumTrans($params) {
         //https://github.com/24aitor/Laralang/blob/master/src/Builder/ApertiumTrans.php
         //$host = 'api.apertium.org';
         //$urldata = file_get_contents("http://$host/json/translate?q=$urlString&langpair=$this->from|$this->to");
         //$data = json_decode($urldata, true);
     }
 
-    public function googleTrans($params)
-    {
+    public function googleTrans($params) {
         $host = 'translate.googleapis.com';
         \extract($params);
 
@@ -348,8 +334,7 @@ trait ImportTrait
         return \trim(\implode(' ', $trans));
     }
 
-    public function mymemoryTrans($params)
-    {
+    public function mymemoryTrans($params) {
         $host = 'api.mymemory.translated.net';
         \extract($params);
 

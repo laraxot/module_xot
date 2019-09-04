@@ -1,27 +1,22 @@
 <?php
+
 namespace Modules\Xot\Services;
 
 use Cache;
-
-use Illuminate\Support\Str;
-
 use Goutte\Client as GoutteClient;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Cookie\CookieJar;
-//use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Cookie\FileCookieJar;
+//use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Str;
 
-
-
-class ImportGoutteService
-{
+class ImportGoutteService {
     public static $goutteClient = null;
     public static $guzzleClient = null;
     public static $client = null;
     public static $client_options = [];
 
-    public static function importInit()
-    {
+    public static function importInit() {
         \ini_set('max_execution_time', 3000);
         $params = \Route::current()->parameters();
         $cookieFile = './jar.txt';
@@ -56,8 +51,7 @@ $cookieJar = new FileCookieJar($cookieFile, TRUE);
 
     //end __construct
 
-    public static function getID($method, $url, $attrs = [])
-    {
+    public static function getID($method, $url, $attrs = []) {
         $url_parse = \parse_url($url);
         $dir = Str::slug(\str_replace('.', '-', $url_parse['host']));
         $file = Str::slug(\str_replace('.', '-', $url_parse['path']));
@@ -66,18 +60,15 @@ $cookieJar = new FileCookieJar($cookieFile, TRUE);
         return $path.'_3';
     }
 
-    public static function submit($form, $vars)
-    {
+    public static function submit($form, $vars) {
         return self::$client->submit($form, $vars);
     }
 
-    public static function click($link)
-    {
+    public static function click($link) {
         return self::$client->click($link);
     }
 
-    public static function gRequest($method, $url, $attrs = [])
-    {
+    public static function gRequest($method, $url, $attrs = []) {
         if (null == self::$client) {
             self::importInit();
         }
@@ -90,8 +81,7 @@ $cookieJar = new FileCookieJar($cookieFile, TRUE);
         return $ris;
     }
 
-    public static function cacheRequest($method, $url, $attrs = [])
-    {
+    public static function cacheRequest($method, $url, $attrs = []) {
         $key = self::getID($method, $url, $attrs);
         $value = Cache::rememberForever($key, function () use ($method,$url,$attrs) {
             $crawler = self::gRequest($method, $url, $attrs);

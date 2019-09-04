@@ -1,15 +1,14 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
-trait FormRequestTrait
-{
+trait FormRequestTrait {
     /**
      * Get the error messages for the defined validation rules.
      *
      * @return array
      */
-    public function messages()
-    {
+    public function messages() {
         $pieces = \explode('\\', __CLASS__);
         $pack = \mb_strtolower($pieces[1]);
         //ddd($pieces);
@@ -19,12 +18,12 @@ trait FormRequestTrait
         })->all();
         $trad_name = $pack.'::'.\implode('.', $pieces);
         $trad = trans($trad_name);
-        if (!\is_array($trad)) {
+        if (! \is_array($trad)) {
             //    ddd($trad_name.' is not an array');
             $trad = [];
         }
         $tradGeneric = trans('theme::generic'); //deve funzionare anche senza il pacchetto "food", invece "extend" e' un pacchetto primario
-        if (!\is_array($tradGeneric)) {
+        if (! \is_array($tradGeneric)) {
             $tradGeneric = [];
         }
         $trad = \array_merge($tradGeneric, $trad);

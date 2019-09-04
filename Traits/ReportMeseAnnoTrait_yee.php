@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 // /laravel/app/Updater.php
@@ -9,23 +10,21 @@ use Modules\Sigma\Models\Anag;
 //---------- models -----------
 use Modules\Trasferte\Models;
 use Modules\Xot\Traits\RouteTrait;
-//------services---------
-use Modules\Theme\Services\ThemeService;
 
-trait ReportMeseAnnoTrait_yee
-{
+//------services---------
+
+trait ReportMeseAnnoTrait_yee {
     //----------------------------------
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $data = $request->all();
         $params = \Route::current()->parameters();
         $model = $this->getModel();
 
         //$params=array_merge($request->all(),);
-        if (!isset($params['mese'])) {
+        if (! isset($params['mese'])) {
             $params['mese'] = \date('m');
         }
-        if (!isset($params['anno'])) {
+        if (! isset($params['anno'])) {
             $params['anno'] = \date('Y');
         }
         $params['tipo'] = 1;

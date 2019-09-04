@@ -1,16 +1,15 @@
 <?php
+
 namespace Modules\Xot\Services;
 
 use TeamTNT\TNTSearch\Indexer\TNTGeoIndexer;
-use TeamTNT\TNTSearch\TNTSearch;
 use TeamTNT\TNTSearch\TNTGeoSearch;
+use TeamTNT\TNTSearch\TNTSearch;
 
-use Illuminate\Http\Request;
 //---------CSS----------
 
-class ScoutService{
-
-	public static function import($params) {
+class ScoutService {
+    public static function import($params) {
         \extract($params);
         $tnt = new TNTSearch();
         $driver = config('database.default');
@@ -49,14 +48,14 @@ class ScoutService{
         $indexer->run();
     }
 
-    public static function findNearest($params){
+    public static function findNearest($params) {
         return self::findNearestTnt($params);
     }
 
-    public static function findNearestTnt($params){
+    public static function findNearestTnt($params) {
         extract($params);
         $index = $model->searchableAs().'.geo.index';
-        if (!\File::exists(storage_path($index))) {
+        if (! \File::exists(storage_path($index))) {
             ScoutService::geoImport(['model' => $model]);
         }
         $driver = config('database.default');
@@ -65,8 +64,7 @@ class ScoutService{
         $candyShopIndex->loadConfig($config);
         $candyShopIndex->selectIndex($index);
         $candyShops = $candyShopIndex->findNearest($currentLocation, $distance, $limit);
+
         return $candyShops;
-    } 
-
-
+    }
 }//end class

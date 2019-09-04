@@ -1,13 +1,8 @@
 <?php
 
-
-
-use Modules\Xot\Services;
-
 use Collective\Html\FormBuilder;
 
-class CustomInputService extends FormBuilder
-{
+class CustomInputService extends FormBuilder {
     /**
      * Generate Bank drop down list.
      *
@@ -17,8 +12,7 @@ class CustomInputService extends FormBuilder
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function selectBank($name, $selected = null, $options = [])
-    {
+    public function selectBank($name, $selected = null, $options = []) {
         $list = [
             '' => 'Select Bank...',
             'AB Bank' => 'AB Bank',

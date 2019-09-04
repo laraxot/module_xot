@@ -1,19 +1,16 @@
 <?php
+
 namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-
 use Illuminate\Support\Str;
-
 //---- services ---
 use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller{
-
+abstract class XotBaseContainerController extends Controller {
     protected $controller;
     protected $row;
     protected $module;
@@ -23,29 +20,31 @@ abstract class XotBaseContainerController extends Controller{
     public function init($params) { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
-        list($containers,$items)=params2ContainerItem($params);
-        $tmp=collect($containers)->map(function ($item){
-        	return Str::studly($item);
+        list($containers, $items) = params2ContainerItem($params);
+        $tmp = collect($containers)->map(function ($item) {
+            return Str::studly($item);
         })->implode('\\');
-        if(!isset($params['module'])) return ;
-        $mod=\Module::find($params['module']);
-        if($mod==null){
-            if(Str::startsWith($params['module'],'trasferte') ){ //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
-                $mod=(object) ['name'=>'Trasferte']; 
-            };
+        if (! isset($params['module'])) {
+            return;
         }
-        $controller='\Modules\\'.$mod->name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
-        //ddd($controller);
-        try{
-            if(class_exists($controller)){
-                $this->controller=$controller;
-            }else{
-                $controller='\Modules\Xot\Http\Controllers\Admin\XotController'; 
-                $this->controller=$controller;
+        $mod = \Module::find($params['module']);
+        if (null == $mod) {
+            if (Str::startsWith($params['module'], 'trasferte')) { //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
+                $mod = (object) ['name' => 'Trasferte'];
             }
-        }catch(\Exception $e){
-            $controller='\Modules\Xot\Http\Controllers\Admin\XotController';
-            $this->controller=$controller;
+        }
+        $controller = '\Modules\\'.$mod->name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        //ddd($controller);
+        try {
+            if (class_exists($controller)) {
+                $this->controller = $controller;
+            } else {
+                $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
+                $this->controller = $controller;
+            }
+        } catch (\Exception $e) {
+            $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
+            $this->controller = $controller;
         }
         /*
         $file=$mod->getPath().'\Http\Controllers\Admin\\'.$tmp.'Controller.php';
@@ -60,30 +59,29 @@ abstract class XotBaseContainerController extends Controller{
             $this->controller=$controller;
         }
         */
-        $this->item_last=last($items);
-        $this->container_last=last($containers);
-        $this->last=last($params);
+        $this->item_last = last($items);
+        $this->container_last = last($containers);
+        $this->last = last($params);
     }
 
-	public function __call($method, $args){
+    public function __call($method, $args) {
         $params = \Route::current()->parameters();
         $this->init($params);
         $controller = $this->controller;
-        $row=$this->last;
+        $row = $this->last;
         if (is_object($row) && \Auth::user()->cannot($method, $row)) {
             ddd('non autorizzato ['.$method.']['.get_class($row).']');
             abort(403);
         }
-        $request=Request::capture();
-        if(in_array($method,['update'])){
-            $model=$this->item_last;
-            $panel=StubService::getByModel($model,'panel',$create = true);
-            if(is_object($panel)){
-                $request->validate($panel->rules(),$panel->rulesMessages());
+        $request = Request::capture();
+        if (in_array($method, ['update'])) {
+            $model = $this->item_last;
+            $panel = StubService::getByModel($model, 'panel', $create = true);
+            if (is_object($panel)) {
+                $request->validate($panel->rules(), $panel->rulesMessages());
             }
         }
         //ddd($controller);
-        return app($controller)->$method($request,$this->container_last,$this->item_last);
-
+        return app($controller)->$method($request, $this->container_last, $this->item_last);
     }
 }

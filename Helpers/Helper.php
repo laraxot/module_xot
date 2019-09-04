@@ -1,15 +1,11 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-
-
 
 //namespace Modules\XRA\Helpers;
 
-if (!\function_exists('ddd')) {
-    function ddd($params)
-    {
+if (! \function_exists('ddd')) {
+    function ddd($params) {
         /*
         try{
             \header('Content-type: text/html');
@@ -34,9 +30,8 @@ if (!\function_exists('ddd')) {
     }
 }
 
-if (!\function_exists('getFilename')) {
-    function getFilename($params)
-    {
+if (! \function_exists('getFilename')) {
+    function getFilename($params) {
         $tmp = \debug_backtrace();
         $class = class_basename($tmp[1]['class']);
         $func = $tmp[1]['function'];
@@ -45,15 +40,14 @@ if (!\function_exists('getFilename')) {
             \str_replace('Controller', '', $class).
                     '_'.\str_replace('do_', '', $func).
                     '_'.$params_list
-                );
+        );
 
         return $filename;
     }
 }
 
-if (!\function_exists('setConfig')) {
-    function setConfig($params)
-    {
+if (! \function_exists('setConfig')) {
+    function setConfig($params) {
         $data = getConfig($params);
         $data = \array_merge($data, $params['data']);
 
@@ -70,9 +64,8 @@ if (!\function_exists('setConfig')) {
     }
 }
 
-if (!\function_exists('getConfig')) {
-    function getConfig($params)
-    {
+if (! \function_exists('getConfig')) {
+    function getConfig($params) {
         $config_files = getConfigFiles($params);
         if (\count($config_files) > 1) {
             $data = [];
@@ -87,16 +80,16 @@ if (!\function_exists('getConfig')) {
         return $data;
     }
 }
-if (!\function_exists('req_uri')) {
-    function req_uri(){
-        $req_uri=isset($_SERVER['REQUEST_URI'])?$_SERVER['REQUEST_URI']:'';
+if (! \function_exists('req_uri')) {
+    function req_uri() {
+        $req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+
         return $req_uri;
     }
 }
 
-if (!\function_exists('getConfigFile')) {
-    function getConfigFiles($params)
-    {
+if (! \function_exists('getConfigFile')) {
+    function getConfigFiles($params) {
         //if(count($params)>1){
         if (\is_dir(base_path('config/'.$params['file']))) {
             $tmps = (\array_keys(config($params['file'])));
@@ -109,12 +102,12 @@ if (!\function_exists('getConfigFile')) {
         }
         //ddd($params);
         //}
-        if (!isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
+        if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
             $_SERVER['SERVER_NAME'] = 'localhost';
         }
         $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
         $config_file = base_path('config'.DIRECTORY_SEPARATOR.$server_name.DIRECTORY_SEPARATOR.$params['file']);
-        if (!\file_exists($config_file)) {
+        if (! \file_exists($config_file)) {
             //ddd($config_file);
             if (\file_exists(base_path('config/'.$params['file']))) {
                 //ddd(base_path('config/'.$params['file']));
@@ -127,13 +120,13 @@ if (!\function_exists('getConfigFile')) {
             echo '<h3>'.$config_file.'</h3>';
             dd('<br/>LINE:['.__LINE__.']['.__FILE__.']');
         }
+
         return [$config_file];
     }
 }
 
-if (!\function_exists('arraySave')) {
-    function arraySave($params)
-    {
+if (! \function_exists('arraySave')) {
+    function arraySave($params) {
         \XRA\Extend\Services\ArrayService::save($params);
         /*
         \extract($params);
@@ -148,172 +141,180 @@ if (!\function_exists('arraySave')) {
     }
 }
 
-if (!\function_exists('in_admin')) {
-    function in_admin()
-    {
+if (! \function_exists('in_admin')) {
+    function in_admin() {
         return 'admin' == \Request::segment(1);
     }
 }
-if (!\function_exists('inAdmin')) {
-    function inAdmin()
-    {
+if (! \function_exists('inAdmin')) {
+    function inAdmin() {
         return 'admin' == \Request::segment(1);
     }
 }
 
-
-    /**
+    /*
      * Replaces spaces with full text search wildcards
      *
      * @param string $term
      * @return string
      */
-if (!\function_exists('fullTextWildcards')) {
-    /*protected */ function fullTextWildcards($term)
-    {
+if (! \function_exists('fullTextWildcards')) {
+    /*protected */ function fullTextWildcards($term) {
         // removing symbols used by MySQL
         $reservedSymbols = ['-', '+', '<', '>', '@', '(', ')', '~'];
         $term = str_replace($reservedSymbols, '', $term);
 
         $words = explode(' ', $term);
 
-        foreach($words as $key => $word) {
+        foreach ($words as $key => $word) {
             /*
              * applying + operator (required word) only big words
              * because smaller ones are not indexed by mysql
              */
-            if(strlen($word) >= 3) {
-                $words[$key] = '+' . $word . '*';
+            if (strlen($word) >= 3) {
+                $words[$key] = '+'.$word.'*';
             }
         }
 
-        $searchTerm = implode( ' ', $words);
+        $searchTerm = implode(' ', $words);
 
         return $searchTerm;
     }
 }
 
-if (!\function_exists('params2ContainerItem')) {
-    function params2ContainerItem($params=null){
-        if($params==null){
+if (! \function_exists('params2ContainerItem')) {
+    function params2ContainerItem($params = null) {
+        if (null == $params) {
             $params = \Route::current()->parameters();
         }
-        $container=[];
-        $item=[];
-        foreach($params as $k=>$v){
-            $pattern='/(container|item)([0-9]+)/';
-            preg_match($pattern, $k,$matches);
-            if(isset($matches[1]) && isset($matches[2]) ){
-                $sk=$matches[1];
-                $sv=$matches[2];
-                $$sk[$sv]=$v;
-            };
+        $container = [];
+        $item = [];
+        foreach ($params as $k => $v) {
+            $pattern = '/(container|item)([0-9]+)/';
+            preg_match($pattern, $k, $matches);
+            if (isset($matches[1]) && isset($matches[2])) {
+                $sk = $matches[1];
+                $sv = $matches[2];
+                $$sk[$sv] = $v;
+            }
         }
-        return [$container,$item];
+
+        return [$container, $item];
     }
 }
 
-
-if (!\function_exists('getModuleModels')) {
-    function getModuleModels($module){
-        if(Str::startsWith($module,'trasferte')){ //caso eccezzionale 
-            $module='trasferte';
+if (! \function_exists('getModuleModels')) {
+    function getModuleModels($module) {
+        if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
+            $module = 'trasferte';
         }
-        $mod=\Module::find($module);
-        if($mod==null) return [];
-        $mod_path=$mod->getPath().'/Models';
-        $mod_path=str_replace(['\\','/'],[DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR],$mod_path);
+        $mod = \Module::find($module);
+        if (null == $mod) {
+            return [];
+        }
+        $mod_path = $mod->getPath().'/Models';
+        $mod_path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $mod_path);
         $files = File::files($mod_path);
-        $data=[]; 
-        $ns='Modules\\'.$mod->name.'\\Models';  // con la barra davanti non va il search ?
-        foreach($files as $file){
-            $filename=$file->getRelativePathname();
-            $ext='.php';
-            if(ends_with($filename,$ext)){
-                $tmp=new \stdClass();
-                $name=substr(($filename),0,-strlen($ext));
-                $tmp->class=$ns.'\\'.$name;
-                $name=Str::snake($name);
-                $tmp->name=$name;
-                $data[$tmp->name]=$tmp->class;
-                
+        $data = [];
+        $ns = 'Modules\\'.$mod->name.'\\Models';  // con la barra davanti non va il search ?
+        foreach ($files as $file) {
+            $filename = $file->getRelativePathname();
+            $ext = '.php';
+            if (ends_with($filename, $ext)) {
+                $tmp = new \stdClass();
+                $name = substr(($filename), 0, -strlen($ext));
+                $tmp->class = $ns.'\\'.$name;
+                $name = Str::snake($name);
+                $tmp->name = $name;
+                $data[$tmp->name] = $tmp->class;
             }
         }
+
         return $data;
     }
 }
 
-if (!\function_exists('tenantName')) {
-    function tenantName($params=[]){
-        if (!isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
+if (! \function_exists('tenantName')) {
+    function tenantName($params = []) {
+        if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
             $_SERVER['SERVER_NAME'] = 'localhost';
         }
         $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
-        if(!\File::exists(base_path('config/'.$server_name))){
+        if (! \File::exists(base_path('config/'.$server_name))) {
             $server_name = 'localhost';
         }
+
         return $server_name;
     }//end function
 }
 
-if (!\function_exists('xotModel')) {
-    function xotModel($name){
-        $model=tenantConfig('xra.model.'.$name);
-        return new $model;
-    }
-}    
+if (! \function_exists('xotModel')) {
+    function xotModel($name) {
+        $model = tenantConfig('xra.model.'.$name);
 
-if (!\function_exists('tenantConfig')) {
-    function tenantConfig($key){
-        $group=implode('.',array_slice(explode('.',$key),0,2));
-        if(in_admin() && Str::startsWith($key,'xra.model') ){
-            $module_name=\Request::segment(2);
-            $models=getModuleModels($module_name);
-            $original_conf=config('xra.model');
-            if(!is_array($original_conf))$original_conf=[];
-            $merge_conf=array_merge($original_conf,$models);
+        return new $model();
+    }
+}
+
+if (! \function_exists('tenantConfig')) {
+    function tenantConfig($key) {
+        $group = implode('.', array_slice(explode('.', $key), 0, 2));
+        if (in_admin() && Str::startsWith($key, 'xra.model')) {
+            $module_name = \Request::segment(2);
+            $models = getModuleModels($module_name);
+            $original_conf = config('xra.model');
+            if (! is_array($original_conf)) {
+                $original_conf = [];
+            }
+            $merge_conf = array_merge($original_conf, $models);
             \Config::set('xra.model', $merge_conf);
         }
-        $tenant_name=tenantName();
-        $extra_conf=config($tenant_name.'.'.$group);
-        $original_conf=config($group);
+        $tenant_name = tenantName();
+        $extra_conf = config($tenant_name.'.'.$group);
+        $original_conf = config($group);
         //ddd($extra_conf);
-        if(!is_array($original_conf)) $original_conf=[];
-        if(!is_array($extra_conf)) $extra_conf=[];
-        $merge_conf=array_merge($original_conf,$extra_conf); //_recursive
+        if (! is_array($original_conf)) {
+            $original_conf = [];
+        }
+        if (! is_array($extra_conf)) {
+            $extra_conf = [];
+        }
+        $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
         \Config::set($group, $merge_conf);  // non so se metterlo ..
         return config($key);
     }
 }
 
-if (!\function_exists('transFields')) {
-    function transFields($params){
+if (! \function_exists('transFields')) {
+    function transFields($params) {
         extract($params);
-        if(isset($attributes)){
+        if (isset($attributes)) {
             extract($attributes);
         }
-        $ris=new \stdClass();
+        $ris = new \stdClass();
 
-        $start=0;
-        if(in_admin()){
-            $start=1;
+        $start = 0;
+        if (in_admin()) {
+            $start = 1;
         }
-       
-        $ris->name_dot=bracketsToDotted($name);
 
-        $pattern= '/\.[0-9]+\./m';
-        $ris->name_dot=preg_replace($pattern,'.',$ris->name_dot);
-        
-        list($ns,$key)=explode('::',$view);
-        $view_noact=$ns.'::'.implode('.',array_slice(explode('.',$key),$start,-1));
+        $ris->name_dot = bracketsToDotted($name);
 
-        $trans_fields=['label','placeholder','help'];
-        foreach($trans_fields as $tf){
-            $trans=$view_noact.'.field.'.$ris->name_dot.'_'.$tf;
-            $ris->$tf=isset($$tf)?$$tf:trans($trans);
-            if($ris->$tf == $trans) $ris->$tf='';
+        $pattern = '/\.[0-9]+\./m';
+        $ris->name_dot = preg_replace($pattern, '.', $ris->name_dot);
+
+        list($ns, $key) = explode('::', $view);
+        $view_noact = $ns.'::'.implode('.', array_slice(explode('.', $key), $start, -1));
+
+        $trans_fields = ['label', 'placeholder', 'help'];
+        foreach ($trans_fields as $tf) {
+            $trans = $view_noact.'.field.'.$ris->name_dot.'_'.$tf;
+            $ris->$tf = isset($$tf) ? $$tf : trans($trans);
+            if ($ris->$tf == $trans) {
+                $ris->$tf = '';
+            }
         }
- 
+
         /*
         $trans=$view_noact.'.field.'.$name;
         $ris->label=isset($label)?$label:trans($trans);
@@ -323,26 +324,27 @@ if (!\function_exists('transFields')) {
         if($ris->placeholder==$trans) $ris->placeholder=' ';
         */
 
-        $attributes=$params;
-        $attrs_default=['class' => 'form-control','placeholder'=>$ris->placeholder];
-        $ris->attributes=collect(array_merge($attrs_default, $attributes))
-                        ->filter(function($item,$key){
-                            return in_array($key,['class','placeholder','readonly']) || Str::startsWith($key,'data-');
+        $attributes = $params;
+        $attrs_default = ['class' => 'form-control', 'placeholder' => $ris->placeholder];
+        $ris->attributes = collect(array_merge($attrs_default, $attributes))
+                        ->filter(function ($item, $key) {
+                            return in_array($key, ['class', 'placeholder', 'readonly']) || Str::startsWith($key, 'data-');
                         })
                         //->only('class','placeholder','readonly')
                         ->all();
-        $ris->params=$params;
+        $ris->params = $params;
+
         return $ris;
     }
 }
 
-if (!\function_exists('debug_getter_obj')){
-    function debug_getter_obj($params){
+if (! \function_exists('debug_getter_obj')) {
+    function debug_getter_obj($params) {
         extract($params);
-        $methods=collect(get_class_methods($obj))->filter(function($item){
-            $exclude=[
+        $methods = collect(get_class_methods($obj))->filter(function ($item) {
+            $exclude = [
                 //--Too few arguments to function
-                'getRelationExistenceQuery',  
+                'getRelationExistenceQuery',
                 'getRelationExistenceQueryForSelfRelation',
                 'getRelationExistenceCountQuery',
                 'getMorphedModel',
@@ -364,153 +366,150 @@ if (!\function_exists('debug_getter_obj')){
                 'getDataAttribute',
                 //--altri errori --
             ];
-            return (Str::startsWith($item,'get')  && !in_array($item,$exclude)  );
-        })->map(function($item) use($obj) {
-            $tmp=[];
-            $tmp['name']=$item;
-            try{
-                $tmp['ris']=$obj->$item();
-            }catch(\Exception $e){
-                $tmp['ris']=$e->getMessage();
+
+            return Str::startsWith($item, 'get') && ! in_array($item, $exclude);
+        })->map(function ($item) use ($obj) {
+            $tmp = [];
+            $tmp['name'] = $item;
+            try {
+                $tmp['ris'] = $obj->$item();
+            } catch (\Exception $e) {
+                $tmp['ris'] = $e->getMessage();
             }
+
             return $tmp;
         });
         //->dd();
-        $html='<table border="1">
+        $html = '<table border="1">
         <thead>
         <tr>
         <th>Name</th>
         <th>Ris</th>
         </tr>
         </thead>';
-        foreach($methods as $k=>$v){
-            $html.='<tr>';
-            $html.='<td>'.$v['name'].'</td>';
-            $val=$v['ris'];
-            if(is_object($val)){
-                $val='(Object) '.get_class($val);
+        foreach ($methods as $k => $v) {
+            $html .= '<tr>';
+            $html .= '<td>'.$v['name'].'</td>';
+            $val = $v['ris'];
+            if (is_object($val)) {
+                $val = '(Object) '.get_class($val);
             }
-            if(is_array($val)){
-                $val=var_export($val,true);
+            if (is_array($val)) {
+                $val = var_export($val, true);
             }
-            $html.='<td>'.$val.'</td>';
-            $html.='</tr>';
-            
+            $html .= '<td>'.$val.'</td>';
+            $html .= '</tr>';
         }
-        $html.='</table>';
+        $html .= '</table>';
         echo $html;
         ddd($methods);
     }//end function
 }//end exists
 
-
-if (!\function_exists('bracketsToDotted')) {
- // privacies[111][pivot][title] => privacies.111.pivot.title 
-    function bracketsToDotted($str,$quotation_marks=''){
-        return str_replace(['[',']'],['.',''],$str);
+if (! \function_exists('bracketsToDotted')) {
+    // privacies[111][pivot][title] => privacies.111.pivot.title
+    function bracketsToDotted($str, $quotation_marks = '') {
+        return str_replace(['[', ']'], ['.', ''], $str);
     }
 }
-if (!\function_exists('dottedToBrackets')) {
- // privacies.111.pivot.title => privacies[111][pivot][title] 
-    function dottedToBrackets($str,$quotation_marks=''){
-        $str=collect(explode('.',$str))->map(function ($v, $k){
-            return $k==0?$v:'['.$v.']';
+if (! \function_exists('dottedToBrackets')) {
+    // privacies.111.pivot.title => privacies[111][pivot][title]
+    function dottedToBrackets($str, $quotation_marks = '') {
+        $str = collect(explode('.', $str))->map(function ($v, $k) {
+            return 0 == $k ? $v : '['.$v.']';
         })->implode('');
+
         return $str;
     }
 }
 
-
-
-
-if (!\function_exists('money_format')) {
+if (! \function_exists('money_format')) {
     // funzione copiata da https://php.net/manual/en/function.money-format.php
     // Improvement to Rafael M. Salvioni's solution for money_format on Windows: when no currency symbol is selected, in the formatting, the minus sign was also lost when the locale puts it in position 3 or 4. Changed $currency = '';  to: $currency = $cprefix .$csuffix;
 
     function money_format($format, $number) {
-            $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?' .
+        $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'.
                     '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
-            if (setlocale(LC_MONETARY, 0) == 'C') {
-                setlocale(LC_MONETARY, '');
-            }
-            $locale = localeconv();
-            preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
-            foreach ($matches as $fmatch) {
-                $value = floatval($number);
-                $flags = array(
+        if ('C' == setlocale(LC_MONETARY, 0)) {
+            setlocale(LC_MONETARY, '');
+        }
+        $locale = localeconv();
+        preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
+        foreach ($matches as $fmatch) {
+            $value = floatval($number);
+            $flags = [
                     'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
                             $match[1] : ' ',
                     'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
                     'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
                             $match[0] : '+',
                     'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
-                    'isleft' => preg_match('/\-/', $fmatch[1]) > 0
-                );
-                $width = trim($fmatch[2]) ? (int) $fmatch[2] : 0;
-                $left = trim($fmatch[3]) ? (int) $fmatch[3] : 0;
-                $right = trim($fmatch[4]) ? (int) $fmatch[4] : $locale['int_frac_digits'];
-                $conversion = $fmatch[5];
+                    'isleft' => preg_match('/\-/', $fmatch[1]) > 0,
+                ];
+            $width = trim($fmatch[2]) ? (int) $fmatch[2] : 0;
+            $left = trim($fmatch[3]) ? (int) $fmatch[3] : 0;
+            $right = trim($fmatch[4]) ? (int) $fmatch[4] : $locale['int_frac_digits'];
+            $conversion = $fmatch[5];
 
-                $positive = true;
-                if ($value < 0) {
-                    $positive = false;
-                    $value *= -1;
-                }
-                $letter = $positive ? 'p' : 'n';
+            $positive = true;
+            if ($value < 0) {
+                $positive = false;
+                $value *= -1;
+            }
+            $letter = $positive ? 'p' : 'n';
 
-                $prefix = $suffix = $cprefix = $csuffix = $signal = '';
+            $prefix = $suffix = $cprefix = $csuffix = $signal = '';
 
-                $signal = $positive ? $locale['positive_sign'] : $locale['negative_sign'];
-                switch (true) {
-                    case $locale["{$letter}_sign_posn"] == 1 && $flags['usesignal'] == '+':
+            $signal = $positive ? $locale['positive_sign'] : $locale['negative_sign'];
+            switch (true) {
+                    case 1 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
                         $prefix = $signal;
                         break;
-                    case $locale["{$letter}_sign_posn"] == 2 && $flags['usesignal'] == '+':
+                    case 2 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
                         $suffix = $signal;
                         break;
-                    case $locale["{$letter}_sign_posn"] == 3 && $flags['usesignal'] == '+':
+                    case 3 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
                         $cprefix = $signal;
                         break;
-                    case $locale["{$letter}_sign_posn"] == 4 && $flags['usesignal'] == '+':
+                    case 4 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
                         $csuffix = $signal;
                         break;
-                    case $flags['usesignal'] == '(':
-                    case $locale["{$letter}_sign_posn"] == 0:
+                    case '(' == $flags['usesignal']:
+                    case 0 == $locale["{$letter}_sign_posn"]:
                         $prefix = '(';
                         $suffix = ')';
                         break;
                 }
-                if (!$flags['nosimbol']) {
-                    $currency = $cprefix .
-                            ($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) .
+            if (! $flags['nosimbol']) {
+                $currency = $cprefix.
+                            ('i' == $conversion ? $locale['int_curr_symbol'] : $locale['currency_symbol']).
                             $csuffix;
-                } else {
-                    $currency = $cprefix .$csuffix;
-                }
-                $space = $locale["{$letter}_sep_by_space"] ? ' ' : '';
-
-                $value = number_format($value, $right, $locale['mon_decimal_point'], $flags['nogroup'] ? '' : $locale['mon_thousands_sep']);
-                $value = @explode($locale['mon_decimal_point'], $value);
-
-                $n = strlen($prefix) + strlen($currency) + strlen($value[0]);
-                if ($left > 0 && $left > $n) {
-                    $value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0];
-                }
-                $value = implode($locale['mon_decimal_point'], $value);
-                if ($locale["{$letter}_cs_precedes"]) {
-                    $value = $prefix . $currency . $space . $value . $suffix;
-                } else {
-                    $value = $prefix . $value . $space . $currency . $suffix;
-                }
-                if ($width > 0) {
-                    $value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ?
-                                    STR_PAD_RIGHT : STR_PAD_LEFT);
-                }
-
-                $format = str_replace($fmatch[0], $value, $format);
+            } else {
+                $currency = $cprefix.$csuffix;
             }
-            return $format;
+            $space = $locale["{$letter}_sep_by_space"] ? ' ' : '';
+
+            $value = number_format($value, $right, $locale['mon_decimal_point'], $flags['nogroup'] ? '' : $locale['mon_thousands_sep']);
+            $value = @explode($locale['mon_decimal_point'], $value);
+
+            $n = strlen($prefix) + strlen($currency) + strlen($value[0]);
+            if ($left > 0 && $left > $n) {
+                $value[0] = str_repeat($flags['fillchar'], $left - $n).$value[0];
+            }
+            $value = implode($locale['mon_decimal_point'], $value);
+            if ($locale["{$letter}_cs_precedes"]) {
+                $value = $prefix.$currency.$space.$value.$suffix;
+            } else {
+                $value = $prefix.$value.$space.$currency.$suffix;
+            }
+            if ($width > 0) {
+                $value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ?
+                                    STR_PAD_RIGHT : STR_PAD_LEFT);
+            }
+
+            $format = str_replace($fmatch[0], $value, $format);
         }
 
-
+        return $format;
+    }
 }

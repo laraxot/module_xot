@@ -1,33 +1,27 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
-use Carbon\Carbon;
+use Modules\Xot\Services\ArrayService;
 use Zend;
 
-use Modules\Xot\Services\ArrayService;
-
-trait ArrayTrait
-{
-    public static function toXLS($params)
-    {
+trait ArrayTrait {
+    public static function toXLS($params) {
         //return self::toXLS_Maatwebsite($params);
         return ArrayService::toXLS($params);
     }
 
-    
-    public static function toCSV($params)
-    {
+    public static function toCSV($params) {
         //return self::toCSV_php($params);
         return ArrayService::toCSV($params);
     }
 
-    public static function array_raggruppa($params)
-    {
-        if (!isset($params['key_array']) && isset($params['key'])) {
+    public static function array_raggruppa($params) {
+        if (! isset($params['key_array']) && isset($params['key'])) {
             $params['key_array'] = $params['key'];
         }
         \extract($params);
-        if (!\is_array($data)) {
+        if (! \is_array($data)) {
             return [];
         }
         //*-- made with collection
@@ -48,7 +42,7 @@ trait ArrayTrait
         $ris = [];
         //foreach($data as $k => $v) {
         foreach ($data as $k => $v) {
-            if (!\is_array($key_array)) {
+            if (! \is_array($key_array)) {
                 ddd($key_array);
             }
             \reset($key_array);
@@ -56,7 +50,7 @@ trait ArrayTrait
             //while (list($k1, $v1) = each($key_array)) {
             foreach ($key_array as $k1 => $v1) {
                 if (\is_object($v)) {
-                    if (!isset($v->$v1)) {
+                    if (! isset($v->$v1)) {
                         //self::print_x($v1);
                         //self::print_x($v);
                         //ddd('qui');
@@ -73,7 +67,7 @@ trait ArrayTrait
                 $skey[] = $v2;
             }
             $skey = \implode('-', $skey);
-            if (!isset($ris[$skey])) {
+            if (! isset($ris[$skey])) {
                 $ris[$skey] = [];
             }
             $ris[$skey][] = $v;
@@ -82,15 +76,14 @@ trait ArrayTrait
         return $ris;
     }
 
-    public static function array_subtotale($params)
-    {
+    public static function array_subtotale($params) {
         $fields = [];
         \extract($params);
         $ris = [];
         $fields = \array_merge($fields, $key);
         $fields = \array_merge($fields, $add); //in piu forse
         $fields = \array_unique($fields);
-        if (!\is_array($data)) {
+        if (! \is_array($data)) {
             return $ris;
         }
 
@@ -127,7 +120,7 @@ trait ArrayTrait
             $skey = [];
             \reset($key);
             foreach ($key as $kk => $vk) {
-                if (!isset($v->$vk)) {
+                if (! isset($v->$vk)) {
                     echo '<pre>[v]';
                     \print_r($v);
                     echo '[/v]</pre>';
@@ -139,11 +132,11 @@ trait ArrayTrait
                 $skey[] = $v->$vk;
             }
             $skey = \implode('-', $skey);
-            if (!isset($ris[$skey])) {
+            if (! isset($ris[$skey])) {
                 $obj = new \stdclass();
                 \reset($fields);
                 foreach ($fields as $kf => $vf) {
-                    if (!isset($v->$vf)) {
+                    if (! isset($v->$vf)) {
                         $v->$vf = 0;
                     }
                     $obj->$vf = $v->$vf;
@@ -152,10 +145,10 @@ trait ArrayTrait
             } else {
                 \reset($add);
                 foreach ($add as $ka => $va) {
-                    if (!isset($v->$va)) {
+                    if (! isset($v->$va)) {
                         $v->$va = 0;
                     }
-                    if (!isset($ris[$skey]->$va)) {
+                    if (! isset($ris[$skey]->$va)) {
                         $ris[$skey]->$va = 0;
                     }
                     $ris[$skey]->$va += $v->$va;
@@ -170,14 +163,12 @@ trait ArrayTrait
         return $ris;
     }
 
-    public static function toObject($data)
-    {
+    public static function toObject($data) {
         //return is_array($data) ? (object) array_map(__function __, $data) : $data;
         return self::array2Obj($data);
     }
 
-    public static function toArrayObject($data)
-    {
+    public static function toArrayObject($data) {
         return \array_map(
             function ($v) {
                 return self::toObject($v);
@@ -186,9 +177,8 @@ trait ArrayTrait
         );
     }
 
-    public static function array2Obj($array = [])
-    {
-        if (!\is_array($array)) {
+    public static function array2Obj($array = []) {
+        if (! \is_array($array)) {
             return $array;
         }
         \reset($array);
@@ -206,8 +196,7 @@ trait ArrayTrait
         return null;
     }
 
-    public static function save($params)
-    {
+    public static function save($params) {
         \extract($params);
         $writer = new Zend\Config\Writer\PhpArray();
         $content = $writer->toString($data);

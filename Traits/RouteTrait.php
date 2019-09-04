@@ -1,21 +1,17 @@
 <?php
 
-
-
 namespace Modules\Xot\Traits;
 
 use Route;
 
-trait RouteTrait
-{
-    public static function dynamic_route($array, $namespace = null)
-    {
+trait RouteTrait {
+    public static function dynamic_route($array, $namespace = null) {
         \reset($array);
         foreach ($array as $k => $v) {
-            if (!\in_array('prefix', \array_keys($v), true) /*&& $v['name']!=null*/) {
+            if (! \in_array('prefix', \array_keys($v), true) /*&& $v['name']!=null*/) {
                 $v['prefix'] = \mb_strtolower($v['name']);
             }
-            if (!\in_array('as', \array_keys($v), true)) {
+            if (! \in_array('as', \array_keys($v), true)) {
                 if (null === $v['name']) {
                     if (\in_array('prefix', \array_keys($v), true)) {
                         $v['as'] = $v['prefix'];
@@ -35,7 +31,7 @@ trait RouteTrait
                 $namespace = null;
             }
 
-            if (!\in_array('namespace', \array_keys($v), true)) {
+            if (! \in_array('namespace', \array_keys($v), true)) {
                 $v['namespace'] = $namespace;
             }
             if (false !== \mb_strpos($v['as'], '{')) {
@@ -61,8 +57,7 @@ trait RouteTrait
     //end function
 
     //--------------------------------------------------------------------------------
-    public static function createRouteResource($params)
-    {
+    public static function createRouteResource($params) {
         $v = $params;
         if (null == $v['name']) {
             return;
@@ -81,7 +76,7 @@ trait RouteTrait
         if (isset($v['only'])) {
             $opts['only'] = $v['only'];
         }
-        if (!isset($v['controller'])) {
+        if (! isset($v['controller'])) {
             $v['controller'] = \ucfirst($v['name']).'Controller';
             $v['controller'] = \str_replace('{', '', $v['controller']);
             $v['controller'] = \str_replace('}', '', $v['controller']);
@@ -101,10 +96,9 @@ trait RouteTrait
     }
 
     // ------------------------------------------------------------------------------
-    public static function createRouteSubs($params)
-    {
+    public static function createRouteSubs($params) {
         $v = $params;
-        if (!isset($v['subs'])) {
+        if (! isset($v['subs'])) {
             return;
         }
 
@@ -126,15 +120,14 @@ trait RouteTrait
     // Route::get($uri, $callback);
 
     //---------------------------------------------------
-    public static function createRouteActs($params)
-    {
+    public static function createRouteActs($params) {
         $v = $params;
-        if (!isset($v['acts'])) {
+        if (! isset($v['acts'])) {
             return;
         }
         \reset($v['acts']);
         foreach ($v['acts'] as $k1 => $v1) {
-            if (!isset($v['controller'])) {
+            if (! isset($v['controller'])) {
                 $v['controller'] = $v['name'];
                 $v['controller'] = \str_replace('/', '_', $v['controller']);
                 if ($v['controller'] != $v['name']) {
@@ -142,7 +135,7 @@ trait RouteTrait
                 }
                 $v['controller'] = $v['controller'].'Controller';
             }
-            if (!isset($v1['act'])) {
+            if (! isset($v1['act'])) {
                 $v1['act'] = $v1['name'];
                 $v1['act'] = \preg_replace('/{.*}\//', '', $v1['act']);
                 $v1['act'] = \str_replace('/', '_', $v1['act']);
@@ -150,7 +143,7 @@ trait RouteTrait
                     $v1['act'] = camel_case($v1['act']);
                 }
             }
-            if (!isset($v1['as'])) {
+            if (! isset($v1['as'])) {
                 $v1['as'] = \mb_strtolower($v1['name']).'';
                 $v1['as'] = \str_replace('/', '.', $v1['as']);
                 $v1['as'] = \preg_replace('/{.*}./', '', $v1['as']);
@@ -174,8 +167,7 @@ trait RouteTrait
 
     // /--------------------------------------------------------
 
-    public static function routes()
-    {
+    public static function routes() {
         if ('' != \Request::path()) {
             $tmp = \explode('/', \Request::path());
             $tmp = \array_slice($tmp, 0, 2);
@@ -197,8 +189,7 @@ trait RouteTrait
 
     //end routes
     //------------------------------------------------------------------
-    public static function prefixedResourceNames($prefix)
-    {
+    public static function prefixedResourceNames($prefix) {
         if ('.' == \mb_substr($prefix, -1)) {
             $prefix = \mb_substr($prefix, 0, -1);
         }

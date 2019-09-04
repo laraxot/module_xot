@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use Illuminate\Http\Request;
@@ -14,8 +15,8 @@ use Modules\Xot\Services\ScoutService;
 trait CrudContainerItemTrait {
     private $optionalParams = [];
 
-    public function getModel(){
-        $namespace=get_class($this);
+    public function getModel() {
+        $namespace = get_class($this);
         $str = 'Http\\Controllers';
         $pos = \mb_strpos($namespace, $str);
         $namespace = \mb_substr($namespace, 0, $pos);
@@ -23,6 +24,7 @@ trait CrudContainerItemTrait {
         $class = class_basename($this);
         $class = \str_replace('Controller', '', $class);
         $model = $namespace.$class;
+
         return new $model();
     }
 
@@ -30,22 +32,28 @@ trait CrudContainerItemTrait {
         $class = class_basename(__CLASS__);
         $class = \str_replace('Controller', '', $class);
         $class = \mb_strtolower($class);
+
         return $class;
     }
 
-
-    public function index(Request $request){
-        
-        if ($request->act=='routelist') { return ArtisanTrait::exe('route:list');  }
+    public function index(Request $request) {
+        if ('routelist' == $request->act) {
+            return ArtisanTrait::exe('route:list');
+        }
         $params = \Route::current()->parameters();
-        if (isset($params['lang'])) { \App::setLocale($params['lang']); }
+        if (isset($params['lang'])) {
+            \App::setLocale($params['lang']);
+        }
         $row = last($params);
-        if ($request->has('scoutimport')) { ScoutService::import(['model' => $row]);}
+        if ($request->has('scoutimport')) {
+            ScoutService::import(['model' => $row]);
+        }
 
         if ($request->has('q') && ($request->ajax() || 1 == $request->ajax)) { //typeahead
-            $start_time=microtime(true);
+            $start_time = microtime(true);
             $q = $request->input('q').'';
-            $rows=Post::ofSearch($q)->where('post_type',$row->post_type)->select('title')->distinct()->limit(10)->get();
+            $rows = Post::ofSearch($q)->where('post_type', $row->post_type)->select('title')->distinct()->limit(10)->get();
+
             return $rows->toJson();
         }
 
@@ -75,39 +83,37 @@ trait CrudContainerItemTrait {
         \extract($params);
         $model = $this->getModel();
         //$rows = $model;
-        list($containers,$items)=$this->params2ContainerItem($params);
-        $n_containers=count($containers);
-        $n_items=count($items);
-        if($n_items==0){
+        list($containers, $items) = $this->params2ContainerItem($params);
+        $n_containers = count($containers);
+        $n_items = count($items);
+        if (0 == $n_items) {
             //$rows=$row->archive();
             if (\method_exists($model, 'post')) {
-                $rows=$model->has('post')->with(['post']);//->paginate(20);//con post = 50, senza = 70
-            }else{
-                $rows=$model;
+                $rows = $model->has('post')->with(['post']); //->paginate(20);//con post = 50, senza = 70
+            } else {
+                $rows = $model;
             }
-                
-        }else{
-            $types = str_plural($containers[$n_containers-1]->post_type);
+        } else {
+            $types = str_plural($containers[$n_containers - 1]->post_type);
             $types = camel_case($types);
-            try{
-                if(!is_object($items[$n_items-1])){
-
+            try {
+                if (! is_object($items[$n_items - 1])) {
                     ddd($items);
                 }
-                $rows = $items[$n_items-1]->$types();
-            }catch(\Exception $e){
+                $rows = $items[$n_items - 1]->$types();
+            } catch (\Exception $e) {
                 //$rows=[];
                 ddd($e);
+
                 return abort(404);
             }
 
-
             //*
-            if($n_items>=2){ 
-               //ddd($items[$n_items-2]); //guid = padova , type= location
+            if ($n_items >= 2) {
+                //ddd($items[$n_items-2]); //guid = padova , type= location
                 //$rows=$rows->scopeOfLocality('padova');
-                //* -- se tutto collegato coi related 
-                /* -- MEGLIO FARLO CUSTOM DENTRO IL MODELLO, non tutto deve passare per RELATED 
+                //* -- se tutto collegato coi related
+                /* -- MEGLIO FARLO CUSTOM DENTRO IL MODELLO, non tutto deve passare per RELATED
                 $rows = $rows->whereHas('relatedrev',function($query) use ($items,$n_items) {
                     $query->where('blog_post_related.post_id',$items[$n_items-2]->post_id);
                 });
@@ -116,12 +122,10 @@ trait CrudContainerItemTrait {
             }
             //*/
         }
-        
 
         if ($request->has('q')) {
             $query = $request->get('q');
             $rows = $rows->ofPostSearch($query);
-
         }
 
         if (\method_exists($model, 'getOrderBy')) {
@@ -135,18 +139,18 @@ trait CrudContainerItemTrait {
         if ($request->has('scoutimport')) {
             ScoutService::import(['model' => $model]);
         }
-        $mrows=[];
+        $mrows = [];
         $allrows = $rows;
         $rows = $rows->/*groupBy('guid')->*/paginate(20);
-        if($model->post_type=='restaurant'){
+        if ('restaurant' == $model->post_type) {
             $rows->load(['cuisineCats']); // con cuisineCats = 15 senza = 47
         }
-        if($model->post_type=='cuisine'){
-            $rows->load('recipes','ingredientCats');
+        if ('cuisine' == $model->post_type) {
+            $rows->load('recipes', 'ingredientCats');
         }
         $roots = Post::getRoots();
 
-        return ThemeService::view()->with($roots)->with('rows',$rows)->with('allrows',$allrows); //mrows lo usero' per i morphed
+        return ThemeService::view()->with($roots)->with('rows', $rows)->with('allrows', $allrows); //mrows lo usero' per i morphed
         // $href_create=route('classificator.cat.create');
         //$titolo = 'classificazione pagine';
         //return view('adm_theme::tree.show')->with('href_create',$href_create)->with('titolo',$titolo);
@@ -159,12 +163,12 @@ trait CrudContainerItemTrait {
         */
     }
 
-    public function edit(Request $request){
-        if (1 == $request->replicate) { // da passare in act 
+    public function edit(Request $request) {
+        if (1 == $request->replicate) { // da passare in act
             return $this->replicate($request);
         }
-        switch($request->act){
-            case 'xstack': xdebug_print_function_stack( 'Your own message' ); break;
+        switch ($request->act) {
+            case 'xstack': xdebug_print_function_stack('Your own message'); break;
         }
         $lang = \App::getLocale();
         $params = \Route::current()->parameters();
@@ -180,11 +184,12 @@ trait CrudContainerItemTrait {
             abort(403);
         }
         $second_last = collect(\array_slice($params, -2))->first(); //penultimo
-        if (!\is_object($row) && \is_object($second_last) && $second_last->post_type == $row) {
+        if (! \is_object($row) && \is_object($second_last) && $second_last->post_type == $row) {
             $type = $item0->post_type.'_x_'.$second_last->post_type;
             $item0->related()->attach($second_last->post_id, ['type' => $type]);
         }
         $roots = Post::getRoots();
+
         return ThemeService::addViewParam('row', $row)
             ->addViewParam($roots)
             ->view();
@@ -192,7 +197,7 @@ trait CrudContainerItemTrait {
 
     //end edit
 
-    public function update(Request $request){
+    public function update(Request $request) {
         $params = \Route::current()->parameters();
         $lang = \App::getLocale();
         \extract($params);
@@ -202,30 +207,29 @@ trait CrudContainerItemTrait {
             abort(403);
         }
         $data['image_resize_src'] = [];
-        
-        $ris=$row->update($data);
-        $post=$row->post;
-        if($post!=null){
+
+        $ris = $row->update($data);
+        $post = $row->post;
+        if (null != $post) {
             $post->update($data);
         }
         //$post=$row->post()->save($post); //?
         $pivot_var = $request->pivot;
-        if(is_array($pivot_var) && isset($row->pivot) ){ 
+        if (is_array($pivot_var) && isset($row->pivot)) {
             $row->pivot->update($pivot_var);
         }
         //ddd($row->getFillable());
-        /*
-        */
-        if(isset($row->fillableRelationship) && is_array($row->fillableRelationship) ){
-            $intersects=collect(array_keys($data))->intersect($row->fillableRelationship)->all();
-            foreach($intersects as $intersect){
-                $place=$row->$intersect()->updateOrCreate([],$data[$intersect]);
+
+        if (isset($row->fillableRelationship) && is_array($row->fillableRelationship)) {
+            $intersects = collect(array_keys($data))->intersect($row->fillableRelationship)->all();
+            foreach ($intersects as $intersect) {
+                $place = $row->$intersect()->updateOrCreate([], $data[$intersect]);
             }
         }
         if (isset($data['linked']) && \is_array($data['linked'])) { //-- Linked Data
             $post->update($data['linked']);
         }
-        
+
         if (isset($data['related'])) {
             ddd('check 1');
             foreach ($data['related'] as $rel_obj => $rel_id) {
@@ -260,14 +264,14 @@ trait CrudContainerItemTrait {
         \Session::flash('status', 'aggiornato! '.\implode(' ', $arr));
         //return back()->withInput();
         $routename = \Route::current()->getName();
-        if (!isset($data['_action'])) {
+        if (! isset($data['_action'])) {
             $data['_action'] = 'save_continue';
         }
-        return ThemeService::action($request,$row);
+
+        return ThemeService::action($request, $row);
     }
 
-    public function getEmpty($row)
-    {
+    public function getEmpty($row) {
         $class = '\\'.\get_class($row);
         $empty = new $class();
         $empty->lang = $row->lang;
@@ -276,7 +280,7 @@ trait CrudContainerItemTrait {
         return $empty;
     }
 
-    public function create(Request $request){
+    public function create(Request $request) {
         $params = \Route::current()->parameters();
         if (isset($params['lang'])) {
             \App::setLocale($params['lang']);
@@ -288,8 +292,8 @@ trait CrudContainerItemTrait {
         $routename = \Route::current()->getName();
         $row = last($params);
         //ddd(config('xra.model'));
-        if(get_class($row) == Post::class){ //se e' post devo prendere l'elemento collegato
-            $row=$row->getLinkedModel();
+        if (Post::class == get_class($row)) { //se e' post devo prendere l'elemento collegato
+            $row = $row->getLinkedModel();
             //$row=$row->linkable; //Class 'forum_cat' not found
         }
         if (isset($this->notAuthorize) && true == $this->notAuthorize) {
@@ -309,7 +313,7 @@ trait CrudContainerItemTrait {
             ->view();
     }
 
-    public function store(Request $request){
+    public function store(Request $request) {
         $params = \Route::current()->parameters();
         $routename = \Route::current()->getName();
         /*
@@ -324,40 +328,37 @@ trait CrudContainerItemTrait {
         $row = last($params);
         $data = $request->all();
 
-        $model=$this->getModel();
-        $data['lang']=$model->lang;
-        $data['type']=$model->post_type; //retrocompatibilità
-        if(!isset($data['guid']) && isset($data['title']) ){
-            $data['guid']=Str::slug($data['title']);
+        $model = $this->getModel();
+        $data['lang'] = $model->lang;
+        $data['type'] = $model->post_type; //retrocompatibilità
+        if (! isset($data['guid']) && isset($data['title'])) {
+            $data['guid'] = Str::slug($data['title']);
         }
-        $row=$model->create($data);
+        $row = $model->create($data);
         //ddd($row); // bisogna controllare se post_id e' creato
-        $post=$row->post()->create($data);
+        $post = $row->post()->create($data);
 
-        if(isset($row->fillableRelationship) && is_array($row->fillableRelationship) ){
-            $intersects=collect(array_keys($data))->intersect($row->fillableRelationship)->all();
-            foreach($intersects as $intersect){
-                $place=$row->$intersect()->create($data[$intersect]);
+        if (isset($row->fillableRelationship) && is_array($row->fillableRelationship)) {
+            $intersects = collect(array_keys($data))->intersect($row->fillableRelationship)->all();
+            foreach ($intersects as $intersect) {
+                $place = $row->$intersect()->create($data[$intersect]);
             }
         }
-
 
         //ddd($post);
         $second_last = collect(\array_slice($params, -2))->first(); //penultimo
-        
-        if (\is_object($second_last) && $n_params>=2) { // da verificare il > x
-            
+
+        if (\is_object($second_last) && $n_params >= 2) { // da verificare il > x
             $pivot_var = $request->pivot;
-            if (!\is_array($pivot_var)) {
+            if (! \is_array($pivot_var)) {
                 $pivot_var = [];
             }
-            $related_type=collect(config('xra.model'))->search(get_class($row));
-            $types=Str::plural($related_type);
-            $pivot_var['related_type']=$related_type;
-            $pivot=$second_last->morphRelated($row->getModel())->attach($row->post_id,$pivot_var);
-            $tmp=$second_last->$types()->save($row);
+            $related_type = collect(config('xra.model'))->search(get_class($row));
+            $types = Str::plural($related_type);
+            $pivot_var['related_type'] = $related_type;
+            $pivot = $second_last->morphRelated($row->getModel())->attach($row->post_id, $pivot_var);
+            $tmp = $second_last->$types()->save($row);
         }
-        
 
         $arr = \array_slice($row->toArray(), 0, 5);
         $msg = 'aggiunto! ';
@@ -386,38 +387,40 @@ trait CrudContainerItemTrait {
             ]);
         }
 
-        if (!isset($data['_action'])) {
+        if (! isset($data['_action'])) {
             $data['_action'] = 'save_continue';
         }
-        return ThemeService::action($request,$row);
-       
-    }
-    
-    public function params2ContainerItem($params){
-        $container=[];
-        $item=[];
-        foreach($params as $k=>$v){
-            $pattern='/(container|item)([0-9]+)/';
-            preg_match($pattern, $k,$matches);
-            if(isset($matches[1]) && isset($matches[2]) ){
-                $sk=$matches[1];
-                $sv=$matches[2];
-                $$sk[$sv]=$v;
-            };
-        }
-        return [$container,$item]; 
+
+        return ThemeService::action($request, $row);
     }
 
-    public function indexEdit(Request $request){
+    public function params2ContainerItem($params) {
+        $container = [];
+        $item = [];
+        foreach ($params as $k => $v) {
+            $pattern = '/(container|item)([0-9]+)/';
+            preg_match($pattern, $k, $matches);
+            if (isset($matches[1]) && isset($matches[2])) {
+                $sk = $matches[1];
+                $sv = $matches[2];
+                $$sk[$sv] = $v;
+            }
+        }
+
+        return [$container, $item];
+    }
+
+    public function indexEdit(Request $request) {
         $params = \Route::current()->parameters();
         $row = last($params);
-        if (!\Auth::check() || \Auth::user()->cannot(__FUNCTION__, $row)) {
+        if (! \Auth::check() || \Auth::user()->cannot(__FUNCTION__, $row)) {
             $routename = \Route::current()->getName();
-            $route_next=str_replace('.index_edit','.index',$routename);
-            return redirect()->route($route_next,$params);
+            $route_next = str_replace('.index_edit', '.index', $routename);
+
+            return redirect()->route($route_next, $params);
         }
-        if($request->getMethod()=='POST'){
-            $res= $this->indexUpdate($request);
+        if ('POST' == $request->getMethod()) {
+            $res = $this->indexUpdate($request);
             if (\Request::ajax()) {
                 $response = [
                     'success' => true,
@@ -429,38 +432,38 @@ trait CrudContainerItemTrait {
                 return response()->json($response, 200);
             }
         }
-        list($container,$item)=$this->params2ContainerItem($params);
-        $n_container=count($container);
-        $n_item=count($item);
+        list($container, $item) = $this->params2ContainerItem($params);
+        $n_container = count($container);
+        $n_item = count($item);
 
-        $types=str_plural($container[$n_container-1]->post_type);
-        $types=camel_case($types);
-        $rows=$item[$n_item-1]->$types();
-        $rows=$rows->paginate(20);
+        $types = str_plural($container[$n_container - 1]->post_type);
+        $types = camel_case($types);
+        $rows = $item[$n_item - 1]->$types();
+        $rows = $rows->paginate(20);
         $roots = Post::getRoots();
-        return ThemeService::view()->with('rows',$rows)->with($roots);
+
+        return ThemeService::view()->with('rows', $rows)->with($roots);
     }
 
-    public function indexUpdate(Request $request){
-        $data=$request->all();
-        $model=$this->getModel(); //Rating
+    public function indexUpdate(Request $request) {
+        $data = $request->all();
+        $model = $this->getModel(); //Rating
         //ddd($model);
         $params = \Route::current()->parameters();
-        list($container,$item)=$this->params2ContainerItem($params);
-        $n_container=count($container);
-        $n_item=count($item);
+        list($container, $item) = $this->params2ContainerItem($params);
+        $n_container = count($container);
+        $n_item = count($item);
 
-        $types=str_plural($container[$n_container-1]->post_type);
-        $types=camel_case($types);
-        $rows=$item[$n_item-1]->$types();
+        $types = str_plural($container[$n_container - 1]->post_type);
+        $types = camel_case($types);
+        $rows = $item[$n_item - 1]->$types();
 
-        foreach($data as $k=>$v){
-            if(is_array($v)){
-                foreach($v as $k1 => $v1){
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                foreach ($v as $k1 => $v1) {
                     //$row=$rows->where('ratings.post_id',$k1)->first();
-                    $row=$model->where('post_id',$k1)->first();
-                    $row->update([$k=>$v1]);
-
+                    $row = $model->where('post_id', $k1)->first();
+                    $row->update([$k => $v1]);
                 }
             }
         }
@@ -468,10 +471,10 @@ trait CrudContainerItemTrait {
         //ddd($rows->get());
     }
 
-    public function indexOrder(Request $request){
+    public function indexOrder(Request $request) {
         $params = \Route::current()->parameters();
         $row = last($params);
-       
+
         /*
         if (!\Auth::check() || \Auth::user()->cannot(__FUNCTION__, $row)) {
             $routename = \Route::current()->getName();
@@ -479,19 +482,19 @@ trait CrudContainerItemTrait {
             return redirect()->route($route_next,$params);
         }
         */
-        list($container,$item)=$this->params2ContainerItem($params);
-        $n_container=count($container);
-        $n_item=count($item);
+        list($container, $item) = $this->params2ContainerItem($params);
+        $n_container = count($container);
+        $n_item = count($item);
 
-        $types=str_plural($container[$n_container-1]->post_type);
-        $types=camel_case($types);
-        $rows=$item[$n_item-1]->$types();
-        $rows=$rows->get(); //non ha senso mettere la paginazione
-        if($request->getMethod()=='POST'){
-            $order_arr=explode('|',$request->order_list);
-            foreach($order_arr as $k=>$v){
-                $up=$rows->where('post_id',$v)->first();
-                $up->pivot->pos=$k+1;
+        $types = str_plural($container[$n_container - 1]->post_type);
+        $types = camel_case($types);
+        $rows = $item[$n_item - 1]->$types();
+        $rows = $rows->get(); //non ha senso mettere la paginazione
+        if ('POST' == $request->getMethod()) {
+            $order_arr = explode('|', $request->order_list);
+            foreach ($order_arr as $k => $v) {
+                $up = $rows->where('post_id', $v)->first();
+                $up->pivot->pos = $k + 1;
                 $up->pivot->save();
                 //dd($k+1);
             }
@@ -507,15 +510,13 @@ trait CrudContainerItemTrait {
             }
         }
 
-
-        $order_list=$rows->pluck('post_id')->implode('|');
+        $order_list = $rows->pluck('post_id')->implode('|');
         $roots = Post::getRoots();
-        return ThemeService::view()->with('rows',$rows)->with($roots)->with('order_list',$order_list);
+
+        return ThemeService::view()->with('rows', $rows)->with($roots)->with('order_list', $order_list);
     }
 
-
-
-    public function show(Request $request){
+    public function show(Request $request) {
         $params = \Route::current()->parameters();
         $row = last($params);
         $roots = Post::getRoots();
@@ -526,11 +527,11 @@ trait CrudContainerItemTrait {
             }
             */
             //return abort(404);
-            $parz=$roots;
-            $parz['msg']='not found';
-            $parz['lang']=\App::getLocale();
-            $parz['params']=$params;
-            
+            $parz = $roots;
+            $parz['msg'] = 'not found';
+            $parz['lang'] = \App::getLocale();
+            $parz['params'] = $params;
+
             if (\View::exists('pub_theme::errors.404')) {
                 return response()->view('pub_theme::errors.404', $parz, 404);
             } else {
@@ -546,8 +547,7 @@ trait CrudContainerItemTrait {
     //end show
 
     // TODO migliorare il destroy, in modo che cancellando una categoria o menu, cancelli ricorsivamente anche tutti i suoi figlio (categorie e non)
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request) {
         $params = \Route::current()->parameters();
         \extract($params);
         $row = last($params);
@@ -560,8 +560,7 @@ trait CrudContainerItemTrait {
         //$res = Post::destroy($request->id);
     }
 
-    public function detach(Request $request)
-    {
+    public function detach(Request $request) {
         $params = \Route::current()->parameters();
         $data = $request->all();
         $lang = \App::getLocale();
@@ -570,8 +569,7 @@ trait CrudContainerItemTrait {
         $last->pivot->delete();
     }
 
-    public function attach(Request $request)
-    {
+    public function attach(Request $request) {
         $params = \Route::current()->parameters();
         $data = $request->all();
         $lang = \App::getLocale();
@@ -598,8 +596,7 @@ trait CrudContainerItemTrait {
         return $this->create($request);
     }
 
-    public function initPos()
-    {
+    public function initPos() {
         $params = \Route::current()->parameters();
         //extract($params);
         $parent_item = collect(\array_slice($params, -3))->first();
@@ -614,8 +611,7 @@ trait CrudContainerItemTrait {
         }
     }
 
-    public function moveUp(Request $request)
-    {
+    public function moveUp(Request $request) {
         $params = \Route::current()->parameters();
         $parent_item = collect(\array_slice($params, -3))->first();
         $me = collect(\array_slice($params, -1))->first();
@@ -626,7 +622,7 @@ trait CrudContainerItemTrait {
             return redirect()->back();
         }
         $prev = $parent_item->relatedNotOrdered($me->post_type)->where('blog_post_related.pos', '<', $me_pos)->orderBy('blog_post_related.pos', 'desc')->first();
-        if (!isset($prev->pivot)) {
+        if (! isset($prev->pivot)) {
             return redirect()->back();
         }
         $prev_pos = $prev->pivot->pos;
@@ -638,12 +634,11 @@ trait CrudContainerItemTrait {
         return redirect()->back();
     }
 
-    public function moveDown(Request $request)
-    {
+    public function moveDown(Request $request) {
         $params = \Route::current()->parameters();
         $parent_item = collect(\array_slice($params, -3))->first();
         $me = collect(\array_slice($params, -1))->first();
-        if (!isset($me->pivot)) {
+        if (! isset($me->pivot)) {
             ddd($me);
         }
         $me_pos = $me->pivot->pos;
@@ -653,7 +648,7 @@ trait CrudContainerItemTrait {
             return redirect()->back();
         }
         $next = $parent_item->relatedNotOrdered($me->post_type)->where('blog_post_related.pos', '>', $me_pos)->orderBy('blog_post_related.pos', 'asc')->first();
-        if (!isset($next->pivot)) {
+        if (! isset($next->pivot)) {
             return redirect()->back();
         }
         $next_pos = $next->pivot->pos;
@@ -665,8 +660,7 @@ trait CrudContainerItemTrait {
         return redirect()->back();
     }
 
-    public function jsonFeed()
-    {
+    public function jsonFeed() {
         $posts = Post::active()->limit(20)->get();
         $data = [
             'version' => 'https://jsonfeed.org/version/1',
@@ -704,8 +698,7 @@ trait CrudContainerItemTrait {
      *
      * @return $this
      */
-    public function addViewParam($name, $value)
-    {
+    public function addViewParam($name, $value) {
         $this->optionalParams[$name] = $value;
 
         return $this;
@@ -717,8 +710,7 @@ trait CrudContainerItemTrait {
      *
      * @return mixed
      */
-    public function extractMapParameters($row)
-    {
+    public function extractMapParameters($row) {
         $linked = $row->linked;
         $item = $linked->getMapItem();
         $item['title'] = $row->title;
@@ -737,8 +729,7 @@ trait CrudContainerItemTrait {
      *
      * @return mixed
      */
-    private function addCustomParametersToView($view)
-    {
+    private function addCustomParametersToView($view) {
         if (\count($this->optionalParams) > 0) {
             foreach ($this->optionalParams as $key => $value) {
                 $view->with($key, $value);
@@ -748,8 +739,7 @@ trait CrudContainerItemTrait {
         return $view;
     }
 
-
-    public function tabs(){
+    public function tabs() {
         return ['test'];
     }
 }//end trait

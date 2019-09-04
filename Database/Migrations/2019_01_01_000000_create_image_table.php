@@ -1,19 +1,19 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 //----- models -----
 use Modules\Xot\Models\Image as MyModel;
 
-class CreateImageTable extends Migration{
-
-    public function getTable(){
+class CreateImageTable extends Migration {
+    public function getTable() {
         return with(new MyModel())->getTable();
     }
 
-    public function up(){
+    public function up() {
         //----- create -----
-        if (!Schema::hasTable($this->getTable())) {
+        if (! Schema::hasTable($this->getTable())) {
             Schema::create($this->getTable(), function (Blueprint $table) {
                 $table->increments('id');
                 $table->nullableMorphs('post');
@@ -33,7 +33,7 @@ class CreateImageTable extends Migration{
         });
     }
 
-    public function down(){
+    public function down() {
         Schema::dropIfExists($this->getTable());
     }
 }

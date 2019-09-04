@@ -1,14 +1,16 @@
 <?php
+
 namespace Modules\Xot\Services;
-use Illuminate\Support\Str;
+
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 use Route;
 
-class RouteService{
+class RouteService {
     protected static $namespace_start = '';
     protected static $curr = null;
 
-    public static function getGroupOpts($v, $namespace){
+    public static function getGroupOpts($v, $namespace) {
         $group_opts = [
             'prefix' => self::getPrefix($v, $namespace),
             'namespace' => self::getNamespace($v, $namespace),
@@ -18,7 +20,7 @@ class RouteService{
         return $group_opts;
     }
 
-    public static function getPrefix($v, $namespace){
+    public static function getPrefix($v, $namespace) {
         if (\in_array('prefix', \array_keys($v), true)) {
             return $v['prefix'];
         }
@@ -42,7 +44,7 @@ class RouteService{
         return $prefix;
     }
 
-    public static function getAs($v, $namespace){
+    public static function getAs($v, $namespace) {
         if (\in_array('as', \array_keys($v), true)) {
             return $v['as'];
         }
@@ -56,7 +58,7 @@ class RouteService{
         return $as.'.';
     }
 
-    public static function getNamespace($v, $namespace){
+    public static function getNamespace($v, $namespace) {
         if (\in_array('namespace', \array_keys($v), true)) {
             return $v['namespace'];
         }
@@ -72,7 +74,7 @@ class RouteService{
         return studly_case($namespace);
     }
 
-    public static function getAct($v, $namespace){
+    public static function getAct($v, $namespace) {
         if (\in_array('act', \array_keys($v), true)) {
             return $v['act'];
         }
@@ -87,8 +89,7 @@ class RouteService{
         return camel_case($v['act']);
     }
 
-    public static function getParamName($v, $namespace)
-    {
+    public static function getParamName($v, $namespace) {
         if (\in_array('param_name', \array_keys($v), true)) {
             return $v['param_name'];
         }
@@ -101,10 +102,9 @@ class RouteService{
         return $param_name;
     }
 
-    public static function getParamsName($v, $namespace)
-    {
+    public static function getParamsName($v, $namespace) {
         $param_name = self::getParamName($v, $namespace);
-        if (!\is_array($param_name)) {
+        if (! \is_array($param_name)) {
             $params_name = [$param_name];
         } else {
             $params_name = $param_name;
@@ -113,8 +113,7 @@ class RouteService{
         return $params_name;
     }
 
-    public static function getResourceOpts($v, $namespace)
-    {
+    public static function getResourceOpts($v, $namespace) {
         $param_name = self::getParamName($v, $namespace);
         $params_name = self::getParamsName($v, $namespace);
         $opts = [
@@ -124,7 +123,7 @@ class RouteService{
         if (isset($v['only'])) {
             $opts['only'] = $v['only'];
         }
-        if ('' == $param_name && !isset($opts['only'])) {
+        if ('' == $param_name && ! isset($opts['only'])) {
             $opts['only'] = ['index'];
         }
         $where = [];
@@ -135,8 +134,7 @@ class RouteService{
         return $opts;
     }
 
-    public static function getController($v, $namespace)
-    {
+    public static function getController($v, $namespace) {
         if (\in_array('controller', \array_keys($v), true)) {
             return $v['controller'];
         }
@@ -152,8 +150,7 @@ class RouteService{
         return $v['controller'];
     }
 
-    public static function getUri($v, $namespace)
-    {
+    public static function getUri($v, $namespace) {
         $uri = \mb_strtolower($v['name']);
         /*
         $v['prefix']=self::getPrefix($v,$namespace);
@@ -164,8 +161,7 @@ class RouteService{
         return $uri;
     }
 
-    public static function getMethod($v, $namespace)
-    {
+    public static function getMethod($v, $namespace) {
         if (\in_array('method', \array_keys($v), true)) {
             return $v['method'];
         }
@@ -173,8 +169,7 @@ class RouteService{
         return ['get', 'post'];
     }
 
-    public static function getUses($v, $namespace)
-    {
+    public static function getUses($v, $namespace) {
         $controller = self::getController($v, $namespace);
         $act = self::getAct($v, $namespace);
         $uses = $controller.'@'.$act;
@@ -182,8 +177,7 @@ class RouteService{
         return $uses;
     }
 
-    public static function getCallback($v, $namespace, $curr)
-    {
+    public static function getCallback($v, $namespace, $curr) {
         $as = Str::slug($v['name']); //!!!!!! test da controllare
         $uses = self::getUses($v, $namespace);
         if (null != $curr) {
@@ -196,8 +190,7 @@ class RouteService{
         return $callback;
     }
 
-    public static function dynamic_route($array, $namespace = null, $namespace_start = null, $curr = null)
-    {
+    public static function dynamic_route($array, $namespace = null, $namespace_start = null, $curr = null) {
         if (null != $namespace_start) {
             self::$namespace_start = $namespace_start;
         }/*
@@ -219,8 +212,7 @@ class RouteService{
     //end function
 
     //--------------------------------------------------------------------------------
-    public static function createRouteResource($v, $namespace)
-    {
+    public static function createRouteResource($v, $namespace) {
         if (null == $v['name']) {
             return;
         }
@@ -230,9 +222,8 @@ class RouteService{
     }
 
     // ------------------------------------------------------------------------------
-    public static function createRouteSubs($v, $namespace, $curr)
-    {
-        if (!isset($v['subs'])) {
+    public static function createRouteSubs($v, $namespace, $curr) {
+        if (! isset($v['subs'])) {
             return;
         }
         $sub_namespace = self::getNamespace($v, $namespace);
@@ -258,9 +249,8 @@ class RouteService{
     }
 
     //---------------------------------------------------
-    public static function createRouteActs($v, $namespace, $curr)
-    {
-        if (!isset($v['acts'])) {
+    public static function createRouteActs($v, $namespace, $curr) {
+        if (! isset($v['acts'])) {
             return;
         }
         \reset($v['acts']);
@@ -281,8 +271,7 @@ class RouteService{
 
     // /--------------------------------------------------------
 
-    public static function routes()
-    {
+    public static function routes() {
         if ('' != \Request::path()) {
             $tmp = \explode('/', \Request::path());
             $tmp = \array_slice($tmp, 0, 2);
@@ -304,8 +293,7 @@ class RouteService{
 
     //end routes
     //------------------------------------------------------------------
-    public static function prefixedResourceNames($prefix)
-    {
+    public static function prefixedResourceNames($prefix) {
         if ('.' == \mb_substr($prefix, -1)) {
             $prefix = \mb_substr($prefix, 0, -1);
         }
@@ -319,185 +307,211 @@ class RouteService{
 
     //end prefixedResourceNames
 
-    public static function containerN($params){
+    public static function containerN($params) {
         extract($params);
-        if(!isset($model)) ddd($params);
-        $name=collect(config('xra.model'))->search($model);
+        if (! isset($model)) {
+            ddd($params);
+        }
+        $name = collect(config('xra.model'))->search($model);
         $params = \Route::current()->parameters();
-        list($containers,$items)=params2ContainerItem($params); 
-        $container_i=collect($containers)->search($name);
+        list($containers, $items) = params2ContainerItem($params);
+        $container_i = collect($containers)->search($name);
+
         return $container_i;
     }
 
-    public static function routenameSon($params){
-        $container_i=self::containerN($params); 
-        $routename = \Route::currentRouteName(); 
+    public static function routenameSon($params) {
+        $container_i = self::containerN($params);
+        $routename = \Route::currentRouteName();
         extract($params);
-        $act=last(explode('.',$routename));
-        if(in_array($act,['edit','index_edit'])) $act='index_edit';
-        else $act='index';
+        $act = last(explode('.', $routename));
+        if (in_array($act, ['edit', 'index_edit'])) {
+            $act = 'index_edit';
+        } else {
+            $act = 'index';
+        }
         //*
-        $tmp=[];
-        if(in_admin()){ $tmp[]='admin'; }
-        for($i=0;$i<=$container_i+1;$i++){  $tmp[]='container'.$i; }
-        $tmp[]=$act;
-        $rountename_son=implode('.',$tmp);
+        $tmp = [];
+        if (in_admin()) {
+            $tmp[] = 'admin';
+        }
+        for ($i = 0; $i <= $container_i + 1; ++$i) {
+            $tmp[] = 'container'.$i;
+        }
+        $tmp[] = $act;
+        $rountename_son = implode('.', $tmp);
         //*/
         //$rountename_son=in_admin()?'admin.':'';
         //$rountename_son.=str_repeat()
         //$rountename_son=str_repeat() //da fare
         return $rountename_son;
-    }  
+    }
 
-    public static function urlSon($params,$son_name=''){
-        $container_i=self::containerN($params); 
-        $routename_son=self::routenameSon($params);
+    public static function urlSon($params, $son_name = '') {
+        $container_i = self::containerN($params);
+        $routename_son = self::routenameSon($params);
         extract($params);
         $params = \Route::current()->parameters();
-        $parz=$params;
-        $parz['container'.($container_i+1)]=$son_name;
-        try{
-            $route=route($routename_son,$parz);
-        }catch(\Exception $e){
-            $msg=[
-                'container_i'=>$container_i,
-                'routename_son'=>$routename_son,
-                'son_name'=>$son_name,
+        $parz = $params;
+        $parz['container'.($container_i + 1)] = $son_name;
+        try {
+            $route = route($routename_son, $parz);
+        } catch (\Exception $e) {
+            $msg = [
+                'container_i' => $container_i,
+                'routename_son' => $routename_son,
+                'son_name' => $son_name,
             ];
             //echo '<pre>'.print_r($msg,true).'</pre>';ddd($parz);
-            $route='#';
+            $route = '#';
         }
+
         return $route;
     }
 
-    public static function tabs($params){
+    public static function tabs($params) {
         extract($params);
         $params = \Route::current()->parameters();
         $routename = \Route::currentRouteName();
-        $act=last(explode('.',$routename)); 
-        list($containers,$items)=params2ContainerItem($params); 
-        $n_items=count($items);
-        $item_last=last($items);
-        if(count($items)==0) return [];
-        $tabs=[];
+        $act = last(explode('.', $routename));
+        list($containers, $items) = params2ContainerItem($params);
+        $n_items = count($items);
+        $item_last = last($items);
+        if (0 == count($items)) {
+            return [];
+        }
+        $tabs = [];
 
-
-        $cont_i=RouteService::containerN(['model'=>$model]);
+        $cont_i = RouteService::containerN(['model' => $model]);
         //ddd($routename);
-        if($cont_i==0){
-            $tmp1=new \stdClass();
-            if($act=='index_edit') $act='edit';
-            if($act=='index') $act='show';
-            $tmp1->title=$act;
-            $tmp1->routename=(in_admin()?'admin.':'').'container0.'.$act;
-            $tmp1->url=route($tmp1->routename,$params);
-            $tmp1->active=($routename==$tmp1->routename);
-            $tabs[]=$tmp1;
+        if (0 == $cont_i) {
+            $tmp1 = new \stdClass();
+            if ('index_edit' == $act) {
+                $act = 'edit';
+            }
+            if ('index' == $act) {
+                $act = 'show';
+            }
+            $tmp1->title = $act;
+            $tmp1->routename = (in_admin() ? 'admin.' : '').'container0.'.$act;
+            $tmp1->url = route($tmp1->routename, $params);
+            $tmp1->active = ($routename == $tmp1->routename);
+            $tabs[] = $tmp1;
         }
         //echo('[ '.$model.']['.$cont_i.']');
 
-        if(isset($params['item'.$cont_i]) ) {
-        foreach($tabs_name as $k=>$v){
-            $tmp1=new \stdClass();
-            $tmp1->title=$v;
-            $tmp1->active=in_array($v,$containers);
-            $tmp1->routename=RouteService::routenameSon(['model'=>$model]);
-            /*
-            $path=collect(explode('.',$tmp1->routename))->map(function ($v,$k) use ($params) {
-                if(isset($params[$v])) return $params[$v];
-                return $v;
-            })->implode('.');
-            $trad=implode('.',array_slice(explode('.',$path),0,-1));
-            $tmp1->trad='pub_theme::'.$trad;
-            */
-            //$tmp1->title=trans($tmp1->trad.'.tab.'.$v);
-            $tmp1->title=trans('pub_theme::'.array_first($containers).'.tab.'.$v);
-            $tmp1->url=RouteService::urlSon(['model'=>$model],$v);
-            $tabs[]=$tmp1;
+        if (isset($params['item'.$cont_i])) {
+            foreach ($tabs_name as $k => $v) {
+                $tmp1 = new \stdClass();
+                $tmp1->title = $v;
+                $tmp1->active = in_array($v, $containers);
+                $tmp1->routename = RouteService::routenameSon(['model' => $model]);
+                /*
+                $path=collect(explode('.',$tmp1->routename))->map(function ($v,$k) use ($params) {
+                    if(isset($params[$v])) return $params[$v];
+                    return $v;
+                })->implode('.');
+                $trad=implode('.',array_slice(explode('.',$path),0,-1));
+                $tmp1->trad='pub_theme::'.$trad;
+                */
+                //$tmp1->title=trans($tmp1->trad.'.tab.'.$v);
+                $tmp1->title = trans('pub_theme::'.array_first($containers).'.tab.'.$v);
+                $tmp1->url = RouteService::urlSon(['model' => $model], $v);
+                $tabs[] = $tmp1;
+            }
         }
+        $data[$cont_i] = $tabs;
+        if (count($containers) > 1 && $cont_i > 0) {
+            $panel = StubService::getByModel($items[$cont_i - 1], 'panel');
+            $tabs_parent = $panel->tabs();
+            $data = array_merge($tabs_parent, $data);
         }
-        $data[$cont_i]=$tabs;
-        if(count($containers)>1 && $cont_i>0){
-            $panel=StubService::getByModel($items[$cont_i-1],'panel');
-            $tabs_parent=$panel->tabs();
-            $data=array_merge($tabs_parent,$data);;
-        }
-        return $data;
-    }  
 
-    public static function urlModel($params){
+        return $data;
+    }
+
+    public static function urlModel($params) {
         extract($params);
         $params = \Route::current()->parameters();
         //$routename = \Request::route()->getName();
-        $cont_i=RouteService::containerN(['model'=>get_class($model)]);
-        $tmp=[];
-        if(in_admin()) $tmp[]='admin';
-        for($i=0;$i<=$cont_i;$i++){ $tmp[]='container'.$i; }
-        $tmp[]=$act;
-        $routename=implode('.',$tmp);
-        $params['container'.($cont_i)]=$model->post_type;
-        $params['item'.($cont_i)]=$model;
-        return route($routename,$params);
+        $cont_i = RouteService::containerN(['model' => get_class($model)]);
+        $tmp = [];
+        if (in_admin()) {
+            $tmp[] = 'admin';
+        }
+        for ($i = 0; $i <= $cont_i; ++$i) {
+            $tmp[] = 'container'.$i;
+        }
+        $tmp[] = $act;
+        $routename = implode('.', $tmp);
+        $params['container'.($cont_i)] = $model->post_type;
+        $params['item'.($cont_i)] = $model;
+
+        return route($routename, $params);
     }
 
-    public static function routenameN($params){
+    public static function routenameN($params) {
         //--- default data
         $routename = \Route::currentRouteName();
-        $act=last(explode('.',$routename)); 
+        $act = last(explode('.', $routename));
         extract($params);
-        $tmp=[];
-        if(in_admin()) $tmp[]='admin';
-        for($i=0;$i<=$n;$i++){ $tmp[]='container'.$i; }
-        $tmp[]=$act;
-        $routename=implode('.',$tmp);
+        $tmp = [];
+        if (in_admin()) {
+            $tmp[] = 'admin';
+        }
+        for ($i = 0; $i <= $n; ++$i) {
+            $tmp[] = 'container'.$i;
+        }
+        $tmp[] = $act;
+        $routename = implode('.', $tmp);
+
         return $routename;
     }
 
     /**
-    * in = row , related
-    *
-    **/
-
-    public static function urlRelated($params){
+     * in = row , related.
+     *
+     **/
+    public static function urlRelated($params) {
         extract($params);
         $params = \Route::current()->parameters();
-        $cont_i=RouteService::containerN(['model'=>get_class($row)]);
-        $routename=RouteService::routenameN(['n'=>$cont_i+1,'act'=>$act]);
-        $row_name=collect(config('xra.model'))->search(get_class($row));
-        
+        $cont_i = RouteService::containerN(['model' => get_class($row)]);
+        $routename = RouteService::routenameN(['n' => $cont_i + 1, 'act' => $act]);
+        $row_name = collect(config('xra.model'))->search(get_class($row));
+
         //$related_name=collect(config('xra.model'))->search(get_class($related));
 
-        $params['container'.$cont_i]=$row_name;
-        $params['item'.$cont_i]=$row;
-        $params['container'.($cont_i+1)]=$related_name;
-        return route($routename,$params,false);
+        $params['container'.$cont_i] = $row_name;
+        $params['item'.$cont_i] = $row;
+        $params['container'.($cont_i + 1)] = $related_name;
+
+        return route($routename, $params, false);
     }
 
-    public static function urlAct($params){
-        $query=[];
+    public static function urlAct($params) {
+        $query = [];
         extract($params);
-        $mutator=$act.'_url';
-        try{
-            $route=$row->$mutator;
-        }catch(\Exception $e){
-            $route='#';
+        $mutator = $act.'_url';
+        try {
+            $route = $row->$mutator;
+        } catch (\Exception $e) {
+            $route = '#';
         }
         $route_action = \Route::currentRouteAction();
-        $old_act=Str::snake(Str::after($route_action,'@'));
-        $routename=Request::route()->getName();
-        $old_act_route=last(explode('.',$routename));
-        
-        $routename_act=Str::before($routename,$old_act_route).''.$act;
-        $route_params=\Route::current()->parameters();
-        if(\Route::has($routename_act)){
-            $parz=array_merge($route_params,[$row]);
-            $parz=array_merge($parz,$query);
-            $route=route($routename_act,$parz);
-        }else{
-            $route='#'.$routename_act;
+        $old_act = Str::snake(Str::after($route_action, '@'));
+        $routename = Request::route()->getName();
+        $old_act_route = last(explode('.', $routename));
+
+        $routename_act = Str::before($routename, $old_act_route).''.$act;
+        $route_params = \Route::current()->parameters();
+        if (\Route::has($routename_act)) {
+            $parz = array_merge($route_params, [$row]);
+            $parz = array_merge($parz, $query);
+            $route = route($routename_act, $parz);
+        } else {
+            $route = '#'.$routename_act;
         }
+
         return $route;
     }
-
-
 }
