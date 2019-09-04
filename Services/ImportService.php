@@ -18,29 +18,26 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
+
 //*/
 
-class ImportService
-{
+class ImportService{
     public static $client = null;
     public static $client_options = [];
     public static $res = null;
     public static $cookieJar = null;
 
-    public static function setClientOptions($data = [])
-    {
+    public static function setClientOptions($data = []){
         self::$client_options = \array_merge(self::$client_options, $data);
         //ddd(self::$client_options);
     }
 
-    public static function initCookieJar()
-    {
+    public static function initCookieJar(){
         $cookieFile = base_path('../jar.txt');
         self::$cookieJar = new FileCookieJar($cookieFile, true);
     }
 
-    public static function importInit()
-    {
+    public static function importInit(){
         \ini_set('max_execution_time', 3000);
         $params = \Route::current()->parameters();
         //$cookieJar = new CookieJar();
@@ -48,32 +45,12 @@ class ImportService
         if (null == self::$cookieJar) {
             self::initCookieJar();
         }
-        /*
-        $headers_key=collect(\Request::header())->map(function($item,$key){	return title_case($key); })->all();
-        $headers_value=collect(\Request::header())->map(function($item,$key){ return $item[0]; })->all();
-        $headers=array_combine($headers_key,$headers_value);
-        */
-        //$headers=\Request::header();
-        //$headers['Upgrade-Insecure-Requests'] = 1;
-        //$headers['Referer']='http://www.google.com';
-        //unset($headers['Cache-Control']);
-        //unset($headers['Cookie']);
-        //unset($headers['Host']);
+       
         $headers = [];
         $fields = ['User-Agent', 'Accept', 'Accept-Language', 'Accept-Encoding', 'Connection', 'Cookie', 'Upgrade-Insecure-Requests', 'Cache-Control'];
         foreach ($fields as $field) {
             $headers[$field] = \Request::header($field);
         }
-        //ddd($headers);
-        //ddd(\Request::header('Accept'));
-        /*
-        $headers['Accept']= text/html,application/xhtml+xml,application/xml;q=0.9,* / *;q=0.8
-        Accept-Language: en-US,en;q=0.5
-        Accept-Encoding: gzip, deflate, br
-        Connection: keep-alive
-        Upgrade-Insecure-Requests: 1
-        */
-        //ddd($headers);
         self::enableRedirect();
         self::$client_options['headers'] = $headers;
         self::$client_options['headers']['Referer'] = 'http://www.google.com';
@@ -173,15 +150,14 @@ class ImportService
         return view('theme::jquery_request');
     }
 
-    public static function gRequest($method, $url, $attrs = [], $out = 'res')
-    {
+    public static function gRequest($method, $url, $attrs = [], $out = 'res'){
         if (null == self::$client) {
             self::importInit();
         }
         if (!isset(self::$client_options['base_uri'])) {
             $url_info = \parse_url($url);
             self::$client_options['base_uri'] = $url_info['scheme'].'://'.$url_info['host'];
-            $url = $url_info['path'];
+            $url = isset($url_info['path'])?$url_info['path']:'';
             if (isset($url_info['query'])) {
                 $url .= '?'.$url_info['query'];
             }
@@ -191,7 +167,6 @@ class ImportService
         if(Str::startsWith($url,$base_uri)){
             $url=substr($url, strlen($base_uri));
         }
-
         try {
             $res = self::$client->request($method, $url, \array_merge(self::$client_options, $attrs));
         } catch (GuzzleException $e) {
@@ -391,9 +366,18 @@ fclose($putStream);
         //$url  
         //$filename
         extract($params);
-        $resource_out=fopen($filename, 'w');
-        self::gRequest('get',$url,['save_to'=>$resource_out]);
-        fclose($resource_out);
+        $resource=fopen($filename, 'w');
+        $stream = \GuzzleHttp\Psr7\stream_for($resource);
+        self::gRequest('get',$url,
+            [
+                'sink'=>$stream,
+                'progress' => function ($download_size, $downloaded, $upload_size, $uploaded) {
+                    //$this->downloadProgress($download_size, $downloaded, $upload_size, $uploaded);
+                    echo '<br>['.$download_size.']['.$downloaded.']['.$upload_size.']['.$uploaded.']';
+                },
+            ]
+        );
+        fclose($resource);
         /*
         Call to undefined function GuzzleHttp\Stream\create
         $resource_in=fopen($url, 'r');
@@ -544,5 +528,31 @@ fclose($putStream);
     }
 
     //end mymemoryTrans;
+
+    public static function getForms($params){
+        extract($params);
+        $crawler = new Crawler((string) $html);
+        $forms=$crawler->filter($node_tag)->each(function (Crawler $node) { 
+            return [
+                    'action'=>$node->attr('action'),
+                    'method'=>$node->attr('method'),
+                    'fields'=> ($node->filter('input')->each(function (Crawler $node1) {
+                        return [$node1->attr('name') => $node1->attr('value') ];    
+                    })
+                    )
+                ];
+        });
+        foreach($forms as $k=>$v){
+            $forms[$k]['fields']=collect($v['fields'])->collapse()->all();
+        }
+        
+        return $forms;
+    }
+
+    public static function formRequest($params){
+        extract($params);
+        return self::gRequest($form['method'],$form['action'],['form_params'=>$form['fields']]);
+    }
+
 
 }//end class
