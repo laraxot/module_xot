@@ -16,7 +16,7 @@ class CreateImageTable extends Migration{
         if (!Schema::hasTable($this->getTable())) {
             Schema::create($this->getTable(), function (Blueprint $table) {
                 $table->increments('id');
-                $table->nullableMorphs('post',191);
+                $table->nullableMorphs('post');
                 $table->string('src');
 
                 $table->integer('auth_user_id')->nullable()->index();
