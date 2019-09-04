@@ -27,6 +27,7 @@ trait CrudContainerItemNoPostTrait{
 
 	public function index(Request $request,$container,$item){
 		$params = \Route::current()->parameters();
+		
 		if($container===false){
 			$home_view=$params['module'].'::admin.index';
 			if (\View::exists($home_view)) {
@@ -51,11 +52,12 @@ trait CrudContainerItemNoPostTrait{
 		}
 		$panel->setRow($row);
 		$rows=$rows->paginate(20);
-		return ThemeService::view()
-				->with('rows',$rows)
-				->with('row',$row)
-				->with('_panel',$panel)
-				;
+		$view_params=[
+			'rows'=>$rows,
+			'row'=>$row,
+			'_panel'=>$panel,
+		];
+		return ThemeService::view()->with($view_params);
 	}
 
 

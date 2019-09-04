@@ -37,7 +37,9 @@ class XotServiceProvider extends XotBaseServiceProvider{
     public function bootCallback(){
     	$this->mergeConfigs();
         if(\Request::has('act') && \Request::input('act')=='migrate'){
-            DB::purge();
+
+            //DB::purge('mysql'); //Call to a member function prepare() on null
+            DB::reconnect('mysql');
         }
         DB::reconnect();
     	$map=config('xra.model');
