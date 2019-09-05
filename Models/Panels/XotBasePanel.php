@@ -537,4 +537,28 @@ abstract class XotBasePanel {
     public function url() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
     }
+
+    public function indexUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
+    }
+
+    public function editUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'edit']);
+    }
+
+    public function updateUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'update']);
+    }
+
+    public function showUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+    }
+
+    public function createUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'create']);
+    }
+
+    public function storeUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'store']);
+    }
 }

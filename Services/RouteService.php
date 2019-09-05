@@ -446,6 +446,7 @@ class RouteService {
         $routename = implode('.', $tmp);
         $params['container'.($cont_i)] = $model->post_type;
         $params['item'.($cont_i)] = $model;
+        $params['lang'] = \App::getLocale();
 
         return route($routename, $params);
     }

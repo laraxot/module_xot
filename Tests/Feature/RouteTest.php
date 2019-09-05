@@ -7,107 +7,61 @@ namespace Modules\Xot\Tests\Feature;
 *
 **/
 
-use Tests\TestCase;
-
-
 use Modules\Blog\Models\Post;
-use Modules\Food\Models\Restaurant;
+use Modules\Xot\Services\PanelService as Panel;
+use Tests\TestCase;
 
 class RouteTest extends TestCase {
     /**
      * A basic test example.
      */
-    public function testRoutes() {
-
-        $urls = [
-            '/',
-            '/url2',
-            '/url3',
-        ];
-
-        $langs=config('laravellocalization.supportedLocales');
-
-        $roots=config('xra.roots');
-
-
-        echo  PHP_EOL;
-        $url='/';
+    public function myTestUrl($url) {
         $response = $this->get($url); //homepage
-        echo chr(13).''.$url.'  '.$response->status();
-        if((int)$response->status() == 200){
+        echo PHP_EOL.'url: '.$url.'  status: '.$response->status();
+        if (200 == (int) $response->status()) {
             $this->assertTrue(true);
-        }else{
+        } else {
             $this->assertTrue(false);
         }
-        echo  PHP_EOL;
-        foreach($langs as $lang=>$lang_arr){
-            $url='/'.$lang;
-            $response = $this->get($url); //homepage
-            echo chr(13).''.$url.'  '.$response->status();
-            if((int)$response->status() == 200){
-                //$this->assertTrue(true);
-            }else{
-                //$this->assertTrue(false);
-            }
-            echo  PHP_EOL;
-            foreach($roots as $root){
-
-                //$url='/'.$lang.'/'.$root;
-                $parz=[
-                    'lang'=>$lang,
-                    'container0'=>$root,
-                ];
-                //container0.index
-                $url=route('container0.index',$parz);
-                $response = $this->get($url);
-                echo chr(13).''.$url.'  '.$response->status();
-                $model=xotModel($root);
-                $risto=factory(Restaurant::class)->make();
-                dd($risto);
-                /*
-                dd($risto);
-
-
-                $rows=factory(get_class($model),5)
-                    ->create()
-                    ->each(function ($row){
-                        dd(1);
-                        $post=factory(Post::class)->make();
-                        $row->post()->save($post);
-                    });
-                dd($rows);
-
-                //$rows=$model->all();
-                foreach($rows as $row){
-                    echo chr(13).$row->title;
-                }
-                    */
-
-                //$response->assertStatus(200);
-               
-                //$this->assertResponseOk();
-                echo  PHP_EOL;
-            }
-        }
-
-        $this->assertTrue(true);
-
-        //$this->call('GET',$url);
-        //$this->assertResponseOk();
-
-
-        /*
-        foreach ($urls as $url) {
-            $response = $this->get($url);
-            if (200 !== (int) $response->status()) {
-                echo  $appURL.$url.' (FAILED) did not return a 200.';
-                $this->assertTrue(false);
-            } else {
-                echo $appURL.$url.' (success ?)';
-                $this->assertTrue(true);
-            }
-            echo  PHP_EOL;
-        }
-        */
+        //echo  PHP_EOL;
     }
-}
+
+    public function testRoutes() {
+        $langs = config('laravellocalization.supportedLocales');
+        $roots = config('xra.roots');
+        //-------- HOME -------------
+        $url = '/';
+        $this->myTestUrl($url);
+
+        foreach ($langs as $lang => $lang_arr) {
+            \App::getLocale($lang);
+            $url = '/'.$lang;
+            $this->myTestUrl($url);
+
+            foreach ($roots as $root) {
+                $parz = ['lang' => $lang, 'container0' => $root];
+                $url = route('container0.index', $parz);
+                $this->myTestUrl($url);
+
+                if ($populate = 0) {
+                    $model = xotModel($root);
+                    $rows = factory(get_class($model), 5)->create();
+                    foreach ($rows as $k => $row) {
+                        $post = $row->post()->save(factory(Post::class)->create(['lang' => $lang]));
+                        $rows[$k]->post = $post;
+                    }
+                }
+
+                $model = xotModel($root);
+                $rows = $model->limit(5)->get();
+                foreach ($rows as $k => $row) {
+                    $panel = Panel::get($row);
+                    $url = $panel->url();
+                    $this->myTestUrl($url);
+                }
+            }
+        }
+    }
+
+    //end function
+}//end class

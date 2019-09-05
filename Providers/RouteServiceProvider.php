@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 //--- bases ---
@@ -19,22 +20,23 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
     public function bootCallback() {
         $router = $this->app['router'];
         //--- cambio lingua --
-        $langs=array_keys(config('laravellocalization.supportedLocales'));
-        
-        if(in_array(\Request::segment(1),$langs)){
-            $lang=\Request::segment(1);
-            \App::setLocale($lang);
-        };
+        $langs = array_keys(config('laravellocalization.supportedLocales'));
 
-        //$this->mergeConfigs();
+        if (in_array(\Request::segment(1), $langs)) {
+            $lang = \Request::segment(1);
+            \App::setLocale($lang);
+        }
+
         $this->registerRoutePattern($router);
-        if ('migrate' != \Request::input('act') && ! $this->app->runningInConsole()) {
+        /*-- e' commentato perche' devo controllare se funziona --*/
+        if ('migrate' != \Request::input('act') /*&& ! $this->app->runningInConsole() */) {
             $this->registerRouteBind($router);
         }
+
         //ddd('preso');
     }
 
-    public function registerRoutePattern(\Illuminate\Routing\Router $router) {
+    public function registerRoutePattern(Router $router) {
         $models = tenantConfig('xra.model');
         //----------ROUTE PATTERN
         $pattern = collect(\array_keys($models))->implode('|');
@@ -47,8 +49,9 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
     //end registerRoutePattern
 
-    public function registerRouteBind(\Illuminate\Routing\Router $router) {
+    public function registerRouteBind(Router $router) {
         //--------- ROUTE BIND
+
         //*
         $router->bind('lang', function ($value) {
             \App::setLocale($value);
@@ -86,6 +89,14 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
                 if (is_object($row)) {
                     return $row;
+                }
+                if ($debug = 0) {
+                    echo PHP_EOL.'----------------------------------';
+                    echo PHP_EOL.' model class : '.get_class($model);
+                    echo PHP_EOL.' value : '.$value;
+                    echo PHP_EOL.' pk_full : '.$pk_full;
+                    echo PHP_EOL.'----------------------------------';
+                    ddd(\Modules\Blog\Model\Post::count());
                 }
 
                 return $value;
