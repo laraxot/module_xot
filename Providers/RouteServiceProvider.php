@@ -37,8 +37,13 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
     }
 
     public function registerRoutePattern(Router $router) {
+        //---------- Lang Route Pattern
+        $langs = config('laravellocalization.supportedLocales');
+        $pattern = collect(\array_keys($langs))->implode('|');
+        $pattern = '/|'.$pattern.'|/i';
+        $router->pattern('lang', $pattern);
+        //---------- Container ROUTE PATTERN
         $models = tenantConfig('xra.model');
-        //----------ROUTE PATTERN
         $pattern = collect(\array_keys($models))->implode('|');
         $pattern = '/|'.$pattern.'|/i';
         for ($i = 0; $i < 4; ++$i) {
