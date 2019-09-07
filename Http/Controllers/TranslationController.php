@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 //use File;
 //---- services --
 use Modules\Theme\Services\ThemeService;
-use Modules\Extend\Services\TranslatorService;
+use Modules\Xot\Services\TranslatorService;
 
 class TranslationController extends Controller{
 

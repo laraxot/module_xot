@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 //use File;
 //---- services --
 use Modules\Theme\Services\ThemeService;
-use Modules\Extend\Services\TranslatorService;
+use Modules\Xot\Services\TranslatorService;
 
 class ImageController extends Controller{
 
