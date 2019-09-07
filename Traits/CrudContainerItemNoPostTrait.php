@@ -32,7 +32,7 @@ trait CrudContainerItemNoPostTrait {
             $row = self::getXotModel($container);
             $rows = $row;
         } else {
-            $types = camel_case(str_plural($container));
+            $types = Str::camel(Str::plural($container));
             $rows = $item->$types();
             $row = $rows->getRelated();
         }
@@ -54,7 +54,7 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function create(Request $request, $container, $item) {
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();
             $row = $rows->getRelated();
@@ -74,7 +74,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function edit(Request $request, $container, $item) {
         $panel = StubService::getByModel($item, 'panel');
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         $route_params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($route_params);
         if (count($items) > 1) {
@@ -208,7 +208,7 @@ trait CrudContainerItemNoPostTrait {
         if (! isset($data['lang'])) {
             $data['lang'] = \App::getLocale();
         }
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();
             $related = $rows->getRelated();
@@ -325,7 +325,7 @@ trait CrudContainerItemNoPostTrait {
         if ('POST' == $request->getMethod()) {
             return $this->indexAttachSave($request, $container, $item);
         }
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         if (is_object($item)) {
             $rows = $item->$types();
             $pivot_class = $rows->getPivotClass();
@@ -347,7 +347,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function indexAttachSave(Request $request, $container, $item) {
         $data = $request->all();
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         $related_pivot_key_name = $item->$types()->getRelatedPivotKeyName();
         $related_pivot_key_value = $data[$related_pivot_key_name];
         $rows = $item->$types()->attach($related_pivot_key_value, $data); //forse dovremmo aggiungere il tipo di relazione
@@ -379,7 +379,7 @@ trait CrudContainerItemNoPostTrait {
     public function indexUpdate(Request $request, $container, $item) {
         $data = $request->all();
 
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
         if (isset($data[$types]['from']) || isset($data[$types]['to'])) {
             $this->saveMultiselectTwoSides($request, $container, $item);
         }
@@ -442,7 +442,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function saveMultiselectTwoSides(Request $request, $container, $item) { //passo request o direttamente data ?
         $data = $request->all();
-        $types = camel_case(str_plural($container));
+        $types = Str::camel(Str::plural($container));
 
         $items = $item->$types();
         //getPivotAccessor

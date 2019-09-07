@@ -4,6 +4,7 @@ namespace Modules\Xot\Providers;
 
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Modules;
 
 abstract class XotBaseServiceProvider extends ServiceProvider {
@@ -116,7 +117,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
                 //$tmp->namespace='\\'.$vendor.'\\'.$pack.'\\Events\\'.$info['filename'];
                 $event_name = $info['filename'];
                 $str = 'Event';
-                if (ends_with($event_name, $str)) {
+                if (Str::endsWith($event_name, $str)) {
                     $listener_name = substr($event_name, 0, -strlen($str)).'Listener';
 
                     $event = $this->module_base_ns.'\\Events\\'.$event_name;

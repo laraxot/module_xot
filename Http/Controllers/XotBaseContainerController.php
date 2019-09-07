@@ -4,6 +4,7 @@ namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\StubService; //4 guestPolicy
@@ -25,7 +26,7 @@ abstract class XotBaseContainerController extends Controller {
             return Str::studly($item);
         })->implode('\\');
 
-        $container_first = array_first($containers);
+        $container_first = Arr::first($containers);
         //ddd($container_first); //restaurant
         $model_name = config('xra.model.'.$container_first); // ddd($model_name); //Modules\Food\Models\Restaurant
         $pos = strpos($model_name, '\\Models\\');
@@ -115,7 +116,7 @@ abstract class XotBaseContainerController extends Controller {
     $request = \str_replace('\\Controllers\\', '\\Requests\\', $controller);
             $request = \mb_substr($request, 0, -\mb_strlen('Controller'));
             $pos = \mb_strrpos($request, '\\');
-            $request = \mb_substr($request, 0, $pos + 1).studly_case($method).\mb_substr($request, $pos + 1);
+            $request = \mb_substr($request, 0, $pos + 1).Str::studly($method).\mb_substr($request, $pos + 1);
             $request = $request::capture();
             $request->validate($request->rules(), $request->messages());
     -------------*/

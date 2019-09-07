@@ -561,4 +561,9 @@ abstract class XotBasePanel {
     public function storeUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'store']);
     }
+
+    public function destroyUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
+    }
+
 }

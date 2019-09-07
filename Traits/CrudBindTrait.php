@@ -46,7 +46,7 @@ trait CrudBindTrait {
         $model = $this->getModel();
         $rows = $model;
         if (isset($container) && isset($item) && isset($container1)) {
-            $type1s = str_plural($container1->post_type);
+            $type1s = Str::plural($container1->post_type);
             $rows = $item->linked->$type1s();
         }
 

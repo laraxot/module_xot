@@ -131,7 +131,7 @@ trait RouteTrait {
                 $v['controller'] = $v['name'];
                 $v['controller'] = \str_replace('/', '_', $v['controller']);
                 if ($v['controller'] != $v['name']) {
-                    $v['controller'] = camel_case($v['controller']);
+                    $v['controller'] = Str::camel($v['controller']);
                 }
                 $v['controller'] = $v['controller'].'Controller';
             }
@@ -140,7 +140,7 @@ trait RouteTrait {
                 $v1['act'] = \preg_replace('/{.*}\//', '', $v1['act']);
                 $v1['act'] = \str_replace('/', '_', $v1['act']);
                 if ($v1['act'] != $v1['name']) {
-                    $v1['act'] = camel_case($v1['act']);
+                    $v1['act'] = Str::camel($v1['act']);
                 }
             }
             if (! isset($v1['as'])) {

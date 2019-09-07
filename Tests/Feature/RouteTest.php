@@ -18,12 +18,15 @@ class RouteTest extends TestCase {
     public function myTestUrl($url) {
         $response = $this->get($url); //homepage
         echo PHP_EOL.'url: '.$url.'  status: '.$response->status();
+        /*
         if (200 == (int) $response->status()) {
             $this->assertTrue(true);
         } else {
             $this->assertTrue(false);
         }
         //echo  PHP_EOL;
+        */
+        $response->assertStatus(200);
     }
 
     public function testRoutes() {

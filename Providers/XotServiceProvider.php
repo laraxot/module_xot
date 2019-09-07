@@ -39,9 +39,9 @@ class XotServiceProvider extends XotBaseServiceProvider {
                 URL::forceScheme('https');
             }
         }
-
+        //*
         $this->registerTranslator();
-
+        //*/
         resolve(EngineManager::class)->extend('fulltext', function () {
             return new FullTextSearchEngine();
         });

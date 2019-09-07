@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Route;
@@ -71,7 +72,7 @@ class RouteService {
             return null;
         }
 
-        return studly_case($namespace);
+        return Str::studly($namespace);
     }
 
     public static function getAct($v, $namespace) {
@@ -81,12 +82,12 @@ class RouteService {
         $v['act'] = $v['name'];
         $v['act'] = \preg_replace('/{.*}\//', '', $v['act']);
         $v['act'] = \str_replace('/', '_', $v['act']);
-        $v['act'] = camel_case($v['act']);
+        $v['act'] = Str::camel($v['act']);
         $v['act'] = \str_replace('{', '', $v['act']);
         $v['act'] = \str_replace('}', '', $v['act']);
         //camel_case foo_bar  => fooBar
         //studly_case foo_bar => FooBar
-        return camel_case($v['act']);
+        return Str::camel($v['act']);
     }
 
     public static function getParamName($v, $namespace) {
@@ -142,7 +143,7 @@ class RouteService {
         $v['controller'] = \str_replace('/', '_', $v['controller']);
         $v['controller'] = \str_replace('{', '', $v['controller']);
         $v['controller'] = \str_replace('}', '', $v['controller']);
-        $v['controller'] = studly_case($v['controller']);
+        $v['controller'] = Str::studly($v['controller']);
         //camel_case foo_bar  => fooBar
         //studly_case foo_bar => FooBar
         $v['controller'] = $v['controller'].'Controller';
@@ -313,11 +314,14 @@ class RouteService {
             ddd($params);
         }
         $name = collect(config('xra.model'))->search($model);
-        $params = \Route::current()->parameters();
-        list($containers, $items) = params2ContainerItem($params);
+        if(!isset($route_params)){
+            $route_current=\Route::current();
+            $route_params = is_object($route_current)?$route_current->parameters():[];
+        }
+        list($containers, $items) = params2ContainerItem($route_params);
         $container_i = collect($containers)->search($name);
 
-        return $container_i;
+        return $container_i*1;
     }
 
     public static function routenameSon($params) {
@@ -371,10 +375,10 @@ class RouteService {
 
     public static function tabs($params) {
         extract($params);
-        $params = \Route::current()->parameters();
+        $route_params = \Route::current()->parameters();
         $routename = \Route::currentRouteName();
         $act = last(explode('.', $routename));
-        list($containers, $items) = params2ContainerItem($params);
+        list($containers, $items) = params2ContainerItem($route_params);
         $n_items = count($items);
         $item_last = last($items);
         if (0 == count($items)) {
@@ -382,7 +386,7 @@ class RouteService {
         }
         $tabs = [];
 
-        $cont_i = RouteService::containerN(['model' => $model]);
+        $cont_i = RouteService::containerN(['model' => $model,'route_params'=>$route_params]);
         //ddd($routename);
         if (0 == $cont_i) {
             $tmp1 = new \stdClass();
@@ -415,7 +419,7 @@ class RouteService {
                 $tmp1->trad='pub_theme::'.$trad;
                 */
                 //$tmp1->title=trans($tmp1->trad.'.tab.'.$v);
-                $tmp1->title = trans('pub_theme::'.array_first($containers).'.tab.'.$v);
+                $tmp1->title = trans('pub_theme::'.Arr::first($containers).'.tab.'.$v);
                 $tmp1->url = RouteService::urlSon(['model' => $model], $v);
                 $tabs[] = $tmp1;
             }
@@ -432,9 +436,10 @@ class RouteService {
 
     public static function urlModel($params) {
         extract($params);
-        $params = \Route::current()->parameters();
+        $route_current=\Route::current();
+        $route_params=is_object($route_current)?$route_current->parameters():[];
         //$routename = \Request::route()->getName();
-        $cont_i = RouteService::containerN(['model' => get_class($model)]);
+        $cont_i = RouteService::containerN(['model' => get_class($model),'route_params'=>$route_params]);
         $tmp = [];
         if (in_admin()) {
             $tmp[] = 'admin';
@@ -444,11 +449,15 @@ class RouteService {
         }
         $tmp[] = $act;
         $routename = implode('.', $tmp);
-        $params['container'.($cont_i)] = $model->post_type;
-        $params['item'.($cont_i)] = $model;
-        $params['lang'] = \App::getLocale();
+        $route_params['lang'] = \App::getLocale();
+        $route_params['container'.($cont_i)] = $model->post_type;
+        $route_params['item'.($cont_i)] = $model;
 
-        return route($routename, $params);
+        $url=route($routename, $route_params);
+        if(Str::endsWith($url,'?')){
+            $url=Str::before($url,'?');
+        }
+        return $url;
     }
 
     public static function routenameN($params) {
@@ -475,12 +484,19 @@ class RouteService {
      **/
     public static function urlRelated($params) {
         extract($params);
-        $params = \Route::current()->parameters();
+        try{
+            $params = \Route::current()->parameters();
+        }catch(\Exception $e){
+            $params = [];
+        }
         $cont_i = RouteService::containerN(['model' => get_class($row)]);
         $routename = RouteService::routenameN(['n' => $cont_i + 1, 'act' => $act]);
         $row_name = collect(config('xra.model'))->search(get_class($row));
 
         //$related_name=collect(config('xra.model'))->search(get_class($related));
+        if(!isset($params['lang'])){
+            $params['lang']=\App::getLocale();
+        }
 
         $params['container'.$cont_i] = $row_name;
         $params['item'.$cont_i] = $row;
@@ -504,7 +520,11 @@ class RouteService {
         $old_act_route = last(explode('.', $routename));
 
         $routename_act = Str::before($routename, $old_act_route).''.$act;
-        $route_params = \Route::current()->parameters();
+        try{
+            $route_params = \Route::current()->parameters();
+        }catch(\Exception $e){
+            $route_params = [];
+        }
         if (\Route::has($routename_act)) {
             $parz = array_merge($route_params, [$row]);
             $parz = array_merge($parz, $query);

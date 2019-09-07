@@ -6,7 +6,7 @@ namespace Modules\Xot\Traits;
 //camel_case() 'foo_bar' fooBar
 //kebab_case() 'fooBar'  foo-bar
 //snake_case() 'fooBar' foo_bar
-//studly_case() 'foo_bar' FooBar
+//Str::studly() 'foo_bar' FooBar
 //title_case() 'a nice title uses the correct case'
 
 trait MyLogTrait {

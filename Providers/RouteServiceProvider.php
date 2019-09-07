@@ -4,6 +4,7 @@ namespace Modules\Xot\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 //--- bases ---
 
@@ -69,14 +70,14 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
             $container_name = 'container'.$i;
             $router->bind($item_name, function ($value) use ($container_name,$lang,$i) {
                 $container_curr = request()->$container_name;
-                $types = camel_case(str_plural($container_curr));
+                $types = Str::camel(Str::plural($container_curr));
 
                 if (0 == $i) {
                     $model = xotModel($container_curr);
                     $rows = $model;
                 } else {
                     $item_prev = request()->{'item'.($i - 1)};
-                    $types = camel_case(str_plural($container_curr));
+                    $types = Str::camel(Str::plural($container_curr));
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
                 }

@@ -94,8 +94,8 @@ trait CrudContainerItemTrait {
                 $rows = $model;
             }
         } else {
-            $types = str_plural($containers[$n_containers - 1]->post_type);
-            $types = camel_case($types);
+            $types = Str::plural($containers[$n_containers - 1]->post_type);
+            $types = Str::camel($types);
             try {
                 if (! is_object($items[$n_items - 1])) {
                     ddd($items);
@@ -436,8 +436,8 @@ trait CrudContainerItemTrait {
         $n_container = count($container);
         $n_item = count($item);
 
-        $types = str_plural($container[$n_container - 1]->post_type);
-        $types = camel_case($types);
+        $types = Str::plural($container[$n_container - 1]->post_type);
+        $types = Str::camel($types);
         $rows = $item[$n_item - 1]->$types();
         $rows = $rows->paginate(20);
         $roots = Post::getRoots();
@@ -454,8 +454,8 @@ trait CrudContainerItemTrait {
         $n_container = count($container);
         $n_item = count($item);
 
-        $types = str_plural($container[$n_container - 1]->post_type);
-        $types = camel_case($types);
+        $types = Str::plural($container[$n_container - 1]->post_type);
+        $types = Str::camel($types);
         $rows = $item[$n_item - 1]->$types();
 
         foreach ($data as $k => $v) {
@@ -486,8 +486,8 @@ trait CrudContainerItemTrait {
         $n_container = count($container);
         $n_item = count($item);
 
-        $types = str_plural($container[$n_container - 1]->post_type);
-        $types = camel_case($types);
+        $types = Str::plural($container[$n_container - 1]->post_type);
+        $types = Str::camel($types);
         $rows = $item[$n_item - 1]->$types();
         $rows = $rows->get(); //non ha senso mettere la paginazione
         if ('POST' == $request->getMethod()) {

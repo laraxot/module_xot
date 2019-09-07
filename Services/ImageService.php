@@ -71,11 +71,11 @@ class ImageService {
         if ('' == $val) {
             $val = public_path('img/nophoto.jpg');
         }
-        if (starts_with($val, url(''))) { //se e' una immagine locale
+        if (Str::startsWith($val, url(''))) { //se e' una immagine locale
             $val = public_path(\substr($val, strlen(url(''))));
         }
         $str = '/laravel-filemanager/';
-        if (starts_with($val, $str)) {
+        if (Str::startsWith($val, $str)) {
             $val = public_path(\substr($val, strlen($str)));
         }
         self::$src = $val;
@@ -279,8 +279,8 @@ class ImageService {
             $image_path = public_path(\mb_substr($image_path, \mb_strlen($str)));
             //die($image_path);
         }
-        if (starts_with($image_path, '/')) {
-            if (! starts_with($image_path, public_path('/'))) {
+        if (Str::startsWith($image_path, '/')) {
+            if (! Str::startsWith($image_path, public_path('/'))) {
                 $image_path = public_path($image_path);
             }
         }
