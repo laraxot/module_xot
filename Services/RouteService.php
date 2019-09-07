@@ -393,12 +393,12 @@ class RouteService {
             if ('index_edit' == $act) {
                 $act = 'edit';
             }
-            if ('index' == $act) {
+            if ('index' == $act) { 
                 $act = 'show';
             }
             $tmp1->title = $act;
             $tmp1->routename = (in_admin() ? 'admin.' : '').'container0.'.$act;
-            $tmp1->url = route($tmp1->routename, $params);
+            $tmp1->url = route($tmp1->routename, $route_params);
             $tmp1->active = ($routename == $tmp1->routename);
             $tabs[] = $tmp1;
         }
