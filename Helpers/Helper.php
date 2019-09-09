@@ -4,6 +4,15 @@ use Illuminate\Support\Str;
 
 //namespace Modules\XRA\Helpers;
 
+if (! \function_exists('snake_case')) {
+    function snake_case($str) {
+        return Str::snake($str);
+    }
+}
+
+
+
+
 if (! \function_exists('ddd')) {
     function ddd($params) {
         /*
