@@ -11,6 +11,8 @@ use Modules\Blog\Models\Post;
 use Modules\Xot\Services\PanelService as Panel;
 use Tests\TestCase;
 
+//use Tests\BrowserKitTestCase as TestCase;
+
 class RouteTest extends TestCase {
     /**
      * A basic test example.
@@ -60,6 +62,7 @@ class RouteTest extends TestCase {
                 foreach ($rows as $k => $row) {
                     $panel = Panel::get($row);
                     $url = $panel->url();
+                    echo PHP_EOL.' post_id: '.$row->post_id.'  post_type: '.$row->post_type.'  lang: '.$row->lang;
                     $this->myTestUrl($url);
                 }
             }

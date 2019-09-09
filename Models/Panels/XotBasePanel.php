@@ -565,5 +565,4 @@ abstract class XotBasePanel {
     public function destroyUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
     }
-
 }

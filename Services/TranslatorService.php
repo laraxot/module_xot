@@ -43,8 +43,8 @@ class TranslatorService extends BaseTranslator {
         return $translation;
     }
 
-    public function getFromJson($key, array $replace = [], $locale = null){
-        return self::get($key,$replace,$locale);
+    public function getFromJson($key, array $replace = [], $locale = null) {
+        return self::get($key, $replace, $locale);
     }
 
     public static function parse($params) {

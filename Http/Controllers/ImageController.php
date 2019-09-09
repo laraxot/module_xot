@@ -1,34 +1,32 @@
 <?php
+
 namespace Modules\Xot\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Str;
 
 //use File;
 //---- services --
-use Modules\Theme\Services\ThemeService;
-use Modules\Xot\Services\TranslatorService;
 
-class ImageController extends Controller{
+class ImageController extends Controller {
+    public function index(Request $request) {
+        ddd('index');
+    }
 
-	public function index(Request $request){
-		ddd('index');
-	}
+    public function show(Request $request) {
+        $params = \Route::current()->parameters();
+        list($containers, $items) = params2ContainerItem($params);
+        $last_item = last($items);
 
-	public function show(Request $request){
-		$params = \Route::current()->parameters();
-		list($containers,$items)=params2ContainerItem($params);
-		$last_item=last($items);
-		return $this->$last_item($request);
-	} //
+        return $this->$last_item($request);
+    }
 
-    public function store(Request $request){
+    public function store(Request $request) {
         return $this->canvas($request);
     }
 
-	public function canvas(Request $request) {
+    public function canvas(Request $request) {
         $data = $request->all();
         $path_parts = \pathinfo($data['name']);
         $error = false;
@@ -53,19 +51,19 @@ class ImageController extends Controller{
         \Storage::disk('public_html')->put($path, $imgdata);
         $url = \Storage::disk('public_html')->url($path);
         $url = \str_replace(url('/'), '', $url); //per risparmiare spazio
-        
-        $str='/storage';
-        if(Str::startsWith($url, $str)){
-            $url=substr($url,strlen($str));
+
+        $str = '/storage';
+        if (Str::startsWith($url, $str)) {
+            $url = substr($url, strlen($str));
         }
-        
+
         $response = [
                 'status' => 'success',
                 'url' => $url.'?'.\time(), //added the time to force update when editting multiple times
                 'filename' => $filename,
         ];
 
-        if (!empty($data['original'])) {
+        if (! empty($data['original'])) {
             $tmp = \explode(',', $data['original']);
             $originaldata = \base64_decode($tmp[1], true);
             $original = \mb_substr($data['name'], 0, -(\mb_strlen($extension) + 1)).'.'.\mb_substr(\sha1(\time()), 0, 6).'.original.'.$extension;

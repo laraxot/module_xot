@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Xot\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -8,27 +9,26 @@ use Illuminate\Http\Request;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\TranslatorService;
 
-class TranslationController extends Controller{
+class TranslationController extends Controller {
+    public function index(Request $request) {
+        return ThemeService::view();
+    }
 
-	public function index(Request $request){
-		return ThemeService::view();
-	}
-
-
-	public function store(Request $request){
-        $data=$request->all();
-        $trans=$data['trans'];
+    public function store(Request $request) {
+        $data = $request->all();
+        $trans = $data['trans'];
         TranslatorService::store($trans);
         if (\Request::ajax()) {
-                $response = [
+            $response = [
                     'success' => true,
                     //'data'    => $result,
                     'message' => 'OK',
                 ];
-                $response = \array_merge($data, $response);
-                return response()->json($response, 200);
+            $response = \array_merge($data, $response);
+
+            return response()->json($response, 200);
         }
+
         return redirect()->back();
-        
     }
 }

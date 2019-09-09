@@ -314,14 +314,14 @@ class RouteService {
             ddd($params);
         }
         $name = collect(config('xra.model'))->search($model);
-        if(!isset($route_params)){
-            $route_current=\Route::current();
-            $route_params = is_object($route_current)?$route_current->parameters():[];
+        if (! isset($route_params)) {
+            $route_current = \Route::current();
+            $route_params = is_object($route_current) ? $route_current->parameters() : [];
         }
         list($containers, $items) = params2ContainerItem($route_params);
         $container_i = collect($containers)->search($name);
 
-        return $container_i*1;
+        return $container_i * 1;
     }
 
     public static function routenameSon($params) {
@@ -386,14 +386,14 @@ class RouteService {
         }
         $tabs = [];
 
-        $cont_i = RouteService::containerN(['model' => $model,'route_params'=>$route_params]);
+        $cont_i = RouteService::containerN(['model' => $model, 'route_params' => $route_params]);
         //ddd($routename);
         if (0 == $cont_i) {
             $tmp1 = new \stdClass();
             if ('index_edit' == $act) {
                 $act = 'edit';
             }
-            if ('index' == $act) { 
+            if ('index' == $act) {
                 $act = 'show';
             }
             $tmp1->title = $act;
@@ -436,10 +436,10 @@ class RouteService {
 
     public static function urlModel($params) {
         extract($params);
-        $route_current=\Route::current();
-        $route_params=is_object($route_current)?$route_current->parameters():[];
+        $route_current = \Route::current();
+        $route_params = is_object($route_current) ? $route_current->parameters() : [];
         //$routename = \Request::route()->getName();
-        $cont_i = RouteService::containerN(['model' => get_class($model),'route_params'=>$route_params]);
+        $cont_i = RouteService::containerN(['model' => get_class($model), 'route_params' => $route_params]);
         $tmp = [];
         if (in_admin()) {
             $tmp[] = 'admin';
@@ -453,10 +453,11 @@ class RouteService {
         $route_params['container'.($cont_i)] = $model->post_type;
         $route_params['item'.($cont_i)] = $model;
 
-        $url=route($routename, $route_params);
-        if(Str::endsWith($url,'?')){
-            $url=Str::before($url,'?');
+        $url = route($routename, $route_params);
+        if (Str::endsWith($url, '?')) {
+            $url = Str::before($url, '?');
         }
+
         return $url;
     }
 
@@ -484,9 +485,9 @@ class RouteService {
      **/
     public static function urlRelated($params) {
         extract($params);
-        try{
+        try {
             $params = \Route::current()->parameters();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $params = [];
         }
         $cont_i = RouteService::containerN(['model' => get_class($row)]);
@@ -494,8 +495,8 @@ class RouteService {
         $row_name = collect(config('xra.model'))->search(get_class($row));
 
         //$related_name=collect(config('xra.model'))->search(get_class($related));
-        if(!isset($params['lang'])){
-            $params['lang']=\App::getLocale();
+        if (! isset($params['lang'])) {
+            $params['lang'] = \App::getLocale();
         }
 
         $params['container'.$cont_i] = $row_name;
@@ -520,9 +521,9 @@ class RouteService {
         $old_act_route = last(explode('.', $routename));
 
         $routename_act = Str::before($routename, $old_act_route).''.$act;
-        try{
+        try {
             $route_params = \Route::current()->parameters();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $route_params = [];
         }
         if (\Route::has($routename_act)) {
