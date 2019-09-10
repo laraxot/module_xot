@@ -12,21 +12,21 @@ class TranslationPanel {
      *
      * @var string
      */
-    public static $model = 'Modules\Xot\Models\Translation';
+    protected static $model = 'Modules\Xot\Models\Translation';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    protected static $title = 'title';
 
     /**
      * The columns that should be searched.
      *
      * @var array
      */
-    public static $search = [
+    protected static $search = [
 ];
 
     /**

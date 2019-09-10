@@ -10,19 +10,18 @@ use Intervention\Image\Facades\Image;
 //---- services ----
 
 class ImageService {
-    private static $_instance = null;
-    public static $img = null;
-    public static $width;
-    public static $height;
-    public static $src;
-    public static $filename;
+    private static $instance = null;
+    protected static $img = null;
+    protected static $width;
+    protected static $height;
+    protected static $src;
+    protected static $filename;
 
     public static function getInstance($params = []) {
-        if (null === self::$_instance) {
-            self::$_instance = new self($params);
+        if (null === self::$instance) {
+            self::$instance = new self($params);
         }
-
-        return self::$_instance;
+        return self::$instance;
     }
 
     public function __construct($params = []) {

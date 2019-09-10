@@ -21,10 +21,11 @@ use Symfony\Component\DomCrawler\Crawler;
 //*/
 
 class ImportService {
-    public static $client = null;
-    public static $client_options = [];
-    public static $res = null;
-    public static $cookieJar = null;
+    
+    protected static $client = null;
+    protected static $client_options = [];
+    protected static $res = null;
+    protected static $cookieJar = null;
 
     public static function setClientOptions($data = []) {
         self::$client_options = \array_merge(self::$client_options, $data);
@@ -79,7 +80,7 @@ class ImportService {
         //senza verify false errore = #message: "cURL error 60: SSL certificate problem: self signed certificate in certificate chain (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)"
     }
 
-    public static function setCookie(array $cookies) {
+    public static function enableCookie(array $cookies) {
         //$cookieJar->setCookie(SetCookie::fromString('SID="AuthKey 23ec5d03-86db-4d80-a378-6059139a7ead"; expires=Thu, 24 Nov 2016 13:52:20 GMT; path=/; domain=.sketchup.com'));
         if (null == self::$cookieJar) {
             self::initCookieJar();

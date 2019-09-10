@@ -9,7 +9,12 @@ class PanelService {
     private static $_instance = null;
     private static $model;
     private static $panel;
-
+    
+    /*
+    public function __construct($model){
+        $this->model=$model;
+    }
+    */
     public static function getInstance() {
         if (null === self::$_instance) {
             self::$_instance = new self();
@@ -21,13 +26,13 @@ class PanelService {
     public static function get($model) {
         return self::setModel($model)->panel();
     }
-
+   
     public static function setModel($model) {
         self::$model = $model;
 
         return self::getInstance();
     }
-
+    
     public static function panel() {
         $class_full = get_class(self::$model);
         $class_name = class_basename(self::$model);

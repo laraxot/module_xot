@@ -3,7 +3,7 @@
 namespace Modules\Xot\Traits;
 
 // /laravel/app/Updater.php
-//camel_case() 'foo_bar' fooBar
+//Str::camel() 'foo_bar' fooBar
 //kebab_case() 'fooBar'  foo-bar
 //snake_case() 'fooBar' foo_bar
 //Str::studly() 'foo_bar' FooBar

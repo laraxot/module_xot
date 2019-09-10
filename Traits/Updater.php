@@ -24,7 +24,7 @@ trait Updater {
             echo '<hr/>mylog_path : ['.$mylog_path.']';
             ddd($this);
         }
-        $res = $this->myLog()->save($log);
+        $this->myLog()->save($log);
         $this->last_stato = $stato;
         $this->datemod = Carbon::now();
         $this->handle = \Auth::user()->handle;

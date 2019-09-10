@@ -131,7 +131,7 @@ trait ServiceProviderTrait {
             foreach (\glob($path.'/*.php') as $filename) {
                 $name = \str_replace('Policy.php', '', \basename($filename));
                 //if($name!=basename($filename)){
-                if (ends_with(\basename($filename), 'Policy.php')) {
+                if (Str::endsWith(\basename($filename), 'Policy.php')) {
                     //$model=$this->getNamespace().DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR.$name;
                     //$policy=$this->getNamespace().DIRECTORY_SEPARATOR.'Policies'.DIRECTORY_SEPARATOR.$name.'Policy';
                     $model = $this->getNamespace().'\\Models\\'.$name;
@@ -147,7 +147,7 @@ trait ServiceProviderTrait {
             try {
                 \File::put($policies_file, json_encode($policies));
             } catch (\Exception $e) {
-                dd($e);
+                ddd($e);
             }
         } else {
             $policies = \File::get($policies_file);
@@ -170,7 +170,7 @@ trait ServiceProviderTrait {
                 //$tmp->namespace='\\'.$vendor.'\\'.$pack.'\\Events\\'.$info['filename'];
                 $event_name = $info['filename'];
                 $str = 'Event';
-                if (ends_with($event_name, $str)) {
+                if (Str::endsWith($event_name, $str)) {
                     $listener_name = substr($event_name, 0, -strlen($str)).'Listener';
                     $event = $this->getNamespace().'\\Events\\'.$event_name;
                     $listener = $this->getNamespace().'\\Listeners\\'.$listener_name;
@@ -186,7 +186,7 @@ trait ServiceProviderTrait {
             try {
                 \File::put($events_file, json_encode($events));
             } catch (\Exception $e) {
-                dd($e);
+                ddd($e);
             }
         } else {
             $events = \File::get($events_file);

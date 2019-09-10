@@ -567,8 +567,8 @@ trait CrudSimpleTrait {
 
         \Session::flash('status', 'Risorsa salvata!');
         switch ($request->_action) {
-            case 'save_continue': return redirect()->route(\str_replace('.update', '.edit', $routename), $params);
-            case 'come_back': return redirect()->back();
+               case 'save_continue': return redirect()->route(\str_replace('.update', '.edit', $routename), $params);
+               case 'come_back': return redirect()->back();
         }
 
         return redirect()->route(\str_replace('.update', '.index', $routename), $params);

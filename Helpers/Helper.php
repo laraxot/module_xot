@@ -226,7 +226,7 @@ if (! \function_exists('getModuleModels')) {
         foreach ($files as $file) {
             $filename = $file->getRelativePathname();
             $ext = '.php';
-            if (ends_with($filename, $ext)) {
+            if (Str::endsWith($filename, $ext)) {
                 $tmp = new \stdClass();
                 $name = substr(($filename), 0, -strlen($ext));
                 $tmp->class = $ns.'\\'.$name;

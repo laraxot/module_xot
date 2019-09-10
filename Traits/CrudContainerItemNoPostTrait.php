@@ -163,7 +163,9 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         $rows = $model->$name();
         if ($rows->exists()) {
-            $model->$name()->update($data);
+            //$model->$name()->update($data);
+            $model->$name->update($data);
+
         } else {
             $this->storeRelationshipsBelongsTo($params);
         }

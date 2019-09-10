@@ -35,7 +35,7 @@ abstract class XotBaseRepository implements RepositoryContract {
      *
      * @var string
      */
-    public static $searchOperator = 'LIKE';
+    protected static $searchOperator = 'LIKE';
 
     /**
      * @var \Illuminate\Database\Eloquent\Model

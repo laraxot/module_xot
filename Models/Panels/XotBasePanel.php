@@ -44,7 +44,7 @@ abstract class XotBasePanel {
     }
 
     public function rules() {
-        $fields = $this->fields();
+        $fields = $this->editFields();
         $rules = collect($fields)->map(function ($item) {
             if (! isset($item->rules)) {
                 $item->rules = '';
@@ -356,8 +356,7 @@ abstract class XotBasePanel {
                 $item->except = [];
             }
 
-            return
-                ! in_array($item->type, ['Password']) &&
+            return ! in_array($item->type, ['Password']) &&
                 ! in_array('index', $item->except);
         })->all();
 
@@ -377,9 +376,8 @@ abstract class XotBasePanel {
                 $item->except = [];
             }
 
-            return
                 //!in_array($item->type,['Password']) &&
-                ! in_array('create', $item->except) &&
+            return ! in_array('create', $item->except) &&
                 ! in_array($item->name, $excepts)
                 ;
         })->all();

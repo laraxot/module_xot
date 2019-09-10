@@ -450,7 +450,7 @@ trait CrudContainerItemTrait {
         $model = $this->getModel(); //Rating
         //ddd($model);
         $params = \Route::current()->parameters();
-        list($container, $item) = $this->params2ContainerItem($params);
+        [$container, $item] = $this->params2ContainerItem($params);
         $n_container = count($container);
         $n_item = count($item);
 

@@ -10,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ArrayService {
-    public static $export_processor = 1;
+    protected static $export_processor = 1;
 
     public static function toXLS($params) {
         require_once __DIR__.'/vendor/autoload.php';

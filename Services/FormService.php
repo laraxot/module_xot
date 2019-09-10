@@ -24,7 +24,7 @@ class FormService {
             foreach ($files as $file) {
                 $filename = $file->getRelativePathname();
                 $ext = '.blade.php';
-                if (ends_with($filename, $ext)) {
+                if (Str::endsWith($filename, $ext)) {
                     $base = substr(($filename), 0, -strlen($ext));
                     $name = str_replace(DIRECTORY_SEPARATOR, '_', $base);
                     $name = 'bs'.Str::studly($name);

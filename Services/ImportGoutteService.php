@@ -11,10 +11,10 @@ use GuzzleHttp\Cookie\FileCookieJar;
 use Illuminate\Support\Str;
 
 class ImportGoutteService {
-    public static $goutteClient = null;
-    public static $guzzleClient = null;
-    public static $client = null;
-    public static $client_options = [];
+    protected static $goutteClient = null;
+    protected static $guzzleClient = null;
+    protected static $client = null;
+    protected static $client_options = [];
 
     public static function importInit() {
         \ini_set('max_execution_time', 3000);
