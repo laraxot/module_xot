@@ -10,9 +10,6 @@ if (! \function_exists('snake_case')) {
     }
 }
 
-
-
-
 if (! \function_exists('ddd')) {
     function ddd($params) {
         /*
