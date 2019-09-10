@@ -104,7 +104,9 @@ trait CrudContainerItemNoPostTrait {
         }
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        //return view('xot::test'); //4 debug
+        if($debug=0){
+            return view('xot::test'); //4 debug
+        }
         if ($request->ajax()) {
             return json_encode(['msg' => 'ok']);
         } else {
@@ -147,6 +149,27 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
+    public function updateRelationshipsHasOne($params) {
+        extract($params);
+        $rows=$model->$name();
+        if($rows->exists()){
+            $model->$name()->update($data);
+        }else{
+            $this->storeRelationshipsHasOne($params);
+        }
+    }
+
+    public function updateRelationshipsBelongsTo($params) {
+        extract($params);
+        $rows=$model->$name();
+        if($rows->exists()){
+            $model->$name()->update($data);
+        }else{
+            $this->storeRelationshipsBelongsTo($params);
+        }
+    } 
+
+
     public function updateRelationshipsMorphOne($params) {
         extract($params);
         $model->$name()->update($data);
@@ -187,8 +210,32 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function storeRelationshipsHasOne($params) {
-        //ddd($params);
+        extract($params);
+        $rows=$model->$name();
+        //debug_getter_obj(['obj'=>$rows]);
+        $related=$rows->create($data);
+        if(!$model->$name()->exists()){//collegamento non riuscito
+            $pk_local=$rows->getLocalKeyName();
+            $pk_fore=$rows->getForeignKeyName();
+            $data1=[$pk_local=>$related->$pk_fore];
+            $model->update($data1);
+        }
+        
     }
+
+    public function storeRelationshipsBelongsTo($params) {
+        extract($params);
+        $rows=$model->$name();
+        //debug_getter_obj(['obj'=>$rows]);
+        $related=$rows->create($data);
+        if(!$model->$name()->exists()){//collegamento non riuscito
+            $pk_own=$rows->getOwnerKeyName();
+            $pk_fore=$rows->getForeignKeyName();
+            $data1=[$pk_fore=>$related->$pk_own];
+            $model->update($data1);
+        }   
+    }
+
 
     public function formatData($params) {
         extract($params);
@@ -244,6 +291,7 @@ trait CrudContainerItemNoPostTrait {
             }
 
             $data = $this->formatData(['data' => $data, 'class' => Post::class]);
+            if(!isset($data['title'])) $data['title']=class_basename($item_new).' '.$item_new->getKey();
             //ddd($data);
             $item_new->post()->create($data);
         }
@@ -256,7 +304,9 @@ trait CrudContainerItemNoPostTrait {
         self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
 
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        //return view('xot::test');// 4 debug
+        if($debug=0){
+            return view('xot::test');// 4 debug
+        }
         return ThemeService::action($request, $row);
     }
 

@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 
 //--- Services --
-use Modules\Extend\Services\StubService;
-use Modules\Extend\Services\RouteService;
+use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\RouteService;
 
 
 use Modules\Xot\Models\Panels\XotBasePanel;
