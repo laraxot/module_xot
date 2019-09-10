@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\PanelService as Panel;
+
 
 abstract class XotBasePanel {
     public $out = null;
@@ -562,5 +564,54 @@ abstract class XotBasePanel {
 
     public function destroyUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
+    }
+
+    public function postType(){
+        $models=config('xra.model');
+        $post_type=collect($models)->search(static::$model);
+        if($post_type==''){
+            $post_type=Str::snake(class_basename(static::$model));
+        }
+        return $post_type;
+    }
+
+    public function getTabs() {
+        $request = \Request::capture();
+        $routename = \Route::currentRouteName();
+        $route_params = \Route::current()->parameters();
+        [$containers,$items]=params2ContainerItem($route_params);
+        $data=[];
+        foreach($items as $k=>$item){
+            $panel=Panel::get($item);
+            $tabs=$panel->tabs();
+            $row=[];
+            if($k==0){
+                $tmp=new \stdClass();
+                $tmp->title='<< Back';
+                $tmp->url=$panel->indexUrl();
+                $tmp->active=false;
+                $row[]=$tmp;
+                //-----------------------
+                $tmp=new \stdClass();
+                $tmp->title='Content';
+                $tmp->url=$panel->editUrl();
+                $tmp->active=false;
+                $row[]=$tmp;
+                //----------------------
+            }
+            foreach($tabs as $tab){
+                $tmp=new \stdClass();
+                $tmp->title=$tab;
+                $tmp->url=RouteService::urlRelated(['row'=>$item,'related_name'=>$tab,'act'=>'index_edit']);
+                $tmp->active=in_array($tab,$containers);
+                $row[]=$tmp;
+            }
+            $data[]=$row;
+        }
+        //ddd($data);
+        //ddd($this->items);
+        //ddd($this->row);
+        //ddd(RouteService::urlRelated(['row'=>$this->row,'related_name'=>'area','act'=>'index_edit']));
+        return $data;
     }
 }

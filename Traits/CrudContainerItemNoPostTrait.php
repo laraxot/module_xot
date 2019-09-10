@@ -15,6 +15,8 @@ use Modules\Theme\Services\ThemeService;
 //use Modules\Xot\Services\PanelService;
 //use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\PanelService as Panel;
+
 
 trait CrudContainerItemNoPostTrait {
     public function index(Request $request, $container, $item) {
@@ -93,6 +95,7 @@ trait CrudContainerItemNoPostTrait {
     public function update(Request $request, $container, $item) {
         $data = $request->all();
         $row = $item;
+        $panel=Panel::get($row);
         $ris = $row->update($data);
         //$row->post()->save($data); //save vuole un oggetto
         if (method_exists($row, 'post')) {
@@ -110,7 +113,11 @@ trait CrudContainerItemNoPostTrait {
         if ($request->ajax()) {
             return json_encode(['msg' => 'ok']);
         } else {
-            return ThemeService::action($request, $row);
+            //return ThemeService::action($request, $row);
+            return ThemeService::view(['panel' => $panel, 'row' => $item])
+                ->with('row', $item)
+                ->with('_panel', $panel)
+                ;
         }
     }
 
@@ -309,7 +316,12 @@ trait CrudContainerItemNoPostTrait {
             return view('xot::test'); // 4 debug
         }
 
-        return ThemeService::action($request, $row);
+        //return ThemeService::action($request, $row);
+        $panel=Panel::get($item_new);
+        return ThemeService::view(['panel' => $panel, 'row' => $item_new])
+                ->with('row', $item_new)
+                ->with('_panel', $panel)
+                ;
     }
 
     public function storeRelationshipsMorphOne($params) {
@@ -432,9 +444,11 @@ trait CrudContainerItemNoPostTrait {
         $data = $request->all();
 
         $types = Str::camel(Str::plural($container));
+        /*
         if (isset($data[$types]['from']) || isset($data[$types]['to'])) {
             $this->saveMultiselectTwoSides($request, $container, $item);
         }
+        */
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'indexUpdate']);
         //ddd($data);
 
@@ -492,11 +506,23 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
-    public function saveMultiselectTwoSides(Request $request, $container, $item) { //passo request o direttamente data ?
-        $data = $request->all();
-        $types = Str::camel(Str::plural($container));
+    public function indexUpdateRelationshipsBelongsToMany($params) {
+        extract($params);
+        if (isset($data['from']) || isset($data['to'])) {
+            $this->saveMultiselectTwoSides($params);
+            $data['from']=[];unset($data['from']);
+            $data['to']=[];unset($data['to']);
+        }
+    }
 
-        $items = $item->$types();
+    public function saveMultiselectTwoSides($params) { //passo request o direttamente data ?
+        extract($params);
+
+        //$data = $request->all();
+        //$types = Str::camel(Str::plural($container));
+
+        //$items = $item->$types();
+        $items=$model->$name();
         //getPivotAccessor
         //getPivotClass
         //ddd($items->pivot());
@@ -504,13 +530,14 @@ trait CrudContainerItemNoPostTrait {
         //Modules\LU\Models\AreaAdminArea  solo se lo ficco con lo Using
         //ddd(get_class_methods($items));
         //ddd(class_basename($items));//BelongsToMany
-        $container_obj = $this->getXotModel($container);
+        //$container_obj = $this->getXotModel($container);
+        $container_obj = $model;
         $items_key = $container_obj->getKeyName();
         $items_0 = $items->get()->pluck($items_key);
-        if (! isset($data[$types]['to'])) {
-            $data[$types]['to'] = [];
+        if (! isset($data['to'])) {
+            $data['to'] = [];
         }
-        $items_1 = collect($data[$types]['to']);
+        $items_1 = collect($data['to']);
         $items_add = $items_1->diff($items_0);
         $items_sub = $items_0->diff($items_1);
         $items->detach($items_sub->all());

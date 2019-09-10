@@ -450,7 +450,9 @@ class RouteService {
         $tmp[] = $act;
         $routename = implode('.', $tmp);
         $route_params['lang'] = \App::getLocale();
-        $route_params['container'.($cont_i)] = $model->post_type;
+        $post_type=$model->post_type;
+        if($post_type=='') $post_type=Str::snake(class_basename($model));
+        $route_params['container'.($cont_i)] = $post_type;
         $route_params['item'.($cont_i)] = $model;
 
         $url = route($routename, $route_params);
