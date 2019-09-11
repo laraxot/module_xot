@@ -20,10 +20,10 @@ class XotServiceProvider extends XotBaseServiceProvider {
         $this->mergeConfigs();
 
         if (\Request::has('act') && 'migrate' == \Request::input('act')) {
-            //DB::purge('mysql'); //Call to a member function prepare() on null
+            DB::purge('mysql'); //Call to a member function prepare() on null
             DB::reconnect('mysql');
         }
-        DB::purge();
+        //DB::purge(); //Call to a member function prepare() on null
         DB::reconnect();
         $map = config('xra.model');
         Relation::morphMap($map);
