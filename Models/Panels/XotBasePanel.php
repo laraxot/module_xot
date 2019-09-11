@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 //----------  SERVICES --------------------------
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\RouteService;
@@ -539,7 +540,26 @@ abstract class XotBasePanel {
     }
 
     public function indexUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
+        $url=RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
+        $data=[];
+        $filters=$this->filters();
+        foreach($filters as $k => $v){
+            $field_value=$this->row->{$v->field_name};
+            if(!isset($v->where_method)) $v->where_method='where';
+            $where=Str::after($v->where_method,'where');
+
+            $filters[$k]->field_value=$field_value;
+            switch($where){
+                case 'Year': $value=$field_value->year;break;
+                case 'Month': $value=$field_value->month;break;
+                default: $value=$field_value;break;
+            }
+            $filters[$k]->value=$value;
+        }
+        $queries=collect($filters)->pluck('value','param_name')->all();
+        $url=(url_queries($queries,$url));
+        return $url;
+                
     }
 
     public function editUrl() {
@@ -588,7 +608,27 @@ abstract class XotBasePanel {
             if($k==0){
                 $tmp=new \stdClass();
                 $tmp->title='<< Back';
-                $tmp->url=$panel->indexUrl();
+                /*
+                $data=[];
+                $filters=$panel->filters();
+                foreach($filters as $k => $v){
+                    $field_value=$this->row->{$v->field_name};
+                    $where=Str::after($v->where_method,'where');
+                    $filters[$k]->field_value=$field_value;
+                    switch($where){
+                        case 'Year': $value=$field_value->year;break;
+                        case 'Month': $value=$field_value->month;break;
+                        default: $value=$field_value;break;
+                    }
+                    $filters[$k]->value=$value;
+                }
+                $queries=collect($filters)->pluck('value','param_name')->all();
+
+                $url=$panel->indexUrl();
+                
+                $url=(url_queries($queries,$url));
+                */
+                $tmp->url=$panel->indexUrl();;
                 $tmp->active=false;
                 $row[]=$tmp;
                 //-----------------------

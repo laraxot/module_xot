@@ -504,8 +504,13 @@ class RouteService {
         $params['container'.$cont_i] = $row_name;
         $params['item'.$cont_i] = $row;
         $params['container'.($cont_i + 1)] = $related_name;
+        try{
+            $route=route($routename, $params, false);
+        }catch(\Exception $e){
+            $route='#['.__LINE__.']['.__FILE__.']';
+        }
 
-        return route($routename, $params, false);
+        return $route;
     }
 
     public static function urlAct($params) {
