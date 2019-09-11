@@ -608,34 +608,19 @@ abstract class XotBasePanel {
             if($k==0){
                 $tmp=new \stdClass();
                 $tmp->title='<< Back';
-                /*
-                $data=[];
-                $filters=$panel->filters();
-                foreach($filters as $k => $v){
-                    $field_value=$this->row->{$v->field_name};
-                    $where=Str::after($v->where_method,'where');
-                    $filters[$k]->field_value=$field_value;
-                    switch($where){
-                        case 'Year': $value=$field_value->year;break;
-                        case 'Month': $value=$field_value->month;break;
-                        default: $value=$field_value;break;
-                    }
-                    $filters[$k]->value=$value;
-                }
-                $queries=collect($filters)->pluck('value','param_name')->all();
-
-                $url=$panel->indexUrl();
-                
-                $url=(url_queries($queries,$url));
-                */
                 $tmp->url=$panel->indexUrl();;
                 $tmp->active=false;
                 $row[]=$tmp;
                 //-----------------------
                 $tmp=new \stdClass();
-                $tmp->title='Content';
-                $tmp->url=$panel->editUrl();
-                $tmp->active=false;
+                $url=$panel->editUrl();
+                $tmp->url=$url;
+                $tmp->title='Content ';//.'['.request()->url().']['.$url.']';
+                if($url_test=1){
+                    $tmp->active=request()->url()==$url;
+                }else{
+                    $tmp->active=request()->routeIs('admin.container0.edit');
+                }
                 $row[]=$tmp;
                 //----------------------
             }
@@ -648,10 +633,6 @@ abstract class XotBasePanel {
             }
             $data[]=$row;
         }
-        //ddd($data);
-        //ddd($this->items);
-        //ddd($this->row);
-        //ddd(RouteService::urlRelated(['row'=>$this->row,'related_name'=>'area','act'=>'index_edit']));
         return $data;
     }
 }
