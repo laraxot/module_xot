@@ -585,3 +585,29 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
                 (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
         }
     }
+
+
+if (! function_exists('str_singular')) {
+    function str_singular($str) {
+        return Str::singular($str);
+    }
+}
+
+if (! function_exists('starts_with')) {
+    function starts_with($str,$str1) {
+        return Str::startsWith($str,$str1);
+    }
+}
+
+if (! function_exists('ends_with')) {
+    function ends_with($str,$str1) {
+        return Str::endsWith($str,$str1);
+    }
+}
+
+
+if (! function_exists('str_contains')) {
+    function str_contains($str,$str1) {
+        return Str::contains($str,$str1);
+    }
+}
