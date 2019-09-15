@@ -311,12 +311,12 @@ abstract class XotBasePanel {
 
             return;
         }
-        if($format=='transform' ){
+        if($format=='geoJson' ){
             $this->force_exit = 1;
             $ris=$data->where('latitude','!=','')->get();
             // https://github.com/renelikestacos/Web-Mapping-Leaflet-NodeJS-Tutorials
             // https://github.com/shramov/leaflet-plugins/blob/master/examples/permalink.html
-            $out=new \Modules\Xot\Transformers\MapCollection($ris);
+            $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
             //\File::put(public_path('data/resto.json'),$out);
             $this->out = $out;
             
