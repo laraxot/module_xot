@@ -371,6 +371,7 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function show(Request $request, $container, $item) {
+        $data=$request->all();
         $panel = StubService::getByModel($item, 'panel');
         if (is_object($item)) {
             $panel->callAction($item, $request->_act);
@@ -378,6 +379,15 @@ trait CrudContainerItemNoPostTrait {
                 return $panel->out;
             }
         }
+        if(isset($data['format'])){
+            $format=$data['format'];
+            if($format=='json'){
+                //return $item->toJson();
+                \Modules\Food\Transformers\RestaurantResource::withoutWrapping();
+                return new \Modules\Food\Transformers\RestaurantResource($item);
+            }
+        }
+
 
         return ThemeService::view()
             ->with('row', $item)
