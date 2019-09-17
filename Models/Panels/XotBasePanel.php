@@ -357,7 +357,7 @@ abstract class XotBasePanel {
                             ->select('post.post_id','post_type','guid','latitude','longitude')
                             ->where('latitude','!=','')
                             ->where('lang',$lang)
-                            ->paginate(1500)
+                            ->paginate(1000)
                             ->appends(\Request::input())
                             ;
                 $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
