@@ -331,6 +331,7 @@ abstract class XotBasePanel {
             $cache_key='geoJson';
             $out=Cache::store('file')->get($cache_key, function () use($data){
                 $lang=\App::getLocale();
+                ini_set('memory_limit',0);
                 $ris=$data->select('post.post_id','post_type','guid','latitude','longitude')
                             ->where('latitude','!=','')
                             ->where('lang',$lang)
