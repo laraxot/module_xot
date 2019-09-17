@@ -294,6 +294,7 @@ if (! \function_exists('tenantConfig')) {
 if (! \function_exists('transFields')) {
     function transFields($params) {
         extract($params);
+        //ddd($params);
         if (isset($attributes)) {
             extract($attributes);
         }
