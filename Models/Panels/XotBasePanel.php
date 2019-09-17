@@ -330,7 +330,10 @@ abstract class XotBasePanel {
             **/
             $cache_key='geoJson';
             $out=Cache::store('file')->get($cache_key, function () use($data){
-                $ris=$data->where('latitude','!=','')->get();
+                $ris=$data->select('post.post_id','post_type','guid','latitude','longitude')
+                            ->where('latitude','!=','')
+                            ->where('lang',$lang)
+                            ->get();
                 $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
                 return $out;
             });
