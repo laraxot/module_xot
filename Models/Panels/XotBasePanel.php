@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 //----------  SERVICES --------------------------
@@ -321,11 +323,17 @@ abstract class XotBasePanel {
         }
         if($format=='geoJson' ){
             $this->force_exit = 1;
-            $ris=$data->where('latitude','!=','')->get();
-            // https://github.com/renelikestacos/Web-Mapping-Leaflet-NodeJS-Tutorials
-            // https://github.com/shramov/leaflet-plugins/blob/master/examples/permalink.html
-            $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
-            //\File::put(public_path('data/resto.json'),$out);
+            /**
+            * https://github.com/renelikestacos/Web-Mapping-Leaflet-NodeJS-Tutorials
+            * https://github.com/shramov/leaflet-plugins/blob/master/examples/permalink.html
+            *
+            **/
+            $cache_key='geoJson';
+            $out=Cache::store('file')->get($cache_key, function () use($data){
+                $ris=$data->where('latitude','!=','')->get();
+                $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
+                return $out;
+            });
             $this->out = $out;
             
         }
