@@ -332,24 +332,23 @@ abstract class XotBasePanel {
             *
             **/
             //ddd('aaa');
-            $cache_key='geoJson_5_'.Str::slug(url()->full());
-            /*
-            if(!Storage::disk('cache')->exists($cache_key.'.json')){
-                $lang=\App::getLocale();
-                $ris=$data
-                            ->select('post.post_id','post_type','guid','latitude','longitude')
-                            ->where('latitude','!=','')
-                            ->where('lang',$lang)
-                            ->paginate(200)
-                            //->get()
-                            ;
-                $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
-                Storage::disk('cache')->put($cache_key.'.json',$out->toJson());    
-            }else{
-                $out=Storage::disk('cache')->get($cache_key.'.json');
+            $cache_key='geoJson_6_'.Str::slug(url()->full());
+            if($cache_custom=0){
+                if(!Storage::disk('cache')->exists($cache_key.'.json')){
+                    $lang=\App::getLocale();
+                    $ris=$data
+                                ->select('post.post_id','post_type','guid','latitude','longitude')
+                                ->where('latitude','!=','')
+                                ->where('lang',$lang)
+                                ->paginate(200)
+                                //->get()
+                                ;
+                    $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
+                    Storage::disk('cache')->put($cache_key.'.json',$out->toJson());    
+                }else{
+                    $out=Storage::disk('cache')->get($cache_key.'.json');
+                }
             }
-            */
-            //ini_set('memory_limit',0);
             //*
             $minutes=60*60*24;
             $out=Cache::store('file')->remember($cache_key, $minutes,function () use($data){
@@ -358,12 +357,12 @@ abstract class XotBasePanel {
                             ->select('post.post_id','post_type','guid','latitude','longitude')
                             ->where('latitude','!=','')
                             ->where('lang',$lang)
-                            //->limit(500) 
-                            ->paginate(300)->appends(\Request::input())
-                            //->get()
+                            ->paginate(1500)
+                            ->appends(\Request::input())
                             ;
                 $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
                 //$out=$out->toJson();
+
                 return $out;
             });
             //*/
