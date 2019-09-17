@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -328,17 +331,42 @@ abstract class XotBasePanel {
             * https://github.com/shramov/leaflet-plugins/blob/master/examples/permalink.html
             *
             **/
-            $cache_key='geoJson';
-            $out=Cache::store('file')->get($cache_key, function () use($data){
+            //ddd('aaa');
+            $cache_key='geoJson_5_'.Str::slug(url()->full());
+            /*
+            if(!Storage::disk('cache')->exists($cache_key.'.json')){
                 $lang=\App::getLocale();
-                ini_set('memory_limit',0);
-                $ris=$data->select('post.post_id','post_type','guid','latitude','longitude')
+                $ris=$data
+                            ->select('post.post_id','post_type','guid','latitude','longitude')
                             ->where('latitude','!=','')
                             ->where('lang',$lang)
-                            ->get();
+                            ->paginate(200)
+                            //->get()
+                            ;
                 $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
+                Storage::disk('cache')->put($cache_key.'.json',$out->toJson());    
+            }else{
+                $out=Storage::disk('cache')->get($cache_key.'.json');
+            }
+            */
+            //ini_set('memory_limit',0);
+            //*
+            $minutes=60*60*24;
+            $out=Cache::store('file')->remember($cache_key, $minutes,function () use($data){
+                $lang=\App::getLocale();
+                $ris=$data
+                            ->select('post.post_id','post_type','guid','latitude','longitude')
+                            ->where('latitude','!=','')
+                            ->where('lang',$lang)
+                            //->limit(500) 
+                            ->paginate(300)->appends(\Request::input())
+                            //->get()
+                            ;
+                $out=new \Modules\Geo\Transformers\GeoJsonCollection($ris);
+                //$out=$out->toJson();
                 return $out;
             });
+            //*/
             $this->out = $out;
             
         }
