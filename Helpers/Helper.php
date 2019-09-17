@@ -321,12 +321,12 @@ if (! \function_exists('transFields')) {
             }
         }
 
-        /*
-        $trans=$view_noact.'.field.'.$name;
+        $trans=$view_noact.'.field.'.$ris->name_dot;
         $ris->label=isset($label)?$label:trans($trans);
+        $trans=$view_noact.'.field.'.$ris->name_dot.'_placeholder';
+        $ris->placeholder=isset($placeholder)?$placeholder:trans($trans);;
+        /*
         //if($ris->label==$trans) $ris->label=$name;
-        $trans=$view_noact.'.field.'.$name.'_placeholder';
-        $ris->placeholder=trans($trans);
         if($ris->placeholder==$trans) $ris->placeholder=' ';
         */
 
@@ -340,6 +340,8 @@ if (! \function_exists('transFields')) {
                         //->only('class','placeholder','readonly')
                         ->all();
         $ris->params = $params;
+
+        
 
         return $ris;
     }

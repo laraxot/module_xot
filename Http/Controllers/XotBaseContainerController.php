@@ -103,7 +103,13 @@ abstract class XotBaseContainerController extends Controller {
         //if(in_array($method,['update','store'])){
         if ('GET' != $request->getMethod()) {
             if (! $request->ajax()) {
-                $request->validate($panel->rules(), $panel->rulesMessages());
+                $route_action = \Route::currentRouteAction();
+                $act=Str::after($route_action,'@');
+                /*
+                $rule_method=$act.'Rules';
+                $rules=$panel->$rule_method();
+                */
+                $request->validate($panel->rules(['act'=>$act]), $panel->rulesMessages());
             }
         }
 

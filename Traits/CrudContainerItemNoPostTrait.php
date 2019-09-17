@@ -290,7 +290,7 @@ trait CrudContainerItemNoPostTrait {
             }
             $tmp = $item->$types()->save($item_new, $pivot_data);
         }
-        //*
+        /*
         if (method_exists($item_new, 'post')) { // mi evita delle query dopo
             if (isset($data['post'])) {
                 $data = array_merge($data, $data['post']); //forzatura
@@ -303,21 +303,26 @@ trait CrudContainerItemNoPostTrait {
             //ddd($data);
             $item_new->post()->create($data);
         }
+        */
         $panel = StubService::getByModel($item_new, 'panel');
 
+
+       
+        //*/
+        self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
+        //*
         if (method_exists($panel, 'storeCallback')) {
             $item_new = $panel->storeCallback(['row' => $item_new, 'data' => $data]);
         }
         //*/
-        self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
 
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        if ($debug = 0) {
-            return view('xot::test'); // 4 debug
-        }
-
+        
         //return ThemeService::action($request, $row);
+
         $panel=Panel::get($item_new);
+
+
         return ThemeService::view(['panel' => $panel, 'row' => $item_new])
                 ->with('row', $item_new)
                 ->with('_panel', $panel)
@@ -354,9 +359,16 @@ trait CrudContainerItemNoPostTrait {
                 if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
+                if (! isset($v['pivot']['auth_user_id']) && isset($model->auth_user_id) ) {
+                    $v['pivot']['auth_user_id'] =$model->auth_user_id;
+                }
                 if (! isset($v['pivot']['auth_user_id']) && \Auth::check()) {
                     $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
                 }
+                /**
+                * syncWithoutDetaching fa una select a vuoto ma funziona
+                *
+                **/
                 $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
             } else {
                 /*

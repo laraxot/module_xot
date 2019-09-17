@@ -6,6 +6,7 @@ use Collective\Html\FormFacade as Form;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 //----------  SERVICES --------------------------
@@ -46,8 +47,16 @@ abstract class XotBasePanel {
         return [];
     }
 
-    public function rules() {
-        $fields = $this->editFields();
+    public function rules($params=[]) {
+        $act='';
+        extract($params);
+        switch($act){
+            case 'store':$fields = $this->createFields();break;
+            case 'update':$fields = $this->editFields();break;
+            default:$fields = $this->fields();break;
+        }
+
+        
         $rules = collect($fields)->map(function ($item) {
             if (! isset($item->rules)) {
                 $item->rules = '';
@@ -67,7 +76,6 @@ abstract class XotBasePanel {
 
             return [$item->name => $item->rules];
         })->collapse()->all();
-
         return $rules;
     }
 
@@ -609,6 +617,8 @@ abstract class XotBasePanel {
     public function getTabs() {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
+        $act=last(explode('.',$routename));
+        //$routename = \Route::current()->getName();
         $route_params = \Route::current()->parameters();
         [$containers,$items]=params2ContainerItem($route_params);
         $data=[];
@@ -617,20 +627,27 @@ abstract class XotBasePanel {
             $tabs=$panel->tabs();
             $row=[];
             if($k==0){
-                $tmp=new \stdClass();
-                $tmp->title='<< Back';
-                $tmp->url=$panel->indexUrl();;
-                $tmp->active=false;
-                $row[]=$tmp;
+                if(Gate::allows('index', $this->row)){
+                    $tmp=new \stdClass();
+                    $tmp->title='<< Back';
+                    $tmp->url=$panel->indexUrl();;
+                    $tmp->active=false;
+                    $row[]=$tmp;
+                }
                 //-----------------------
                 $tmp=new \stdClass();
-                $url=$panel->editUrl();
+                if(in_array($act,['index_edit','edit','update'])){
+                    $url=$panel->editUrl();break;
+                }else{
+                    $url=$panel->showUrl();break;
+                }
+                
                 $tmp->url=$url;
                 $tmp->title='Content ';//.'['.request()->url().']['.$url.']';
                 if($url_test=1){
                     $tmp->active=request()->url()==$url;
                 }else{
-                    $tmp->active=request()->routeIs('admin.container0.edit');
+                    $tmp->active=request()->routeIs('admin.container0.'.$act);  
                 }
                 $row[]=$tmp;
                 //----------------------
@@ -638,7 +655,13 @@ abstract class XotBasePanel {
             foreach($tabs as $tab){
                 $tmp=new \stdClass();
                 $tmp->title=$tab;
-                $tmp->url=RouteService::urlRelated(['row'=>$item,'related_name'=>$tab,'act'=>'index_edit']);
+
+                if(in_array($act,['index_edit','edit','update'])){
+                    $tab_act='index_edit';
+                }else{
+                    $tab_act='index';
+                }
+                $tmp->url=RouteService::urlRelated(['row'=>$item,'related_name'=>$tab,'act'=>$tab_act]);
                 $tmp->active=in_array($tab,$containers);
                 $row[]=$tmp;
             }

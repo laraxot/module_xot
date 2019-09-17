@@ -453,7 +453,19 @@ class RouteService {
         $post_type=$model->post_type;
         if($post_type=='') $post_type=Str::snake(class_basename($model));
         $route_params['container'.($cont_i)] = $post_type;
-        $route_params['item'.($cont_i)] = $model;
+        $route_key=$model->getRouteKeyName();
+        $route_key_val=$model->$route_key;
+        if($debug=0){
+            $msg=[
+                'route_key' => $route_key,
+                'route_key_val'=>$route_key_val,
+                'class'=>get_class($model),
+                'model'=> $model,
+            ];
+            ddd($msg);
+        }
+
+        $route_params['item'.($cont_i)] = $route_key_val;
 
         $url = route($routename, $route_params);
         if (Str::endsWith($url, '?')) {
