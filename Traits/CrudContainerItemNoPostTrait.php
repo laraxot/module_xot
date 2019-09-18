@@ -98,6 +98,7 @@ trait CrudContainerItemNoPostTrait {
         $panel=Panel::get($row);
         $ris = $row->update($data);
         //$row->post()->save($data); //save vuole un oggetto
+        /* ---- 
         if (method_exists($row, 'post')) {
             if (null == $row->post) {
                 $row->post()->create($data);
@@ -105,6 +106,7 @@ trait CrudContainerItemNoPostTrait {
                 $row->post->update($data);
             }
         }
+        */
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
         if ($debug = 0) {

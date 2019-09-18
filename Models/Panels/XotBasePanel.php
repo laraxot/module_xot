@@ -677,11 +677,10 @@ abstract class XotBasePanel {
                 //-----------------------
                 $tmp=new \stdClass();
                 if(in_array($act,['index_edit','edit','update'])){
-                    $url=$panel->editUrl();break;
+                    $url=$panel->editUrl();
                 }else{
-                    $url=$panel->showUrl();break;
+                    $url=$panel->showUrl();
                 }
-                
                 $tmp->url=$url;
                 $tmp->title='Content ';//.'['.request()->url().']['.$url.']';
                 if($url_test=1){
