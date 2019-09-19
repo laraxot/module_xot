@@ -667,9 +667,9 @@ abstract class XotBasePanel {
             $tabs=$panel->tabs();
             $row=[];
             if($k==0){
-                if(Gate::allows('index', $this->row)){
+                if(Gate::allows('index', $item)){
                     $tmp=new \stdClass();
-                    $tmp->title='<< Back';
+                    $tmp->title='<< Back ';//.'['.get_class($item).']';
                     $tmp->url=$panel->indexUrl();;
                     $tmp->active=false;
                     $row[]=$tmp;
