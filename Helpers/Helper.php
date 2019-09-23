@@ -298,10 +298,12 @@ if (! \function_exists('transFields')) {
         if (isset($attributes)) {
             extract($attributes);
         }
-        $field=$options['field'];
-        
-        //$ris = new \stdClass();
-        $ris=$field;
+        if(isset($options['field'])){
+            $field=$options['field'];
+            $ris=$field;
+        }else{
+            $ris = new \stdClass();
+        }
 
         $start = 0;
         if (in_admin()) {
