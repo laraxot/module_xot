@@ -319,8 +319,31 @@ class RouteService {
             $route_params = is_object($route_current) ? $route_current->parameters() : [];
         }
         list($containers, $items) = params2ContainerItem($route_params);
-        $container_i = collect($containers)->search($name);
+        $container_types=[];
+        foreach($containers as $i=>$container){
+            $types=Str::camel(Str::plural($container));
+            if($i==0){
+                $container_types[$i]=config('xra.model.'.$container);
+            }else{
+                $rows=$items[$i-1]->$types();
+                $container_types[$i]=get_class($rows->getRelated());    
+            }
+        }
+        $container_i = collect($container_types)->search($model);
+        /*
+        ddd($container_types);
+        //$item_i=collect($items)->whereInstanceOf($model);
+        $item_i=collect($items)->search(function ($item,$key) use ($model){
+            return get_class($item)==$model;
+        });
 
+        $item_i=$item_i*1;
+        if($item_i>0){
+            return $item_i;
+        }
+        
+        $container_i = collect($containers)->search($name);
+        */
         return $container_i * 1;
     }
 
@@ -452,7 +475,15 @@ class RouteService {
         $route_params['lang'] = \App::getLocale();
         $post_type=$model->post_type;
         if($post_type=='') $post_type=Str::snake(class_basename($model));
-        $route_params['container'.($cont_i)] = $post_type;
+        /**
+        * Incerto
+        *
+        **/
+
+        if(!isset($route_params['container'.($cont_i)]) ){
+            $route_params['container'.($cont_i)] = $post_type;
+        }
+        
         $route_key=$model->getRouteKeyName();
         $route_key_val=$model->$route_key;
         if($debug=0){

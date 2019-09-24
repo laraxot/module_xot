@@ -396,9 +396,9 @@ trait CrudContainerItemNoPostTrait {
         if(isset($data['format'])){
             $format=$data['format'];
             if($format=='json'){
-                //return $item->toJson();
-                \Modules\Food\Transformers\RestaurantResource::withoutWrapping();
-                return new \Modules\Food\Transformers\RestaurantResource($item);
+                return $item->toJson();
+                //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
+                //return new \Modules\Xot\Transformers\JsonResource($item);
             }
         }
 
