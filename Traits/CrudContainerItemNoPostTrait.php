@@ -98,7 +98,7 @@ trait CrudContainerItemNoPostTrait {
         $panel=Panel::get($row);
         $ris = $row->update($data);
         //$row->post()->save($data); //save vuole un oggetto
-        /* ---- 
+        /* ----
         if (method_exists($row, 'post')) {
             if (null == $row->post) {
                 $row->post()->create($data);
@@ -162,7 +162,11 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         $rows = $model->$name();
         if ($rows->exists()) {
-            $model->$name()->update($data);
+            if(!is_array($data)){
+               //variabile uguale alla relazione
+            }else{
+                $model->$name()->update($data);
+            }
         } else {
             $this->storeRelationshipsHasOne($params);
         }
@@ -309,7 +313,7 @@ trait CrudContainerItemNoPostTrait {
         $panel = StubService::getByModel($item_new, 'panel');
 
 
-       
+
         //*/
         self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
         //*
@@ -319,7 +323,7 @@ trait CrudContainerItemNoPostTrait {
         //*/
 
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        
+
         //return ThemeService::action($request, $row);
 
         $panel=Panel::get($item_new);
@@ -450,14 +454,14 @@ trait CrudContainerItemNoPostTrait {
         };
         ddd('senza item ?');
         */
-        //return view('xot::test');// 4 debug
         return ThemeService::action($request, $item);
     }
 
     public function indexEdit(Request $request, $container, $item) {
         //ddd($request->getMethod());
         if ('POST' == $request->getMethod()) {
-            return $this->indexUpdate($request, $container, $item);
+            //return  //
+            $this->indexUpdate($request, $container, $item);
         }
 
         return $this->index($request, $container, $item);
@@ -466,35 +470,13 @@ trait CrudContainerItemNoPostTrait {
 
     public function indexUpdate(Request $request, $container, $item) {
         $data = $request->all();
-
+        /* --- da cambiare js --
         $types = Str::camel(Str::plural($container));
-        /*
         if (isset($data[$types]['from']) || isset($data[$types]['to'])) {
             $this->saveMultiselectTwoSides($request, $container, $item);
         }
         */
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'indexUpdate']);
-        //ddd($data);
-
-        //foreach($data[$types] as $k=>$v){
-        //$item->$types()->updateExistingPivot($k, $v, false);
-        /*
-        $tmp=$this->getXotModel($container)->find($k);
-        $item->$types()->save($tmp,$v['pivot']);
-        */
-        //$item->$types()->syncWithoutDetaching([$k=>$v['pivot']]);
-        //$v['pivot']['auth_user_id']=\Auth::user()->auth_user_id;
-        //$item->$types()->syncWithoutDetaching([$k=>$v['pivot']]);
-        //}
-        /*
-        echo '<ol>[';
-        foreach($item->$types()->get() as $k=>$v){
-            echo '<li>'.$v->pivot->rating.'</li>';
-        }
-        echo ']</ol>';
-        */
-        //return view('xot::test');
-        return back()->withInput();
     }
 
     public function indexUpdateRelationshipsMorphToMany($params) {
@@ -513,7 +495,7 @@ trait CrudContainerItemNoPostTrait {
                 if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
-                if (! isset($v['pivot']['auth_user_id']) && \Auth::check()) {
+                if ((! isset($v['pivot']['auth_user_id']) || $v['pivot']['auth_user_id']=='') && \Auth::check()) {
                     $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
                 }
                 $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
