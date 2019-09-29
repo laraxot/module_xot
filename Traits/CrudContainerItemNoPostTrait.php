@@ -21,7 +21,6 @@ use Modules\Xot\Services\PanelService as Panel;
 trait CrudContainerItemNoPostTrait {
     public function index(Request $request, $container, $item) {
         $params = \Route::current()->parameters();
-
         if (false === $container) {
             $home_view = $params['module'].'::admin.index';
             if (\View::exists($home_view)) {

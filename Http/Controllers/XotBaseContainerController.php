@@ -56,7 +56,7 @@ abstract class XotBaseContainerController extends Controller {
         list($containers, $items) = params2ContainerItem($params);
         $request = Request::capture();
         $a = $this->init($params);
-        $controller = $this->controller;
+        $controller = $this->controller; 
         $row = $this->last;
         // ddd($this->authorize($method,$row));
         if (! is_object($row) && '' != $row && '' != config('xra.model.'.$row)) {

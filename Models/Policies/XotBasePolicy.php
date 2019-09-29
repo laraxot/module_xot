@@ -7,11 +7,14 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 //use Illuminate\Database\Eloquent\Model as Post;
 use Modules\LU\Models\User;
 
+
+use Modules\Xot\Services\PanelService as Panel;
+
 abstract class XotBasePolicy {
     use HandlesAuthorization;
 
     public function before($user, $ability) {
-        if (is_object($user) && $user->isSuperAdmin()) {
+        if (is_object($user) && Panel::get($user)->isSuperAdmin()) {
             return true;
         }
     }
@@ -81,7 +84,7 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function delete(User $user, Post $post) {
+    public function delete(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -97,7 +100,7 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function restore(User $user, Post $post) {
+    public function restore(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -113,7 +116,7 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function forceDelete(User $user, Post $post) {
+    public function forceDelete(User $user, $post) {
     }
 
     public function detach(User $user, $post) {
@@ -146,6 +149,6 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function view(User $user, Post $post) {
+    public function view(User $user, $post) {
     }
 }

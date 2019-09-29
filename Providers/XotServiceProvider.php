@@ -29,6 +29,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
         Relation::morphMap($map);
         $this->commands([
             \Modules\Xot\Console\CreateAllRepositoriesCommand::class,
+            \Modules\Xot\Console\PanelMakeCommand::class,
         ]);
 
         if (false) {

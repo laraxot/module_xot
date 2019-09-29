@@ -5,6 +5,8 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+use Modules\Xot\Services\StubService;
+
 class PanelService {
     private static $_instance = null;
     private static $model;
@@ -36,10 +38,13 @@ class PanelService {
     public static function panel() {
         $class_full = get_class(self::$model);
         $class_name = class_basename(self::$model);
-        $class = Str::before($class_full, $class_name);
+        //$class = Str::before($class_full, $class_name);
+        $class =substr($class_full,0,-strlen($class_name));
         $panel_class = $class.'Panels\\'.$class_name.'Panel';
+        if(!class_exists($panel_class)){
+            $tmp= StubService::getByModel(self::$model, 'panel',$create=true);
+        }
         self::$panel = new $panel_class(self::$model);
-
         return self::$panel;
     }
 
