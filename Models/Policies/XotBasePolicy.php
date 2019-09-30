@@ -5,7 +5,8 @@ namespace Modules\Xot\Models\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 //use Modules\Food\Models\Restaurant as Post;
 //use Illuminate\Database\Eloquent\Model as Post;
-use Modules\LU\Models\User;
+//use Modules\LU\Models\User;
+use Modules\Xot\Contracts\UserContract as User;
 
 
 use Modules\Xot\Services\PanelService as Panel;
@@ -13,7 +14,7 @@ use Modules\Xot\Services\PanelService as Panel;
 abstract class XotBasePolicy {
     use HandlesAuthorization;
 
-    public function before($user, $ability) {
+    public function before(User $user, $ability) {
         if (is_object($user) && Panel::get($user)->isSuperAdmin()) {
             return true;
         }
