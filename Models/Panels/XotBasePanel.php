@@ -654,6 +654,30 @@ abstract class XotBasePanel {
         return $post_type;
     }
 
+    public function getItemTabs(){
+        $item=$this->row;
+        $tabs=$this->tabs();
+        $routename = \Route::currentRouteName();
+        $act=last(explode('.',$routename));
+        $row=[];
+        foreach($tabs as $tab){
+            $tmp=new \stdClass();
+            $tmp->title=$tab;
+
+            if(in_array($act,['index_edit','edit','update'])){
+                $tab_act='index_edit';
+            }else{
+                $tab_act='index';
+            }
+            $tmp->url=RouteService::urlRelated(['row'=>$item,'related_name'=>$tab,'act'=>$tab_act]);
+            $tmp->active=false;//in_array($tab,$containers);
+            $row[]=$tmp;
+        }
+
+        return [$row];
+    }
+
+
     public function getTabs() {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
@@ -662,11 +686,14 @@ abstract class XotBasePanel {
         $route_params = \Route::current()->parameters();
         [$containers,$items]=params2ContainerItem($route_params);
         $data=[];
+        //$items[]=$this->row;
+        array_unique($items);
         foreach($items as $k=>$item){
             $panel=Panel::get($item);
             $tabs=$panel->tabs();
             $row=[];
             if($k==0){
+                //*
                 if(Gate::allows('index', $item)){
                     $tmp=new \stdClass();
                     $tmp->title='<< Back ';//.'['.get_class($item).']';
@@ -690,6 +717,7 @@ abstract class XotBasePanel {
                 }
                 $row[]=$tmp;
                 //----------------------
+                //*/
             }
             foreach($tabs as $tab){
                 $tmp=new \stdClass();
