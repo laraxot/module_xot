@@ -30,6 +30,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
         $this->commands([
             \Modules\Xot\Console\CreateAllRepositoriesCommand::class,
             \Modules\Xot\Console\PanelMakeCommand::class,
+            \Modules\Xot\Console\FixProvidersCommand::class,
         ]);
 
         if (false) {
