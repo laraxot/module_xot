@@ -11,7 +11,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\Theme\Http\Controllers';
+    protected $moduleNamespace = 'DummyControllerNamespace';
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 }

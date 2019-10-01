@@ -2,65 +2,76 @@
 namespace Modules\Xot\Console;
 
 
-//use Illuminate\Console\Command;
+use Illuminate\Console\Command;
 //use Illuminate\Console\GeneratorCommand;
-use Nwidart\Modules\Commands\GeneratorCommand;
+//use Nwidart\Modules\Commands\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
-class FixProvidersCommand extends GeneratorCommand {
-    protected $name = 'xot:fix-module-provider';
-    protected $description = 'fix module provider of module ';
+class FixProvidersCommand extends Command {
+    protected $name = 'xot:fix-module-providers';
+    protected $description = 'fix module providers of module ';
     //protected $type = 'ModuleProvider';
     //protected $argumentName='name';
 
+    /*
     protected function getStub(){
         return __DIR__.'/stubs/module_provider.stub';
     }
-
     protected function getTemplateContents(){
     	$stub=File::get($this->getStub());
-    	$module_name =$this->argument('module_name');
+    	$module_name =$this->argument('name');
         $module = \Module::findOrFail($module_name);
         $module_ns=$this->laravel['modules']->config('namespace');
-        //Modules\Theme\Providers DummyNamespace
         $replaces=[
         	'DummyNamespace'	=> $module_ns.'\\'.$module->getStudlyName().'\Providers',
         	'DummyClass'		=> $module->getStudlyName().'Provider',
         	'dummy_name'		=> $module->getLowerName(),
-    		//'MODULENAME'        => $module->getStudlyName(),
-    		//'NAMESPACE'         => $module->getStudlyName(),
-    		//'LOWER_NAME'        => $module->getLowerName(),
-    		//'STUDLY_NAME'       => $module->getStudlyName(),
-    		//'MODULE_NAMESPACE'  => $module_ns,
     	];
     	$stub=str_replace(array_keys($replaces),array_values($replaces),$stub);
     	return $stub;
     }
 
     public function getDestinationFilePath(){
-    	/*
-        $path = $this->laravel['modules']->getModulePath($this->getModuleName());
-        $controllerPath = GenerateConfigReader::read('provider');
-
-        return $path . $controllerPath->getPath() . '/' . $this->getControllerName() . '.test';
-        */
-        $module_name =$this->argument('module_name');
+        $module_name =$this->argument('name');
         $module = \Module::findOrFail($module_name);
         $providers_path=realpath($module->getExtraPath('Providers'));
         $module_name =$module->getStudlyName();
         return $providers_path.'/'.$module_name.'ServiceProvider_1.php';
     }
+    */
+    /*
+    protected function getNamespace($name){
+        //dd($rootNamespace);
+        
+        //$module = \Module::findOrFail($name);
+        return 'Modules\Mazinga\Providers';
+    }
+    //*/
+    
+    /*
+    protected function qualifyClass($name){
+        //return 'Modules\Mazinga';
+        $module = \Module::findOrFail($name);
+        return $module->getStudlyName().'Provider';
+    }
+    
 
+    protected function getPath($name){
+        $module = \Module::findOrFail(Str::before($name,'Provider'));
+        return $module->getExtraPath('Providers\test4.test');
+    }
+    */
     protected function getArguments(){
         return [
-        	 ['module_name', InputArgument::REQUIRED, 'The name of the module.'],
+        	 ['name', InputArgument::REQUIRED, 'The name of the module.'],
         ];
     }
-
     /*
+
+
     public function handle() {
 
 
@@ -85,6 +96,54 @@ class FixProvidersCommand extends GeneratorCommand {
     }
 	*/
     
+    public function handle() {
+        $module_name=$this->argument('name');
+        $module = \Module::findOrFail($module_name);
+        $providers_path=realpath($module->getExtraPath('Providers'));
+        $module_name =$module->getStudlyName();
+        $route_provider_stub=File::get(__DIR__.'/stubs/route_provider.stub');
+        $module_provider_stub=File::get(__DIR__.'/stubs/module_provider.stub');
+        $module_ns=$this->laravel['modules']->config('namespace');
+        $dummy_class=$module_name.'ServiceProvider';
+        $replaces=[
+            'DummyNamespace'=> $module_ns.'\\'.$module_name.'\Providers',
+            'DummyClass'    => $dummy_class,
+            'dummy_name'    => $module->getLowerName(),
+            'DummyControllerNamespace' => $module_ns.'\\'.$module_name.'\Http\Controllers',
+        ];
+        
+        $module_provider_stub=str_replace(array_keys($replaces),array_values($replaces),$module_provider_stub);
+        $filename=$providers_path.'\\'.$dummy_class.'.php';
+        if(File::exists($filename)){
+            $this->info($filename.' already exists!');
+            $tmp=File::get($filename);
+            if(Str::contains($tmp,'XotBaseServiceProvider')){
+                $this->error($filename.' just fixed!');
+                //return false;
+            }else{
+                File::put($filename,$module_provider_stub);
+            }
+        }else{
+            File::put($filename,$module_provider_stub);
+        }
+        
+        $dummy_class='RouteServiceProvider';
+        $replaces['DummyClass'] = $dummy_class;
+        $route_provider_stub=str_replace(array_keys($replaces),array_values($replaces),$route_provider_stub);
+        $filename=$providers_path.'\\'.$dummy_class.'.php';
+        if(File::exists($filename)){
+            $this->info($filename.' already exists!');
+            $tmp=File::get($filename);
+            if(Str::contains($tmp,'XotBaseRouteServiceProvider')){
+                $this->error($filename.' just fixed!');
+            }else{
+                File::put($filename,$route_provider_stub);
+            }
+        }else{
+            File::put($filename,$route_provider_stub);
+        }
 
+
+    }
 
 }

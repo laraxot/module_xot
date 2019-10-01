@@ -14,7 +14,7 @@ use Modules\Xot\Services\PanelService as Panel;
 abstract class XotBasePolicy {
     use HandlesAuthorization;
 
-    public function before(User $user, $ability) {
+    public function before($user, $ability) {
         if (is_object($user) && Panel::get($user)->isSuperAdmin()) {
             return true;
         }
