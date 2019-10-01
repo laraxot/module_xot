@@ -1,29 +1,11 @@
 <?php
-
 use Modules\Xot\Services\RouteService;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-/*
-Route::prefix('xot')->group(function() {
-    Route::get('/', 'XotController@index');
-});
-*/
-
-//if(\Request::segment(1)=='admin'  /* && \Request::segment(2)=='blog' */){
-$namespace = '\Modules\Xot'; //$this->getNamespace();
+$namespace = '\Modules\Xot'; 
 $pack = class_basename($namespace);
 
 $namespace .= '\Http\Controllers';
-$middleware = ['web', 'guest']; //guest ti riindirizza se non sei loggato
+//$middleware = ['web', 'guest']; //guest ti riindirizza se non sei loggato
 $middleware = ['web'];
 
 $areas_prgs = include __DIR__.'/web_common.php';
@@ -55,6 +37,23 @@ Route::group(
         //Route::get('/test01',   'HomeController@test01');
     }
 );
+
+
+$middleware = ['web', 'auth'/*,'verified'*/];
+$prefix = 'admin';
+
+Route::group(
+    [
+    'prefix' => $prefix,
+    'middleware' => $middleware,
+    'namespace' => $namespace.'\Admin',
+    ],
+    function () use ($areas_prgs) {
+        Route::get('/', 'BackendController@dashboard');
+        //RouteTrait::dynamic_route($areas_prgs);
+    }
+);
+
 
 if (in_admin()) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO

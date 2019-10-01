@@ -26,7 +26,7 @@ trait CrudContainerItemNoPostTrait {
             if (\View::exists($home_view)) {
                 return ThemeService::view($home_view);
             } else {
-                return ThemeService::view('backend::admin.home');
+                return ThemeService::view('xot::admin.home');
             }
         }
         if (false === $item) {

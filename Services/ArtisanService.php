@@ -36,6 +36,6 @@ class ArtisanService {
         } catch (Exception $e) {
             return '<br/>'.$command.' non effettuato';
         }
-        //return view('Backend::admin.index')->with('output', $output);
+        
     }
 }

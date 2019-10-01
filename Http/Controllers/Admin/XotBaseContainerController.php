@@ -81,7 +81,7 @@ abstract class XotBaseContainerController extends Controller {
                 $request->validate($panel->rules(), $panel->rulesMessages());
             }
         }
-        //ddd($controller);
+        //ddd($controller.'  '.$method);
         return app($controller)->$method($request, $this->container_last, $this->item_last);
     }
 }
