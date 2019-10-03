@@ -143,6 +143,18 @@ class FixProvidersCommand extends Command {
             File::put($filename,$route_provider_stub);
         }
 
+        $img_path=$module->getExtraPath('Resources/views/img/icon.png');
+        if (! File::exists(dirname($img_path))) {
+            try {
+                File::makeDirectory(dirname($img_path), 0755, true, true);
+            } catch (Exception $e) {
+                dd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
+            }
+        }
+        if (!File::exists($img_path)) {
+            File::copy(public_path('img/icon.png'), $img_path);
+        }
+
 
     }
 
