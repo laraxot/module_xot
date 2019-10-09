@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -408,7 +409,12 @@ abstract class XotBasePanel {
         $this->callAction($query, $act);
 
         $formatted = $this->formatData($query, $data);
-
+        $page = isset($data['page']) ? $data['page'] : 1;
+        Cache::forever('page', $page);
+        //ddd(Cache::get('page'));
+        //session('page',$page);
+        //Cookie::make('page', $page, 20);
+        //ddd(Cookie::get('page'));
         return $query;
     }
 
@@ -616,7 +622,11 @@ abstract class XotBasePanel {
             $filters[$k]->value=$value;
         }
         $queries=collect($filters)->pluck('value','param_name')->all();
-        $url=(url_queries($queries,$url));
+        $node=class_basename($this->row).'-'.$this->row->getKey();
+        $queries['page']=Cache::get('page');
+        
+        
+        $url=(url_queries($queries,$url)).'#'.$node;
         return $url;
                 
     }
