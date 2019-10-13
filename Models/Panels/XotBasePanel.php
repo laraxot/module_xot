@@ -631,6 +631,10 @@ abstract class XotBasePanel {
                 
     }
 
+    public function indexEditUrl() {
+            return RouteService::urlModel(['model' => $this->row, 'act' => 'index_edit']);
+    }
+
     public function editUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'edit']);
     }

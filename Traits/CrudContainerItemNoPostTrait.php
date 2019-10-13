@@ -130,6 +130,11 @@ trait CrudContainerItemNoPostTrait {
         //ddd($params);
         extract($params);
         $methods = get_class_methods($model);
+        /*
+        if(!is_array($methods)){
+            $methods=[];
+        }
+        */
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
         })->map(function ($v, $k) use ($model) {
@@ -461,6 +466,9 @@ trait CrudContainerItemNoPostTrait {
         if ('POST' == $request->getMethod()) {
             //return  //
             $this->indexUpdate($request, $container, $item);
+            if ($request->ajax()) {
+                return json_encode(['msg' => 'ok']);
+            }
         }
 
         return $this->index($request, $container, $item);
