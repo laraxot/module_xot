@@ -105,11 +105,9 @@ abstract class XotBaseContainerController extends Controller {
             if (! $request->ajax()) {
                 $route_action = \Route::currentRouteAction();
                 $act=Str::after($route_action,'@');
-                /*
-                $rule_method=$act.'Rules';
-                $rules=$panel->$rule_method();
-                */
-                $request->validate($panel->rules(['act'=>$act]), $panel->rulesMessages());
+                $rules=$panel->rules(['act'=>$act]);
+                
+                $request->validate($rules, $panel->rulesMessages());
             }
         }
 
