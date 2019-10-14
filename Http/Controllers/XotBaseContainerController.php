@@ -8,6 +8,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\StubService; //4 guestPolicy
+use Modules\Xot\Services\PanelService as Panel;
+use Modules\Theme\Services\ThemeService;
+
+
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -111,7 +115,41 @@ abstract class XotBaseContainerController extends Controller {
             }
         }
 
-        return app($controller)->$method($request, $this->container_last, $this->item_last);
+        //return app($controller)->$method($request, $this->container_last, $this->item_last);
+        $controller_single=(substr($controller,0,-strlen('Controller')).'\\'.Str::studly($method).'Controller');
+        /*-- to do --
+            non passare piu' request ma passare direttamente $data
+        */
+        //  \Debugbar::disable(); 
+
+        $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+
+        return $panel->out(
+            [
+                'is_ajax'=>$request->ajax(),
+                'method'=> $request->getMethod(),
+            ]
+        );
+        /*
+        $row=app($controller)->$method($request, $this->container_last, $this->item_last);
+        $rows=app($controller)::$rows;
+        $panel=Panel::get($row);
+        $html=ThemeService::view(['panel' => $panel, 'row' => $row])
+                ->with('row', $row)
+                ->with('rows', $rows)
+                ->with('_panel', $panel)
+                ;
+        if ('GET' == $request->getMethod()) {
+            return $html;
+        }
+        
+        if ($request->ajax()) {
+            return json_encode(['msg' => 'ok','html'=>(string)$html]);
+        } else {
+            return $html;
+        }
+        */
+        
     }
 
     /*------------

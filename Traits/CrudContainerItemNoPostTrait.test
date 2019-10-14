@@ -1,13 +1,18 @@
 <?php
 
 namespace Modules\Xot\Traits;
+
+//use Artisan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+//per il w
+
 //-------- services -----
 use Modules\Blog\Models\Post;
 //-------- models ------
 //------- services -------
-//use Modules\Theme\Services\ThemeService;  // qui restituisco il Panel che poi mostrera' i dati
+use Modules\Theme\Services\ThemeService;
+//use Modules\Xot\Services\PanelService;
 //use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\PanelService as Panel;
@@ -15,7 +20,43 @@ use Modules\Xot\Services\PanelService as Panel;
 
 trait CrudContainerItemNoPostTrait {
 
+   // public $rows;
+
     public function index(Request $request, $container, $item) {
+        /*
+        $params = \Route::current()->parameters();
+        if (false === $container) {
+            $home_view = $params['module'].'::admin.index';
+            if (\View::exists($home_view)) {
+                return ThemeService::view($home_view);
+            } else {
+                return ThemeService::view('xot::admin.home');
+            }
+        }
+        if (false === $item) {
+            $row = self::getXotModel($container);
+            $rows = $row;
+        } else {
+            $types = Str::camel(Str::plural($container));
+            $rows = $item->$types();
+            $row = $rows->getRelated();
+        }
+        $panel = StubService::getByModel($row, 'panel', true);
+        $policy = StubService::getByModel($row, 'policy', true);
+        $rows = $panel->indexRows($request, $rows);
+        if ($panel->force_exit) {
+            return $panel->out;
+        }
+        $panel->setRow($row);
+        $rows = $rows->paginate(20);
+        $view_params = [
+            'rows' => $rows,
+            'row' => $row,
+            '_panel' => $panel,
+        ];
+
+        return ThemeService::view()->with($view_params);
+        */
         if (false === $item) {
             $row = self::getXotModel($container);
             $rows = $row;
@@ -25,9 +66,9 @@ trait CrudContainerItemNoPostTrait {
             $row = $rows->getRelated();
         }
         //$rows = $rows->paginate(20);
-        $panel=Panel::get($row);
-        $panel->setRows($rows);
-        return $panel;
+        static::$rows=$rows;
+
+        return $row;
     }
 
     public function create(Request $request, $container, $item) {
@@ -39,56 +80,41 @@ trait CrudContainerItemNoPostTrait {
             $rows = null;
             $row = xotModel($container);
         }
-        //$rows = $rows->paginate(20);
-        $panel=Panel::get($row);
+        $rows = $rows->paginate(20);
+        static::$rows=$rows;
+        return $row;
+
+        /*
+        $panel = StubService::getByModel($row, 'panel');
+        $panel->setRow($row);
         $panel->setRows($rows);
-        return $panel;
-    }
 
-    public function store(Request $request, $container, $item) {
-        $data = $request->all();
-
-        
-        $types = Str::camel(Str::plural($container));
-        if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
-            $rows = $item->$types();
-            $related = $rows->getRelated();
-            //$related_class=get_class($related);
-            //$row=new $related_class;
-            $row = $related;
-        } else {
-            $rows = null;
-            $row = xotModel($container);
-        }
-
-        if (! isset($data['lang']) && in_array('lang',$row->getFillable())) {
-            $data['lang'] = \App::getLocale();
-        }
-
-        $item_new = $row->fill($data);
-        $item_new->save();
-
-        if (false !== $item) {
-            if (! is_object($item)) {
-                ddd($item);
-            }
-            $pivot_data = [];
-            if (isset($data['pivot'])) {
-                $pivot_data = $data['pivot'];
-            }
-            $tmp = $item->$types()->save($item_new, $pivot_data);
-        }
-        $panel = StubService::getByModel($item_new, 'panel');
-        self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
-        if (method_exists($panel, 'storeCallback')) {
-            $item_new = $panel->storeCallback(['row' => $item_new, 'data' => $data]);
-        }
-        \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        return $panel;
+        return ThemeService::view()
+            ->with('row', $row)
+            ->with('_panel', $panel)
+            ;
+        */
     }
 
     public function edit(Request $request, $container, $item) {
-        return Panel::get($item);                
+        /*
+        $panel = StubService::getByModel($item, 'panel');
+        $types = Str::camel(Str::plural($container));
+        $route_params = \Route::current()->parameters();
+        list($containers, $items) = params2ContainerItem($route_params);
+        if (count($items) > 1) {
+            $second_last_item = $items[count($items) - 2];
+            $rows = $second_last_item->$types();
+            $panel->setRows($rows);
+        }
+        $panel->setRow($item);
+
+        return ThemeService::view(['panel' => $panel, 'row' => $item])
+                ->with('row', $item)
+                ->with('_panel', $panel)
+                ;
+        */
+        return $item;                
     }
 
     public function update(Request $request, $container, $item) {
@@ -96,13 +122,31 @@ trait CrudContainerItemNoPostTrait {
         $row = $item;
         $panel=Panel::get($row);
         $ris = $row->update($data);
+        //$row->post()->save($data); //save vuole un oggetto
+        /* ----
+        if (method_exists($row, 'post')) {
+            if (null == $row->post) {
+                $row->post()->create($data);
+            } else {
+                $row->post->update($data);
+            }
+        }
+        */
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        return Panel::get($item);
-    }
+        return $item;
 
-    public function show(Request $request, $container, $item) {
-        return Panel::get($item);
+        /* sono vecchio mi serve per ricordare cosa facevo prima 
+        if ($request->ajax()) {
+            return json_encode(['msg' => 'ok']);
+        } else {
+            //return ThemeService::action($request, $row);
+            return ThemeService::view(['panel' => $panel, 'row' => $item])
+                ->with('row', $item)
+                ->with('_panel', $panel)
+                ;
+        }
+        */
     }
 
     /**
@@ -189,6 +233,14 @@ trait CrudContainerItemNoPostTrait {
             $res = $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
             $model->$name()->touch();
         }
+
+        //ddd($res);
+        /*"attached" => []
+  "detached" => []
+  "updated" => array:2 [▼
+    0 => 2
+    1 => 4
+    //*/
     }
 
     public function updateRelationshipsPivot($params) {
@@ -233,7 +285,7 @@ trait CrudContainerItemNoPostTrait {
             $model->update($data1);
         }
     }
-    /* -- non so se la utilizzo, dopo cancello
+
     public function formatData($params) {
         extract($params);
         $panel = StubService::getByModel(new $class(), 'panel');
@@ -245,8 +297,82 @@ trait CrudContainerItemNoPostTrait {
         //ddd($fields);
         return $data;
     }
-    */
-    
+
+    public function store(Request $request, $container, $item) {
+        $data = $request->all();
+
+        if (! isset($data['lang'])) {
+            $data['lang'] = \App::getLocale();
+        }
+        $types = Str::camel(Str::plural($container));
+        if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
+            $rows = $item->$types();
+            $related = $rows->getRelated();
+            //$related_class=get_class($related);
+            //$row=new $related_class;
+            $row = $related;
+        } else {
+            $rows = null;
+            $row = xotModel($container);
+        }
+
+        $item_new = $row->fill($data);
+        $item_new->save();
+        //echo '<pre>'.print_r($data,true).'</pre>';
+        //echo '<pre>'.print_r($row->getFillable(),true).'</pre>';
+        //echo '<pre>'.print_r($item_new->toArray(),true).'</pre>';
+        //ddd($item_new);
+
+        if (false !== $item) {
+            if (! is_object($item)) {
+                ddd($item);
+            }
+            $pivot_data = [];
+            if (isset($data['pivot'])) {
+                $pivot_data = $data['pivot'];
+            }
+            $tmp = $item->$types()->save($item_new, $pivot_data);
+        }
+        /*
+        if (method_exists($item_new, 'post')) { // mi evita delle query dopo
+            if (isset($data['post'])) {
+                $data = array_merge($data, $data['post']); //forzatura
+            }
+
+            $data = $this->formatData(['data' => $data, 'class' => Post::class]);
+            if (! isset($data['title'])) {
+                $data['title'] = class_basename($item_new).' '.$item_new->getKey();
+            }
+            //ddd($data);
+            $item_new->post()->create($data);
+        }
+        */
+        $panel = StubService::getByModel($item_new, 'panel');
+
+
+
+        //*/
+        self::manageRelationships(['model' => $item_new, 'data' => $data, 'act' => 'store', 'container' => $container, 'item' => $item, 'rows' => $rows]);
+        //*
+        if (method_exists($panel, 'storeCallback')) {
+            $item_new = $panel->storeCallback(['row' => $item_new, 'data' => $data]);
+        }
+        //*/
+
+        \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
+
+        //return ThemeService::action($request, $row);
+        /*
+        $panel=Panel::get($item_new);
+
+
+        return ThemeService::view(['panel' => $panel, 'row' => $item_new])
+                ->with('row', $item_new)
+                ->with('_panel', $panel)
+                ;
+        */
+        return $item_new;
+    }
 
     public function storeRelationshipsMorphOne($params) {
         extract($params);
@@ -262,7 +388,17 @@ trait CrudContainerItemNoPostTrait {
 
     public function storeRelationshipsMorphToMany($params) {
         extract($params);
-        
+        /*
+            name= nome relazione
+        */
+        /*
+        ddd($params);
+        $model_linked_name=Str::singular($name);
+        $model_linked=$this->getXotModel($model_linked_name);
+        $row_linked=$model_linked->where($data)->first();
+        ddd($row_linked);
+        $model->$name()->save($row_linked);
+        */
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {
@@ -291,11 +427,37 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
-    
+    public function show(Request $request, $container, $item) {
+        /*
+        $data=$request->all();
+        $panel = StubService::getByModel($item, 'panel');
+        if (is_object($item)) {
+            $panel->callAction($item, $request->_act);
+            if ($panel->force_exit) {
+                return $panel->out;
+            }
+        }
+        if(isset($data['format'])){
+            $format=$data['format'];
+            if($format=='json'){
+                return $item->toJson();
+                //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
+                //return new \Modules\Xot\Transformers\JsonResource($item);
+            }
+        }
+
+
+        return ThemeService::view()
+            ->with('row', $item)
+            ->with('_panel', $panel)
+            ;
+        */
+        return $item;
+    }
 
     public function indexAttach(Request $request, $container, $item) {
         if ('POST' == $request->getMethod()) {
-            $this->indexAttachSave($request, $container, $item);
+            return $this->indexAttachSave($request, $container, $item);
         }
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) {
@@ -308,7 +470,11 @@ trait CrudContainerItemNoPostTrait {
             if (method_exists($rows, 'getMorphType')) {
                 $panel->pivot_key_names[] = $rows->getMorphType();
             }
-            return $panel;
+            ///*
+            return ThemeService::view()
+                ->with('row', $pivot)
+                ->with('_panel', $panel)
+            ;
         }
         //return $this->create($request,$container,$item); //crea collegamento ..
     }
@@ -330,7 +496,7 @@ trait CrudContainerItemNoPostTrait {
         };
         ddd('senza item ?');
         */
-        //return ThemeService::action($request, $item);
+        return ThemeService::action($request, $item);
     }
 
     public function indexEdit(Request $request, $container, $item) {
@@ -339,11 +505,9 @@ trait CrudContainerItemNoPostTrait {
             //return  //
             $this->indexUpdate($request, $container, $item);
             \Session::flash('status', 'Successo ! ');
-            /*
             if ($request->ajax()) {
                 return json_encode(['msg' => 'ok']);
             }
-            */
         }
 
         return $this->index($request, $container, $item);

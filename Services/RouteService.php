@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Route;
 
+use Modules\Xot\Services\PanelService as Panel;
+
 class RouteService {
     protected static $namespace_start = '';
     protected static $curr = null;
@@ -463,6 +465,17 @@ class RouteService {
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         //$routename = \Request::route()->getName();
         $cont_i = RouteService::containerN(['model' => get_class($model), 'route_params' => $route_params]);
+        
+        $parent=$model->parent;
+        if(is_object($parent)){
+            $parent_cont_i=RouteService::containerN(['model' => get_class($parent), 'route_params' => $route_params]);
+            $route_params['container'.($parent_cont_i)]=Panel::get($parent)->postType();
+            $route_params['item'.($parent_cont_i)]=$parent;
+            if($parent_cont_i==$cont_i){
+                $cont_i++;
+            }
+        }
+        
         $tmp = [];
         if (in_admin()) {
             $tmp[] = 'admin';
@@ -473,28 +486,13 @@ class RouteService {
         $tmp[] = $act;
         $routename = implode('.', $tmp);
         $route_params['lang'] = \App::getLocale();
-        $post_type=$model->post_type;
-        if($post_type=='') $post_type=Str::snake(class_basename($model));
-        /**
-        * Incerto
-        *
-        **/
-
-        if(!isset($route_params['container'.($cont_i)]) ){
+        $post_type=Panel::get($model)->postType();
+        //if(!isset($route_params['container'.($cont_i)]) ){
             $route_params['container'.($cont_i)] = $post_type;
-        }
-        
+        //}
+
         $route_key=$model->getRouteKeyName();
         $route_key_val=$model->$route_key;
-        if($debug=0){
-            $msg=[
-                'route_key' => $route_key,
-                'route_key_val'=>$route_key_val,
-                'class'=>get_class($model),
-                'model'=> $model,
-            ];
-            ddd($msg);
-        }
 
         $route_params['item'.($cont_i)] = $route_key_val;
 

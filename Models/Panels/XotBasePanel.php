@@ -20,6 +20,8 @@ use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\PanelService as Panel;
+use Modules\Theme\Services\ThemeService;
+
 
 
 abstract class XotBasePanel {
@@ -157,7 +159,7 @@ abstract class XotBasePanel {
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function indexQuery(Request $request, $query) {
+    public static function indexQuery($data, $query) {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         return $query;
     }
@@ -600,9 +602,20 @@ abstract class XotBasePanel {
         return [];
     }
 
+
+
     public function url() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
     }
+
+    public function langUrl($lang){
+        return '/wip['.__LINE__.']['.__FILE__.']';
+    }
+
+    public function relatedUrl($params) {
+        $params['row']=$this->row;
+        return RouteService::urlRelated($params);
+    }    
 
     public function indexUrl() {
         $url=RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
@@ -659,6 +672,10 @@ abstract class XotBasePanel {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
     }
 
+    public function gearUrl(){
+        return '#';
+    }
+    /*
     public function postType(){
         $models=config('xra.model');
         $post_type=collect($models)->search(static::$model);
@@ -666,7 +683,16 @@ abstract class XotBasePanel {
             $post_type=Str::snake(class_basename(static::$model));
         }
         return $post_type;
+    }*/
+    
+    public function postType(){
+        $post_type = collect(config('xra.model'))->search(get_class($this->row));
+        if (false === $post_type) {
+            $post_type = snake_case(class_basename($this->row));
+        }
+        return $post_type;
     }
+    
 
     public function getItemTabs(){
         $item=$this->row;
@@ -749,5 +775,66 @@ abstract class XotBasePanel {
             $data[]=$row;
         }
         return $data;
+    }
+
+    public function rows($data){
+        
+        $filters = $data;
+        $q = isset($data['q']) ? $data['q'] : null;
+        $out_format = isset($data['format']) ? $data['format'] : null;
+        $act = isset($data['_act']) ? $data['_act'] : null;
+        $query=$this->rows;
+        if(!is_object($query)){
+            return $query;
+        }
+        //ddd(get_class($this));
+        $with=$this->with();
+        if(!is_array($with)){
+            $msg=[
+                'class'=>get_class($this),
+                'with'=>$with,
+            ];
+            ddd($with);
+        }
+        $query = $query->with($with);
+        $query = $this->indexQuery($data,$query);
+
+        //$query=$query->withPost('a');
+        $query = $this->applyJoin($query);
+        $query = $this->applyFilter($query, $filters);
+        $query = $this->applySearch($query, $q);
+
+        $this->callAction($query, $act);
+
+        $formatted = $this->formatData($query, $data);
+        $page = isset($data['page']) ? $data['page'] : 1;
+        Cache::forever('page', $page);
+        $query=$query->paginate(20);
+        return $query;
+
+    }
+
+
+
+
+
+    public function out($params=[]){
+        $is_ajax=false;
+        $method='GET';
+        extract($params);
+        $data = request()->all();
+        
+        
+
+        $html=ThemeService::view()
+                ->with('row',$this->row)
+                ->with('rows',$this->rows($data))
+                ->with('_panel',$this)
+                ;
+        if($is_ajax){
+            \Debugbar::disable(); 
+            return response()->json(['msg' => 'ok','html'=>(string)$html]);
+        }
+        return $html;
     }
 }
