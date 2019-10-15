@@ -289,7 +289,21 @@ abstract class XotBasePanel {
         });
     }
 
+
+    public function formatItemData($item,$params){
+        if($item==null) return null;
+        extract($params);
+        if (! isset($format)) return null;
+        if ('json' == $format) {
+            return $item->toJson();
+                //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
+                //return new \Modules\Xot\Transformers\JsonResource($item);
+        }
+        return null;
+    }
+
     public function formatData($data, $params) {
+        if($data==null) return null;
         extract($params);
         if (! isset($format)) {
             return null;
@@ -864,14 +878,23 @@ abstract class XotBasePanel {
             $html=$this->formatData($rows,$data);
         }
         if($html==null){
+            $html=$this->formatItemData($this->row,$data);
+        }
+        if($html==null){
+            $with=[
+                'row'=>$this->row,
+                '_panel'=>$this,
+            ];
+            if(is_object($rows)){
+                $with['rows']=$rows->paginate(20);
+            }
+
             $html=ThemeService::view()
-                ->with('row',$this->row)
-                ->with('rows',$rows->paginate(20))
-                ->with('_panel',$this)
+                ->with($with)
                 ;
         }
 
-        if($is_ajax){
+        if($is_ajax && $out_format==null){
             \Debugbar::disable(); 
             return response()->json(['msg' => 'ok','html'=>(string)$html]);
         }
