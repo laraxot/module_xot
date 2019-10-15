@@ -4,8 +4,9 @@ namespace Modules\Xot\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 //-------- services -----
-use Modules\Blog\Models\Post;
 //-------- models ------
+//use Modules\Blog\Models\Post; // deve essere slegato dal modulo Blog
+use Modules\Xot\Models\Home;
 //------- services -------
 //use Modules\Theme\Services\ThemeService;  // qui restituisco il Panel che poi mostrera' i dati
 //use Modules\Xot\Services\PolicyService;
@@ -444,6 +445,7 @@ trait CrudContainerItemNoPostTrait {
         $model = tenantConfig('xra.model.'.$name);
         //ddd($model);
         if (null == $model) {
+            return null;
             echo '<h3>not exists ['.$name.'] on config xra.model</h3>';
             ddd(config('xra.model'));
         }

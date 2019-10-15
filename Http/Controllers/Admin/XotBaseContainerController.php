@@ -46,19 +46,6 @@ abstract class XotBaseContainerController extends Controller {
             $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
             $this->controller = $controller;
         }
-        /*
-        $file=$mod->getPath().'\Http\Controllers\Admin\\'.$tmp.'Controller.php';
-        $file=str_replace('/',DIRECTORY_SEPARATOR,$file);
-        $file=str_replace('\\',DIRECTORY_SEPARATOR,$file);
-        if(\File::exists($file)){
-            //ddd('esiste ['.$file.']');
-            $this->controller=$controller;
-        }else{
-            //ddd('non esiste ['.$file.']');
-            $controller='\Modules\Xot\Http\Controllers\Admin\XotBaseController';
-            $this->controller=$controller;
-        }
-        */
         $this->item_last = last($items);
         $this->container_last = last($containers);
         $this->last = last($params);
@@ -81,7 +68,16 @@ abstract class XotBaseContainerController extends Controller {
                 $request->validate($panel->rules(), $panel->rulesMessages());
             }
         }
-        //ddd($controller.'  '.$method);
-        return app($controller)->$method($request, $this->container_last, $this->item_last);
+        if($this->container_last==false){
+            return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
+        }
+        //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
+        $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+        return $panel->out(
+            [
+                'is_ajax'=>$request->ajax(),
+                'method'=> $request->getMethod(),
+            ]
+        );
     }
 }

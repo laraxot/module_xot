@@ -292,7 +292,7 @@ abstract class XotBasePanel {
     public function formatData($data, $params) {
         extract($params);
         if (! isset($format)) {
-            return $data;
+            return null;
         }
         if ('json' == $format) { //potrei ficcare anche xls
             //ddd($this->option_id());
@@ -303,9 +303,10 @@ abstract class XotBasePanel {
             $this->force_exit = 1;
             //$this->out=json_encode($res);
             //$this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
-            $this->out = $ris->toJson();
+            $out = $ris->toJson();
+            $this->out=$out;
             //$this->out=\Modules\Progressioni\Transformers\ProgressioniResource::collection($ris);
-            return;
+            return $out;
         }
         if ('typeahead' == $format) {
             /*
@@ -325,7 +326,7 @@ abstract class XotBasePanel {
             //$this->out=new $transformers_coll($ris);
             $this->out = $transformers_res::collection($ris); 
 
-            return;
+            return $this->out;
         }
         if($format=='geoJson' ){
             $this->force_exit = 1;
@@ -370,11 +371,11 @@ abstract class XotBasePanel {
             });
             //*/
             $this->out = $out;
-            
+            return $out;
         }
 
 
-        return $data;
+        return null;
     }
 
     public function callAction($query, $act) {
@@ -384,13 +385,13 @@ abstract class XotBasePanel {
         $action = collect($this->actions())
             ->firstWhere('name', $act);
         $action->setRows($query);
-        $this->out = $action->handle();
+        $out=$action->handle();
+        $this->out = $out;
         if (null != $this->out) { //se c'e' un risultato
             $this->force_exit = true;
         }
-    }
-
-    //end callAction
+        return $out;
+    }//end callAction
 
     public function indexRows(Request $request, $query) {
         $data = $request->all();
@@ -782,7 +783,7 @@ abstract class XotBasePanel {
         $filters = $data;
         $q = isset($data['q']) ? $data['q'] : null;
         $out_format = isset($data['format']) ? $data['format'] : null;
-        $act = isset($data['_act']) ? $data['_act'] : null;
+        //$act = isset($data['_act']) ? $data['_act'] : null;
         $query=$this->rows;
         if(!is_object($query)){
             return $query;
@@ -803,18 +804,47 @@ abstract class XotBasePanel {
         $query = $this->applyJoin($query);
         $query = $this->applyFilter($query, $filters);
         $query = $this->applySearch($query, $q);
-
+        $page = isset($data['page']) ? $data['page'] : 1;
+        Cache::forever('page', $page);
+        /*
         $this->callAction($query, $act);
 
         $formatted = $this->formatData($query, $data);
-        $page = isset($data['page']) ? $data['page'] : 1;
-        Cache::forever('page', $page);
         $query=$query->paginate(20);
+        return $query;
+        */
         return $query;
 
     }
 
+    public function callItemAction($act){
+        if($act==null) return null;
+        $action = collect($this->actions())
+            ->where('onItem',true)
+            ->firstWhere('name', $act);
+        if(!is_object($action)){
+            return null; 
+        }
+        $action->setRows($this->row);
+        $out=$action->handle();
+        return $out;
+    }
 
+    public function callContainerAction($act){
+        if($act==null) return null;
+        $action = collect($this->actions())
+            ->where('onContainer',true)
+            ->firstWhere('name', $act);
+        if(!is_object($action)){
+            ddd(['action'=>$action,'name'=>$act]);
+        }
+        $data = request()->all();
+        $rows=$this->rows($data);
+
+        $action->setRows($rows);
+        $out=$action->handle();
+        return $out;
+    }
 
 
 
@@ -823,14 +853,24 @@ abstract class XotBasePanel {
         $method='GET';
         extract($params);
         $data = request()->all();
-        
-        
-
-        $html=ThemeService::view()
+        $rows = $this->rows($data);
+        $act=isset($data['_act'])?$data['_act']:null;
+        $out_format = isset($data['format']) ? $data['format'] : null;
+        $html=$this->callItemAction($act);
+        if($html==null){
+            $html=$this->callContainerAction($act);
+        }
+        if($html==null){
+            $html=$this->formatData($rows,$data);
+        }
+        if($html==null){
+            $html=ThemeService::view()
                 ->with('row',$this->row)
-                ->with('rows',$this->rows($data))
+                ->with('rows',$rows->paginate(20))
                 ->with('_panel',$this)
                 ;
+        }
+
         if($is_ajax){
             \Debugbar::disable(); 
             return response()->json(['msg' => 'ok','html'=>(string)$html]);

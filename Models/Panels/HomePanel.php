@@ -1,5 +1,5 @@
 <?php
-namespace DummyNamespace;
+namespace Modules\Xot\Models\Panels;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -12,27 +12,27 @@ use Modules\Xot\Services\RouteService;
 
 use Modules\Xot\Models\Panels\XotBasePanel;
 
-class DummyClass extends XotBasePanel {
+class HomePanel extends XotBasePanel {
 	/**
 	 * The model the resource corresponds to.
 	 *
 	 * @var string
 	 */
-	public static $model = 'DummyFullModel';
+	public static $model = 'Modules\Xot\Models\Home';
 
 	/**
 	 * The single value that should be used to represent the resource when being displayed.
 	 *
 	 * @var string
 	 */
-	public static $title = "dummy_title"; 
+	public static $title = "title"; 
 
 	/**
 	 * The columns that should be searched.
 	 *
 	 * @var array
 	 */
-	public static $search = dummy_search ;
+	public static $search = [];
 
 	/**
 	* The relationships that should be eager loaded on index queries.
@@ -112,7 +112,8 @@ class DummyClass extends XotBasePanel {
 
 
 	public static function fields(){
-		return dummy_fields;
+		return array (
+);
 	}
 	 
 	/**
