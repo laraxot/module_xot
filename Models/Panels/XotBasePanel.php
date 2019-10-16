@@ -266,6 +266,16 @@ abstract class XotBasePanel {
 
     //end applySearch
 
+    public function applySort($query,$sort){
+        if(!is_array($sort)) return $query;
+        $column=$sort['by'];
+        $direction=isset($sort['order'])?$sort['order']:null;
+        $query=$query->orderBy($column, $direction);
+        return $query;
+
+    }
+
+
     //-- da studiare --
     protected static function applySearchNova($query, $search) {
         return $query->where(function ($query) use ($search) {
@@ -797,6 +807,7 @@ abstract class XotBasePanel {
         $filters = $data;
         $q = isset($data['q']) ? $data['q'] : null;
         $out_format = isset($data['format']) ? $data['format'] : null;
+        $sort = isset($data['sort']) ? $data['sort'] : null;
         //$act = isset($data['_act']) ? $data['_act'] : null;
         $query=$this->rows;
         if(!is_object($query)){
@@ -818,6 +829,7 @@ abstract class XotBasePanel {
         $query = $this->applyJoin($query);
         $query = $this->applyFilter($query, $filters);
         $query = $this->applySearch($query, $q);
+        $query = $this->applySort($query, $sort);
         $page = isset($data['page']) ? $data['page'] : 1;
         Cache::forever('page', $page);
         /*
