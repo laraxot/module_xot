@@ -865,8 +865,10 @@ abstract class XotBasePanel {
         $action = collect($this->actions())
             ->where('onContainer',true)
             ->firstWhere('name', $act);
+
         if(!is_object($action)){
-            ddd(['action'=>$action,'name'=>$act]);
+            return null;
+            
         }
         $data = request()->all();
         $rows=$this->rows($data);
