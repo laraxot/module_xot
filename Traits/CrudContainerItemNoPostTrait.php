@@ -85,6 +85,7 @@ trait CrudContainerItemNoPostTrait {
             $item_new = $panel->storeCallback(['row' => $item_new, 'data' => $data]);
         }
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
+        $panel=Panel::get($item_new);
         return $panel;
     }
 
