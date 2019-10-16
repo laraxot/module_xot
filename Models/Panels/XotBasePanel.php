@@ -98,6 +98,10 @@ abstract class XotBasePanel {
         })
         ->map(function ($item) use ($lang) {
             $tmp = [];
+            /**
+            * togliere la lang dai messaggi ed usare la stringa come id di validazione
+            * se la traduzione non esiste, restituire la stringa normale
+            **/
             foreach ($item->rules_messages[$lang] as $k => $v) {
                 $tmp[$item->name.'.'.$k] = $v;
             }

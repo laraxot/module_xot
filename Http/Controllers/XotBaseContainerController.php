@@ -58,6 +58,7 @@ abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($params);
+        //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $request = Request::capture();
         $a = $this->init($params);
         $controller = $this->controller; 
@@ -110,7 +111,9 @@ abstract class XotBaseContainerController extends Controller {
                 $route_action = \Route::currentRouteAction();
                 $act=Str::after($route_action,'@');
                 $rules=$panel->rules(['act'=>$act]);
-                
+                /* -- questo funziona..
+                $request->merge(['published_at'=>\Carbon\Carbon::now()]);
+                */
                 $request->validate($rules, $panel->rulesMessages());
             }
         }
