@@ -493,7 +493,16 @@ class RouteService {
 
         $route_key=$model->getRouteKeyName();
         $route_key_val=$model->$route_key;
+        if($route_key_val=='' && $model->getKey()!=''){
+            
+            ddd([
+                'route_key'=>$route_key,
+                'class'=>get_class($model),
+                'primary_name'=>$model->getKeyName(),
+                'primary_value'=>$model->getKey(),
+            ]);
 
+        }
         $route_params['item'.($cont_i)] = $route_key_val;
 
         $url = route($routename, $route_params);
