@@ -58,8 +58,8 @@ abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($params);
-        //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $request = Request::capture();
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        //$request = Request::capture();
         $a = $this->init($params);
         $controller = $this->controller; 
         $row = $this->last;
@@ -110,14 +110,14 @@ abstract class XotBaseContainerController extends Controller {
             if (! $request->ajax()) {
                 $route_action = \Route::currentRouteAction();
                 $act=Str::after($route_action,'@');
-                $rules=$panel->rules(['act'=>$act]);
+                //$rules=$panel->rules(['act'=>$act]);
                 /* -- questo funziona..
                 $request->merge(['published_at'=>\Carbon\Carbon::now()]);
                 */
-                $request->validate($rules, $panel->rulesMessages());
+                //$request->validate($rules, $panel->rulesMessages());
+                $request->validatePanel($panel,$act);
             }
         }
-
         //return app($controller)->$method($request, $this->container_last, $this->item_last);
         $controller_single=(substr($controller,0,-strlen('Controller')).'\\'.Str::studly($method).'Controller');
         /*-- to do --

@@ -42,10 +42,11 @@ abstract class XotBaseRequest extends FormRequest {
     }
 
 
-    public function validatePanel($panel){
+    public function validatePanel($panel,$act=''){
         $this->setPanel($panel);
         $this->prepareForValidation();
-        $this->validate($panel->rules(), $panel->rulesMessages());
+        $rules=$panel->rules(['act'=>$act]);
+        $this->validate($rules, $panel->rulesMessages());
     }
 
     /*
