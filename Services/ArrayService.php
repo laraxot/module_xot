@@ -3,6 +3,7 @@
 namespace Modules\Xot\Services;
 
 use Cache;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PHPExcel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -55,7 +56,8 @@ class ArrayService {
         );
         //$sheet->setCellValue('A1', 'Hello World !');
         $writer = new Xlsx($spreadsheet);
-        $pathToFile = 'c:\\download\\xls\\'.$filename.'.xlsx';
+        //$pathToFile = 'c:\\download\\xls\\'.$filename.'.xlsx';
+        $pathToFile = Storage::disk('local')->path($filename.'.xlsx');
         $writer->save($pathToFile); //$writer->save('php://output'); // per out diretto ?
         if (! isset($out)) {
             return response()->download($pathToFile);
