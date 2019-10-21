@@ -60,12 +60,16 @@ abstract class XotBaseContainerController extends Controller {
             ddd('non autorizzato ['.$method.']['.get_class($row).']');
             abort(403);
         }
-        $request = Request::capture();
+        //$request = Request::capture();
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         if (in_array($method, ['update'])) {
             $model = $this->item_last;
             $panel = StubService::getByModel($model, 'panel', $create = true);
+
             if (is_object($panel)) {
-                $request->validate($panel->rules(), $panel->rulesMessages());
+                //$request->prepareForValidation();
+                //$request->validate($panel->rules(), $panel->rulesMessages());
+                $request->validatePanel($panel);
             }
         }
         if($this->container_last==false){
