@@ -910,7 +910,6 @@ abstract class XotBasePanel {
             if(is_object($rows)){
                 $with['rows']=$rows->paginate(20);
             }
-
             $html=ThemeService::view()
                 ->with($with)
                 ;
