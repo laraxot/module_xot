@@ -405,7 +405,7 @@ abstract class XotBasePanel {
 
         return null;
     }
-
+    /*
     public function callAction($query, $act) {
         if (null == $act) {
             return $query;
@@ -420,6 +420,7 @@ abstract class XotBasePanel {
         }
         return $out;
     }//end callAction
+    */
 
     public function indexRows(Request $request, $query) {
         $data = $request->all();
@@ -437,7 +438,7 @@ abstract class XotBasePanel {
         $query = $this->applyFilter($query, $filters);
         $query = $this->applySearch($query, $q);
 
-        $this->callAction($query, $act);
+        //$this->callAction($query, $act);
 
         $formatted = $this->formatData($query, $data);
         $page = isset($data['page']) ? $data['page'] : 1;
@@ -872,7 +873,6 @@ abstract class XotBasePanel {
         }
         $data = request()->all();
         $rows=$this->rows($data);
-
         $action->setRows($rows);
         $out=$action->handle();
         return $out;
