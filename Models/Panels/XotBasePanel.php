@@ -30,6 +30,7 @@ abstract class XotBasePanel {
     public $msg = 'msg from panel';
     public $row = null;
     public $rows = null;
+    public $parent = null;
 
     public function __construct($model = null) {
         $this->row = $model;
@@ -41,6 +42,10 @@ abstract class XotBasePanel {
 
     public function setRows($rows) {
         $this->rows = $rows;
+    }
+
+    public function setParent($parent){
+        $this->parent=$parent;
     }
 
     public function optionIdName() {
@@ -620,6 +625,22 @@ abstract class XotBasePanel {
         return Form::bsSubmit('save');
     }
 
+
+    public function btn($act){
+        $parents=[];
+        $curr=$this->parent;
+        $route_params = \Route::current()->parameters();
+        $cont_i=RouteService::containerN(['model'=>get_class($curr->row)]);
+        $routename=RouteService::routenameN(['n'=>$cont_i+1,'act'=>$act]);
+        $route_params['item'.($cont_i+0)]='antipasti';
+        $route_params['container'.($cont_i+1)]=$this->postType();
+        $route_params['item'.($cont_i+1)]='gigi';
+        $route=route($routename,$route_params);
+        return '['.$routename.']<br>['.$route.'][['.$cont_i.']';
+
+
+    }
+
     public function imageHtml($params) {
         /*
         * mettere imageservice, o quello di spatie ?
@@ -708,6 +729,10 @@ abstract class XotBasePanel {
 
     public function destroyUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
+    }
+
+    public function detachUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'detach']);
     }
 
     public function gearUrl(){
