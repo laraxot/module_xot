@@ -30,6 +30,7 @@ abstract class XotBasePanel {
     public $msg = 'msg from panel';
     public $row = null;
     public $rows = null;
+    public $parent = null;
 
     public function __construct($model = null) {
         $this->row = $model;
@@ -43,6 +44,10 @@ abstract class XotBasePanel {
         $this->rows = $rows;
     }
 
+    public function setParent($parent){
+        $this->parent=$parent;
+    }
+
     public function optionIdName() {
         return 'id';
     }
@@ -52,6 +57,10 @@ abstract class XotBasePanel {
     }
 
     public function search() {
+        return [];
+    }
+
+    public function orderBy() {
         return [];
     }
 
@@ -273,7 +282,11 @@ abstract class XotBasePanel {
     public function applySort($query,$sort){
         if(!is_array($sort)) return $query;
         $column=$sort['by'];
-        $direction=isset($sort['order'])?$sort['order']:null;
+        /** 
+        * valutare se mettere controllo se colonna e' sortable
+        **/
+        if($column=='') return $query;
+        $direction=isset($sort['order'])?$sort['order']:'asc';
         $query=$query->orderBy($column, $direction);
         return $query;
 
@@ -612,6 +625,22 @@ abstract class XotBasePanel {
         return Form::bsSubmit('save');
     }
 
+
+    public function btn($act){
+        $parents=[];
+        $curr=$this->parent;
+        $route_params = \Route::current()->parameters();
+        $cont_i=RouteService::containerN(['model'=>get_class($curr->row)]);
+        $routename=RouteService::routenameN(['n'=>$cont_i+1,'act'=>$act]);
+        $route_params['item'.($cont_i+0)]='antipasti';
+        $route_params['container'.($cont_i+1)]=$this->postType();
+        $route_params['item'.($cont_i+1)]='gigi';
+        $route=route($routename,$route_params);
+        return '['.$routename.']<br>['.$route.'][['.$cont_i.']';
+
+
+    }
+
     public function imageHtml($params) {
         /*
         * mettere imageservice, o quello di spatie ?
@@ -700,6 +729,10 @@ abstract class XotBasePanel {
 
     public function destroyUrl() {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
+    }
+
+    public function detachUrl() {
+        return RouteService::urlModel(['model' => $this->row, 'act' => 'detach']);
     }
 
     public function gearUrl(){
@@ -906,7 +939,6 @@ abstract class XotBasePanel {
             if(is_object($rows)){
                 $with['rows']=$rows->paginate(20);
             }
-
             $html=ThemeService::view()
                 ->with($with)
                 ;

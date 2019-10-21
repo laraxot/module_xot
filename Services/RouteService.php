@@ -348,7 +348,23 @@ class RouteService {
         */
         return $container_i * 1;
     }
-
+    /*
+    public static function routenameN($params) {
+        $routename = \Route::currentRouteName();
+        $act = last(explode('.', $routename));
+        extract($params);
+        $tmp = [];
+        if (in_admin()) {
+            $tmp[] = 'admin';
+        }
+        for ($i = 0; $i <= $n + 1; ++$i) {
+            $tmp[] = 'container'.$i;
+        }
+        $tmp[] = $act;
+        $routename_n = implode('.', $tmp);
+        return $routename_n;
+    }
+    */
     public static function routenameSon($params) {
         $container_i = self::containerN($params);
         $routename = \Route::currentRouteName();
