@@ -277,7 +277,11 @@ abstract class XotBasePanel {
     public function applySort($query,$sort){
         if(!is_array($sort)) return $query;
         $column=$sort['by'];
-        $direction=isset($sort['order'])?$sort['order']:null;
+        /** 
+        * valutare se mettere controllo se colonna e' sortable
+        **/
+        if($column=='') return $query;
+        $direction=isset($sort['order'])?$sort['order']:'asc';
         $query=$query->orderBy($column, $direction);
         return $query;
 
