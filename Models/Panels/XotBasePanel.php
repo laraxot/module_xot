@@ -55,6 +55,10 @@ abstract class XotBasePanel {
         return [];
     }
 
+    public function orderBy() {
+        return [];
+    }
+
     public function rules($params=[]) {
         $act='';
         extract($params);
