@@ -632,10 +632,12 @@ abstract class XotBasePanel {
         $route_params = \Route::current()->parameters();
         $cont_i=RouteService::containerN(['model'=>get_class($curr->row)]);
         $routename=RouteService::routenameN(['n'=>$cont_i+1,'act'=>$act]);
+        
         $route_params['item'.($cont_i+0)]='antipasti';
         $route_params['container'.($cont_i+1)]=$this->postType();
         $route_params['item'.($cont_i+1)]='gigi';
         $route=route($routename,$route_params);
+        //http://multi.local:8080/it/profile/profile%20279656/restaurant/pizza%20gino/cuisine/antipasti/recipe/gigi]
         return '['.$routename.']<br>['.$route.'][['.$cont_i.']';
 
 
