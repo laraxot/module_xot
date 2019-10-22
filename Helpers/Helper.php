@@ -36,6 +36,12 @@ if (! \function_exists('ddd')) {
     }
 }
 
+if (! \function_exists('str_slug')) {
+    function str_slug($str) {
+        return Str::slug($str);
+    }
+}
+
 if (! \function_exists('getFilename')) {
     function getFilename($params) {
         $tmp = \debug_backtrace();

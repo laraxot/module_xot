@@ -6,9 +6,13 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\AliasLoader; // per dizionario morph
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Translation\Translator;
+use Illuminate\Cache\TagSet;
+use Illuminate\Support\Collection;
 use Laravel\Scout\EngineManager; // per slegarmi da tntsearch
 use Modules\Xot\Engines\FullTextSearchEngine;
+use Modules\Xot\Engines\Opcache;
 use Modules\Xot\Services\TranslatorService;
 
 class XotServiceProvider extends XotBaseServiceProvider {
@@ -43,6 +47,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
         }
         //*
         $this->registerTranslator();
+        $this->registerCacheOPCache();
         //*/
         resolve(EngineManager::class)->extend('fulltext', function () {
             return new FullTextSearchEngine();
@@ -85,5 +90,19 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
             return $trans;
         });
+    }
+
+    public function registerCacheOPCache(){
+        Cache::extend('opcache', function () {
+            $store = new Opcache\Store;
+            return new Opcache\Repository($store, new TagSet($store));
+        });
+        // Extend Collection to implement __set_state magic method
+        if (! Collection::hasMacro('__set_state')) {
+            Collection::macro('__set_state', function (array $array) {
+                return new Collection($array['items']);
+            });
+        }
+
     }
 }//end class
