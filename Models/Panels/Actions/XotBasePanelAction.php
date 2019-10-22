@@ -16,4 +16,12 @@ abstract class XotBasePanelAction {
     public function btn();
     public function handle();
     */
+
+    public function setRows($rows){
+    	$this->rows=$rows;
+    }
+
+    public function setRow($row){
+    	$this->row=$row;
+    }
 }
