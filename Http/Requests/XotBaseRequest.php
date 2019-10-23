@@ -108,11 +108,13 @@ abstract class XotBaseRequest extends FormRequest {
 
 
     public function ConvDate($field,$value){
+        if($value==null) return $value;
         $value_new=Carbon::createFromFormat('d/m/Y', $value);
         return $value_new;
     }
 
     public function ConvDateTime($field,$value){
+        if($value==null) return $value;
         $value_new=Carbon::createFromFormat('d/m/Y H:i', $value);
         return $value_new;
     }
