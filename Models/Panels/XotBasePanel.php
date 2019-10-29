@@ -891,7 +891,8 @@ abstract class XotBasePanel {
         if(!is_object($action)){
             return null; 
         }
-        $action->setRows($this->row);
+        $action->setRows($this->row); //retrocompatibilita' da eliminare
+        $action->setRow($this->row);
         $out=$action->handle();
         return $out;
     }
