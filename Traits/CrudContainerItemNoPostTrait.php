@@ -407,20 +407,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function saveMultiselectTwoSides($params) { //passo request o direttamente data ?
         extract($params);
-
-        //$data = $request->all();
-        //$types = Str::camel(Str::plural($container));
-
-        //$items = $item->$types();
         $items=$model->$name();
-        //getPivotAccessor
-        //getPivotClass
-        //ddd($items->pivot());
-        //ddd($items->getPivotClass());//Illuminate\Database\Eloquent\Relations\Pivot
-        //Modules\LU\Models\AreaAdminArea  solo se lo ficco con lo Using
-        //ddd(get_class_methods($items));
-        //ddd(class_basename($items));//BelongsToMany
-        //$container_obj = $this->getXotModel($container);
         $container_obj = $model;
         $items_key = $container_obj->getKeyName();
         $items_0 = $items->get()->pluck($items_key);
