@@ -48,6 +48,26 @@ abstract class XotBasePanel {
         $this->parent=$parent;
     }
 
+    public function optionId($row){
+        return $row->id;
+    }
+
+    /**
+     * on select the option label 
+     *
+     */
+
+    public function optionLabel($row){
+        return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
+    }
+
+    public function options($data=null){
+        if($data==null){
+            $data=request()->all();
+        }
+        return $this->rows($data)->get();
+    }
+
     public function optionIdName() {
         return 'id';
     }

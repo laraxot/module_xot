@@ -1,6 +1,6 @@
 <?php
-
 namespace Modules\Xot\Traits;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 //-------- services -----
@@ -48,8 +48,6 @@ trait CrudContainerItemNoPostTrait {
 
     public function store(Request $request, $container, $item) {
         $data = $request->all();
-
-        
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();
@@ -221,6 +219,11 @@ trait CrudContainerItemNoPostTrait {
             $data1 = [$pk_local => $related->$pk_fore];
             $model->update($data1);
         }
+    }
+
+    public function storeRelationshipsHasMany($params) {
+        extract($params);
+        //$rows = $model->$name();
     }
 
     public function storeRelationshipsBelongsTo($params) {
@@ -408,9 +411,14 @@ trait CrudContainerItemNoPostTrait {
     public function saveMultiselectTwoSides($params) { //passo request o direttamente data ?
         extract($params);
         $items=$model->$name();
+        $related=$items->getRelated();
+        //ddd($related);
         $container_obj = $model;
-        $items_key = $container_obj->getKeyName();
+        //$items_key = $container_obj->getKeyName();
+        $items_key = $related->getKeyName();
+        //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
+        
         if (! isset($data['to'])) {
             $data['to'] = [];
         }

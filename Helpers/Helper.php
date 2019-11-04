@@ -385,6 +385,7 @@ if (! \function_exists('debug_getter_obj')) {
                 //---------
                 'getDataStartAttribute',
                 'getDataAttribute',
+                'getMacro',
                 //--altri errori --
             ];
 
