@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Theme\Services\ThemeService;
 
@@ -973,4 +974,25 @@ abstract class XotBasePanel {
         }
         return $html;
     }
+
+    public function pdf($params=[]){
+        $view=ThemeService::getView();//progressioni::admin.schede.show
+        $view.='.pdf';
+        $html=view($view)
+                    ->with('view',$view)
+                    ->with('row',$this->row);
+        /*            
+        return HtmlService::toPdf(
+            [
+                'html'=>$html,
+                'pdforientation'=>'L',
+                'out'=>'content_PDF',
+                'filename'=>'tmp.pdf',
+            ]
+        );  //Landscape, Portrait
+        */
+        $params['html']=$html;
+        return HtmlService::toPdf($params);
+    }
+
 }
