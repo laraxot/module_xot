@@ -647,7 +647,8 @@ abstract class XotBasePanel {
     }
 
 
-    public function btn($act){
+    public function btn($act,$params=[]){
+        extract($params);
         $parents=[];
         $parent=$this->parent;
         $route_params = \Route::current()->parameters();
@@ -664,7 +665,11 @@ abstract class XotBasePanel {
             'id'=>$this->row->id,
             'btn_class'=>'btn',
             'route'=>$route,
+            'act'=>$act,
         ];
+        if(isset($modal) && $modal){
+            return view('formx::includes.components.btn.modal')->with($parz);
+        }
         return view('formx::includes.components.btn.'.$act)->with($parz);
 
     }
@@ -960,6 +965,8 @@ abstract class XotBasePanel {
         if($html==null){
             $html=$this->formatItemData($this->row,$data);
         }
+        $view=ThemeService::getView();
+        $view_work=ThemeService::getViewWork();
         if($html==null){
             $with=[
                 'row'=>$this->row,
@@ -975,7 +982,14 @@ abstract class XotBasePanel {
 
         if($is_ajax && $out_format==null){
             \Debugbar::disable(); 
-            return response()->json(['msg' => 'ok','html'=>(string)$html]);
+            return response()->json(
+                [
+                    'msg' => 'ok',
+                    'html'=>(string)$html,
+                    'view'=>$view,
+                    'view_work'=>$view_work,
+                ]
+            );
         }
         return $html;
     }
