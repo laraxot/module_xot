@@ -124,7 +124,6 @@ abstract class XotBaseContainerController extends Controller {
             non passare piu' request ma passare direttamente $data
         */
         //  \Debugbar::disable(); 
-
         $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
 
         return $panel->out(

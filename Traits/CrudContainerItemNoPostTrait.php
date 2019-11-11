@@ -456,6 +456,7 @@ trait CrudContainerItemNoPostTrait {
         $item->pivot->delete(); // da aggiungere pivot_id
         $status = 'scollegato';
         \Session::flash('status', $status);
+        return Panel::get($item);
     }
 
     //end detach
@@ -464,6 +465,7 @@ trait CrudContainerItemNoPostTrait {
         $item->delete(); // da aggiungere pivot_id
         $status = 'eliminato';
         \Session::flash('status', $status);
+        return Panel::get($item);
     }
 
     //end detach
