@@ -999,7 +999,9 @@ abstract class XotBasePanel {
         $view.='.pdf';
         $html=view($view)
                     ->with('view',$view)
-                    ->with('row',$this->row);
+                    ->with('row',$this->row)
+                    ->with('rows',$this->rows)
+                    ;
         /*            
         return HtmlService::toPdf(
             [
