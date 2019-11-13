@@ -6,7 +6,7 @@ namespace Modules\Xot\Models\Panels\Actions;
 //use Laravel\Scout\Searchable;
 
 //----------  SERVICES --------------------------
-
+use Modules\Xot\Services\RouteService;
 //---- Traits ----
 //use Modules\Xot\Traits\Updater;
 
@@ -55,8 +55,9 @@ abstract class XotBasePanelAction {
                     //'stato'=>6,
                 ],
             ]);
-        return '<a href="'.$url.'" class="btn btn-success">
-            <i class="fas fa-file-signature"></i>&nbsp;Compila
+        $title=str_replace('_',' ',$this->name);
+        return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
+            '.$this->icon.'</i>&nbsp;'.$title.'
             </a>';
     }//end btnItem
 
