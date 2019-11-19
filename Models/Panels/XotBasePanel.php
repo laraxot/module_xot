@@ -1004,16 +1004,10 @@ abstract class XotBasePanel {
                     ->with('row',$this->row)
                     ->with('rows',$this->rows)
                     ;
-        /*            
-        return HtmlService::toPdf(
-            [
-                'html'=>$html,
-                'pdforientation'=>'L',
-                'out'=>'content_PDF',
-                'filename'=>'tmp.pdf',
-            ]
-        );  //Landscape, Portrait
-        */
+        //ddd($this->rows->get());
+        if(request()->input('debug')){
+            return $html;
+        }
         $params['html']=$html;
         return HtmlService::toPdf($params);
     }
