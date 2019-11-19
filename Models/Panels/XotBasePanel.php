@@ -607,12 +607,14 @@ abstract class XotBasePanel {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $params = \Route::current()->parameters();
+        /*
         if ('' == $request->year) {
             $request->year = date('Y');
         }
         if ('' == $request->month) {
             $request->month = date('m');
         }
+        */
         $q = 2;
         $d = Carbon::create($request->year, $request->month, 1)->subMonth($q);
         $nav = [];
@@ -1002,16 +1004,10 @@ abstract class XotBasePanel {
                     ->with('row',$this->row)
                     ->with('rows',$this->rows)
                     ;
-        /*            
-        return HtmlService::toPdf(
-            [
-                'html'=>$html,
-                'pdforientation'=>'L',
-                'out'=>'content_PDF',
-                'filename'=>'tmp.pdf',
-            ]
-        );  //Landscape, Portrait
-        */
+        //ddd($this->rows->get());
+        if(request()->input('debug')){
+            return $html;
+        }
         $params['html']=$html;
         return HtmlService::toPdf($params);
     }
