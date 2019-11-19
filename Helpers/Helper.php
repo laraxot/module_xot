@@ -220,6 +220,9 @@ if (! \function_exists('getModuleModels')) {
         if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
             $module = 'trasferte';
         }
+        if($module==null){
+            return [];
+        }
         $mod = \Module::find($module);
         if (null == $mod) {
             return [];
