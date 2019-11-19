@@ -69,8 +69,28 @@ abstract class XotBasePanel {
         return $this->rows($data)->get();
     }
 
+    public function optionsTree($data=null){
+        if($data==null){
+            $data=request()->all();
+        }
+        $rows=$this->rows($data)->get();
+        $primary_field=$this->row->getKeyName();
+        $c = new \Modules\Xot\Services\ChainService($primary_field, 'parent_id', 'pos', $rows);
+        $options=collect($c->chain_table)->map(function($item){
+            return [
+                'id'=>$this->optionId($item),
+                'label'=>str_repeat('------', $item->indent + 1).$this->optionLabel($item),
+            ];
+        })->pluck('label','id')
+        ->prepend('Root',0)
+        ->all();
+        return $options;
+    }
+
+
+
     public function optionIdName() {
-        return 'id';
+        return $this->row->getKeyName();
     }
 
     public function optionLabelName() {
