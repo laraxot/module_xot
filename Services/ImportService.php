@@ -21,7 +21,7 @@ use Symfony\Component\DomCrawler\Crawler;
 //*/
 
 class ImportService {
-    
+
     protected static $client = null;
     protected static $client_options = [];
     protected static $res = null;
@@ -498,7 +498,7 @@ class ImportService {
         $urldata = \file_get_contents('http://'.$host.'/get?q='.$q.'&langpair='.$from.'|'.$to.'');
         $data = \json_decode($urldata, true);
         if (200 != $data['responseStatus']) {
-            if (true == $this->debug) {
+            if (true == self::$debug) {
                 if (403 == $data['responseStatus']) {
                     $details = ($data['responseDetails']);
                 } else {

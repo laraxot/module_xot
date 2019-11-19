@@ -31,7 +31,7 @@ class ArrayService {
             case 2:return self::toXLS_Maatwebsite($params); break;
             case 3:return self::toXLS_phpexcel($params); break;
             default:
-                ddd('unknown export_processor ['.$this->export_processor.']');
+                ddd('unknown export_processor ['.self::export_processor.']');
             break;
         }
     }
@@ -364,6 +364,7 @@ class ArrayService {
         \Config::set('excel::csv.delimiter', ';');
         \Config::set('excel.csv.delimiter', ';');
         \Maatwebsite\Excel\Facades\Excel::setDelimiter(';');
+        extract($params);
 
         return \Maatwebsite\Excel\Facades\Excel::create($filename, function ($excel) use ($data) {
             $excel->sheet('mySheet', function ($sheet) use ($data) {
