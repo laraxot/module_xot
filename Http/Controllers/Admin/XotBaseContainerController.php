@@ -33,7 +33,7 @@ abstract class XotBaseContainerController extends Controller {
                 $mod = (object) ['name' => 'Trasferte'];
             }
         }
-        $controller = '\Modules\\'.$mod->name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        $controller = '\Modules\\'.$mod->getName().'\Http\Controllers\Admin\\'.$tmp.'Controller';
         //ddd($controller);
         try {
             if (class_exists($controller)) {
