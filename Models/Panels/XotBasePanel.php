@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Xot\Models\Panels;
 
 use Collective\Html\FormFacade as Form;
@@ -586,10 +585,11 @@ abstract class XotBasePanel {
 
     //------- navigazioni ---
 
-    public function yearNav() {
+    public function yearNavRedirect() {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $params = \Route::current()->parameters();
+        
         $redirect = 1;
         if ('' == $request->year) {
             if ($redirect) {
@@ -601,7 +601,35 @@ abstract class XotBasePanel {
             }
             $request->year = date('Y');
         }
+
         $year = $request->year - 1;
+        $nav = [];
+        for ($i = 0; $i < 3; ++$i) {
+            $tmp = [];
+            $params['year'] = $year;
+            $tmp['title'] = $year;
+            if (date('Y') == $params['year']) {
+                $tmp['title'] = '['.$tmp['title'].']';
+            }
+            if ($request->year == $params['year']) {
+                $tmp['active'] = 1;
+            } else {
+                $tmp['active'] = 0;
+            }
+            $tmp['url'] = route($routename, $params);
+            $nav[] = (object) $tmp;
+            ++$year;
+        }
+
+        return $nav;
+    }
+
+    public function yearNav() {
+        $request = \Request::capture();
+        $routename = \Route::currentRouteName();
+        $params = \Route::current()->parameters();
+        $year = $request->input('year',date('Y'));
+        $year=$year-1;
         $nav = [];
         for ($i = 0; $i < 3; ++$i) {
             $tmp = [];
