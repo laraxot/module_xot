@@ -28,12 +28,17 @@ abstract class XotBaseContainerController extends Controller {
             return;
         }
         $mod = \Module::find($params['module']);
+        if(is_object($mod)){
+            $mod_name=$mod->getName();
+        }
+        
         if (null == $mod) {
             if (Str::startsWith($params['module'], 'trasferte')) { //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
                 $mod = (object) ['name' => 'Trasferte'];
+                $mod_name='Trasferte';
             }
         }
-        $controller = '\Modules\\'.$mod->getName().'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        $controller = '\Modules\\'.$mod_name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
         //ddd($controller);
         try {
             if (class_exists($controller)) {
