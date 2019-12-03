@@ -82,11 +82,14 @@ abstract class XotBaseContainerController extends Controller {
             return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
         }
         //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
+        
         if($request->_act!=''){
             $panel=$this->ContainerItem2Panel($this->container_last, $this->item_last);
         }else{
             $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
         }
+        
+            //ddd($this->item_last->n);
         return $panel->out(
             [
                 'is_ajax'=>$request->ajax(),
@@ -98,15 +101,21 @@ abstract class XotBaseContainerController extends Controller {
 
     public function ContainerItem2Panel($container,$item){
         $types = Str::camel(Str::plural($container));
-        if (is_object($item)) { 
-            $rows = $item->$types();
-            $related = $rows->getRelated();
-            $row = $related;
-        } else {
+        if (is_object($item)){
+            if(method_exists($item,$types) ) { 
+                $rows = $item->$types();
+                $related = $rows->getRelated();
+                $row = $related;
+            }else{
+                $rows=null;
+                $row=$item;
+            }
+        }else{
             $row = xotModel($container);
             $rows = $row;// o NULL ??? 
         }
         $panel=Panel::get($row);
+        //$panel->setRow($row);
         $panel->setRows($rows);
         return $panel;
     }

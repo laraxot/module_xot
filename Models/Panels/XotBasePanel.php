@@ -974,7 +974,12 @@ abstract class XotBasePanel {
         }
         $action->setRows($this->row); //retrocompatibilita' da eliminare
         $action->setRow($this->row);
-        $out=$action->handle();
+        $method=request()->getMethod();
+        if($method=='GET'){
+            $out=$action->handle();
+        }else{
+            $out=$action->postHandle();
+        }
         return $out;
     }
 
@@ -991,7 +996,12 @@ abstract class XotBasePanel {
         $data = request()->all();
         $rows=$this->rows($data);
         $action->setRows($rows);
-        $out=$action->handle();
+        $method=request()->getMethod();
+        if($method=='GET'){
+            $out=$action->handle();
+        }else{
+            $out=$action->postHandle();
+        }
         return $out;
     }
 
@@ -1058,6 +1068,14 @@ abstract class XotBasePanel {
         }
         $params['html']=$html;
         return HtmlService::toPdf($params);
+    }
+
+
+    public static function getInstance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
 }

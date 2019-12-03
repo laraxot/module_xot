@@ -2,11 +2,17 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
 
 //----------  SERVICES --------------------------
 use Modules\Xot\Services\RouteService;
+use Modules\Xot\Services\ArrayService;
+use Modules\Xot\Services\PanelService as Panel;
+use Modules\Theme\Services\ThemeService;
 //---- Traits ----
 //use Modules\Xot\Traits\Updater;
 
@@ -60,5 +66,16 @@ abstract class XotBasePanelAction {
             '.$this->icon.'</i>&nbsp;'.$title.'
             </a>';
     }//end btnItem
+
+    public function updateRow(){
+        $row=$this->row;
+        $panel=Panel::get($row);
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $request->validatePanel($panel);
+        $data=$request->all();
+        $res=tap($row)->update($data);
+        \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); 
+        return $this->handle();
+    }
 
 }
