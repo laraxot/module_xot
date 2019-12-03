@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 //---- services ---
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\PanelService as Panel;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -81,7 +82,11 @@ abstract class XotBaseContainerController extends Controller {
             return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
         }
         //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
-        $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+        if($request->_act!=''){
+            $panel=$this->ContainerItem2Panel($this->container_last, $this->item_last);
+        }else{
+            $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+        }
         return $panel->out(
             [
                 'is_ajax'=>$request->ajax(),
@@ -89,4 +94,20 @@ abstract class XotBaseContainerController extends Controller {
             ]
         );
     }
-}
+
+
+    public function ContainerItem2Panel($container,$item){
+        $types = Str::camel(Str::plural($container));
+        if (is_object($item)) { 
+            $rows = $item->$types();
+            $related = $rows->getRelated();
+            $row = $related;
+        } else {
+            $row = xotModel($container);
+            $rows = $row;// o NULL ??? 
+        }
+        $panel=Panel::get($row);
+        $panel->setRows($rows);
+        return $panel;
+    }
+}//end class
