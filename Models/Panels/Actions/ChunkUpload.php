@@ -39,7 +39,7 @@ class ChunkUpload extends XotBasePanelAction{
         return response()->json($ris);
 	}
 
-	public function handle_old(){
+	public function postHandle(){
 		
         $filename = $_POST['dir'].\DIRECTORY_SEPARATOR.$_POST['name'];
         if (0 == $_POST['seek']) {
