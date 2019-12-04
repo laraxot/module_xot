@@ -159,6 +159,10 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
+    public function updateRelationshipsBelongsToMany($params){
+        
+    }
+
     public function updateRelationshipsBelongsTo($params) {
         extract($params);
         $rows = $model->$name();
