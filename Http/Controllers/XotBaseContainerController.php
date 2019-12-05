@@ -55,6 +55,7 @@ abstract class XotBaseContainerController extends Controller {
 
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
+        $lang=\App::getLocale();
         list($containers, $items) = params2ContainerItem($params);
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         //$request = Request::capture();
@@ -81,6 +82,11 @@ abstract class XotBaseContainerController extends Controller {
             $authorized = Gate::allows($method, $row);
             //$authorized=\Auth::guest()->can($method, $row);
         }
+        if (! $authorized && !\Auth::check()) {
+            $msg=['msg'=>'ok','html'=>'<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
+            return response()->json($msg,200);
+        }
+
         if (! $authorized) {
             $method_name = $method.'SpecialCase';
             if (method_exists($panel, $method_name)) {
