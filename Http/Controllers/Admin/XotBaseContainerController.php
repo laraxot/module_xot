@@ -32,7 +32,7 @@ abstract class XotBaseContainerController extends Controller {
         if(is_object($mod)){
             $mod_name=$mod->getName();
         }
-        
+
         if (null == $mod) {
             if (Str::startsWith($params['module'], 'trasferte')) { //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
                 $mod = (object) ['name' => 'Trasferte'];
@@ -63,8 +63,11 @@ abstract class XotBaseContainerController extends Controller {
         $controller = $this->controller;
         $row = $this->last;
         if (is_object($row) && \Auth::user()->cannot($method, $row)) {
-            ddd('non autorizzato ['.$method.']['.get_class($row).']');
-            abort(403);
+            //ddd('non autorizzato ['.$method.']['.get_class($row).']');
+            //return response()->deny('testxxx');
+            $msg='user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
+            abort(403,$msg);
+            //return response()->view('adm_theme::errors.403', [], 403);
         }
         //$request = Request::capture();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -82,13 +85,13 @@ abstract class XotBaseContainerController extends Controller {
             return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
         }
         //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
-        
+
         if($request->_act!=''){
             $panel=$this->ContainerItem2Panel($this->container_last, $this->item_last);
         }else{
             $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
         }
-        
+
             //ddd($this->item_last->n);
         return $panel->out(
             [
@@ -102,7 +105,7 @@ abstract class XotBaseContainerController extends Controller {
     public function ContainerItem2Panel($container,$item){
         $types = Str::camel(Str::plural($container));
         if (is_object($item)){
-            if(method_exists($item,$types) ) { 
+            if(method_exists($item,$types) ) {
                 $rows = $item->$types();
                 $related = $rows->getRelated();
                 $row = $related;
@@ -112,7 +115,7 @@ abstract class XotBaseContainerController extends Controller {
             }
         }else{
             $row = xotModel($container);
-            $rows = $row;// o NULL ??? 
+            $rows = $row;// o NULL ???
         }
         $panel=Panel::get($row);
         //$panel->setRow($row);
