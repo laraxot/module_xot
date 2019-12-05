@@ -160,6 +160,14 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function updateRelationshipsBelongsToMany($params){
+        extract($params);
+        //$rows = $model->$name();
+        if (isset($data['from']) || isset($data['to'])) {
+            $this->saveMultiselectTwoSides($params);
+            //ddd($params);
+        }else{
+            //ddd('TO DO');
+        }
 
     }
 
