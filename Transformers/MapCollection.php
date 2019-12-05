@@ -4,13 +4,12 @@ namespace Modules\Xot\Transformers;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class MapCollection extends ResourceCollection{
+class MapCollection extends ResourceCollection {
+    public $collects = MapResource::class;
 
-	public $collects = MapResource::class;
-
-	public function toArray($request){
+    public function toArray($request) {
         return [
-        	'type'=>'FeatureCollection',
+            'type' => 'FeatureCollection',
             'features' => $this->collection,
             /*'links' => [
                 'self' => 'link-value',

@@ -21,7 +21,6 @@ use Symfony\Component\DomCrawler\Crawler;
 //*/
 
 class ImportService {
-
     protected static $client = null;
     protected static $client_options = [];
     protected static $res = null;

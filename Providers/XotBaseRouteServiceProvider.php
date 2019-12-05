@@ -1,12 +1,11 @@
 <?php
+
 namespace Modules\Xot\Providers;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider; // per dizionario morph
 use Illuminate\Support\Facades\Route;
 
 abstract class XotBaseRouteServiceProvider extends ServiceProvider {
-    
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso
         if (method_exists($this, 'bootCallback')) {

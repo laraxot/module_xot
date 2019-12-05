@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Xot\Traits;
 
 use Illuminate\Http\Request;
@@ -6,16 +7,13 @@ use Illuminate\Support\Str;
 //-------- services -----
 //-------- models ------
 //use Modules\Blog\Models\Post; // deve essere slegato dal modulo Blog
-use Modules\Xot\Models\Home;
 //------- services -------
 //use Modules\Theme\Services\ThemeService;  // qui restituisco il Panel che poi mostrera' i dati
 //use Modules\Xot\Services\PolicyService;
-use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\PanelService as Panel;
-
+use Modules\Xot\Services\StubService;
 
 trait CrudContainerItemNoPostTrait {
-
     public function index(Request $request, $container, $item) {
         if (false === $item) {
             $row = self::getXotModel($container);
@@ -26,8 +24,9 @@ trait CrudContainerItemNoPostTrait {
             $row = $rows->getRelated();
         }
         //$rows = $rows->paginate(20);
-        $panel=Panel::get($row);
+        $panel = Panel::get($row);
         $panel->setRows($rows);
+
         return $panel;
     }
 
@@ -41,8 +40,9 @@ trait CrudContainerItemNoPostTrait {
             $row = xotModel($container);
         }
         //$rows = $rows->paginate(20);
-        $panel=Panel::get($row);
+        $panel = Panel::get($row);
         $panel->setRows($rows);
+
         return $panel;
     }
 
@@ -60,7 +60,7 @@ trait CrudContainerItemNoPostTrait {
             $row = xotModel($container);
         }
 
-        if (! isset($data['lang']) && in_array('lang',$row->getFillable())) {
+        if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
             $data['lang'] = \App::getLocale();
         }
 
@@ -83,7 +83,8 @@ trait CrudContainerItemNoPostTrait {
             $item_new = $panel->storeCallback(['row' => $item_new, 'data' => $data]);
         }
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
-        $panel=Panel::get($item_new);
+        $panel = Panel::get($item_new);
+
         return $panel;
     }
 
@@ -94,7 +95,7 @@ trait CrudContainerItemNoPostTrait {
     public function update(Request $request, $container, $item) {
         $data = $request->all();
         $row = $item;
-        $panel=Panel::get($row);
+        $panel = Panel::get($row);
         $ris = $row->update($data);
         $this->manageRelationships(['model' => $item, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
@@ -149,9 +150,9 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         $rows = $model->$name();
         if ($rows->exists()) {
-            if(!is_array($data)){
-               //variabile uguale alla relazione
-            }else{
+            if (! is_array($data)) {
+                //variabile uguale alla relazione
+            } else {
                 $model->$name()->update($data);
             }
         } else {
@@ -159,16 +160,15 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
-    public function updateRelationshipsBelongsToMany($params){
+    public function updateRelationshipsBelongsToMany($params) {
         extract($params);
         //$rows = $model->$name();
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
-            //ddd($params);
-        }else{
+        //ddd($params);
+        } else {
             //ddd('TO DO');
         }
-
     }
 
     public function updateRelationshipsBelongsTo($params) {
@@ -177,7 +177,6 @@ trait CrudContainerItemNoPostTrait {
         if ($rows->exists()) {
             //$model->$name()->update($data);
             $model->$name->update($data);
-
         } else {
             $this->storeRelationshipsBelongsTo($params);
         }
@@ -192,11 +191,11 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
-            if(!is_array($v)){
-               $v=[];
+            if (! is_array($v)) {
+                $v = [];
             }
-            if(!isset($v['pivot'])){
-                $v['pivot']=[];
+            if (! isset($v['pivot'])) {
+                $v['pivot'] = [];
             }
             $res = $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
             $model->$name()->touch();
@@ -250,6 +249,7 @@ trait CrudContainerItemNoPostTrait {
             $model->update($data1);
         }
     }
+
     /* -- non so se la utilizzo, dopo cancello
     public function formatData($params) {
         extract($params);
@@ -263,7 +263,6 @@ trait CrudContainerItemNoPostTrait {
         return $data;
     }
     */
-
 
     public function storeRelationshipsMorphOne($params) {
         extract($params);
@@ -285,13 +284,13 @@ trait CrudContainerItemNoPostTrait {
                 if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
-                if (! isset($v['pivot']['auth_user_id']) && isset($model->auth_user_id) ) {
-                    $v['pivot']['auth_user_id'] =$model->auth_user_id;
+                if (! isset($v['pivot']['auth_user_id']) && isset($model->auth_user_id)) {
+                    $v['pivot']['auth_user_id'] = $model->auth_user_id;
                 }
                 if (! isset($v['pivot']['auth_user_id']) && \Auth::check()) {
                     $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
                 }
-                /**
+                /*
                 * syncWithoutDetaching fa una select a vuoto ma funziona
                 *
                 **/
@@ -308,8 +307,6 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
-
-
     public function indexAttach(Request $request, $container, $item) {
         if ('POST' == $request->getMethod()) {
             $this->indexAttachSave($request, $container, $item);
@@ -325,6 +322,7 @@ trait CrudContainerItemNoPostTrait {
             if (method_exists($rows, 'getMorphType')) {
                 $panel->pivot_key_names[] = $rows->getMorphType();
             }
+
             return $panel;
         }
         //return $this->create($request,$container,$item); //crea collegamento ..
@@ -394,7 +392,7 @@ trait CrudContainerItemNoPostTrait {
                 if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
-                if ((! isset($v['pivot']['auth_user_id']) || $v['pivot']['auth_user_id']=='') && \Auth::check()) {
+                if ((! isset($v['pivot']['auth_user_id']) || '' == $v['pivot']['auth_user_id']) && \Auth::check()) {
                     $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
                 }
                 $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
@@ -415,15 +413,17 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
-            $data['from']=[];unset($data['from']);
-            $data['to']=[];unset($data['to']);
+            $data['from'] = [];
+            unset($data['from']);
+            $data['to'] = [];
+            unset($data['to']);
         }
     }
 
     public function saveMultiselectTwoSides($params) { //passo request o direttamente data ?
         extract($params);
-        $items=$model->$name();
-        $related=$items->getRelated();
+        $items = $model->$name();
+        $related = $items->getRelated();
         //ddd($related);
         $container_obj = $model;
         //$items_key = $container_obj->getKeyName();
@@ -457,10 +457,11 @@ trait CrudContainerItemNoPostTrait {
             echo '<h3>not exists ['.$name.'] on config xra.model</h3>';
             ddd(config('xra.model'));
         }
-        if(class_basename($model)=='BaseModel'){
-            return abort('403','BaseModel is only for Abstract!');
+        if ('BaseModel' == class_basename($model)) {
+            return abort('403', 'BaseModel is only for Abstract!');
         }
-        $row=new $model();
+        $row = new $model();
+
         return $row;
     }
 
@@ -470,6 +471,7 @@ trait CrudContainerItemNoPostTrait {
         $item->pivot->delete(); // da aggiungere pivot_id
         $status = 'scollegato';
         \Session::flash('status', $status);
+
         return Panel::get($item);
     }
 
@@ -479,6 +481,7 @@ trait CrudContainerItemNoPostTrait {
         $item->delete(); // da aggiungere pivot_id
         $status = 'eliminato';
         \Session::flash('status', $status);
+
         return Panel::get($item);
     }
 

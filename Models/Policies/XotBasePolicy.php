@@ -7,8 +7,6 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 //use Illuminate\Database\Eloquent\Model as Post;
 //use Modules\LU\Models\User;
 use Modules\Xot\Contracts\UserContract as User;
-
-
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBasePolicy {

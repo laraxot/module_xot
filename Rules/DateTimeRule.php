@@ -1,11 +1,11 @@
 <?php
+
 namespace Modules\Xot\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
 use Carbon\Carbon;
+use Illuminate\Contracts\Validation\Rule;
 
 class DateTimeRule implements Rule {
-
     public function __construct() {
     }
 
@@ -14,10 +14,10 @@ class DateTimeRule implements Rule {
         //ddd($value);//10/10/2019 13:43
         //return 5 === strlen($value);
 
-        $format='d/m/Y H:i';
-        try{
-            $value_new=Carbon::createFromFormat($format, $value);
-        }catch(\Exception $e){
+        $format = 'd/m/Y H:i';
+        try {
+            $value_new = Carbon::createFromFormat($format, $value);
+        } catch (\Exception $e) {
             return false;
         }
         /* -- non fa il suo dovere --
@@ -25,12 +25,11 @@ class DateTimeRule implements Rule {
         */
 
         return true;
-        
     }
 
     public function message() {
         return 'The :attribute is not a valid datetime';
-    //    return trans('validation.only_uppercase');
+        //    return trans('validation.only_uppercase');
     }
 }
 
@@ -62,7 +61,7 @@ public function rules(Request $request)
 
     return [
         'start_dt' => 'required|date|after:yesterday',
-        'end_dt' => 'required|date|after:start_dt|before:' . Carbon::parse($request->start_dt)->addDays(30)            
+        'end_dt' => 'required|date|after:start_dt|before:' . Carbon::parse($request->start_dt)->addDays(30)
     ];
 }
 

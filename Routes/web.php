@@ -1,7 +1,8 @@
 <?php
+
 use Modules\Xot\Services\RouteService;
 
-$namespace = '\Modules\Xot'; 
+$namespace = '\Modules\Xot';
 $pack = class_basename($namespace);
 
 $namespace .= '\Http\Controllers';
@@ -38,7 +39,6 @@ Route::group(
     }
 );
 
-
 $middleware = ['web', 'auth'/*,'verified'*/];
 $prefix = 'admin';
 
@@ -53,7 +53,6 @@ Route::group(
         //RouteTrait::dynamic_route($areas_prgs);
     }
 );
-
 
 if (in_admin()) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO

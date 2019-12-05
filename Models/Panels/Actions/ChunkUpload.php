@@ -1,27 +1,21 @@
 <?php
 
 namespace Modules\Xot\Models\Panels\Actions;
+
 //-------- models -----------
 
 //-------- services --------
-use Modules\Xot\Services\ArrayService;
-use Modules\Xot\Services\RouteService;
-use Modules\Sigma\Services\SigmaService;
-use Modules\Theme\Services\ThemeService;
-
 
 //-------- bases -----------
-use Modules\Xot\Models\Panels\Actions\XotBasePanelAction;
 
-class ChunkUpload extends XotBasePanelAction{
-	public $name='chunk_upload'; //name for calling Action
-	public $onContainer = true; //onlyContainer
-	public $icon='<i class="fas fa-puzzle-piece"></i>';
+class ChunkUpload extends XotBasePanelAction {
+    public $name = 'chunk_upload'; //name for calling Action
+    public $onContainer = true; //onlyContainer
+    public $icon = '<i class="fas fa-puzzle-piece"></i>';
 
-	public function handle(){
-		
+    public function handle() {
         $filename = $_POST['dir'].\DIRECTORY_SEPARATOR.$_POST['name'];
-        
+
         if (0 == $_POST['seek']) {
             $fp = \fopen($filename, 'w');
         } else {
@@ -36,11 +30,11 @@ class ChunkUpload extends XotBasePanelAction{
             'seek' => $_POST['seek'],
             //'chunck' =>  $_POST['chunk'],
         ];
-        return response()->json($ris);
-	}
 
-	public function postHandle(){
-		
+        return response()->json($ris);
+    }
+
+    public function postHandle() {
         $filename = $_POST['dir'].\DIRECTORY_SEPARATOR.$_POST['name'];
         if (0 == $_POST['seek']) {
             $fp = \fopen($filename, 'w');
@@ -57,7 +51,6 @@ class ChunkUpload extends XotBasePanelAction{
             //'chunck' =>  $_POST['chunk'],
         ];
 
-        
         return response()->json($ris);
-	}
+    }
 }

@@ -220,7 +220,7 @@ if (! \function_exists('getModuleModels')) {
         if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
             $module = 'trasferte';
         }
-        if($module==null){
+        if (null == $module) {
             return [];
         }
         $mod = \Module::find($module);
@@ -241,11 +241,10 @@ if (! \function_exists('getModuleModels')) {
                 $tmp->class = $ns.'\\'.$name;
                 $name = Str::snake($name);
                 $tmp->name = $name;
-                $reflection_class=new ReflectionClass($tmp->class);
-                if(!$reflection_class->isAbstract()){
+                $reflection_class = new ReflectionClass($tmp->class);
+                if (! $reflection_class->isAbstract()) {
                     $data[$tmp->name] = $tmp->class;
                 }
-
             }
         }
 
@@ -311,10 +310,10 @@ if (! \function_exists('transFields')) {
         if (isset($attributes)) {
             extract($attributes);
         }
-        if(isset($options['field'])){
-            $field=$options['field'];
-            $ris=$field;
-        }else{
+        if (isset($options['field'])) {
+            $field = $options['field'];
+            $ris = $field;
+        } else {
             $ris = new \stdClass();
         }
 
@@ -340,10 +339,10 @@ if (! \function_exists('transFields')) {
             }
         }
 
-        $trans=$view_noact.'.field.'.$ris->name_dot;
-        $ris->label=isset($label)?$label:trans($trans);
-        $trans=$view_noact.'.field.'.$ris->name_dot.'_placeholder';
-        $ris->placeholder=isset($placeholder)?$placeholder:trans($trans);;
+        $trans = $view_noact.'.field.'.$ris->name_dot;
+        $ris->label = isset($label) ? $label : trans($trans);
+        $trans = $view_noact.'.field.'.$ris->name_dot.'_placeholder';
+        $ris->placeholder = isset($placeholder) ? $placeholder : trans($trans);
         /*
         //if($ris->label==$trans) $ris->label=$name;
         if($ris->placeholder==$trans) $ris->placeholder=' ';
@@ -352,15 +351,13 @@ if (! \function_exists('transFields')) {
         $attributes = $params;
         $attrs_default = ['class' => 'form-control', 'placeholder' => $ris->placeholder];
 
-        $ris->attributes = collect(array_merge($attrs_default, $attributes,$params['attributes']))
+        $ris->attributes = collect(array_merge($attrs_default, $attributes, $params['attributes']))
                         ->filter(function ($item, $key) {
                             return in_array($key, ['class', 'placeholder', 'readonly']) || Str::startsWith($key, 'data-');
                         })
                         //->only('class','placeholder','readonly')
                         ->all();
         $ris->params = $params;
-
-
 
         return $ris;
     }
@@ -543,7 +540,6 @@ if (! \function_exists('money_format')) {
     }
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | Laravel 5 - URL Query String Helper
@@ -561,11 +557,13 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
     if (! function_exists('url_queries')) {
         /**
          * Modifies the query strings in a given (or the current) URL.
-         * @param  array       $queries Indexed array of query parameters
-         * @param  string|null $url     URL to use parse. If none is supplied, the current URL of the page load will be used
-         * @return string               The updated query string
+         *
+         * @param array       $queries Indexed array of query parameters
+         * @param string|null $url     URL to use parse. If none is supplied, the current URL of the page load will be used
+         *
+         * @return string The updated query string
          */
-        function url_queries(array $queries, string $url=null) {
+        function url_queries(array $queries, string $url = null) {
             // If a URL isn't supplied, use the current one
             if (! $url) {
                 $url = \Request::fullUrl();
@@ -585,29 +583,31 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
             $url_parsed['query'] = $string_query;
             // Build the array back into a complete URL string
             $url = build_url($url_parsed);
+
             return $url;
         }
     }
     if (! function_exists('build_url')) {
         /**
          * Rebuilds the URL parameters into a string from the native parse_url() function.
-         * @param  array  $parts The parts of a URL
-         * @return string        The constructed URL
+         *
+         * @param array $parts The parts of a URL
+         *
+         * @return string The constructed URL
          */
         function build_url(array $parts) {
-            return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '') .
-                ((isset($parts['user']) || isset($parts['host'])) ? '//' : '') .
-                (isset($parts['user']) ? "{$parts['user']}" : '') .
-                (isset($parts['pass']) ? ":{$parts['pass']}" : '') .
-                (isset($parts['user']) ? '@' : '') .
-                (isset($parts['host']) ? "{$parts['host']}" : '') .
-                (isset($parts['port']) ? ":{$parts['port']}" : '') .
-                (isset($parts['path']) ? "{$parts['path']}" : '') .
-                (isset($parts['query']) ? "?{$parts['query']}" : '') .
+            return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '').
+                ((isset($parts['user']) || isset($parts['host'])) ? '//' : '').
+                (isset($parts['user']) ? "{$parts['user']}" : '').
+                (isset($parts['pass']) ? ":{$parts['pass']}" : '').
+                (isset($parts['user']) ? '@' : '').
+                (isset($parts['host']) ? "{$parts['host']}" : '').
+                (isset($parts['port']) ? ":{$parts['port']}" : '').
+                (isset($parts['path']) ? "{$parts['path']}" : '').
+                (isset($parts['query']) ? "?{$parts['query']}" : '').
                 (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
         }
     }
-
 
 if (! function_exists('str_singular')) {
     function str_singular($str) {
@@ -616,20 +616,19 @@ if (! function_exists('str_singular')) {
 }
 
 if (! function_exists('starts_with')) {
-    function starts_with($str,$str1) {
-        return Str::startsWith($str,$str1);
+    function starts_with($str, $str1) {
+        return Str::startsWith($str, $str1);
     }
 }
 
 if (! function_exists('ends_with')) {
-    function ends_with($str,$str1) {
-        return Str::endsWith($str,$str1);
+    function ends_with($str, $str1) {
+        return Str::endsWith($str, $str1);
     }
 }
 
-
 if (! function_exists('str_contains')) {
-    function str_contains($str,$str1) {
-        return Str::contains($str,$str1);
+    function str_contains($str, $str1) {
+        return Str::contains($str, $str1);
     }
 }

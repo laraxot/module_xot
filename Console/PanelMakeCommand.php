@@ -1,15 +1,15 @@
 <?php
+
 namespace Modules\Xot\Console;
 
 use Illuminate\Support\Str;
+use Nwidart\Modules\Commands\GeneratorCommand;
 use Nwidart\Modules\Support\Config\GenerateConfigReader;
 use Nwidart\Modules\Support\Stub;
 use Nwidart\Modules\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
-use Nwidart\Modules\Commands\GeneratorCommand;
 
-class PanelMakeCommand extends GeneratorCommand
-{
+class PanelMakeCommand extends GeneratorCommand {
     use ModuleCommandTrait;
 
     protected $argumentName = 'name';
@@ -28,11 +28,9 @@ class PanelMakeCommand extends GeneratorCommand
      */
     protected $description = 'Create a new panel class for the specified module';
 
-
-    
-
-    public function getTemplateContents(){
+    public function getTemplateContents() {
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+
         return 'testinaaaa';
         /*
         return (new Stub('/testina.stub', [
@@ -42,25 +40,22 @@ class PanelMakeCommand extends GeneratorCommand
         */
     }
 
-    public function getDestinationFilePath()
-    {
-        $path       = $this->laravel['modules']->getModulePath($this->getModuleName());
+    public function getDestinationFilePath() {
+        $path = $this->laravel['modules']->getModulePath($this->getModuleName());
 
         $panelPath = GenerateConfigReader::read('panel');
 
-        return $path . $panelPath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path.$panelPath->getPath().'/'.$this->getFileName().'.php';
     }
 
     /**
      * @return string
      */
-    protected function getFileName()
-    {
+    protected function getFileName() {
         return Str::studly($this->argument('name'));
     }
 
-    public function getDefaultNamespace() : string
-    {
+    public function getDefaultNamespace(): string {
         return $this->laravel['modules']->config('paths.generator.panel.path', 'panels');
     }
 
@@ -69,8 +64,7 @@ class PanelMakeCommand extends GeneratorCommand
      *
      * @return array
      */
-    protected function getArguments()
-    {
+    protected function getArguments() {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the panel.'],
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],

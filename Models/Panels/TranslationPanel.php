@@ -4,7 +4,6 @@ namespace Modules\Xot\Models\Panels;
 
 use Illuminate\Http\Request;
 //--- Services --
-use Modules\Xot\Services\RouteService;
 
 class TranslationPanel {
     /**

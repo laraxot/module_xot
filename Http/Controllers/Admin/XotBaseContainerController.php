@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 //---- services ---
-use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\PanelService as Panel;
+use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -29,14 +29,14 @@ abstract class XotBaseContainerController extends Controller {
             return;
         }
         $mod = \Module::find($params['module']);
-        if(is_object($mod)){
-            $mod_name=$mod->getName();
+        if (is_object($mod)) {
+            $mod_name = $mod->getName();
         }
 
         if (null == $mod) {
             if (Str::startsWith($params['module'], 'trasferte')) { //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
                 $mod = (object) ['name' => 'Trasferte'];
-                $mod_name='Trasferte';
+                $mod_name = 'Trasferte';
             }
         }
         $controller = '\Modules\\'.$mod_name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
@@ -65,8 +65,8 @@ abstract class XotBaseContainerController extends Controller {
         if (is_object($row) && \Auth::user()->cannot($method, $row)) {
             //ddd('non autorizzato ['.$method.']['.get_class($row).']');
             //return response()->deny('testxxx');
-            $msg='user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
-            abort(403,$msg);
+            $msg = 'user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
+            abort(403, $msg);
             //return response()->view('adm_theme::errors.403', [], 403);
         }
         //$request = Request::capture();
@@ -81,45 +81,45 @@ abstract class XotBaseContainerController extends Controller {
                 $request->validatePanel($panel);
             }
         }
-        if($this->container_last==false){
+        if (false == $this->container_last) {
             return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
         }
         //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
 
-        if($request->_act!=''){
-            $panel=$this->ContainerItem2Panel($this->container_last, $this->item_last);
-        }else{
-            $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+        if ('' != $request->_act) {
+            $panel = $this->ContainerItem2Panel($this->container_last, $this->item_last);
+        } else {
+            $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
         }
 
-            //ddd($this->item_last->n);
+        //ddd($this->item_last->n);
         return $panel->out(
             [
-                'is_ajax'=>$request->ajax(),
-                'method'=> $request->getMethod(),
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
             ]
         );
     }
 
-
-    public function ContainerItem2Panel($container,$item){
+    public function ContainerItem2Panel($container, $item) {
         $types = Str::camel(Str::plural($container));
-        if (is_object($item)){
-            if(method_exists($item,$types) ) {
+        if (is_object($item)) {
+            if (method_exists($item, $types)) {
                 $rows = $item->$types();
                 $related = $rows->getRelated();
                 $row = $related;
-            }else{
-                $rows=null;
-                $row=$item;
+            } else {
+                $rows = null;
+                $row = $item;
             }
-        }else{
+        } else {
             $row = xotModel($container);
-            $rows = $row;// o NULL ???
+            $rows = $row; // o NULL ???
         }
-        $panel=Panel::get($row);
+        $panel = Panel::get($row);
         //$panel->setRow($row);
         $panel->setRows($rows);
+
         return $panel;
     }
 }//end class

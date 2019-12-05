@@ -36,6 +36,5 @@ class ArtisanService {
         } catch (Exception $e) {
             return '<br/>'.$command.' non effettuato';
         }
-        
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Modules\Xot\Providers;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Foundation\AliasLoader; // per dizionario morph
+use Illuminate\Cache\TagSet;
+use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Translation\Translator;
-use Illuminate\Cache\TagSet;
-use Illuminate\Support\Collection;
 use Laravel\Scout\EngineManager; // per slegarmi da tntsearch
 use Modules\Xot\Engines\FullTextSearchEngine;
 use Modules\Xot\Engines\Opcache;
@@ -92,9 +92,10 @@ class XotServiceProvider extends XotBaseServiceProvider {
         });
     }
 
-    public function registerCacheOPCache(){
+    public function registerCacheOPCache() {
         Cache::extend('opcache', function () {
-            $store = new Opcache\Store;
+            $store = new Opcache\Store();
+
             return new Opcache\Repository($store, new TagSet($store));
         });
         // Extend Collection to implement __set_state magic method
@@ -103,6 +104,5 @@ class XotServiceProvider extends XotBaseServiceProvider {
                 return new Collection($array['items']);
             });
         }
-
     }
 }//end class

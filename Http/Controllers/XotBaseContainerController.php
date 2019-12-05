@@ -7,11 +7,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
-use Modules\Xot\Services\StubService; //4 guestPolicy
+use Modules\Theme\Services\ThemeService; //4 guestPolicy
 use Modules\Xot\Services\PanelService as Panel;
-use Modules\Theme\Services\ThemeService;
-
-
+use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -61,7 +59,7 @@ abstract class XotBaseContainerController extends Controller {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         //$request = Request::capture();
         $a = $this->init($params);
-        $controller = $this->controller; 
+        $controller = $this->controller;
         $row = $this->last;
         // ddd($this->authorize($method,$row));
         if (! is_object($row) && '' != $row && '' != config('xra.model.'.$row)) {
@@ -109,27 +107,27 @@ abstract class XotBaseContainerController extends Controller {
         if ('GET' != $request->getMethod()) {
             if (! $request->ajax()) {
                 $route_action = \Route::currentRouteAction();
-                $act=Str::after($route_action,'@');
+                $act = Str::after($route_action, '@');
                 //$rules=$panel->rules(['act'=>$act]);
                 /* -- questo funziona..
                 $request->merge(['published_at'=>\Carbon\Carbon::now()]);
                 */
                 //$request->validate($rules, $panel->rulesMessages());
-                $request->validatePanel($panel,$act);
+                $request->validatePanel($panel, $act);
             }
         }
         //return app($controller)->$method($request, $this->container_last, $this->item_last);
-        $controller_single=(substr($controller,0,-strlen('Controller')).'\\'.Str::studly($method).'Controller');
+        $controller_single = (substr($controller, 0, -strlen('Controller')).'\\'.Str::studly($method).'Controller');
         /*-- to do --
             non passare piu' request ma passare direttamente $data
         */
-        //  \Debugbar::disable(); 
-        $panel=app($controller)->$method($request, $this->container_last, $this->item_last);
+        //  \Debugbar::disable();
+        $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
 
         return $panel->out(
             [
-                'is_ajax'=>$request->ajax(),
-                'method'=> $request->getMethod(),
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
             ]
         );
         /*
@@ -144,14 +142,13 @@ abstract class XotBaseContainerController extends Controller {
         if ('GET' == $request->getMethod()) {
             return $html;
         }
-        
+
         if ($request->ajax()) {
             return json_encode(['msg' => 'ok','html'=>(string)$html]);
         } else {
             return $html;
         }
         */
-        
     }
 
     /*------------

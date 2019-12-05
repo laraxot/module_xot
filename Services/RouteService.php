@@ -5,9 +5,8 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
-use Route;
-
 use Modules\Xot\Services\PanelService as Panel;
+use Route;
 
 class RouteService {
     protected static $namespace_start = '';
@@ -321,14 +320,14 @@ class RouteService {
             $route_params = is_object($route_current) ? $route_current->parameters() : [];
         }
         list($containers, $items) = params2ContainerItem($route_params);
-        $container_types=[];
-        foreach($containers as $i=>$container){
-            $types=Str::camel(Str::plural($container));
-            if($i==0){
-                $container_types[$i]=config('xra.model.'.$container);
-            }else{
-                $rows=$items[$i-1]->$types();
-                $container_types[$i]=get_class($rows->getRelated());    
+        $container_types = [];
+        foreach ($containers as $i => $container) {
+            $types = Str::camel(Str::plural($container));
+            if (0 == $i) {
+                $container_types[$i] = config('xra.model.'.$container);
+            } else {
+                $rows = $items[$i - 1]->$types();
+                $container_types[$i] = get_class($rows->getRelated());
             }
         }
         $container_i = collect($container_types)->search($model);
@@ -343,11 +342,12 @@ class RouteService {
         if($item_i>0){
             return $item_i;
         }
-        
+
         $container_i = collect($containers)->search($name);
         */
         return $container_i * 1;
     }
+
     /*
     public static function routenameN($params) {
         $routename = \Route::currentRouteName();
@@ -481,17 +481,17 @@ class RouteService {
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         //$routename = \Request::route()->getName();
         $cont_i = RouteService::containerN(['model' => get_class($model), 'route_params' => $route_params]);
-        
-        $parent=$model->parent;
-        if(is_object($parent)){
-            $parent_cont_i=RouteService::containerN(['model' => get_class($parent), 'route_params' => $route_params]);
-            $route_params['container'.($parent_cont_i)]=Panel::get($parent)->postType();
-            $route_params['item'.($parent_cont_i)]=$parent;
-            if($parent_cont_i==$cont_i){
-                $cont_i++;
+
+        $parent = $model->parent;
+        if (is_object($parent)) {
+            $parent_cont_i = RouteService::containerN(['model' => get_class($parent), 'route_params' => $route_params]);
+            $route_params['container'.($parent_cont_i)] = Panel::get($parent)->postType();
+            $route_params['item'.($parent_cont_i)] = $parent;
+            if ($parent_cont_i == $cont_i) {
+                ++$cont_i;
             }
         }
-        
+
         $tmp = [];
         if (in_admin()) {
             $tmp[] = 'admin';
@@ -502,22 +502,20 @@ class RouteService {
         $tmp[] = $act;
         $routename = implode('.', $tmp);
         $route_params['lang'] = \App::getLocale();
-        $post_type=Panel::get($model)->postType();
+        $post_type = Panel::get($model)->postType();
         //if(!isset($route_params['container'.($cont_i)]) ){
-            $route_params['container'.($cont_i)] = $post_type;
+        $route_params['container'.($cont_i)] = $post_type;
         //}
 
-        $route_key=$model->getRouteKeyName();
-        $route_key_val=$model->$route_key;
-        if($route_key_val=='' && $model->getKey()!=''){
-            
+        $route_key = $model->getRouteKeyName();
+        $route_key_val = $model->$route_key;
+        if ('' == $route_key_val && '' != $model->getKey()) {
             ddd([
-                'route_key'=>$route_key,
-                'class'=>get_class($model),
-                'primary_name'=>$model->getKeyName(),
-                'primary_value'=>$model->getKey(),
+                'route_key' => $route_key,
+                'class' => get_class($model),
+                'primary_name' => $model->getKeyName(),
+                'primary_value' => $model->getKey(),
             ]);
-
         }
         $route_params['item'.($cont_i)] = $route_key_val;
 
@@ -570,10 +568,10 @@ class RouteService {
         $params['container'.$cont_i] = $row_name;
         $params['item'.$cont_i] = $row;
         $params['container'.($cont_i + 1)] = $related_name;
-        try{
-            $route=route($routename, $params, false);
-        }catch(\Exception $e){
-            $route='#['.__LINE__.']['.__FILE__.']';
+        try {
+            $route = route($routename, $params, false);
+        } catch (\Exception $e) {
+            $route = '#['.__LINE__.']['.__FILE__.']';
         }
 
         return $route;

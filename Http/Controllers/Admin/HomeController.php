@@ -9,7 +9,6 @@ use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ArtisanService;
 
 class HomeController extends Controller {
-    
     public function index(Request $request) {
         $out = ArtisanService::act($request->act);
         if ('' != $out) {
@@ -19,12 +18,12 @@ class HomeController extends Controller {
         $home_view = $params['module'].'::admin.index';
         if (\View::exists($home_view)) {
             return ThemeService::view($home_view);
-        } 
+        }
+
         return ThemeService::view('xot::admin.home');
     }
 
     public function redirect(Request $request) {
         return redirect($request->url);
     }
-    
 }

@@ -21,6 +21,7 @@ class ImageService {
         if (null === self::$instance) {
             self::$instance = new self($params);
         }
+
         return self::$instance;
     }
 

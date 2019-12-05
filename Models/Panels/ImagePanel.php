@@ -4,7 +4,6 @@ namespace Modules\Xot\Models\Panels;
 
 use Illuminate\Http\Request;
 //--- Services --
-use Modules\Xot\Services\RouteService;
 
 class ImagePanel extends XotBasePanel {
     /**
@@ -158,7 +157,7 @@ class ImagePanel extends XotBasePanel {
      */
     public function actions(Request $request = null) {
         return [
-            new Actions\ChunkUpload,
+            new Actions\ChunkUpload(),
         ];
     }
 }
