@@ -88,7 +88,7 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function edit(Request $request, $container, $item) {
-        return Panel::get($item);                
+        return Panel::get($item);
     }
 
     public function update(Request $request, $container, $item) {
@@ -160,7 +160,7 @@ trait CrudContainerItemNoPostTrait {
     }
 
     public function updateRelationshipsBelongsToMany($params){
-        
+
     }
 
     public function updateRelationshipsBelongsTo($params) {
@@ -255,7 +255,7 @@ trait CrudContainerItemNoPostTrait {
         return $data;
     }
     */
-    
+
 
     public function storeRelationshipsMorphOne($params) {
         extract($params);
@@ -271,7 +271,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function storeRelationshipsMorphToMany($params) {
         extract($params);
-        
+
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {
@@ -300,7 +300,7 @@ trait CrudContainerItemNoPostTrait {
         }
     }
 
-    
+
 
     public function indexAttach(Request $request, $container, $item) {
         if ('POST' == $request->getMethod()) {
@@ -422,7 +422,7 @@ trait CrudContainerItemNoPostTrait {
         $items_key = $related->getKeyName();
         //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
-        
+
         if (! isset($data['to'])) {
             $data['to'] = [];
         }
@@ -449,8 +449,10 @@ trait CrudContainerItemNoPostTrait {
             echo '<h3>not exists ['.$name.'] on config xra.model</h3>';
             ddd(config('xra.model'));
         }
-        $row = new $model();
-
+        if(class_basename($model)=='BaseModel'){
+            return abort('403','BaseModel is only for Abstract!');
+        }
+        $row=new $model();
         return $row;
     }
 

@@ -241,7 +241,11 @@ if (! \function_exists('getModuleModels')) {
                 $tmp->class = $ns.'\\'.$name;
                 $name = Str::snake($name);
                 $tmp->name = $name;
-                $data[$tmp->name] = $tmp->class;
+                $reflection_class=new ReflectionClass($tmp->class);
+                if(!$reflection_class->isAbstract()){
+                    $data[$tmp->name] = $tmp->class;
+                }
+
             }
         }
 
@@ -347,7 +351,7 @@ if (! \function_exists('transFields')) {
 
         $attributes = $params;
         $attrs_default = ['class' => 'form-control', 'placeholder' => $ris->placeholder];
-        
+
         $ris->attributes = collect(array_merge($attrs_default, $attributes,$params['attributes']))
                         ->filter(function ($item, $key) {
                             return in_array($key, ['class', 'placeholder', 'readonly']) || Str::startsWith($key, 'data-');
@@ -356,7 +360,7 @@ if (! \function_exists('transFields')) {
                         ->all();
         $ris->params = $params;
 
-        
+
 
         return $ris;
     }
@@ -591,15 +595,15 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
          * @return string        The constructed URL
          */
         function build_url(array $parts) {
-            return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '') . 
-                ((isset($parts['user']) || isset($parts['host'])) ? '//' : '') . 
-                (isset($parts['user']) ? "{$parts['user']}" : '') . 
-                (isset($parts['pass']) ? ":{$parts['pass']}" : '') . 
-                (isset($parts['user']) ? '@' : '') . 
-                (isset($parts['host']) ? "{$parts['host']}" : '') . 
-                (isset($parts['port']) ? ":{$parts['port']}" : '') . 
-                (isset($parts['path']) ? "{$parts['path']}" : '') . 
-                (isset($parts['query']) ? "?{$parts['query']}" : '') . 
+            return (isset($parts['scheme']) ? "{$parts['scheme']}:" : '') .
+                ((isset($parts['user']) || isset($parts['host'])) ? '//' : '') .
+                (isset($parts['user']) ? "{$parts['user']}" : '') .
+                (isset($parts['pass']) ? ":{$parts['pass']}" : '') .
+                (isset($parts['user']) ? '@' : '') .
+                (isset($parts['host']) ? "{$parts['host']}" : '') .
+                (isset($parts['port']) ? ":{$parts['port']}" : '') .
+                (isset($parts['path']) ? "{$parts['path']}" : '') .
+                (isset($parts['query']) ? "?{$parts['query']}" : '') .
                 (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
         }
     }
