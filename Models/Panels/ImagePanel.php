@@ -3,6 +3,7 @@
 namespace Modules\Xot\Models\Panels;
 
 use Illuminate\Http\Request;
+
 //--- Services --
 
 class ImagePanel extends XotBasePanel {
