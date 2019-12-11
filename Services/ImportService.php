@@ -313,7 +313,11 @@ class ImportService {
             $linked->latitude = $loc_obj->geometry->location->lat;
             $linked->longitude = $loc_obj->geometry->location->lng;
         } else {
-            dd($loc_obj);
+            $msg=[
+                'address'=>$address,
+                'obj'=>$loc_obj,
+            ];
+            ddd($msg);
         }
 
         return \get_object_vars($linked);
