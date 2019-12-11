@@ -314,6 +314,7 @@ class ImportService {
             $linked->longitude = $loc_obj->geometry->location->lng;
         } else {
             $msg=[
+                'id'=>isset($id)?$id:'',
                 'address'=>$address,
                 'obj'=>$loc_obj,
             ];
