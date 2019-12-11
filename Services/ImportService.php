@@ -318,7 +318,8 @@ class ImportService {
                 'address'=>$address,
                 'obj'=>$loc_obj,
             ];
-            ddd($msg);
+            throw new \Exception('address not valide');
+            //ddd($msg);
         }
 
         return \get_object_vars($linked);
