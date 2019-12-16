@@ -16,10 +16,12 @@
         "natxet/cssmin": "^3.0",
         "patchwork/jsqueeze": "^2.0",
         "phpoffice/phpspreadsheet": "^1.6",
+        "phpoffice/phpword": "^0.17.0",
         "ptachoire/cssembed": "^1.0",
         "spipu/html2pdf": "^5.2",
         "symfony/dom-crawler": "^4.2",
         "twig/twig": "^2.7",
+        "wrklst/docxmustache": "^0.0.33",
         "zendframework/zend-config": "^3.2"
     },
     "config": {
