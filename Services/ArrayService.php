@@ -42,7 +42,12 @@ class ArrayService {
             $data = [];
         }
         $spreadsheet = new Spreadsheet();
+        //----
+        $ltr='A1';
+        //$res=$spreadsheet->getActiveSheet()->getStyle($ltr)->getAlignment()->setWrapText(true);
+        //----
         $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle($ltr)->getAlignment()->setWrapText(true);
         $firstrow = collect($data)->first();
         if (! is_array($firstrow)) {
             $firstrow = [];
