@@ -84,8 +84,14 @@ abstract class XotBaseContainerController extends Controller {
         }
         if (! $authorized && ! \Auth::check()) {
             $msg = ['msg' => 'ok', 'html' => '<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
+            if ($request->ajax()) {
+                return response()->json($msg, 200);
+            }
+            $referer=url()->current();
+            $referer=\Request::path();
+            return redirect()->route('login',['lang'=>\App::getLocale(),'referer'=>$referer])
+                            ->withErrors(['active' => 'login before']);
 
-            return response()->json($msg, 200);
         }
 
         if (! $authorized) {
