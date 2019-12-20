@@ -87,11 +87,11 @@ abstract class XotBaseContainerController extends Controller {
             if ($request->ajax()) {
                 return response()->json($msg, 200);
             }
-            $referer=url()->current();
-            $referer=\Request::path();
-            return redirect()->route('login',['lang'=>\App::getLocale(),'referer'=>$referer])
-                            ->withErrors(['active' => 'login before']);
+            $referer = url()->current();
+            $referer = \Request::path();
 
+            return redirect()->route('login', ['lang' => \App::getLocale(), 'referer' => $referer])
+                            ->withErrors(['active' => 'login before']);
         }
 
         if (! $authorized) {

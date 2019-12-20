@@ -313,10 +313,10 @@ class ImportService {
             $linked->latitude = $loc_obj->geometry->location->lat;
             $linked->longitude = $loc_obj->geometry->location->lng;
         } else {
-            $msg=[
-                'id'=>isset($id)?$id:'',
-                'address'=>$address,
-                'obj'=>$loc_obj,
+            $msg = [
+                'id' => isset($id) ? $id : '',
+                'address' => $address,
+                'obj' => $loc_obj,
             ];
             throw new \Exception('address not valide');
             //ddd($msg);

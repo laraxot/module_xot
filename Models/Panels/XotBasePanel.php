@@ -45,7 +45,7 @@ abstract class XotBasePanel {
     }
 
     public function optionId($row) {
-        return $row->id;
+        return $row->getKey();
     }
 
     /**
@@ -53,6 +53,16 @@ abstract class XotBasePanel {
      */
     public function optionLabel($row) {
         return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
+    }
+
+    public function optionsSelect() {
+        $opts=[];
+        foreach($this->rows as $row){
+            $id=$this->optionId($row);
+            $label=$this->optionLabel($row);
+            $opts[$id]=$label;
+        }
+        return $opts;
     }
 
     public function options($data = null) {

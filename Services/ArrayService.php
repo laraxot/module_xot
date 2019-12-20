@@ -43,7 +43,7 @@ class ArrayService {
         }
         $spreadsheet = new Spreadsheet();
         //----
-        $ltr='A1';
+        $ltr = 'A1';
         //$res=$spreadsheet->getActiveSheet()->getStyle($ltr)->getAlignment()->setWrapText(true);
         //----
         $sheet = $spreadsheet->getActiveSheet();

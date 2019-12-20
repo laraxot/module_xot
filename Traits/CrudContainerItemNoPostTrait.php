@@ -175,8 +175,8 @@ trait CrudContainerItemNoPostTrait {
         extract($params);
         $rows = $model->$name();
         if ($rows->exists()) {
-            //$model->$name()->update($data);
-            $model->$name->update($data);
+            $model->$name()->update($data);
+        //$model->$name->update($data);
         } else {
             $this->storeRelationshipsBelongsTo($params);
         }
@@ -242,6 +242,7 @@ trait CrudContainerItemNoPostTrait {
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
         $related = $rows->create($data);
+        //$model->$name()->save($related); //Call to undefined method Illuminate\Database\Eloquent\Relations\BelongsTo::save()
         if (! $model->$name()->exists()) {//collegamento non riuscito
             $pk_own = $rows->getOwnerKeyName();
             $pk_fore = $rows->getForeignKeyName();

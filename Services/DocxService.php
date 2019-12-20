@@ -3,7 +3,6 @@
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\Storage;
-
 /*
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -11,7 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 \PhpOffice\PhpWord\TemplateProcessor($file);
 https://stackoverflow.com/questions/41296206/read-and-replace-contents-in-docx-word-file
-composer require phpoffice/phpword 
+composer require phpoffice/phpword
 https://github.com/wrklst/docxmustache
 
 https://code-boxx.com/convert-html-to-docx-using-php/
@@ -22,11 +21,11 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class DocxService {
-	public $docx_input;
+    public $docx_input;
 
-	private static $instance = null;
+    private static $instance = null;
 
-	public static function getInstance() {
+    public static function getInstance() {
         if (null === self::$instance) {
             self::$instance = new self();
         }
@@ -34,41 +33,38 @@ class DocxService {
         return self::$instance;
     }
 
+    public static function setDocxInput($filename) {
+        $obj = self::getInstance();
+        $obj->docx_input = $filename;
 
-	public static function setDocxInput($filename){
-		$obj=self::getInstance();
-		$obj->docx_input=$filename;
-		return $obj;
-	}
+        return $obj;
+    }
 
-	public static function setValues($values){
-		$obj=self::getInstance();
-		$obj->values=$values;
-		return $obj;
-	}
+    public static function setValues($values) {
+        $obj = self::getInstance();
+        $obj->values = $values;
 
-	public function out($params=[]){
-		extract($params);
-		require __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
+        return $obj;
+    }
 
-		//return response()->download($this->docx_input);
-		$tpl = new TemplateProcessor($this->docx_input);
-		//$tpl->setValue('customer_title', 'test');
-		$tpl->setValues($this->values);
+    public function out($params = []) {
+        extract($params);
+        require __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
 
-		try{
-        	$tpl->saveAs(storage_path('tmp.docx'));
-    	}catch (\Exception $e){
-        	//handle exception
-        	ddd($e);
-    	}
-    	return response()->download(storage_path('tmp.docx'));
+        //return response()->download($this->docx_input);
+        $tpl = new TemplateProcessor($this->docx_input);
+        //$tpl->setValue('customer_title', 'test');
+        $tpl->setValues($this->values);
 
-	}
+        try {
+            $tpl->saveAs(storage_path('tmp.docx'));
+        } catch (\Exception $e) {
+            //handle exception
+            ddd($e);
+        }
 
-
-
-
+        return response()->download(storage_path('tmp.docx'));
+    }
 }//end class
 
 /*
@@ -98,7 +94,6 @@ $templateProcessor->setValue('rowNumber#8', htmlspecialchars('8'));
 $templateProcessor->setValue('rowNumber#9', htmlspecialchars('9'));
 $templateProcessor->setValue('rowNumber#10', htmlspecialchars('10'));
 */
-
 
 /*
 // Creating the new document...
@@ -150,14 +145,14 @@ $full_path = 'template.docx';
         // In the document.xml file located in the word directory.
 
         $key_file_name = 'word/document.xml';
-        $message = $zip_val->getFromName($key_file_name);               
+        $message = $zip_val->getFromName($key_file_name);
 
         $timestamp = date('d-M-Y H:i:s');
 
         // this data Replace the placeholders with actual values
         $message = str_replace("{officeaddress}", "onlinecode org", $message);
-        $message = str_replace("{Ename}", "ingo@onlinecode.org", $message); 
-        $message = str_replace("{name}", "www.onlinecode.org", $message);   
+        $message = str_replace("{Ename}", "ingo@onlinecode.org", $message);
+        $message = str_replace("{name}", "www.onlinecode.org", $message);
 
         //Replace the content with the new content created above.
         $zip_val->addFromString($key_file_name, $message);
