@@ -632,3 +632,60 @@ if (! function_exists('str_contains')) {
         return Str::contains($str, $str1);
     }
 }
+
+if (! function_exists('getRelationships')) {
+    function getRelationships($model){ //working
+        $methods = get_class_methods($model);
+        $data=[];
+        foreach ($methods as $method) {
+            $reflection = new \ReflectionMethod($model, $method);
+            $args = $reflection->getParameters();
+            if(count($args)==0 && $reflection->class==get_class($model) ){
+                try {
+                    $return = $reflection->invoke($model);
+                    $check=($return instanceof \Illuminate\Database\Eloquent\Relations\Relation);
+                    if($check){
+                        $related_model=(new \ReflectionClass($return->getRelated()))->getName();
+                        $msg=[
+                            'name'=>$reflection->name,
+                            'type'=>class_basename($return),
+                            //'check'=>$check,
+                            //$msg['type']=(new \ReflectionClass($return))->getShortName();
+                            'model'=>$related_model,
+                        ];
+                        $data[]=$msg;
+                    }
+                } catch(ErrorException $e) {}
+            }
+        }
+        return ($data);
+    }
+}
+
+    /*
+    public function getRelationshipsV2($model){
+        $relationships = [];
+
+        foreach((new \ReflectionClass($model))->getMethods(\ReflectionMethod::IS_PUBLIC) as $method){
+            if ($method->class != get_class($model) ||
+                !empty($method->getParameters()) ||
+                $method->getName() == __FUNCTION__) {
+                continue;
+            }
+
+            try {
+                $return = $method->invoke($model);
+
+                if ($return instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+                    $relationships[$method->getName()] = [
+                        'name' => $method->getName(),
+                        'type' => (new \ReflectionClass($return))->getShortName(),
+                        'model' => (new \ReflectionClass($return->getRelated()))->getName()
+                    ];
+                }
+            } catch(ErrorException $e) {}
+        }
+
+        return $relationships;
+    }
+    */

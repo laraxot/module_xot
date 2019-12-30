@@ -3,6 +3,7 @@
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 /*
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Csv;
@@ -65,6 +66,42 @@ class DocxService {
 
         return response()->download(storage_path('tmp.docx'));
     }
+
+
+    public static function rows2Data($row, $prefix) {
+        if(!is_object($row)){
+            return [];
+        }
+        $arr=$row->toArray();
+        $data = collect($arr)->map(function ($item, $key) use ($row,$prefix) {
+            if (is_object($row->$key)) {
+                if ($row->$key instanceof Carbon) {
+                    $item = $row->$key->format('d/m/Y');
+                    return [
+                        $prefix.'.'.$key => $item,
+                        $prefix.'.'.$key.'_year' => $row->$key->format('Y'),
+                            ];
+                }
+            }
+
+            return [$prefix.'.'.$key => $item];
+        })->collapse()->all();
+        
+        if(isset($data[$prefix.'.postal_code'])){
+            $data[$prefix.'.zip_code']=$data[$prefix.'.postal_code'];
+        }
+
+        if( isset($data[$prefix.'.route'])  
+            && isset($data[$prefix.'.locality'])  
+            && isset($data[$prefix.'.zip_code'])  
+            //&& !isset($data[$prefix.'.full_address'])
+        ){
+            
+            $data[$prefix.'.full_address']=$data[$prefix.'.route'].', '.$data[$prefix.'.street_number'].' - '.$data[$prefix.'.zip_code'].' '.$data[$prefix.'.locality'].' ('.$data[$prefix.'.administrative_area_level_2_short'].')';
+        }
+        return $data;
+    }
+
 }//end class
 
 /*
