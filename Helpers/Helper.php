@@ -634,31 +634,36 @@ if (! function_exists('str_contains')) {
 }
 
 if (! function_exists('getRelationships')) {
-    function getRelationships($model){ //working
+    function getRelationships($model) { //working
         $methods = get_class_methods($model);
-        $data=[];
+        $data = [];
+        if (! is_array($methods)) {
+            return $data;
+        }
         foreach ($methods as $method) {
             $reflection = new \ReflectionMethod($model, $method);
             $args = $reflection->getParameters();
-            if(count($args)==0 && $reflection->class==get_class($model) ){
+            if (0 == count($args) && $reflection->class == get_class($model)) {
                 try {
                     $return = $reflection->invoke($model);
-                    $check=($return instanceof \Illuminate\Database\Eloquent\Relations\Relation);
-                    if($check){
-                        $related_model=(new \ReflectionClass($return->getRelated()))->getName();
-                        $msg=[
-                            'name'=>$reflection->name,
-                            'type'=>class_basename($return),
+                    $check = ($return instanceof \Illuminate\Database\Eloquent\Relations\Relation);
+                    if ($check) {
+                        $related_model = (new \ReflectionClass($return->getRelated()))->getName();
+                        $msg = [
+                            'name' => $reflection->name,
+                            'type' => class_basename($return),
                             //'check'=>$check,
                             //$msg['type']=(new \ReflectionClass($return))->getShortName();
-                            'model'=>$related_model,
+                            'model' => $related_model,
                         ];
-                        $data[]=$msg;
+                        $data[] = $msg;
                     }
-                } catch(ErrorException $e) {}
+                } catch (ErrorException $e) {
+                }
             }
         }
-        return ($data);
+
+        return $data;
     }
 }
 

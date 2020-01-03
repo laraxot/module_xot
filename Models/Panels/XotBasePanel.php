@@ -56,12 +56,13 @@ abstract class XotBasePanel {
     }
 
     public function optionsSelect() {
-        $opts=[];
-        foreach($this->rows as $row){
-            $id=$this->optionId($row);
-            $label=$this->optionLabel($row);
-            $opts[$id]=$label;
+        $opts = [];
+        foreach ($this->rows as $row) {
+            $id = $this->optionId($row);
+            $label = $this->optionLabel($row);
+            $opts[$id] = $label;
         }
+
         return $opts;
     }
 
@@ -886,11 +887,13 @@ abstract class XotBasePanel {
         [$containers,$items] = params2ContainerItem($route_params);
         $data = [];
         //$items[]=$this->row;
-        if(!is_array($items)) return [];
+        if (! is_array($items)) {
+            return [];
+        }
         //array_unique($items);
-        
+
         foreach ($items as $k => $item) {
-            $panel = Panel::get($item); 
+            $panel = Panel::get($item);
             $tabs = $panel->tabs();
             $row = [];
             if (0 == $k) {
