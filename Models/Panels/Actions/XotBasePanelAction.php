@@ -68,13 +68,16 @@ abstract class XotBasePanelAction {
 
     //end btnItem
 
-    public function updateRow() {
+    public function updateRow($params=[]) {
         $row = $this->row;
+        extract($params);
         $panel = Panel::get($row);
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $request->validatePanel($panel);
         $data = $request->all();
         $res = tap($row)->update($data);
+        //--- manca update relationship !
+        //----
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!');
 
         return $this->handle();

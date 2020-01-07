@@ -267,7 +267,7 @@ trait CrudContainerItemNoPostTrait {
 
     public function storeRelationshipsMorphOne($params) {
         extract($params);
-        if (! isset($data['lang'])) {
+        if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = \App::getLocale();
         }
         if ($model->$name()->exists()) {
