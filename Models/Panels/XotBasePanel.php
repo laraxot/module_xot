@@ -776,6 +776,7 @@ abstract class XotBasePanel {
         $url = RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
         $data = [];
         $filters = $this->filters();
+
         foreach ($filters as $k => $v) {
             $field_value = $this->row->{$v->field_name};
             if (! isset($v->where_method)) {
@@ -785,7 +786,12 @@ abstract class XotBasePanel {
 
             $filters[$k]->field_value = $field_value;
             switch ($where) {
-                case 'Year': $value = $field_value->year; break;
+                case 'Year': 
+                    $value = $field_value->year;
+                break;
+                case 'ofYear':
+                    $value=\Request::input('year',date('Y'));
+                break;
                 case 'Month': $value = $field_value->month; break;
                 default: $value = $field_value; break;
             }
