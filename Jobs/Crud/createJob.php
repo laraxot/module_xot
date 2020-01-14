@@ -3,21 +3,20 @@
 namespace Modules\Xot\Jobs\Crud;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use Illuminate\Support\Arr;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-
 //----------- Requests ----------
-use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class createJob implements ShouldQueue{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+class createJob implements ShouldQueue {
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     use Traits\CommonTrait;
 
     protected $container;
@@ -31,7 +30,7 @@ class createJob implements ShouldQueue{
      *
      * @return void
      */
-    public function __construct($container,$item,$data=null){
+    public function __construct($container, $item, $data = null) {
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();
@@ -44,10 +43,9 @@ class createJob implements ShouldQueue{
         $panel = Panel::get($row);
         $panel->setRows($rows);
 
-        $this->row=$row;
-        $this->rows=$rows;
-        $this->panel=$panel;
-        
+        $this->row = $row;
+        $this->rows = $rows;
+        $this->panel = $panel;
     }
 
     /**
@@ -55,8 +53,7 @@ class createJob implements ShouldQueue{
      *
      * @return void
      */
-    public function handle(){
+    public function handle() {
         return $this->panel;
     }
-    
 }

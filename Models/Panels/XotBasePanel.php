@@ -786,11 +786,11 @@ abstract class XotBasePanel {
 
             $filters[$k]->field_value = $field_value;
             switch ($where) {
-                case 'Year': 
+                case 'Year':
                     $value = $field_value->year;
                 break;
                 case 'ofYear':
-                    $value=\Request::input('year',date('Y'));
+                    $value = \Request::input('year', date('Y'));
                 break;
                 case 'Month': $value = $field_value->month; break;
                 default: $value = $field_value; break;

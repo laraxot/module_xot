@@ -3,21 +3,20 @@
 namespace Modules\Xot\Jobs\Crud;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use Illuminate\Support\Arr;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-
 //----------- Requests ----------
-use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class StoreJob implements ShouldQueue{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+class StoreJob implements ShouldQueue {
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     use Traits\CommonTrait;
 
     protected $container;
@@ -31,12 +30,12 @@ class StoreJob implements ShouldQueue{
      *
      * @return void
      */
-    public function __construct($container,$item,$data=null){
-        $this->container=$container;
-        $this->item=$item;
-        
+    public function __construct($container, $item, $data = null) {
+        $this->container = $container;
+        $this->item = $item;
+
         $types = Str::camel(Str::plural($container));
-        if (is_object($item)) { 
+        if (is_object($item)) {
             $rows = $item->$types();
             $related = $rows->getRelated();
             $row = $related;
@@ -44,13 +43,13 @@ class StoreJob implements ShouldQueue{
             $rows = null;
             $row = xotModel($container);
         }
-        $this->row=$row;
-        if($data==null){
-            $data=$this->getData();
+        $this->row = $row;
+        if (null == $data) {
+            $data = $this->getData();
         }
-        $this->data=$data;
-        $this->types=$types;
-        $this->rows=$rows;
+        $this->data = $data;
+        $this->types = $types;
+        $this->rows = $rows;
     }
 
     /**
@@ -58,10 +57,11 @@ class StoreJob implements ShouldQueue{
      *
      * @return void
      */
-    public function handle(){
-        $row=$this->row;
-        $data=$this->data;
-        $types=$this->types;
+    public function handle() {
+        $row = $this->row;
+        $data = $this->data;
+        $types = $this->types;
+        ddd($data);
         //---------------------------
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
             $data['lang'] = \App::getLocale();
@@ -69,9 +69,9 @@ class StoreJob implements ShouldQueue{
 
         $row = $row->fill($data);
         $row->save();
-        $panel=Panel::get($row);
+        $panel = Panel::get($row);
 
-        if(is_object($this->item)){
+        if (is_object($this->item)) {
             $pivot_data = [];
             if (isset($data['pivot'])) {
                 $pivot_data = $data['pivot'];
@@ -79,13 +79,15 @@ class StoreJob implements ShouldQueue{
             $tmp = $item->$types()->save($item_new, $pivot_data);
         }
         $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'store']);
-         if (method_exists($panel, 'storeCallback')) {
+        if (method_exists($panel, 'storeCallback')) {
             $row = $panel->storeCallback(['row' => $row, 'data' => $data]);
         }
         \Session::flash('status', 'creato ! ['.$row->getKey().']!');
-        return $panel;
-    }//end handle
 
+        return $panel;
+    }
+
+    //end handle
 
     public function storeRelationshipsPivot($params) {
         /*
@@ -173,10 +175,4 @@ class StoreJob implements ShouldQueue{
             }
         }
     }
-
-
-
-
-
 }//end storeJob
-

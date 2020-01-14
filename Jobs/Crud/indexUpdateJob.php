@@ -3,24 +3,22 @@
 namespace Modules\Xot\Jobs\Crud;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use Illuminate\Support\Arr;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
-
 //----------- Requests ----------
-use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-
 //--- to do ---
 
-class IndexUpdateJob implements ShouldQueue{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+class IndexUpdateJob implements ShouldQueue {
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     use Traits\CommonTrait;
 
     protected $container;
@@ -34,23 +32,23 @@ class IndexUpdateJob implements ShouldQueue{
      *
      * @return void
      */
-    public function __construct($container,$item,$data=null){
-        $this->container=$container;
-        $this->item=$item;
-        
-        if(!is_object($item)){
+    public function __construct($container, $item, $data = null) {
+        $this->container = $container;
+        $this->item = $item;
+
+        if (! is_object($item)) {
             $row = xotModel($container);
             $rows = $row;
-        }else{
+        } else {
             $types = Str::camel(Str::plural($container));
             $rows = $item->$types();
             $row = $rows->getRelated();
         }
-        $this->row=$row;
-        $this->rows=$rows;
-        $this->panel=Panel::get($row);
+        $this->row = $row;
+        $this->rows = $rows;
+        $this->panel = Panel::get($row);
         $this->panel->setRows($rows);
-       //ddd($this->panel);
+        //ddd($this->panel);
         /*
         if($data==null){
             //$data=$this->getData();
@@ -64,9 +62,7 @@ class IndexUpdateJob implements ShouldQueue{
      *
      * @return void
      */
-    public function handle(){
-       
-
+    public function handle() {
         return $this->panel;
     }
 }

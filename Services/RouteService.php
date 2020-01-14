@@ -518,11 +518,10 @@ class RouteService {
             ]);
         }
         $route_params['item'.($cont_i)] = $route_key_val;
-        try{
+        try {
             $url = route($routename, $route_params);
-        }catch(\Exception $e){
-            $url='#routename_err['.__FILE__.']['.__LINE__.']';
-
+        } catch (\Exception $e) {
+            $url = '#routename_err['.__FILE__.']['.__LINE__.']';
         }
         if (Str::endsWith($url, '?')) {
             $url = Str::before($url, '?');

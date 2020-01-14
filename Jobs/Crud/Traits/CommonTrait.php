@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Xot\Jobs\Crud\Traits;
 
 //----------- Requests ----------
@@ -7,12 +8,12 @@ use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
 trait CommonTrait {
-
-	public function getData(){
+    public function getData() {
         $panel = Panel::get($this->row);
         $request = XotRequest::capture();
         $request->validatePanel($panel);
         $data = $request->all();
+
         return $data;
     }
 

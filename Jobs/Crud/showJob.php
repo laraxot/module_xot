@@ -3,21 +3,19 @@
 namespace Modules\Xot\Jobs\Crud;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 //----------- Requests ----------
-use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class showJob implements ShouldQueue{
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+class showJob implements ShouldQueue {
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     use Traits\CommonTrait;
 
     protected $container;
@@ -31,13 +29,12 @@ class showJob implements ShouldQueue{
      *
      * @return void
      */
-    public function __construct($container,$item,$data=null){
-        $this->container=$container;
-        $this->item=$item;
-        $this->row=$item;
-        
-        $this->panel=Panel::get($this->row);
-        
+    public function __construct($container, $item, $data = null) {
+        $this->container = $container;
+        $this->item = $item;
+        $this->row = $item;
+
+        $this->panel = Panel::get($this->row);
     }
 
     /**
@@ -45,8 +42,7 @@ class showJob implements ShouldQueue{
      *
      * @return void
      */
-    public function handle(){
+    public function handle() {
         return $this->panel;
     }
-    
 }
