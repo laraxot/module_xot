@@ -1083,12 +1083,16 @@ abstract class XotBasePanel {
     }
 
     public function pdf($params = []) {
+        if(!isset($params['view_params'])){
+            $params['view_params']=[];
+        }
         $view = ThemeService::getView(); //progressioni::admin.schede.show
         $view .= '.pdf';
         $html = view($view)
                     ->with('view', $view)
                     ->with('row', $this->row)
                     ->with('rows', $this->rows)
+                    ->with($params['view_params'])
                     ;
         //ddd($this->rows->get());
         if (request()->input('debug')) {
