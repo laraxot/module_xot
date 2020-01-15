@@ -119,4 +119,14 @@ abstract class XotBaseRequest extends FormRequest {
 
         return $value_new;
     }
+
+    public function ConvDateTime2Fields($field, $value) {
+        if (null == $value) {
+            return $value;
+        }
+        $value_new = Carbon::createFromFormat('d/m/Y H:i', $value);
+
+        return $value_new;    
+    }
+
 }
