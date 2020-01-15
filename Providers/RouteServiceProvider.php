@@ -64,7 +64,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
         for ($i = 0; $i < 4; ++$i) {
             $container_name = 'container'.$i;
-            $router->pattern($container_name,$pattern_test[0]);
+            //$router->pattern($container_name,$pattern_test[0]);
         }
     }
 

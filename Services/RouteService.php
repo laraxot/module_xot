@@ -203,11 +203,11 @@ class RouteService {
         foreach ($array as $k => $v) {
             $group_opts = self::getGroupOpts($v, $namespace);
             $v['group_opts'] = $group_opts;
+            self::createRouteResource($v, $namespace);
             Route::group($group_opts, function () use ($v,$namespace,$curr) {
                 self::createRouteActs($v, $namespace, $curr);
                 self::createRouteSubs($v, $namespace, $curr);
             });
-            self::createRouteResource($v, $namespace);
         } //end foreach
     }
 
@@ -220,7 +220,11 @@ class RouteService {
         }
         $opts = self::getResourceOpts($v, $namespace);
         $controller = self::getController($v, $namespace);
-        Route::resource(\mb_strtolower($v['name']), $controller, $opts); //->where(['id_'.$v['name'] => '[0-9]+']);
+        $name=\mb_strtolower($v['name']);
+        Route::resource($name, $controller, $opts)
+                        //->where(['container1' => "^((?!create|edit).)*$"])  //BadMethodCallException Method Illuminate\Routing\PendingResourceRegistration::where does not exist.
+                        //  ->middleware('manageContainer','container1')
+                        ; //->where(['id_'.$v['name'] => '[0-9]+']);
     }
 
     // ------------------------------------------------------------------------------
