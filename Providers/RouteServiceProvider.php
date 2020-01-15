@@ -47,9 +47,24 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         $models = tenantConfig('xra.model');
         $pattern = collect(\array_keys($models))->implode('|');
         $pattern = '/|'.$pattern.'|/i';
+        
+        
+        $pattern_test=[
+            0=>$pattern,// working 
+            1=>'^((?!create|edit).)*$', //eppa
+            2=>'[[:alnum:]_]+',
+            3=>'[^[\/]+', //error edits
+            4=>'^(?!.*(edit|create).*$)',
+            5=>'^(?:(?!\bedit\b).)*$',
+            6=>'^((?!\bedit\b).)*$',
+            7=>'[[:alnum:]_?!\bedit\b]+',
+
+        ];
+
+
         for ($i = 0; $i < 4; ++$i) {
             $container_name = 'container'.$i;
-            $router->pattern($container_name, $pattern);
+            $router->pattern($container_name,$pattern_test[0]);
         }
     }
 

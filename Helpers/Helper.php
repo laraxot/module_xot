@@ -269,8 +269,11 @@ if (! \function_exists('tenantName')) {
 if (! \function_exists('xotModel')) {
     function xotModel($name) {
         $model = tenantConfig('xra.model.'.$name);
-
+        if($model==''){
+            ddd($name);
+        }
         return new $model();
+        
     }
 }
 
