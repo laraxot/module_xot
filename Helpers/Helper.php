@@ -362,6 +362,10 @@ if (! \function_exists('transFields')) {
                         ->all();
         $ris->params = $params;
 
+        if(!isset($ris->col_bs_size)){
+            $ris->col_bs_size=12;
+        }
+        
         return $ris;
     }
 }
