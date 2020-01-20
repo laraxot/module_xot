@@ -485,8 +485,10 @@ class RouteService {
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         //$routename = \Request::route()->getName();
         $cont_i = RouteService::containerN(['model' => get_class($model), 'route_params' => $route_params]);
-
         $parent = $model->parent;
+        if(isset($panel_parent) && is_object($panel_parent)){
+            $parent = $panel_parent->row;
+        }
         if (is_object($parent)) {
             $parent_cont_i = RouteService::containerN(['model' => get_class($parent), 'route_params' => $route_params]);
             $route_params['container'.($parent_cont_i)] = Panel::get($parent)->postType();

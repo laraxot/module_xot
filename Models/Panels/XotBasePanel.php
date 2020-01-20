@@ -531,6 +531,26 @@ abstract class XotBasePanel {
         return $fields;
     }
 
+    public function formCreate($params=[]){
+        $fields=$this->createFields();
+        $row=$this->row;
+        $res='';
+        //$res.='<h3>'.$this->storeUrl().'</h3>'; //4 debug
+        $res.=Form::bsOpenPanel($this,'store');
+        $res.='<div class="clearfix">';
+        foreach($fields as $field){
+            $res.=ThemeService::inputHtml(['row'=>$row,'field'=>$field]);
+        }
+        $res.='</div>';
+        //$res.=Form::bsSubmit('save');
+        $res.='<p class="form-submit">
+            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
+        </p>';
+        $res.=Form::close();
+        return $res;
+    }
+
+
     public function createFields() {
         $excepts = [];
         if (is_object($this->rows)) {
@@ -807,35 +827,35 @@ abstract class XotBasePanel {
     }
 
     public function indexEditUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'index_edit']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'index_edit']);
     }
 
     public function editUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'edit']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'edit']);
     }
 
     public function updateUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'update']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'update']);
     }
 
     public function showUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'show']);
     }
 
     public function createUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'create']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'create']);
     }
 
     public function storeUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'store']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'store']);
     }
 
     public function destroyUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'destroy']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'destroy']);
     }
 
     public function detachUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'detach']);
+        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'detach']);
     }
 
     public function gearUrl() {
@@ -1109,5 +1129,13 @@ abstract class XotBasePanel {
         }
 
         return self::$instance;
+    }
+
+
+    public function related($relationship){
+        $related=$this->row->$relationship()->getRelated();
+        $panel_related=Panel::get($related);
+        $panel_related->setParent($this);
+        return $panel_related;
     }
 }

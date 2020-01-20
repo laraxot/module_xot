@@ -61,6 +61,7 @@ class StoreJob implements ShouldQueue {
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
+        $item = $this->item;
         //ddd($data);
         //---------------------------
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
@@ -71,12 +72,19 @@ class StoreJob implements ShouldQueue {
         $row->save();
         $panel = Panel::get($row);
 
-        if (is_object($this->item)) {
+        if (is_object($item)) {
             $pivot_data = [];
             if (isset($data['pivot'])) {
                 $pivot_data = $data['pivot'];
             }
-            $tmp = $item->$types()->save($item_new, $pivot_data);
+            //ddd($types);
+            //$item->$types()->
+            $tmp=$item->$types()->save($row, $pivot_data);
+            //$tmp=$item->$types()->sync([$row->getKey()=>$pivot_data]);
+            
+            //$tmp=$item->$types()->attach($row->getKey(),$pivot_data);
+            //$tmp = $item->$types()->save($row, $pivot_data);
+
         }
         $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'store']);
         if (method_exists($panel, 'storeCallback')) {
