@@ -20,10 +20,8 @@ class IndexJob implements ShouldQueue
     use SerializesModels;
     use Traits\CommonTrait;
 
-    protected $container;
-    protected $item;
-    protected $row;
-    protected $rows;
+    protected $container, $item;
+    protected $rows, $row;
     protected $data;
 
     /**
