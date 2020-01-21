@@ -2,18 +2,19 @@
 
 namespace Modules\Xot\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
+use Illuminate\Support\Str;
 
 //use Modules\Xot\Traits\CrudContainerItemRepositoryTrait as CrudTrait;
 
-abstract class XotBaseController extends Controller {
+abstract class XotBaseController extends Controller
+{
     //use CrudTrait;
-   	
-   	public function __call($name, $arg){
-        $func='\Modules\Xot\Jobs\Crud\\'.$name.'Job';
-        $panel=$func::dispatchNow($arg[1],$arg[2]);
+
+    public function __call($name, $arg)
+    {
+        $func  = 'Modules\Xot\Jobs\Crud\\' . Str::kebab($name) . 'Job';
+        $panel = $func::dispatchNow($arg[1], $arg[2]);
         return $panel;
     }
 }
