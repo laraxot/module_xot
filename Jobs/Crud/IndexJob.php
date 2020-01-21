@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class IndexJob implements ShouldQueue {
+class IndexJob implements ShouldQueue
+{
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -30,29 +31,30 @@ class IndexJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null) {
+    public function __construct($container, $item, $data = null)
+    {
         $this->container = $container;
-        $this->item = $item;
+        $this->item      = $item;
 
-        if (! is_object($item)) {
-            $row = xotModel($container);
+        if (!is_object($item)) {
+            $row  = xotModel($container);
             $rows = $row;
         } else {
             $types = Str::camel(Str::plural($container));
-            $rows = $item->$types();
-            $row = $rows->getRelated();
+            $rows  = $item->$types();
+            $row   = $rows->getRelated();
         }
-        $this->row = $row;
-        $this->rows = $rows;
+        $this->row   = $row;
+        $this->rows  = $rows;
         $this->panel = Panel::get($row);
         $this->panel->setRows($rows);
         //ddd($this->panel);
         /*
-        if($data==null){
-            //$data=$this->getData();
-        }
-        $this->data=$data;
-        */
+    if($data==null){
+    //$data=$this->getData();
+    }
+    $this->data=$data;
+     */
     }
 
     /**
@@ -60,7 +62,8 @@ class IndexJob implements ShouldQueue {
      *
      * @return void
      */
-    public function handle() {
+    public function handle()
+    {
         return $this->panel;
     }
 }
