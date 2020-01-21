@@ -793,7 +793,7 @@ abstract class XotBasePanel {
     }
 
     public function indexUrl() {
-        $url = RouteService::urlModel(['model' => $this->row, 'act' => 'index']);
+        $url = RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'index']);
         $data = [];
         $filters = $this->filters();
 
