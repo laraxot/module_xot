@@ -1054,13 +1054,18 @@ abstract class XotBasePanel {
     }
 
     public function out($params = []) {
+        //--- default vars ---//
         $is_ajax = false;
         $method = 'GET';
+        $act = null;
+        $out_format = null;
         extract($params);
         $data = request()->all();
         $rows = $this->rows($data);
-        $act = isset($data['_act']) ? $data['_act'] : null;
-        $out_format = isset($data['format']) ? $data['format'] : null;
+        if(isset($data['_act'])) $act=$data['_act'];
+        if(isset($data['format'])) $out_format=$data['format'];
+        //$act = isset($data['_act']) ? $data['_act'] : null;
+        //$out_format = isset($data['format']) ? $data['format'] : null;
         $html = $this->callItemAction($act);
         if (null == $html) {
             $html = $this->callContainerAction($act);
