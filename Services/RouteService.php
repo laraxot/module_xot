@@ -505,6 +505,7 @@ class RouteService
 
     public static function urlModel($params)
     {
+        $lang=\App::getLocale();
         extract($params);
         $route_current = \Route::current();
         $route_params  = is_object($route_current) ? $route_current->parameters() : [];
@@ -532,7 +533,7 @@ class RouteService
         }
         $tmp[]                = $act;
         $routename            = implode('.', $tmp);
-        $route_params['lang'] = \App::getLocale();
+        $route_params['lang'] = $lang;
         $post_type            = Panel::get($model)->postType();
         //if(!isset($route_params['container'.($cont_i)]) ){
         $route_params['container' . ($cont_i)] = $post_type;

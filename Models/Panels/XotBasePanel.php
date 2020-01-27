@@ -783,6 +783,10 @@ abstract class XotBasePanel {
     }
 
     public function langUrl($lang) {
+    	$row=$this->row;
+    	$row->lang=$lang;
+    	//return '/wip'.$this->url();
+
         return '/wip['.__LINE__.']['.__FILE__.']';
     }
 
