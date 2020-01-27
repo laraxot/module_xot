@@ -786,9 +786,37 @@ abstract class XotBasePanel {
         return '/wip['.__LINE__.']['.__FILE__.']';
     }
 
+    public function relatedUrlRecursive($params) {    
+
+        $obj=$this;
+        $items=[];
+        $items[]=$this;
+        while(isset($obj->parent)){
+            $items[]=$obj->parent;
+            $obj=$obj->parent;
+        }
+
+        $count=count($items);
+        $parz=[];
+        $routename=[];
+        for($i=0;$i<$count;$i++){
+            $j=$count-$i-1;
+            $parz['container'.$i]=$items[$j]->postType();
+            $parz['item'.$i]=$items[$j]->row;
+            $routename[]='container'.$i;
+        }
+        $parz['container'.$count]=$params['related_name'];
+        $parz['lang']=\App::getLocale();
+        $routename[]='container'.$i;
+        $routename=implode('.',$routename).'.'.$params['act'];
+        $route=route($routename,$parz);
+        return $route;
+
+    }
+
+
     public function relatedUrl($params) {
         $params['row'] = $this->row;
-
         return RouteService::urlRelated($params);
     }
 
