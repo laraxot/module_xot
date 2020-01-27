@@ -783,9 +783,21 @@ abstract class XotBasePanel {
     }
 
     public function langUrl($lang) {
-    	$row=$this->row;
-    	$row->lang=$lang;
+    	//$row=$this->row;
+    	//$row->lang=$lang;
     	//return '/wip'.$this->url();
+        $route_name = \Route::currentRouteName();        
+        $route_params = \Route::current()->parameters();
+        $route_params['lang']=$lang;
+        [$containers,$items] = params2ContainerItem($route_params);
+        $n_items=count($items);
+        //ddd($n_items);//1
+        //ddd($route_name); container0.show
+        for($i=0;$i<$n_items;$i++){
+            $route_params['item'.$i]->lang=$lang;
+            //ddd($route_params['item'.$i]->guidLang);
+        }
+
 
         return '/wip['.__LINE__.']['.__FILE__.']';
     }
