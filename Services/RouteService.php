@@ -351,7 +351,22 @@ class RouteService
             if (0 == $i) {
                 $container_types[$i] = config('xra.model.' . $container);
             } else {
-                $rows                = $items[$i - 1]->$types();
+                $item_prev = $items[$i - 1];
+                if (is_string($item_prev)) {
+                    $container_prev       = $container_types[$i - 1];
+                    $container_prev_obj   = new $container_prev;
+                    $container_prev_panel = Panel::get($container_prev_obj);
+                    $other_lang           = \Modules\Blog\Models\Post::where('post_type', $container_prev_panel->postType())
+                        ->where('guid', $item_prev)
+                        ->first();
+                    if (is_object($other_lang)) {
+                        $up       = $other_lang->replicate();
+                        $up->lang = \App::getLocale();
+                        $up->save();
+                        $item_prev = $container_prev::firstOrCreate(['post_id' => $up->post_id]);
+                    }
+                }
+                $rows                = $item_prev->$types();
                 $container_types[$i] = get_class($rows->getRelated());
             }
         }
@@ -383,7 +398,7 @@ class RouteService
     $tmp[] = 'admin';
     }
     for ($i = 0; $i <= $n + 1; ++$i) {
-    $tmp[] = 'container'.$i;
+    ) $tmp[] = 'container'.$i;
     }
     $tmp[] = $act;
     $routename_n = implode('.', $tmp);
@@ -505,7 +520,7 @@ class RouteService
 
     public static function urlModel($params)
     {
-        $lang=\App::getLocale();
+        $lang = \App::getLocale();
         extract($params);
         $route_current = \Route::current();
         $route_params  = is_object($route_current) ? $route_current->parameters() : [];
