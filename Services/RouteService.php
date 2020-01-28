@@ -366,6 +366,9 @@ class RouteService
                         $item_prev = $container_prev::firstOrCreate(['post_id' => $up->post_id]);
                     }
                 }
+                if (!is_object($item_prev)) {
+                    abort(404);
+                }
                 $rows                = $item_prev->$types();
                 $container_types[$i] = get_class($rows->getRelated());
             }
