@@ -35,6 +35,9 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
             $this->registerRouteBind($router);
         }
 
+        //$route_params = \Route::current()->parameters();
+        //ddd($route_params);
+
         //ddd('preso');
     }
 
