@@ -751,3 +751,23 @@ if (! function_exists('addQueryParams')) {
         return url()->current() . '?' . http_build_query($query); // rebuild the URL with the new parameters array
     }
 }
+
+
+if (! function_exists('isJson')) {
+    /*
+    function isJson($string) {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+    */
+    /*
+    function isJson($string) {
+    return ((is_string($string) &&
+            (is_object(json_decode($string)) ||
+            is_array(json_decode($string))))) ? true : false;   
+    }
+*/
+    function isJson($string) {
+        return is_string($string) && is_array(json_decode($string, true)) ? true : false;
+    }
+}

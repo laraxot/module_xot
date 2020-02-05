@@ -83,6 +83,20 @@ class DocxService {
                             ];
                 }
             }
+            
+            if(isJson($row->$key)) {
+                //ddd($row->$key);
+                $tmp=json_decode($row->$key);
+                $data=[];
+                foreach($tmp as $k=>$v){
+                    if(!is_array($v) && !is_object($v)){
+                        $data[$prefix.'.'.$key.'_'.$k]=$v;
+                    }
+                }
+                //ddd($data);
+                return $data;
+            }
+            
 
             return [$prefix.'.'.$key => $item];
         })->collapse()->all();
