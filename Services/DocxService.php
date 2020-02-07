@@ -21,12 +21,14 @@ https://code-boxx.com/convert-html-to-docx-using-php/
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
-class DocxService {
+class DocxService
+{
     public $docx_input;
 
     private static $instance = null;
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (null === self::$instance) {
             self::$instance = new self();
         }
@@ -34,21 +36,24 @@ class DocxService {
         return self::$instance;
     }
 
-    public static function setDocxInput($filename) {
+    public static function setDocxInput($filename)
+    {
         $obj = self::getInstance();
         $obj->docx_input = $filename;
 
         return $obj;
     }
 
-    public static function setValues($values) {
+    public static function setValues($values)
+    {
         $obj = self::getInstance();
         $obj->values = $values;
 
         return $obj;
     }
 
-    public function out($params = []) {
+    public function out($params = [])
+    {
         extract($params);
         require __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
 
@@ -67,8 +72,9 @@ class DocxService {
         return response()->download(storage_path('tmp.docx'));
     }
 
-    public static function rows2Data($row, $prefix) {
-        if (! is_object($row)) {
+    public static function rows2Data($row, $prefix)
+    {
+        if (!is_object($row)) {
             return [];
         }
         $arr = $row->toArray();
@@ -83,20 +89,22 @@ class DocxService {
                             ];
                 }
             }
-            
-            if(isJson($row->$key)) {
+
+            if (isJson($row->$key)) {
                 //ddd($row->$key);
-                $tmp=json_decode($row->$key);
-                $data=[];
-                foreach($tmp as $k=>$v){
-                    if(!is_array($v) && !is_object($v)){
-                        $data[$prefix.'.'.$key.'_'.$k]=$v;
+                $tmp = json_decode($row->$key);
+                $data = [];
+                foreach ($tmp as $k => $v) {
+                    if (!is_array($v) && !is_object($v)) {
+                        $data[$prefix.'.'.$key.'_'.$k] = $v;
                     }
                 }
                 //ddd($data);
                 return $data;
             }
-            
+            if (is_string($item)) {
+                $item = str_replace('&', '&amp;', $item);
+            }
 
             return [$prefix.'.'.$key => $item];
         })->collapse()->all();

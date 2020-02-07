@@ -183,4 +183,47 @@ class StoreJob implements ShouldQueue {
             }
         }
     }
+
+
+    public function storeRelationshipsBelongsToMany($params){
+        extract($params);
+        if (isset($data['from']) || isset($data['to'])) {
+            $this->saveMultiselectTwoSides($params);
+
+            return;
+        }
+        $model->$name()->syncWithoutDetaching($data);
+    }
+
+
+
+    public function saveMultiselectTwoSides($params)
+    {
+        //passo request o direttamente data ?
+        extract($params);
+        $items   = $model->$name();
+        $related = $items->getRelated();
+        //ddd($related);
+        $container_obj = $model;
+        //$items_key = $container_obj->getKeyName();
+        $items_key = $related->getKeyName();
+        //ddd($items_key);//auth_user_id
+        $items_0 = $items->get()->pluck($items_key);
+
+        if (!isset($data['to'])) {
+            $data['to'] = [];
+        }
+        $items_1   = collect($data['to']);
+        $items_add = $items_1->diff($items_0);
+        $items_sub = $items_0->diff($items_1);
+        $items->detach($items_sub->all());
+        /* da risolvere Column not found: 1054 Unknown column 'related_type' liveuser_area_admin_areas */
+        try {
+            $items->attach($items_add->all(), ['related_type' => $container]);
+        } catch (\Exception $e) {
+            $items->attach($items_add->all());
+        }
+        $status = 'collegati [' . \implode(', ', $items_add->all()) . '] scollegati [' . \implode(', ', $items_sub->all()) . ']';
+        \Session::flash('status', $status);
+    }
 }//end storeJob
