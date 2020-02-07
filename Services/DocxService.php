@@ -55,7 +55,7 @@ class DocxService
     public function out($params = [])
     {
         extract($params);
-        require __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
+        include __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
 
         //return response()->download($this->docx_input);
         $tpl = new TemplateProcessor($this->docx_input);
@@ -72,42 +72,119 @@ class DocxService
         return response()->download(storage_path('tmp.docx'));
     }
 
+    public static function rows2Data_test($row, $prefix)
+    {
+        if (!is_object($row)) {
+            return [];
+        }
+
+
+
+        $data=collect($row)->map(
+            function ($item,$key) use ($prefix,$row) {
+
+                if ($row->$key instanceof Carbon ) {
+                    $item = $row->$key->format('d/m/Y');
+                    $item_year=$row->$key->format('Y');
+                    return [
+                        $prefix.'.'.$key => $item,
+                        $prefix.'.'.$key.'_year' => $item_year,
+                            ];
+                }
+
+
+                if (isJson($row->$key)) {
+                    //ddd($row->$key);
+                    $tmp = json_decode($row->$key);
+                    $data = [];
+                    foreach ($tmp as $k => $v) {
+                        if (!is_array($v) && !is_object($v)) {
+                            $data[$prefix.'.'.$key.'_'.$k] = $v;
+                        }
+                    }
+                    //ddd($data);
+                    return $data;
+                }
+                if (is_string($item)) {
+                    $item = str_replace('&', '&amp;', $item);
+                }
+
+
+                return [
+                    $prefix.'.'.$key => $item,
+                ];
+            }
+        )
+            ->collapse()
+            ->all();
+        return $data;
+    }
+
+
     public static function rows2Data($row, $prefix)
     {
         if (!is_object($row)) {
             return [];
         }
+        /*
+        try{
+            $arr = $row->toArray();
+        }catch(\Exception $e){
+            $arr=[];
+            $fields=$row->getFillable();
+            foreach($fields as $field){
+                try{
+                    $arr[$field]=$row->$field;
+                }catch(\Exception $e1){
+                    $arr[$field]='';
+                }
+            }
+            //ddd($arr);
+        }
+        */
         $arr = $row->toArray();
-        $data = collect($arr)->map(function ($item, $key) use ($row,$prefix) {
-            if (is_object($row->$key)) {
-                if ($row->$key instanceof Carbon) {
-                    $item = $row->$key->format('d/m/Y');
+        //ddd($arr);
+        $data = collect($arr)->map(
+            function ($item, $key) use ($row,$prefix,$arr) {
+                //*
+                if ($arr[$key]!=''  && is_object($row->$key)) {
+                    if ($row->$key instanceof Carbon ) {
+                        try{
+                            $item = $row->$key->format('d/m/Y');
+                        }catch(\Exception $e){
+                            return [
+                                $prefix.'.'.$key => $item,
+                            ];
+                        }
 
-                    return [
+                        return [
                         $prefix.'.'.$key => $item,
                         $prefix.'.'.$key.'_year' => $row->$key->format('Y'),
                             ];
-                }
-            }
-
-            if (isJson($row->$key)) {
-                //ddd($row->$key);
-                $tmp = json_decode($row->$key);
-                $data = [];
-                foreach ($tmp as $k => $v) {
-                    if (!is_array($v) && !is_object($v)) {
-                        $data[$prefix.'.'.$key.'_'.$k] = $v;
                     }
                 }
-                //ddd($data);
-                return $data;
-            }
-            if (is_string($item)) {
-                $item = str_replace('&', '&amp;', $item);
-            }
+                //*/
 
-            return [$prefix.'.'.$key => $item];
-        })->collapse()->all();
+                if (isJson($row->$key)) {
+                    //ddd($row->$key);
+                    $tmp = json_decode($row->$key);
+                    $data = [];
+                    foreach ($tmp as $k => $v) {
+                        if (!is_array($v) && !is_object($v)) {
+                            $data[$prefix.'.'.$key.'_'.$k] = $v;
+                        }
+                    }
+                    //ddd($data);
+                    return $data;
+                }
+                if (is_string($item)) {
+                    $item = str_replace('&', '&amp;', $item);
+                }
+
+                return [$prefix.'.'.$key => $item];
+            }
+        )->collapse()
+        ->all();
 
         if (isset($data[$prefix.'.postal_code'])) {
             $data[$prefix.'.zip_code'] = $data[$prefix.'.postal_code'];
