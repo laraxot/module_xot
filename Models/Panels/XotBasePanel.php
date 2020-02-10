@@ -85,7 +85,8 @@ abstract class XotBasePanel {
         $c = new ChainService($primary_field, 'parent_id', 'pos', $rows);
         $options = collect($c->chain_table)->map(
             function ($item) {
-                $label=str_repeat('------', $item->indent + 1).$this->optionLabel($item);
+                $label = str_repeat('------', $item->indent + 1).$this->optionLabel($item);
+
                 return [
                     'id' => $this->optionId($item),
                     'label' => $label,
@@ -113,6 +114,7 @@ abstract class XotBasePanel {
     public function orderBy() {
         return [];
     }
+
     /*
     public function fields(){
         return [];
@@ -147,7 +149,8 @@ abstract class XotBasePanel {
                     $pivot_rules = collect($pivot_panel->rules())
                                 ->map(
                                     function ($pivot_rule_val, $pivot_rule_key) use ($item) {
-                                        $k=$item->name.'.*.pivot.'.$pivot_rule_key;
+                                        $k = $item->name.'.*.pivot.'.$pivot_rule_key;
+
                                         return [$k => $pivot_rule_val];
                                     }
                                 )->collapse()->all();
