@@ -126,23 +126,20 @@ class DocxService
         if (!is_object($row)) {
             return [];
         }
-        /*
-        try{
-            $arr = $row->toArray();
-        }catch(\Exception $e){
-            $arr=[];
-            $fields=$row->getFillable();
-            foreach($fields as $field){
-                try{
-                    $arr[$field]=$row->$field;
-                }catch(\Exception $e1){
-                    $arr[$field]='';
-                }
+
+        $arr=[];
+        $fields=$row->getFillable();
+        foreach($fields as $field){
+            try{
+                $arr[$field]=$row->$field;
+            }catch(\Exception $e1){
+                $arr[$field]='';
             }
-            //ddd($arr);
         }
-        */
-        $arr = $row->toArray();
+
+
+
+        //$arr = $row->toArray();
         //ddd($arr);
         $data = collect($arr)->map(
             function ($item, $key) use ($row,$prefix,$arr) {
