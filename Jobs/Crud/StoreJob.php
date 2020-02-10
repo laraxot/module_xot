@@ -79,12 +79,11 @@ class StoreJob implements ShouldQueue {
             }
             //ddd($types);
             //$item->$types()->
-            $tmp=$item->$types()->save($row, $pivot_data);
+            $tmp = $item->$types()->save($row, $pivot_data);
             //$tmp=$item->$types()->sync([$row->getKey()=>$pivot_data]);
-            
+
             //$tmp=$item->$types()->attach($row->getKey(),$pivot_data);
             //$tmp = $item->$types()->save($row, $pivot_data);
-
         }
         $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'store']);
         if (method_exists($panel, 'storeCallback')) {
@@ -184,8 +183,7 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-
-    public function storeRelationshipsBelongsToMany($params){
+    public function storeRelationshipsBelongsToMany($params) {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
@@ -195,13 +193,10 @@ class StoreJob implements ShouldQueue {
         $model->$name()->syncWithoutDetaching($data);
     }
 
-
-
-    public function saveMultiselectTwoSides($params)
-    {
+    public function saveMultiselectTwoSides($params) {
         //passo request o direttamente data ?
         extract($params);
-        $items   = $model->$name();
+        $items = $model->$name();
         $related = $items->getRelated();
         //ddd($related);
         $container_obj = $model;
@@ -210,10 +205,10 @@ class StoreJob implements ShouldQueue {
         //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
 
-        if (!isset($data['to'])) {
+        if (! isset($data['to'])) {
             $data['to'] = [];
         }
-        $items_1   = collect($data['to']);
+        $items_1 = collect($data['to']);
         $items_add = $items_1->diff($items_0);
         $items_sub = $items_0->diff($items_1);
         $items->detach($items_sub->all());
@@ -223,7 +218,7 @@ class StoreJob implements ShouldQueue {
         } catch (\Exception $e) {
             $items->attach($items_add->all());
         }
-        $status = 'collegati [' . \implode(', ', $items_add->all()) . '] scollegati [' . \implode(', ', $items_sub->all()) . ']';
+        $status = 'collegati ['.\implode(', ', $items_add->all()).'] scollegati ['.\implode(', ', $items_sub->all()).']';
         \Session::flash('status', $status);
     }
 }//end storeJob

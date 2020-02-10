@@ -65,7 +65,7 @@ class FixProvidersCommand extends Command {
     */
     protected function getArguments() {
         return [
-             ['name', InputArgument::REQUIRED, 'The name of the module.'],
+            ['name', InputArgument::REQUIRED, 'The name of the module.'],
         ];
     }
 

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reset Language Lines
@@ -18,5 +17,4 @@ return [
     'sent' => 'Un email contenant un lien de réinitialisation vous a été envoyé !',
     'token' => 'Ce code de réinitialisation est incorrect.',
     'user' => "Aucun utilisateur n'est enregistré avec cette adresse email.",
-
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Strings Language Lines
@@ -55,14 +54,14 @@ return [
             ],
         ],
 
-		'search' => [
-			'empty' => 'Please enter a search term.',
-			'incomplete' => 'You must write your own search logic for this system.',
-			'title' => 'Search Results',
-			'results' => 'Search Results for :query',
-		],
+        'search' => [
+            'empty' => 'Please enter a search term.',
+            'incomplete' => 'You must write your own search logic for this system.',
+            'title' => 'Search Results',
+            'results' => 'Search Results for :query',
+        ],
 
-		'welcome' => '<p>Detta är AdminLTE temat som är skapat av <a href="https://almsaeedstudio.com/" target="_blank">https://almsaeedstudio.com/</a>.
+        'welcome' => '<p>Detta är AdminLTE temat som är skapat av <a href="https://almsaeedstudio.com/" target="_blank">https://almsaeedstudio.com/</a>.
 Detta är en avskalad version med enbart de mest nödvändiga stilmallarna och skripten för att få det att fungera.
 Ladda ner den fulla versionen och börja lägg till de komponenter du behöver.</p>
 <p>Alla länkar/funktioner är här är bara exempel förutom <strong>Användare och rättigheter</strong> och <strong>Loggöversikten</strong> i sidomenyn

@@ -8,20 +8,20 @@ $acts = [
 ]; //end acts
 
 $cont_acts = [
-                [
-                    'name' => 'Edit',
-                    'act' => 'indexEdit',
-                ], //end act_n
-                [
-                    'name' => 'Order',
-                    'act' => 'indexOrder',
-                ], //end act_n
-                [
-                    'name' => 'Attach',
-                    'act' => 'indexAttach',
-                    //'act'=>'attach',
-                ], //end act_n
-            ];
+    [
+        'name' => 'Edit',
+        'act' => 'indexEdit',
+    ], //end act_n
+    [
+        'name' => 'Order',
+        'act' => 'indexOrder',
+    ], //end act_n
+    [
+        'name' => 'Attach',
+        'act' => 'indexAttach',
+        //'act'=>'attach',
+    ], //end act_n
+];
 
 $item2 = [     //questo per avere /it/restaurant/ristotest/photo/edit
     'name' => '{container0}',
@@ -74,18 +74,18 @@ $item2 = [     //questo per avere /it/restaurant/ristotest/photo/edit
 ]; //end item2
 
 $areas_prgs = [
-        [
-            'name' => '{container0}',
-            'param_name' => '',
-            'as' => 'container0.index_',
-            'acts' => $cont_acts,
-            /*[
+    [
+        'name' => '{container0}',
+        'param_name' => '',
+        'as' => 'container0.index_',
+        'acts' => $cont_acts,
+        /*[
                 [
                     'name'=>'Edit',
                     'act'=>'indexEdit',
                 ],
             ],*/
-        ],
+    ],
     $item2,
 ];
 

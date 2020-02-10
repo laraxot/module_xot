@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Alert Language Lines
@@ -28,6 +27,6 @@ return [
             'restored' => 'Benutzer wiederhergestellt.',
             'updated' => 'Benutzer aktualisiert.',
             'updated_password' => 'Passwort des Benutzers aktualisiert.',
-        ]
+        ],
     ],
 ];

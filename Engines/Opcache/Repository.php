@@ -13,7 +13,6 @@ class Repository extends TaggedCache implements CacheContract {
      *
      * @param string                                     $key
      * @param \DateTimeInterface|\DateInterval|float|int $minutes
-     * @param \Closure                                   $callback
      *
      * @return mixed
      */

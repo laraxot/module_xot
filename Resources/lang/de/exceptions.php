@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Exception Language Lines
@@ -29,10 +28,10 @@ return [
             'users' => [
                 'cant_deactivate_self' => 'Du kannst das nicht mit dir selber machen.',
                 'cant_delete_self' => 'Du kannst dich nciht selber löschen.',
-				'cant_restore' => 'This user is not deleted so it can not be restored.',
+                'cant_restore' => 'This user is not deleted so it can not be restored.',
                 'create_error' => 'Beim erstellen des Benutzers ist ein Fehler aufgetreten. Bitte versuche es erneut.',
                 'delete_error' => 'Beim löschen des Benutzers ist ein Fehler aufgetreten. Bitte versuche es erneut.',
-				'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
+                'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
                 'email_error' => 'Diese E-Mailadresse ist einem anderem Benutzer zugeordnet.',
                 'mark_error' => 'Beim Aktualisieren des benutzers ist ein fehlöer aufgetreten. Bitte versuche es erneut.',
                 'not_found' => 'Dieser benutzer existiert nicht.',
@@ -53,7 +52,7 @@ return [
                 'created_confirm' => 'Dein Account wurde erstellt. Wir haben dir eiene Aktivierungsmail gesendet.',
                 'mismatch' => 'Der Aktivierungscode ist nicht korrekt.',
                 'not_found' => 'Der Aktivierungscode existiert nicht.',
-                'resend' => 'Dein Account ist nicht aktiviert. Bitte klicke auf den Link in der Aktivierungsmail, oder <a href="' . route('frontend.auth.account.confirm.resend', ':user_id') . '">klicke hier</a> um die aktivierungsmail erneut zu senden.',
+                'resend' => 'Dein Account ist nicht aktiviert. Bitte klicke auf den Link in der Aktivierungsmail, oder <a href="'.route('frontend.auth.account.confirm.resend', ':user_id').'">klicke hier</a> um die aktivierungsmail erneut zu senden.',
                 'success' => 'Dein Account wurde aktiviert!',
                 'resent' => 'Eine neue aktivierungsmail wurde an die hinterlegte E-Mailadresse gesendet.',
             ],
@@ -64,8 +63,6 @@ return [
             'password' => [
                 'change_mismatch' => 'Das ist nicht dein altes Passwort.',
             ],
-
-
         ],
     ],
 ];

@@ -9,7 +9,7 @@ use Artisan;
 
 class ArtisanService {
     public static function act($act) { //da fare anche in noconsole, e magari mettere un policy
-        $module_name=\Request::input('module');
+        $module_name = \Request::input('module');
         switch ($act) {
             case 'migrate': return ArtisanService::exe('migrate');
             case 'routelist': return ArtisanService::exe('route:list');
@@ -22,10 +22,10 @@ class ArtisanService {
             case 'configcache': return ArtisanService::exe('config:cache');
 
             //------------------------------------------------------------------
-            
+
             case 'module-list': return ArtisanService::exe('module:list');
             case 'module-disable': return ArtisanService::exe('module:disable '.$module_name);
-            case 'module-enable': return ArtisanService::exe('module:enable '.$module_name); 
+            case 'module-enable': return ArtisanService::exe('module:enable '.$module_name);
             default: return '';
         }
 

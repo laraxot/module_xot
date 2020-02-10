@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Menus Language Lines
@@ -17,13 +16,12 @@ return [
         'voucher' => [
             'create' => 'Create Discount',
             'all' => 'All Discount',
-
         ],
         'takeaway' => [
             'voucher' => [
                 'create' => 'Create Discount',
                 'all' => 'All Discount',
-                ],
+            ],
             'tableBookingSetting' => [
                 'index' => 'Setting',
             ],
@@ -31,19 +29,16 @@ return [
                 'all' => 'All TableBooking',
                 'create' => 'Create TableBooking',
                 'index' => 'Index',
-
             ],
             'smsBroadCast' => [
                 'all' => 'All Sms BroadCast',
                 'create' => 'Create Sms BroadCast',
                 'main' => 'Main Sms BroadCast',
-
             ],
             'smsPackage' => [
                 'all' => 'All SmsPackage',
                 'create' => 'Create SmsPackage',
                 'main' => 'Main SmsPackage',
-
             ],
 
             'offer' => [
@@ -74,7 +69,6 @@ return [
             'cuisine' => [
                 'all' => 'All Cuisine',
                 'create' => 'Create Cuisine',
-
             ],
             'cms' => [
                 'all' => 'All Cms',
@@ -98,7 +92,6 @@ return [
                 'all' => 'All ProductSize',
                 'create' => 'Create ProductSize',
                 'main' => 'Main',
-
             ],
 
             'package' => [
@@ -112,26 +105,25 @@ return [
             'item' => [
                 'all' => 'All Product',
                 'create' => 'Create Product',
-                'main' => 'Main'
+                'main' => 'Main',
             ],
             'ingredient' => [
                 'all' => 'All Ingredient',
-                'create' => 'Create Ingredient'
+                'create' => 'Create Ingredient',
             ],
             'dish' => [
                 'all' => 'All Dishes',
-                'create' => 'Create Dish'
+                'create' => 'Create Dish',
             ],
             'currency' => [
                 'all' => 'All Currency',
                 'create' => 'Create Currency',
-                'main' => 'Main'
+                'main' => 'Main',
             ],
             'addOnCategory' => [
                 'create' => 'Create Category',
                 'all' => 'All Category',
-                'main' => 'Main'
-
+                'main' => 'Main',
             ],
             'orderStatus' => [
                 'all' => 'All Order Status',
@@ -140,9 +132,8 @@ return [
                 'edit' => 'Edit Order Status',
                 'main' => 'Order Status',
                 'view' => 'View Order Status',
-                'deleted' => 'Deleted Order Status'
-
-            ]
+                'deleted' => 'Deleted Order Status',
+            ],
         ],
         'access' => [
             'title' => 'Access Management',
@@ -225,13 +216,12 @@ return [
             'smsAlertSetting' => 'Sms Alert Setting',
             'smsBroadCast' => 'Sms BroadCast',
             'smsPurchaseCredit' => 'Sms Purchase Credit',
-
         ],
     ],
 
     'language-picker' => [
         'language' => 'Language',
-        /**
+        /*
          * Add the new language to this array.
          * The key should have the same language code as the folder name.
          * The string should be: 'Language-name-in-your-own-language (Language-name-in-English)'.

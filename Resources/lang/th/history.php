@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | History Language Lines
@@ -15,7 +14,7 @@ return [
     'backend' => [
         'none' => 'ไม่มีประวัติล่าสุด',
         'none_for_type' => 'ไม่มีประวัติประเภทนี้',
-        'none_for_entity' => "ไม่มีประวัติสำหรับ :entity นี้",
+        'none_for_entity' => 'ไม่มีประวัติสำหรับ :entity นี้',
         'recent_history' => 'ประวัติล่าสุด',
 
         'roles' => [

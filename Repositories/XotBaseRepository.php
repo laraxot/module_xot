@@ -141,8 +141,6 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Get a new entity instance.
      *
-     * @param array $attributes
-     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function getNew(array $attributes = []) {
@@ -249,7 +247,6 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Find data by multiple fields.
      *
-     * @param array $where
      * @param array $columns
      *
      * @return mixed
@@ -512,8 +509,6 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Save a new entity in repository.
      *
-     * @param array $attributes
-     *
      * @return Model|bool
      */
     public function create(array $attributes) {
@@ -530,9 +525,6 @@ abstract class XotBaseRepository implements RepositoryContract {
 
     /**
      * Update an entity with the given attributes and persist it.
-     *
-     * @param Model $entity
-     * @param array $attributes
      *
      * @return bool
      */
@@ -606,8 +598,6 @@ abstract class XotBaseRepository implements RepositoryContract {
 
     /**
      * Add query scope.
-     *
-     * @param Closure $scope
      *
      * @return $this
      */
@@ -694,11 +684,10 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Add a search where clause to the query.
      *
-     * @param Builder $query
-     * @param string  $param
-     * @param string  $column
-     * @param string  $value
-     * @param string  $boolean
+     * @param string $param
+     * @param string $column
+     * @param string $value
+     * @param string $boolean
      */
     protected function createSearchClause(Builder $query, $param, $column, $value, $boolean = 'and') {
         if ('query' === $param) {
@@ -713,11 +702,10 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Add a search join to the query.
      *
-     * @param Builder $query
-     * @param string  $joining_table
-     * @param string  $foreign_key
-     * @param string  $related_key
-     * @param string  $alias
+     * @param string $joining_table
+     * @param string $foreign_key
+     * @param string $related_key
+     * @param string $alias
      *
      * @return string
      */
@@ -740,9 +728,7 @@ abstract class XotBaseRepository implements RepositoryContract {
     /**
      * Add a range clause to the query.
      *
-     * @param Builder $query
-     * @param string  $value
-     * @param array   $columns
+     * @param string $value
      *
      * @return bool
      */

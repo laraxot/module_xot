@@ -60,7 +60,6 @@ interface RepositoryContract {
     /**
      * Find data by multiple fields.
      *
-     * @param array $where
      * @param array $columns
      *
      * @return mixed
@@ -128,17 +127,12 @@ interface RepositoryContract {
     /**
      * Save a new entity in repository.
      *
-     * @param array $attributes
-     *
      * @return Model|bool
      */
     public function create(array $attributes);
 
     /**
      * Update an entity with the given attributes and persist it.
-     *
-     * @param Model $entity
-     * @param array $attributes
      *
      * @return bool
      */

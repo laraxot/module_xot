@@ -1,8 +1,7 @@
 <?php
 
 return [
-
-    /**
+    /*
      *
      * Shared translations.
      *
@@ -10,19 +9,17 @@ return [
     'title' => 'Εγκατάσταση Laravel',
     'next' => 'Επόμενο',
 
-
-    /**
+    /*
      *
      * Home page translations.
      *
      */
     'welcome' => [
-        'title'   => 'Καλωσήρθαστε στο Installer',
+        'title' => 'Καλωσήρθαστε στο Installer',
         'message' => 'Καλωσήρθατε στον οδηγό εγκατάστασης.',
     ],
 
-
-    /**
+    /*
      *
      * Requirements page translations.
      *
@@ -31,8 +28,7 @@ return [
         'title' => 'Απαιτήσεις συστήματος',
     ],
 
-
-    /**
+    /*
      *
      * Permissions page translations.
      *
@@ -41,8 +37,7 @@ return [
         'title' => 'Δικαιώματα',
     ],
 
-
-    /**
+    /*
      *
      * Environment page translations.
      *
@@ -54,8 +49,7 @@ return [
         'errors' => 'Το αρχείο ρυθμίσεων .env ΔΕΝ μπόρεσε να αποθηκευτεί με επιτυχία. Παρακαλώ δημιουργίστε το χειροκίνητα.',
     ],
 
-
-    /**
+    /*
      *
      * Final page translations.
      *

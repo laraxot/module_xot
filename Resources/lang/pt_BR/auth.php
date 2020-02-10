@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Language Lines
@@ -14,7 +13,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'failed'   => 'Estas credenciais não correspondem com nossos registros.',
+    'failed' => 'Estas credenciais não correspondem com nossos registros.',
     'general_error' => 'Você não tem acesso para fazer isso.',
     'socialite' => [
         'unacceptable' => ':provider não é um tipo de login aceitável.',

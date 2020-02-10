@@ -31,8 +31,6 @@ trait Cacheable {
 
     /**
      * Set cache manager.
-     *
-     * @param CacheManager $cache
      */
     public static function setCacheInstance(CacheManager $cache) {
         self::$cache = $cache;
@@ -93,10 +91,9 @@ trait Cacheable {
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param string   $method
-     * @param array    $args
-     * @param \Closure $callback
-     * @param int      $time
+     * @param string $method
+     * @param array  $args
+     * @param int    $time
      *
      * @return mixed
      */

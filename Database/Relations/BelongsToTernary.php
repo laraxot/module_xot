@@ -168,9 +168,6 @@ class BelongsToTernary extends BelongsToMany {
      *
      * @see    \Illuminate\Database\Eloquent\Relations\Relation
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \Illuminate\Database\Eloquent\Builder $parentQuery
-     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getRelationExistenceCountQuery(Builder $query, Builder $parentQuery) {
@@ -261,9 +258,7 @@ class BelongsToTernary extends BelongsToMany {
      *
      * @todo   This is the Laravel's `match` method for BelongsToMany.  Modify it for BelongsToTernary!
      *
-     * @param array                                    $models
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @param string                                   $relation
+     * @param string $relation
      *
      * @return array
      */
@@ -292,9 +287,8 @@ class BelongsToTernary extends BelongsToMany {
      * If we are applying either a limit or offset, we'll first determine a limited/offset list of model ids
      * to select from in the final query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int                                   $limit
-     * @param int                                   $offset
+     * @param int $limit
+     * @param int $offset
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -335,8 +329,6 @@ class BelongsToTernary extends BelongsToMany {
      * Before doing this, we may optionally find any tertiary models that should be
      * set as sub-relations on these models.
      *
-     * @param array $models
-     *
      * @return array
      */
     protected function condenseModels(array $models) {
@@ -353,8 +345,7 @@ class BelongsToTernary extends BelongsToMany {
      * that maps parent ids to arrays of related ids, which in turn map to arrays
      * of tertiary models corresponding to each relationship.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     * @param string                                   $parentKey
+     * @param string $parentKey
      *
      * @return array
      */
@@ -395,9 +386,6 @@ class BelongsToTernary extends BelongsToMany {
     /**
      * Match a collection of child models into a collection of parent models using a dictionary.
      *
-     * @param array                                    $dictionary
-     * @param \Illuminate\Database\Eloquent\Collection $results
-     *
      * @return void
      */
     protected function matchTertiaryModels(array $dictionary, Collection $results) {
@@ -415,8 +403,6 @@ class BelongsToTernary extends BelongsToMany {
 
     /**
      * Get the tertiary models for the relationship.
-     *
-     * @param array $models
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -468,8 +454,6 @@ class BelongsToTernary extends BelongsToMany {
 
     /**
      * Unset tertiary pivots on a collection or array of models.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection $models
      *
      * @return void
      */

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Menus Language Lines
@@ -33,7 +32,7 @@ return [
                 'deleted' => 'ผู้ใช้ที่ถูกลบ',
                 'edit' => 'แก้ไขผู้ใช้',
                 'main' => 'ผู้ใช้',
-        'view' => 'แสดงผู้ใช้',
+                'view' => 'แสดงผู้ใช้',
             ],
         ],
 
@@ -46,13 +45,13 @@ return [
         'sidebar' => [
             'dashboard' => 'แผงควบคุม',
             'general' => 'ทั่วไป',
-        'system' => 'ระบบ',
+            'system' => 'ระบบ',
         ],
     ],
 
     'language-picker' => [
         'language' => 'ภาษา',
-        /**
+        /*
          * Add the new language to this array.
          * The key should have the same language code as the folder name.
          * The string should be: 'Language-name-in-your-own-language (Language-name-in-English)'.

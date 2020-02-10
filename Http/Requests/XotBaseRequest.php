@@ -65,7 +65,6 @@ abstract class XotBaseRequest extends FormRequest {
     /**
      * https://stackoverflow.com/questions/28854585/laravel-5-form-request-data-pre-manipulation?rq=1.
      *
-     *
      **/
 
     /**
@@ -126,7 +125,6 @@ abstract class XotBaseRequest extends FormRequest {
         }
         $value_new = Carbon::createFromFormat('d/m/Y H:i', $value);
 
-        return $value_new;    
+        return $value_new;
     }
-
 }

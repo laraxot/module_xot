@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'Nein',
         'custom' => 'Custom', // TODO TRANSLATION
         'actions' => 'Aktionen',
-		'active' => 'Active',
+        'active' => 'Active',
         'buttons' => [
             'save' => 'Speichern',
             'update' => 'Aktualisieren',
         ],
         'hide' => 'Verstecken',
-		'inactive' => 'Inactive',
+        'inactive' => 'Inactive',
         'none' => 'Keine',
         'show' => 'Anzeigen',
         'toggle_navigation' => 'Navigation umschalten',
@@ -74,33 +73,32 @@ return [
                     'total' => 'Benutzer|Benutzer',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'History',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Confirmed',
-							'created_at' => 'Created At',
-							'deleted_at' => 'Deleted At',
-							'email' => 'E-mail',
-							'last_updated' => 'Last Updated',
-							'name' => 'Name',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Confirmed',
+                            'created_at' => 'Created At',
+                            'deleted_at' => 'Deleted At',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Last Updated',
+                            'name' => 'Name',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'View User',
+                'view' => 'View User',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Login',
             'login_button' => 'Login',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Informationen aktualisieren',
             ],
         ],
-
     ],
 ];

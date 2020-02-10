@@ -24,8 +24,6 @@ abstract class Facade {
 
     /**
      * Run a Closure when the facade has been resolved.
-     *
-     * @param \Closure $callback
      */
     public static function resolved(Closure $callback) {
         static::$app->afterResolving(static::getFacadeAccessor(), function ($service) use ($callback) {

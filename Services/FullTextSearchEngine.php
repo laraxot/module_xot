@@ -26,8 +26,6 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
-     * @param \Laravel\Scout\Builder $builder
-     *
      * @return mixed
      */
     public function search(Builder $builder) {
@@ -112,9 +110,8 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
-     * @param \Laravel\Scout\Builder $builder
-     * @param int                    $perPage
-     * @param int                    $page
+     * @param int $perPage
+     * @param int $page
      *
      * @return mixed
      */
@@ -141,7 +138,6 @@ class FullTextSearchEngine extends Engine {
     /**
      * Map the given results to instances of the given model.
      *
-     * @param \Laravel\Scout\Builder              $builder
      * @param mixed                               $results
      * @param \Illuminate\Database\Eloquent\Model $model
      *

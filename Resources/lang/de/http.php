@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | HTTP Language Lines
@@ -20,5 +19,4 @@ return [
         'title' => 'Wir sind gleich wieder da.',
         'description' => 'Wir sind gleich wieder da.',
     ],
-
 ];

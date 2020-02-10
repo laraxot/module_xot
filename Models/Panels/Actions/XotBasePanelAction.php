@@ -2,9 +2,7 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
 
@@ -22,17 +20,20 @@ abstract class XotBasePanelAction {
     abstract public function setRows($rows);
     public function btn($params=[]);
     */
-    public $name=null;
+    public $name = null;
 
     abstract public function handle();
 
-    public function getName(){
-        if($this->name!=null) return $this->name;
-        $this->name=Str::snake(class_basename($this));
-        $str='_action';
-        if(Str::endsWith($this->name,$str)){
-            $this->name=Str::before($this->name,$str);
+    public function getName() {
+        if (null != $this->name) {
+            return $this->name;
         }
+        $this->name = Str::snake(class_basename($this));
+        $str = '_action';
+        if (Str::endsWith($this->name, $str)) {
+            $this->name = Str::before($this->name, $str);
+        }
+
         return $this->name;
     }
 
@@ -68,7 +69,7 @@ abstract class XotBasePanelAction {
 
     public function btnItem($params = []) {
         extract($params);
-        $name=$this->getName();
+        $name = $this->getName();
         $url = RouteService::urlAct(
             [
                 'row' => $row,

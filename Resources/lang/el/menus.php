@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Menus Language Lines
@@ -33,7 +32,7 @@ return [
                 'deleted' => 'Διεγραμμένοι χρήστες',
                 'edit' => 'Επεξεργασία χρήστη',
                 'main' => 'Χρήστες',
-				'view' => 'Δες το χρήστη',
+                'view' => 'Δες το χρήστη',
             ],
         ],
 
@@ -46,13 +45,13 @@ return [
         'sidebar' => [
             'dashboard' => 'Dashboard',
             'general' => 'Γενικά',
-			'system' => 'Σύστημα',
+            'system' => 'Σύστημα',
         ],
     ],
 
     'language-picker' => [
         'language' => 'Γλώσσα',
-        /**
+        /*
          * Add the new language to this array.
          * The key should have the same language code as the folder name.
          * The string should be: 'Language-name-in-your-own-language (Language-name-in-English)'.
@@ -67,7 +66,7 @@ return [
             'es' => 'Ισπανικά (Spanish)',
             'fr' => 'Γαλλικά (French)',
             'it' => 'Ιταλικά (Italian)',
-			'nl' => 'Ολλανδικά (Dutch)',
+            'nl' => 'Ολλανδικά (Dutch)',
             'pt_BR' => '(Brazilian Portuguese)',
             'sv' => 'Σουηδικά (Swedish)',
             'th' => 'Ταιλανδέζικα (Thai)',

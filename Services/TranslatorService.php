@@ -16,7 +16,6 @@ use Modules\Theme\Services\ThemeService;
 class TranslatorService extends BaseTranslator {
     /**
      * @param string $key
-     * @param array  $replace
      * @param null   $locale
      * @param bool   $fallback
      *
@@ -61,15 +60,15 @@ class TranslatorService extends BaseTranslator {
         $lang_dir = dirname(dirname($filename));
 
         return [
-                'key' => str_replace(['[', ']'], ['.', ''], $key),
-                'namespace' => $namespace,
-                'group' => $group,
-                'ns_group' => $namespace.'::'.$group,
-                'item' => $item,
-                'filename' => $filename,
-                'file_exists' => File::exists($filename),
-                'lang_dir' => $lang_dir,
-                'dir_exists' => File::exists($lang_dir), //dir without lang
+            'key' => str_replace(['[', ']'], ['.', ''], $key),
+            'namespace' => $namespace,
+            'group' => $group,
+            'ns_group' => $namespace.'::'.$group,
+            'item' => $item,
+            'filename' => $filename,
+            'file_exists' => File::exists($filename),
+            'lang_dir' => $lang_dir,
+            'dir_exists' => File::exists($lang_dir), //dir without lang
         ];
     }
 

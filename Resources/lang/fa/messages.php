@@ -1,8 +1,7 @@
 <?php
 
 return [
-
-    /**
+    /*
      *
      * Shared translations.
      *
@@ -10,19 +9,17 @@ return [
     'title' => 'نصب کننده لاراول',
     'next' => 'قدم بعدی',
 
-
-    /**
+    /*
      *
      * Home page translations.
      *
      */
     'welcome' => [
-        'title'   => 'به نصب کننده خوش آمدید',
+        'title' => 'به نصب کننده خوش آمدید',
         'message' => 'به جادوگر نصب خوش آمدید .',
     ],
 
-
-    /**
+    /*
      *
      * Requirements page translations.
      *
@@ -31,8 +28,7 @@ return [
         'title' => 'نیازمندی ها',
     ],
 
-
-    /**
+    /*
      *
      * Permissions page translations.
      *
@@ -41,8 +37,7 @@ return [
         'title' => 'مجوز های دسترسی',
     ],
 
-
-    /**
+    /*
      *
      * Environment page translations.
      *
@@ -54,8 +49,7 @@ return [
         'errors' => 'ذخیره کردن فایل .env امکان پذیر نیست، لطفا آن را به صورت دستی ایجاد کنید.',
     ],
 
-
-    /**
+    /*
      *
      * Final page translations.
      *

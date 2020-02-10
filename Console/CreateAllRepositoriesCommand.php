@@ -74,8 +74,8 @@ class CreateAllRepositoriesCommand extends Command {
      */
     protected function getArguments() {
         return [
-          //  ['name', InputArgument::REQUIRED, 'nickname of user'],
-          //  ['level', InputArgument::REQUIRED, 'level of user'],
+            //  ['name', InputArgument::REQUIRED, 'nickname of user'],
+            //  ['level', InputArgument::REQUIRED, 'level of user'],
         ];
     }
 

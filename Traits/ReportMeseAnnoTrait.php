@@ -33,8 +33,8 @@ trait ReportMeseAnnoTrait {
         }
 
         $subtot = Array_op::array_subtotale([
-        'data' => $rows, 'key' => ['ente', 'matr'], 'add' => $model->getAddFields(), 'fields' => ['nome'],
-    ]);
+            'data' => $rows, 'key' => ['ente', 'matr'], 'add' => $model->getAddFields(), 'fields' => ['nome'],
+        ]);
 
         $view = ThemeService::getView();
 

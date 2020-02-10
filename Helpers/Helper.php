@@ -269,11 +269,11 @@ if (! \function_exists('tenantName')) {
 if (! \function_exists('xotModel')) {
     function xotModel($name) {
         $model = tenantConfig('xra.model.'.$name);
-        if($model==''){
+        if ('' == $model) {
             ddd($name);
         }
+
         return new $model();
-        
     }
 }
 
@@ -362,10 +362,10 @@ if (! \function_exists('transFields')) {
                         ->all();
         $ris->params = $params;
 
-        if(!isset($ris->col_bs_size)){
-            $ris->col_bs_size=12;
+        if (! isset($ris->col_bs_size)) {
+            $ris->col_bs_size = 12;
         }
-        
+
         return $ris;
     }
 }
@@ -471,14 +471,14 @@ if (! \function_exists('money_format')) {
         foreach ($matches as $fmatch) {
             $value = floatval($number);
             $flags = [
-                    'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
-                            $match[1] : ' ',
-                    'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
-                    'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
-                            $match[0] : '+',
-                    'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
-                    'isleft' => preg_match('/\-/', $fmatch[1]) > 0,
-                ];
+                'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
+                        $match[1] : ' ',
+                'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
+                'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
+                        $match[0] : '+',
+                'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
+                'isleft' => preg_match('/\-/', $fmatch[1]) > 0,
+            ];
             $width = trim($fmatch[2]) ? (int) $fmatch[2] : 0;
             $left = trim($fmatch[3]) ? (int) $fmatch[3] : 0;
             $right = trim($fmatch[4]) ? (int) $fmatch[4] : $locale['int_frac_digits'];
@@ -702,8 +702,7 @@ if (! function_exists('getRelationships')) {
     }
     */
 
-
-/**
+/*
  * https://chasingcode.dev/blog/laravel-global-url-helpers/
  * URL before:
  * https://example.com/orders/123?order=ABC009&status=shipped
@@ -717,19 +716,19 @@ if (! function_exists('getRelationships')) {
  */
 
 if (! function_exists('removeQueryParams')) {
-    function removeQueryParams(array $params = []){
+    function removeQueryParams(array $params = []) {
         $url = url()->current(); // get the base URL - everything to the left of the "?"
         $query = request()->query(); // get the query parameters (what follows the "?")
 
-        foreach($params as $param) {
+        foreach ($params as $param) {
             unset($query[$param]); // loop through the array of parameters we wish to remove and unset the parameter from the query array
         }
 
-        return $query ? $url . '?' . http_build_query($query) : $url; // rebuild the URL with the remaining parameters, don't append the "?" if there aren't any query parameters left
+        return $query ? $url.'?'.http_build_query($query) : $url; // rebuild the URL with the remaining parameters, don't append the "?" if there aren't any query parameters left
     }
 }
 
-/**
+/*
  * https://chasingcode.dev/blog/laravel-global-url-helpers/
  * URL before:
  * https://example.com/orders/123?order=ABC009
@@ -742,16 +741,15 @@ if (! function_exists('removeQueryParams')) {
  * 2. https://example.com/orders/123?order=ABC009&status=shipped&coupon=CCC2019
  */
 if (! function_exists('addQueryParams')) {
-    function addQueryParams(array $params = []){
+    function addQueryParams(array $params = []) {
         $query = array_merge(
             request()->query(),
             $params
         ); // merge the existing query parameters with the ones we want to add
 
-        return url()->current() . '?' . http_build_query($query); // rebuild the URL with the new parameters array
+        return url()->current().'?'.http_build_query($query); // rebuild the URL with the new parameters array
     }
 }
-
 
 if (! function_exists('isJson')) {
     /*
@@ -764,7 +762,7 @@ if (! function_exists('isJson')) {
     function isJson($string) {
     return ((is_string($string) &&
             (is_object(json_decode($string)) ||
-            is_array(json_decode($string))))) ? true : false;   
+            is_array(json_decode($string))))) ? true : false;
     }
 */
     function isJson($string) {

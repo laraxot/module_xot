@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Exception Language Lines
@@ -29,10 +28,10 @@ return [
             'users' => [
                 'cant_deactivate_self' => 'Du har inte rättighet att utföra denna handling mot ditt eget konto.',
                 'cant_delete_self' => 'Du kan inte radera ditt eget konto.',
-				'cant_restore' => 'This user is not deleted so it can not be restored.',
+                'cant_restore' => 'This user is not deleted so it can not be restored.',
                 'create_error' => 'Det uppstod ett fel då användaren skulle skapas. Försök igen.',
                 'delete_error' => 'Det uppstod ett fel då användaren skulle raderas. Försök igen.',
-				'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
+                'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
                 'email_error' => 'Den e-post du angav finns redan angiven för en annan användare.',
                 'mark_error' => 'Det uppstod ett fel då användaren skulle uppdateras. Försök igen.',
                 'not_found' => 'Det finns inte någon sådan användare.',
@@ -53,7 +52,7 @@ return [
                 'created_confirm' => 'Ditt konto är nu skapat. Vi har skickat ett mail till dig där du kan bekräfta och aktivera ditt konto.',
                 'mismatch' => 'Din bekräftelsekod för aktivering stämmer inte.',
                 'not_found' => 'Din bekräftelsekod för aktivering stämmer inte.',
-                'resend' => 'Du måste bekräfta och aktivera ditt konto för att fortsätta. Bekräfta och aktivera ditt konto genom länken i mailet vi skickade till dig. <a href="' . route('frontend.auth.account.confirm.resend', ':user_id') . '">Klicka här</a> för att skicka mailet en gång till.',
+                'resend' => 'Du måste bekräfta och aktivera ditt konto för att fortsätta. Bekräfta och aktivera ditt konto genom länken i mailet vi skickade till dig. <a href="'.route('frontend.auth.account.confirm.resend', ':user_id').'">Klicka här</a> för att skicka mailet en gång till.',
                 'success' => 'Ditt konto har nu bekräftats och aktiverats.',
                 'resent' => 'Ett nytt mail med länk för bekräftelse och aktivering har nu skickats till den angivna e-posten.',
             ],

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'No',
         'custom' => 'Custom', // TODO TRANSLATION
         'actions' => 'Azioni',
-		'active' => 'Active',
+        'active' => 'Active',
         'buttons' => [
             'save' => 'Salva',
             'update' => 'Aggiorna',
         ],
         'hide' => 'Nascondi',
-		'inactive' => 'Inactive',
+        'inactive' => 'Inactive',
         'none' => 'Nessuno',
         'show' => 'Visualizza',
         'toggle_navigation' => 'Menu Navigazione',
@@ -71,36 +70,35 @@ return [
                     'no_deactivated' => 'Nessun utente disattivato',
                     'no_deleted' => 'Nessun utente eliminato',
                     'roles' => 'Ruoli',
-                    'total' => 'utente(i) totali', # TODO: pluralization
+                    'total' => 'utente(i) totali', // TODO: pluralization
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'History',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Confirmed',
-							'created_at' => 'Created At',
-							'deleted_at' => 'Deleted At',
-							'email' => 'E-mail',
-							'last_updated' => 'Last Updated',
-							'name' => 'Name',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Confirmed',
+                            'created_at' => 'Created At',
+                            'deleted_at' => 'Deleted At',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Last Updated',
+                            'name' => 'Name',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'View User',
+                'view' => 'View User',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Login',
             'login_button' => 'Login',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Aggiorna informazioni',
             ],
         ],
-
     ],
 ];

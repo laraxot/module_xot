@@ -21,14 +21,12 @@ https://code-boxx.com/convert-html-to-docx-using-php/
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
-class DocxService
-{
+class DocxService {
     public $docx_input;
 
     private static $instance = null;
 
-    public static function getInstance()
-    {
+    public static function getInstance() {
         if (null === self::$instance) {
             self::$instance = new self();
         }
@@ -36,24 +34,21 @@ class DocxService
         return self::$instance;
     }
 
-    public static function setDocxInput($filename)
-    {
+    public static function setDocxInput($filename) {
         $obj = self::getInstance();
         $obj->docx_input = $filename;
 
         return $obj;
     }
 
-    public static function setValues($values)
-    {
+    public static function setValues($values) {
         $obj = self::getInstance();
         $obj->values = $values;
 
         return $obj;
     }
 
-    public function out($params = [])
-    {
+    public function out($params = []) {
         extract($params);
         include __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
 
@@ -72,33 +67,29 @@ class DocxService
         return response()->download(storage_path('tmp.docx'));
     }
 
-    public static function rows2Data_test($row, $prefix)
-    {
-        if (!is_object($row)) {
+    public static function rows2Data_test($row, $prefix) {
+        if (! is_object($row)) {
             return [];
         }
 
-
-
-        $data=collect($row)->map(
-            function ($item,$key) use ($prefix,$row) {
-
-                if ($row->$key instanceof Carbon ) {
+        $data = collect($row)->map(
+            function ($item, $key) use ($prefix,$row) {
+                if ($row->$key instanceof Carbon) {
                     $item = $row->$key->format('d/m/Y');
-                    $item_year=$row->$key->format('Y');
+                    $item_year = $row->$key->format('Y');
+
                     return [
                         $prefix.'.'.$key => $item,
                         $prefix.'.'.$key.'_year' => $item_year,
-                            ];
+                    ];
                 }
-
 
                 if (isJson($row->$key)) {
                     //ddd($row->$key);
                     $tmp = json_decode($row->$key);
                     $data = [];
                     foreach ($tmp as $k => $v) {
-                        if (!is_array($v) && !is_object($v)) {
+                        if (! is_array($v) && ! is_object($v)) {
                             $data[$prefix.'.'.$key.'_'.$k] = $v;
                         }
                     }
@@ -109,7 +100,6 @@ class DocxService
                     $item = str_replace('&', '&amp;', $item);
                 }
 
-
                 return [
                     $prefix.'.'.$key => $item,
                 ];
@@ -117,47 +107,44 @@ class DocxService
         )
             ->collapse()
             ->all();
+
         return $data;
     }
 
-
-    public static function rows2Data($row, $prefix)
-    {
-        if (!is_object($row)) {
+    public static function rows2Data($row, $prefix) {
+        if (! is_object($row)) {
             return [];
         }
 
-        $arr=[];
-        $fields=$row->getFillable();
-        foreach($fields as $field){
-            try{
-                $arr[$field]=$row->$field;
-            }catch(\Exception $e1){
-                $arr[$field]='';
+        $arr = [];
+        $fields = $row->getFillable();
+        foreach ($fields as $field) {
+            try {
+                $arr[$field] = $row->$field;
+            } catch (\Exception $e1) {
+                $arr[$field] = '';
             }
         }
-
-
 
         //$arr = $row->toArray();
         //ddd($arr);
         $data = collect($arr)->map(
             function ($item, $key) use ($row,$prefix,$arr) {
                 //*
-                if ($arr[$key]!=''  && is_object($row->$key)) {
-                    if ($row->$key instanceof Carbon ) {
-                        try{
+                if ('' != $arr[$key] && is_object($row->$key)) {
+                    if ($row->$key instanceof Carbon) {
+                        try {
                             $item = $row->$key->format('d/m/Y');
-                        }catch(\Exception $e){
+                        } catch (\Exception $e) {
                             return [
                                 $prefix.'.'.$key => $item,
                             ];
                         }
 
                         return [
-                        $prefix.'.'.$key => $item,
-                        $prefix.'.'.$key.'_year' => $row->$key->format('Y'),
-                            ];
+                            $prefix.'.'.$key => $item,
+                            $prefix.'.'.$key.'_year' => $row->$key->format('Y'),
+                        ];
                     }
                 }
                 //*/
@@ -167,7 +154,7 @@ class DocxService
                     $tmp = json_decode($row->$key);
                     $data = [];
                     foreach ($tmp as $k => $v) {
-                        if (!is_array($v) && !is_object($v)) {
+                        if (! is_array($v) && ! is_object($v)) {
                             $data[$prefix.'.'.$key.'_'.$k] = $v;
                         }
                     }

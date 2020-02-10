@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Buttons Language Lines
@@ -49,9 +48,9 @@ return [
             'reject' => 'Reject',
             'edit' => 'Edit',
             'update' => 'Update',
-			'view' => 'View',
-			'save' => 'Save',
-			'search' => 'Search',
+            'view' => 'View',
+            'save' => 'Save',
+            'search' => 'Search',
         ],
 
         'save' => 'Save',

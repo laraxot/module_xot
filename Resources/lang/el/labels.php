@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'Όχι',
         'custom' => 'Custom',
         'actions' => 'Ενέργειες',
-		'active' => 'Ενεργό',
+        'active' => 'Ενεργό',
         'buttons' => [
             'save' => 'Αποθήκευση',
             'update' => 'Ανανέωση',
         ],
         'hide' => 'Απόκρυψη',
-		'inactive' => 'Ανενεργό',
+        'inactive' => 'Ανενεργό',
         'none' => 'Κανένα',
         'show' => 'Εμφάνιση',
         'toggle_navigation' => 'Αλλαγή περιήγησης',
@@ -74,33 +73,32 @@ return [
                     'total' => 'user total|users total',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'Ιστορία',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'Ιστορία',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Επιβεβαιωμένο',
-							'created_at' => 'Δημιουργήθηκε την',
-							'deleted_at' => 'Διαγράφηκε την',
-							'email' => 'E-mail',
-							'last_updated' => 'Τελευταία ενημέρωση',
-							'name' => 'Όνομα',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Επιβεβαιωμένο',
+                            'created_at' => 'Δημιουργήθηκε την',
+                            'deleted_at' => 'Διαγράφηκε την',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Τελευταία ενημέρωση',
+                            'name' => 'Όνομα',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'Δες το χρήστη',
+                'view' => 'Δες το χρήστη',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Σύνδεση',
             'login_button' => 'Σύνδεση',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Ανανέωση πληροφοριών',
             ],
         ],
-
     ],
 ];

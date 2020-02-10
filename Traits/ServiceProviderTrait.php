@@ -67,8 +67,8 @@ trait ServiceProviderTrait {
         //&& !$this->files->exists(config_path($class.'.php')) ) {
         if (\file_exists($dir.'/config/'.$class.'.php')) {
             $this->publishes([
-            $dir.'/config/'.$class.'.php' => config_path($class.'.php'),
-        ]);
+                $dir.'/config/'.$class.'.php' => config_path($class.'.php'),
+            ]);
         }
         //};
         //*/

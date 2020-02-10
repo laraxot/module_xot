@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | HTTP Language Lines
@@ -21,5 +20,4 @@ return [
         'title' => 'Voltamos logo',
         'description' => 'Voltamos logo.',
     ],
-
 ];

@@ -1,15 +1,11 @@
 <?php
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Str;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
-
-
 class TenantService {
-
-	public static function getName($params = []) {
+    public static function getName($params = []) {
         if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
             $_SERVER['SERVER_NAME'] = 'localhost';
         }
@@ -17,14 +13,16 @@ class TenantService {
         if (! file_exists(base_path('config/'.$server_name))) {
             $server_name = 'localhost';
         }
+
         return $server_name;
-    }//end function
-
-
-    public static function filePath($filename){
-    	$path= base_path('config/'.self::getName().'/'.$filename);
-    	$path=str_replace(['/','\\'],[DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR],$path);
-    	return $path;
     }
 
+    //end function
+
+    public static function filePath($filename) {
+        $path = base_path('config/'.self::getName().'/'.$filename);
+        $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+
+        return $path;
+    }
 }

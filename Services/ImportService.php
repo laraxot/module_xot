@@ -104,12 +104,12 @@ class ImportService {
             echo '<hr/>Redirecting! '.$request->getUri().' to '.$uri."\n";
         };
         $redirect_params = [
-                'max' => 10,        // allow at most 10 redirects.
-                'strict' => true,      // use "strict" RFC compliant redirects.
-                'referer' => true,      // add a Referer header
-                //'protocols'       => ['https'], // only allow https URLs
-                'on_redirect' => $onRedirect,
-                'track_redirects' => true,
+            'max' => 10,        // allow at most 10 redirects.
+            'strict' => true,      // use "strict" RFC compliant redirects.
+            'referer' => true,      // add a Referer header
+            //'protocols'       => ['https'], // only allow https URLs
+            'on_redirect' => $onRedirect,
+            'track_redirects' => true,
         ];
         self::setClientOptions(['allow_redirects' => $redirect_params]);
         //$client->followRedirects(true);
@@ -525,14 +525,14 @@ class ImportService {
         $crawler = new Crawler((string) $html);
         $forms = $crawler->filter($node_tag)->each(function (Crawler $node) {
             return [
-                    'action' => $node->attr('action'),
-                    'method' => $node->attr('method'),
-                    'fields' => (
-                        $node->filter('input')->each(function (Crawler $node1) {
-                            return [$node1->attr('name') => $node1->attr('value')];
-                        })
-                    ),
-                ];
+                'action' => $node->attr('action'),
+                'method' => $node->attr('method'),
+                'fields' => (
+                    $node->filter('input')->each(function (Crawler $node1) {
+                        return [$node1->attr('name') => $node1->attr('value')];
+                    })
+                ),
+            ];
         });
         foreach ($forms as $k => $v) {
             $forms[$k]['fields'] = collect($v['fields'])->collapse()->all();

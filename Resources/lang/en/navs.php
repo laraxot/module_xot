@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Navs Language Lines
@@ -25,14 +24,14 @@ return [
         'register' => 'Register',
 
         'user' => [
-			'account' => 'My Account',
+            'account' => 'My Account',
             'administration' => 'Administration',
             'change_password' => 'Change Password',
             'my_information' => 'My Information',
-			'profile' => 'Profile',
-			'address_book' => 'Address Book',
-			'order_history' => 'Order History',
-			'credit_cards' => 'Credit Cards',
+            'profile' => 'Profile',
+            'address_book' => 'Address Book',
+            'order_history' => 'Order History',
+            'credit_cards' => 'Credit Cards',
         ],
     ],
 ];

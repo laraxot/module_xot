@@ -1,7 +1,6 @@
-﻿<?php
+<?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Strings Language Lines
@@ -55,14 +54,14 @@ return [
             ],
         ],
 
-		'search' => [
-			'empty' => 'Please enter a search term.',
-			'incomplete' => 'You must write your own search logic for this system.',
-			'title' => 'Search Results',
-			'results' => 'Search Results for :query',
-		],
+        'search' => [
+            'empty' => 'Please enter a search term.',
+            'incomplete' => 'You must write your own search logic for this system.',
+            'title' => 'Search Results',
+            'results' => 'Search Results for :query',
+        ],
 
-		'welcome' => '<p>Le thème AdminLTE est créé par <a href="https://almsaeedstudio.com/" target="_blank">https://almsaeedstudio.com/</a>. Ceci est une version allégée avec seulement les styles et les scripts nécessaires pour le faire fonctionner. Téléchargez la version complète pour commencer à ajouter des composants à votre tableau de bord.</p>
+        'welcome' => '<p>Le thème AdminLTE est créé par <a href="https://almsaeedstudio.com/" target="_blank">https://almsaeedstudio.com/</a>. Ceci est une version allégée avec seulement les styles et les scripts nécessaires pour le faire fonctionner. Téléchargez la version complète pour commencer à ajouter des composants à votre tableau de bord.</p>
 <p>Toutes les fonctionnalités sont dédiées à l\'affichage, à l\'exception de la <strong>Gestion des utilisateurs</strong> à gauche. Ce projet boilerplate est livré avec une bibliothèque de contrôle d\'accès entièrement fonctionnelle pour gérer les utilisateurs / rôles / permmissions.</p>
 <p>Gardez à l\'esprit que c\'est un travail en cours et qu\'il peut subsister quelques anomalies ou bugs qui n\'ont pas été corrigés. Je ferai de mon mieux pour y remédier.</p>
 <p>J\'espère que vous apprécierez le travail que j\'ai mis dans ce projet. Visitez la page <a href="https://github.com/rappasoft/laravel-5-boilerplate" target="_blank">GitHub</a> pour plus d\'informations et enregistrez les <a href="https://github.com/rappasoft/Laravel-5-Boilerplate/issues" target="_blank">anomalies ici</a>.</p>
@@ -104,7 +103,7 @@ return [
                 'array_permissions' => "L'utilisateur doit disposer de toutes les permissions d'un tableau, identifiées soit par leur ID, soit par leur nom.",
                 'array_permissions_not' => "L'utilisateur doit disposer d'au moins une des permissions d'un tableau, identifiées soit par leur ID, soit par leur nom.",
                 'array_roles' => "L'utilisateur doit disposer de tous les rôles d'un tableau, identifiés soit par leur ID, soit par leur nom.",
-                'array_roles_not' =>  "L'utilisateur doit disposer d'au moins un des rôles d'un tableau, identifiés soit par leur ID, soit par leur nom.",
+                'array_roles_not' => "L'utilisateur doit disposer d'au moins un des rôles d'un tableau, identifiés soit par leur ID, soit par leur nom.",
                 'permission_id' => "L'utilisateur doit disposer d'une permission identifiée par son ID",
                 'permission_name' => "L'utilisateur doit disposer d'une permission identifiée par son nom",
                 'role_id' => "L'utilisateur doit disposer d'un rôle identifié par son ID",

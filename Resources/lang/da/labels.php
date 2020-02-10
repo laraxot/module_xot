@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'Nej',
         'custom' => 'Brugerdefineret',
         'actions' => 'Handlinger',
-		'active' => 'Active',
+        'active' => 'Active',
         'buttons' => [
             'save' => 'Gem',
             'update' => 'Opdater',
         ],
         'hide' => 'Skjul',
-		'inactive' => 'Inactive',
+        'inactive' => 'Inactive',
         'none' => 'Ingen',
         'show' => 'Vis',
         'toggle_navigation' => 'Navigation',
@@ -74,33 +73,32 @@ return [
                     'total' => 'bruger i alt|brugere i alt',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'History',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Confirmed',
-							'created_at' => 'Created At',
-							'deleted_at' => 'Deleted At',
-							'email' => 'E-mail',
-							'last_updated' => 'Last Updated',
-							'name' => 'Name',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Confirmed',
+                            'created_at' => 'Created At',
+                            'deleted_at' => 'Deleted At',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Last Updated',
+                            'name' => 'Name',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'View User',
+                'view' => 'View User',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Log ind',
             'login_button' => 'Log ind',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Opdater information',
             ],
         ],
-
     ],
 ];

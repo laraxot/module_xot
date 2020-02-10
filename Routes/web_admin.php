@@ -34,9 +34,9 @@ if ('admin' == \Request::segment(1)) {
     $prefix = 'admin';
     Route::group(
         [
-        'prefix' => $prefix,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
+            'prefix' => $prefix,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
         ],
         function () use ($areas_prgs,$namespace) {
             RouteService::dynamic_route($areas_prgs, null, $namespace);

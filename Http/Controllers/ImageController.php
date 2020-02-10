@@ -58,9 +58,9 @@ class ImageController extends Controller {
         }
 
         $response = [
-                'status' => 'success',
-                'url' => $url.'?'.\time(), //added the time to force update when editting multiple times
-                'filename' => $filename,
+            'status' => 'success',
+            'url' => $url.'?'.\time(), //added the time to force update when editting multiple times
+            'filename' => $filename,
         ];
 
         if (! empty($data['original'])) {

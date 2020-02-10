@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Buttons Language Lines
@@ -42,7 +41,7 @@ return [
             'delete' => 'Radera',
             'edit' => 'Redigera',
             'update' => 'Uppdatera',
-			'view' => 'View',
+            'view' => 'View',
         ],
 
         'save' => 'Spara',

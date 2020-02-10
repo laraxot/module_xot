@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Alert Language Lines
@@ -27,7 +26,7 @@ return [
             'deleted_permanently' => 'Brugeren blev slettet permanent.',
             'restored' => 'Brugeren blev genskabt.',
             'updated' => 'Brugeren blev opdateret.',
-            'updated_password' => "Brugerens adgangskode blev opdateret.",
-        ]
+            'updated_password' => 'Brugerens adgangskode blev opdateret.',
+        ],
     ],
 ];

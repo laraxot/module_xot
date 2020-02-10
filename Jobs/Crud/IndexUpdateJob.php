@@ -14,8 +14,7 @@ use Modules\Xot\Services\PanelService as Panel;
 
 //--- to do ---
 
-class IndexUpdateJob implements ShouldQueue
-{
+class IndexUpdateJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -33,26 +32,25 @@ class IndexUpdateJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null)
-    {
+    public function __construct($container, $item, $data = null) {
         $this->container = $container;
-        $this->item      = $item;
+        $this->item = $item;
 
-        if (!is_object($item)) {
-            $row  = xotModel($container);
+        if (! is_object($item)) {
+            $row = xotModel($container);
             $rows = $row;
         } else {
             $types = Str::camel(Str::plural($container));
-            $rows  = $item->$types();
-            $row   = $rows->getRelated();
+            $rows = $item->$types();
+            $row = $rows->getRelated();
         }
-        $this->row   = $row;
-        $this->rows  = $rows;
+        $this->row = $row;
+        $this->rows = $rows;
         $this->panel = Panel::get($row);
         $this->panel->setRows($rows);
         //ddd($this->panel);
 
-        if ($data == null) {
+        if (null == $data) {
             $data = $this->getData();
         }
         $this->data = $data;
@@ -63,15 +61,14 @@ class IndexUpdateJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
-    {
+    public function handle() {
         //ddd($this->item->groups);
         $this->manageRelationships(['model' => $this->item, 'data' => $this->data, 'act' => 'indexUpdate']);
+
         return $this->panel;
     }
 
-    public function indexUpdateRelationshipsBelongsToMany($params)
-    {
+    public function indexUpdateRelationshipsBelongsToMany($params) {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
@@ -82,8 +79,7 @@ class IndexUpdateJob implements ShouldQueue
         }
     }
 
-    public function indexUpdateRelationshipsMorphToMany($params)
-    {
+    public function indexUpdateRelationshipsMorphToMany($params) {
         extract($params);
         //ddd($data);
         /*
@@ -96,10 +92,10 @@ class IndexUpdateJob implements ShouldQueue
         //*/
         foreach ($data as $k => $v) {
             if (is_array($v)) {
-                if (!isset($v['pivot'])) {
+                if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
-                if ((!isset($v['pivot']['auth_user_id']) || '' == $v['pivot']['auth_user_id']) && \Auth::check()) {
+                if ((! isset($v['pivot']['auth_user_id']) || '' == $v['pivot']['auth_user_id']) && \Auth::check()) {
                     $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
                 }
                 $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
@@ -116,11 +112,10 @@ class IndexUpdateJob implements ShouldQueue
         }
     }
 
-    public function saveMultiselectTwoSides($params)
-    {
+    public function saveMultiselectTwoSides($params) {
         //passo request o direttamente data ?
         extract($params);
-        $items   = $model->$name();
+        $items = $model->$name();
         $related = $items->getRelated();
         //ddd($related);
         $container_obj = $model;
@@ -129,10 +124,10 @@ class IndexUpdateJob implements ShouldQueue
         //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
 
-        if (!isset($data['to'])) {
+        if (! isset($data['to'])) {
             $data['to'] = [];
         }
-        $items_1   = collect($data['to']);
+        $items_1 = collect($data['to']);
         $items_add = $items_1->diff($items_0);
         $items_sub = $items_0->diff($items_1);
         $items->detach($items_sub->all());
@@ -142,7 +137,7 @@ class IndexUpdateJob implements ShouldQueue
         } catch (\Exception $e) {
             $items->attach($items_add->all());
         }
-        $status = 'collegati [' . \implode(', ', $items_add->all()) . '] scollegati [' . \implode(', ', $items_sub->all()) . ']';
+        $status = 'collegati ['.\implode(', ', $items_add->all()).'] scollegati ['.\implode(', ', $items_sub->all()).']';
         \Session::flash('status', $status);
     }
 }

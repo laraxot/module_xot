@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Navs Language Lines
@@ -25,11 +24,11 @@ return [
         'register' => 'Registrarse',
 
         'user' => [
-			'account' => 'Mi Cuenta',
+            'account' => 'Mi Cuenta',
             'administration' => 'Administración',
             'change_password' => 'Cambiar la contraseña',
             'my_information' => 'Mi Cuenta',
-			'profile' => 'Perfil',
+            'profile' => 'Perfil',
         ],
     ],
 ];

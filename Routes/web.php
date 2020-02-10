@@ -14,9 +14,9 @@ $areas_prgs = include __DIR__.'/web_common.php';
 $prefix = '{lang}';
 Route::group(
     [
-    'prefix' => $prefix,
-    'middleware' => $middleware,
-    'namespace' => $namespace,
+        'prefix' => $prefix,
+        'middleware' => $middleware,
+        'namespace' => $namespace,
     ],
     function () use ($areas_prgs,$namespace) {
         RouteService::dynamic_route($areas_prgs, null, $namespace);
@@ -44,9 +44,9 @@ $prefix = 'admin';
 
 Route::group(
     [
-    'prefix' => $prefix,
-    'middleware' => $middleware,
-    'namespace' => $namespace.'\Admin',
+        'prefix' => $prefix,
+        'middleware' => $middleware,
+        'namespace' => $namespace.'\Admin',
     ],
     function () use ($areas_prgs) {
         Route::get('/', 'BackendController@dashboard');
@@ -72,9 +72,9 @@ if (in_admin()) {
     $namespace .= '\Admin';
     Route::group(
         [
-        'prefix' => $prefix,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
+            'prefix' => $prefix,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
         ],
         function () use ($areas_adm,$namespace) {
             RouteService::dynamic_route($areas_adm, null, $namespace);

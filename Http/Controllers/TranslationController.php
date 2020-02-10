@@ -20,10 +20,10 @@ class TranslationController extends Controller {
         TranslatorService::store($trans);
         if (\Request::ajax()) {
             $response = [
-                    'success' => true,
-                    //'data'    => $result,
-                    'message' => 'OK',
-                ];
+                'success' => true,
+                //'data'    => $result,
+                'message' => 'OK',
+            ];
             $response = \array_merge($data, $response);
 
             return response()->json($response, 200);

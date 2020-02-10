@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'ไม่',
         'custom' => 'เลือกเอง',
         'actions' => 'การกระทำ',
-	'active' => 'ใช้งาน',
+        'active' => 'ใช้งาน',
         'buttons' => [
             'save' => 'บันทึก',
             'update' => 'แก้ไข',
         ],
         'hide' => 'ซ่อน',
-	'inactive' => 'ไม่ใช้งาน',
+        'inactive' => 'ไม่ใช้งาน',
         'none' => 'ไม่มี',
         'show' => 'แสดง',
         'toggle_navigation' => 'เปิด/ปิด เมนูนำทาง',
@@ -74,33 +73,32 @@ return [
                     'total' => 'ผู้ใช้ทั้งหมด|ผู้ใช้ทั้งหมด',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'ภาพรวม',
-						'history' => 'ประวัติ',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'ภาพรวม',
+                        'history' => 'ประวัติ',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'รูปตัวแทน',
-							'confirmed' => 'ยืนยันเรียบร้อย',
-							'created_at' => 'สร้างแล้วเมื่อ',
-							'deleted_at' => 'ลบแล้วเมื่อ',
-							'email' => 'อีเมล',
-							'last_updated' => 'ปรับปรุงล่าสุด',
-							'name' => 'ชื่อ',
-							'status' => 'สถานะ',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'รูปตัวแทน',
+                            'confirmed' => 'ยืนยันเรียบร้อย',
+                            'created_at' => 'สร้างแล้วเมื่อ',
+                            'deleted_at' => 'ลบแล้วเมื่อ',
+                            'email' => 'อีเมล',
+                            'last_updated' => 'ปรับปรุงล่าสุด',
+                            'name' => 'ชื่อ',
+                            'status' => 'สถานะ',
+                        ],
+                    ],
+                ],
 
-				'view' => 'แสดงผู้ใช้',
+                'view' => 'แสดงผู้ใช้',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'เข้าสู่ระบบ',
             'login_button' => 'เข้าสู่ระบบ',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'ปรับปรุงข้อมูล',
             ],
         ],
-
     ],
 ];

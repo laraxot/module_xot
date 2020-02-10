@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'Nej',
         'custom' => 'Specifika',
         'actions' => 'Hantera',
-		'active' => 'Active',
+        'active' => 'Active',
         'buttons' => [
             'save' => 'Spara',
             'update' => 'Uppdatera',
         ],
         'hide' => 'Dölj',
-		'inactive' => 'Inactive',
+        'inactive' => 'Inactive',
         'none' => 'Inga',
         'show' => 'Visa',
         'toggle_navigation' => 'Växla navigering',
@@ -74,33 +73,32 @@ return [
                     'total' => 'användare totalt|användare totalt',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'History',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Confirmed',
-							'created_at' => 'Created At',
-							'deleted_at' => 'Deleted At',
-							'email' => 'E-mail',
-							'last_updated' => 'Last Updated',
-							'name' => 'Name',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Confirmed',
+                            'created_at' => 'Created At',
+                            'deleted_at' => 'Deleted At',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Last Updated',
+                            'name' => 'Name',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'View User',
+                'view' => 'View User',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Logga in',
             'login_button' => 'Logga in',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Uppdatera profil',
             ],
         ],
-
     ],
 ];

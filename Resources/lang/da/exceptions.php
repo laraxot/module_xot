@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Exception Language Lines
@@ -31,7 +30,7 @@ return [
                 'cant_delete_self' => 'Du kan ikke slette dig selv.',
                 'create_error' => 'Der opstod et problem ved oprettelsen af denne bruger. Prøv venligst igen.',
                 'delete_error' => 'Der opstod et problem ved sletning af denne bruger. Prøv venligst igen.',
-				'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
+                'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
                 'email_error' => 'Denne e-mailadresse tilhører en anden bruger.',
                 'mark_error' => 'Der opstod et problem ved opdatering af denne bruger. Prøv venligst igen.',
                 'not_found' => 'Denne bruger eksisterer ikke.',
@@ -52,7 +51,7 @@ return [
                 'created_confirm' => 'Din konto blev oprettet. Vi har sendt dig en email for at bekræfte din konto.',
                 'mismatch' => 'Din bekræftelseskode matcher ikke.',
                 'not_found' => 'Denne bekræftelseskode findes ikke.',
-                'resend' => 'Din konto er ikke bekræftet. Klik på linket i bekræftelsesmailen eller <a href="' . route('frontend.auth.account.confirm.resend', ':user_id') . '">klik her</a> for at gensende bekræftelsesmailen.',
+                'resend' => 'Din konto er ikke bekræftet. Klik på linket i bekræftelsesmailen eller <a href="'.route('frontend.auth.account.confirm.resend', ':user_id').'">klik her</a> for at gensende bekræftelsesmailen.',
                 'success' => 'Din konto er blevet bekræftet!',
                 'resent' => 'En ny bekræftelsesmail er blevet sendt til den kendte e-mailadresse.',
             ],
@@ -63,8 +62,6 @@ return [
             'password' => [
                 'change_mismatch' => 'Dette er ikke din gamle adgangskode.',
             ],
-
-
         ],
     ],
 ];

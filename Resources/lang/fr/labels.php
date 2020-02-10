@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -19,13 +18,13 @@ return [
         'no' => 'Non',
         'custom' => 'Personnalisé',
         'actions' => 'Actions',
-		'active' => 'Active',
+        'active' => 'Active',
         'buttons' => [
             'save' => 'Enregistrer',
             'update' => 'Mettre à jour',
         ],
         'hide' => 'Cacher',
-		'inactive' => 'Inactive',
+        'inactive' => 'Inactive',
         'none' => 'Aucun',
         'show' => 'Voir',
         'toggle_navigation' => 'Navigation',
@@ -74,37 +73,36 @@ return [
                     'total' => 'utilisateur total|utilisateurs total',
                 ],
 
-				'tabs' => [
-					'titles' => [
-						'overview' => 'Overview',
-						'history' => 'History',
-					],
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
 
-					'content' => [
-						'overview' => [
-							'avatar' => 'Avatar',
-							'confirmed' => 'Confirmed',
-							'created_at' => 'Created At',
-							'deleted_at' => 'Deleted At',
-							'email' => 'E-mail',
-							'last_updated' => 'Last Updated',
-							'name' => 'Name',
-							'status' => 'Status',
-						],
-					],
-				],
+                    'content' => [
+                        'overview' => [
+                            'avatar' => 'Avatar',
+                            'confirmed' => 'Confirmed',
+                            'created_at' => 'Created At',
+                            'deleted_at' => 'Deleted At',
+                            'email' => 'E-mail',
+                            'last_updated' => 'Last Updated',
+                            'name' => 'Name',
+                            'status' => 'Status',
+                        ],
+                    ],
+                ],
 
-				'view' => 'View User',
+                'view' => 'View User',
             ],
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Connexion',
-            'login_button' => "Entrer",
-            'login_with' => "Se connecter avec :social_media",
+            'login_button' => 'Entrer',
+            'login_with' => 'Se connecter avec :social_media',
             'register_box_title' => "S'enregistrer",
             'register_button' => 'Créer le compte',
             'remember_me' => 'Se souvenir de moi',
@@ -158,6 +156,5 @@ return [
                 'update_information' => 'Mettre à jour les informations',
             ],
         ],
-
     ],
 ];

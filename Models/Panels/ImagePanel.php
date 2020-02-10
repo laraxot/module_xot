@@ -27,7 +27,7 @@ class ImagePanel extends XotBasePanel {
      * @var array
      */
     protected static $search = [
-];
+    ];
 
     /**
      * The relationships that should be eager loaded on index queries.
@@ -90,7 +90,6 @@ class ImagePanel extends XotBasePanel {
      *
      * This query determines which instances of the model may be attached to other resources.
      *
-     * @param Request                               $request
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -102,7 +101,7 @@ class ImagePanel extends XotBasePanel {
 
     public function fields() {
         return [
-];
+        ];
     }
 
     /**
@@ -118,8 +117,6 @@ class ImagePanel extends XotBasePanel {
 
     /**
      * Get the cards available for the request.
-     *
-     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
@@ -140,8 +137,6 @@ class ImagePanel extends XotBasePanel {
 
     /**
      * Get the lenses available for the resource.
-     *
-     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */

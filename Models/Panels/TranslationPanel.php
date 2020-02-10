@@ -27,7 +27,7 @@ class TranslationPanel {
      * @var array
      */
     protected static $search = [
-];
+    ];
 
     /**
      * The relationships that should be eager loaded on index queries.
@@ -61,7 +61,7 @@ class TranslationPanel {
      */
     public function fields() {
         return [
-];
+        ];
     }
 
     /**
@@ -77,8 +77,6 @@ class TranslationPanel {
 
     /**
      * Get the cards available for the request.
-     *
-     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
@@ -99,8 +97,6 @@ class TranslationPanel {
 
     /**
      * Get the lenses available for the resource.
-     *
-     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */

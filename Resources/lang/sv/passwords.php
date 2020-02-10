@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Password Reset Language Lines
@@ -17,6 +16,5 @@ return [
     'reset' => 'Ditt lösenord har återställts!',
     'sent' => 'Ett mail med länk för återställning av ditt lösenord har nu skickats!',
     'token' => 'Denna kod för att återställa lösenord är ogiltig.',
-    'user' => "Det finns ingen registrerad användare med den e-postadressen.",
-
+    'user' => 'Det finns ingen registrerad användare med den e-postadressen.',
 ];

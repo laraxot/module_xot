@@ -1,8 +1,7 @@
 <?php
 
 return [
-
-    /**
+    /*
      *
      * Shared translations.
      *
@@ -11,19 +10,17 @@ return [
     'next' => '下一步',
     'finish' => '安装',
 
-
-    /**
+    /*
      *
      * Home page translations.
      *
      */
     'welcome' => [
-        'title'   => '欢迎来到Laravel安装程序',
+        'title' => '欢迎来到Laravel安装程序',
         'message' => '欢迎来到安装向导.',
     ],
 
-
-    /**
+    /*
      *
      * Requirements page translations.
      *
@@ -32,8 +29,7 @@ return [
         'title' => '环境要求',
     ],
 
-
-    /**
+    /*
      *
      * Permissions page translations.
      *
@@ -42,8 +38,7 @@ return [
         'title' => '权限',
     ],
 
-
-    /**
+    /*
      *
      * Environment page translations.
      *
@@ -55,8 +50,7 @@ return [
         'errors' => '无法保存 .env 文件, 请手动创建它.',
     ],
 
-
-    /**
+    /*
      *
      * Final page translations.
      *

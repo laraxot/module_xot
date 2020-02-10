@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Exception Language Lines
@@ -29,10 +28,10 @@ return [
             'users' => [
                 'cant_deactivate_self' => 'Δεν μπορείτε να το κάνετε αυτό στον εαυτό σας.',
                 'cant_delete_self' => 'Δεν μπορείτε να διαγράψετε τον εαυτό σας.',
-				'cant_restore' => 'This user is not deleted so it can not be restored.',
+                'cant_restore' => 'This user is not deleted so it can not be restored.',
                 'create_error' => 'There was a problem creating this user. Please try again.',
                 'delete_error' => 'There was a problem deleting this user. Please try again.',
-				'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
+                'delete_first' => 'This user must be deleted first before it can be destroyed permanently.',
                 'email_error' => 'That email address belongs to a different user.',
                 'mark_error' => 'There was a problem updating this user. Please try again.',
                 'not_found' => 'That user does not exist.',
@@ -53,7 +52,7 @@ return [
                 'created_confirm' => 'Your account was successfully created. We have sent you an e-mail to confirm your account.',
                 'mismatch' => 'Your confirmation code does not match.',
                 'not_found' => 'That confirmation code does not exist.',
-                'resend' => 'Your account is not confirmed. Please click the confirmation link in your e-mail, or <a href="' . route('frontend.auth.account.confirm.resend', ':user_id') . '">click here</a> to resend the confirmation e-mail.',
+                'resend' => 'Your account is not confirmed. Please click the confirmation link in your e-mail, or <a href="'.route('frontend.auth.account.confirm.resend', ':user_id').'">click here</a> to resend the confirmation e-mail.',
                 'success' => 'Your account has been successfully confirmed!',
                 'resent' => 'A new confirmation e-mail has been sent to the address on file.',
             ],

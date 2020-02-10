@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Labels Language Lines
@@ -36,8 +35,7 @@ return [
             'merchant_registration_list' => 'Restaurant Registration List',
             'merchant_payment_list' => 'Restaurant Payment Manager',
             'order_list' => 'Order List',
-
-    ],
+        ],
 
         'voucher' => [
             'active' => 'Active Discounts',
@@ -55,82 +53,73 @@ return [
                 'used' => 'Used',
                 'created_at' => 'Created At',
             ],
-
         ],
         'takeaway' => [
-        'smsAlertsetting' => [
-        'management' => 'Sms Alert Setting Management',
-        'active' => 'Sms Alert Setting',
-
-        ],
-        	'customer-list' => [
-        	       'table' =>[
-	                    'id' => 'ID',
-	                    'customer_name' => 'Customer Name',
-	                    'status' => 'Status',
-	                    'created_date' => 'Created At',
-	               ],
-		        'active' => 'Customer List',
-		        'management' => 'Customer Management'
-	        ],
-        'subscriber' => [
-        'table' => [
-            'id' => 'Id',
-            'subscribe_email' => 'Subscriber Email',
-            'subscribe_ip' => 'Subscriber Ip',
-            'created_at' => 'Created At',
-            'status' => 'Status',
-            'customer_id' => 'Customer Id',
-            'total_price' => 'Total Price',
-
-        ],
-            'management' => 'Subscriber Management',
-            'active' => 'Active Subscriber',
-        ],
-
-
-        'order' => [
-            'table' => [
-                'id' => 'Id',
-                'created_at' => 'Created At',
-                'status' => 'Status',
-                'customer_name' => 'Customer Name',
-                'total_price' => 'Total Price',
-
+            'smsAlertsetting' => [
+                'management' => 'Sms Alert Setting Management',
+                'active' => 'Sms Alert Setting',
             ],
-        ],
-        'withdrawal' => [
-        'table' => [
-            'date' => 'Date',
-            'merchant' => 'Restaurant Name',
-            'amount' => 'Amount',
-            'payment_type' => 'Payment Type',
-            'from_balance' => 'From Balance',
-            'payment_method' => 'Payment Method',
-            'account' => 'Account',
-            'status' => 'Status',
-            'date_to_process' => 'Date To Process',
-            'created_at' => 'Created At',
-            'merchant_id' => 'Merchant Name',
-            'bank_name' => 'Bank Name'
+            'customer-list' => [
+                'table' => [
+                    'id' => 'ID',
+                    'customer_name' => 'Customer Name',
+                    'status' => 'Status',
+                    'created_date' => 'Created At',
+                ],
+                'active' => 'Customer List',
+                'management' => 'Customer Management',
+            ],
+            'subscriber' => [
+                'table' => [
+                    'id' => 'Id',
+                    'subscribe_email' => 'Subscriber Email',
+                    'subscribe_ip' => 'Subscriber Ip',
+                    'created_at' => 'Created At',
+                    'status' => 'Status',
+                    'customer_id' => 'Customer Id',
+                    'total_price' => 'Total Price',
+                ],
+                'management' => 'Subscriber Management',
+                'active' => 'Active Subscriber',
+            ],
 
-        ],
-
-        ],
-        'smsPurchaseCredit' => [
-        'table' => [
-            'id' => 'REf#',
-            'title' => 'Package Name',
-            'price' => 'Package Price',
-            'credits' => 'Package Credits',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-
-        ],
-            'management' => 'Sms Purchase Credit Management',
-            'active' => 'Active Sms Purchase Credit',
-
-        ],
+            'order' => [
+                'table' => [
+                    'id' => 'Id',
+                    'created_at' => 'Created At',
+                    'status' => 'Status',
+                    'customer_name' => 'Customer Name',
+                    'total_price' => 'Total Price',
+                ],
+            ],
+            'withdrawal' => [
+                'table' => [
+                    'date' => 'Date',
+                    'merchant' => 'Restaurant Name',
+                    'amount' => 'Amount',
+                    'payment_type' => 'Payment Type',
+                    'from_balance' => 'From Balance',
+                    'payment_method' => 'Payment Method',
+                    'account' => 'Account',
+                    'status' => 'Status',
+                    'date_to_process' => 'Date To Process',
+                    'created_at' => 'Created At',
+                    'merchant_id' => 'Merchant Name',
+                    'bank_name' => 'Bank Name',
+                ],
+            ],
+            'smsPurchaseCredit' => [
+                'table' => [
+                    'id' => 'REf#',
+                    'title' => 'Package Name',
+                    'price' => 'Package Price',
+                    'credits' => 'Package Credits',
+                    'status' => 'Status',
+                    'created_at' => 'Created At',
+                ],
+                'management' => 'Sms Purchase Credit Management',
+                'active' => 'Active Sms Purchase Credit',
+            ],
             'smsBroadCast' => [
                 'table' => [
                     'id' => 'Id',
@@ -138,111 +127,98 @@ return [
                     'message' => 'Message',
                     'status' => 'Status',
                     'created_at' => 'Created At',
-
-        ],
-            'management' => 'Sms Broad Cast Management',
-            'active' => 'Active Sms Broad Cast',
-            'create' => 'Create Sms Broad Cast',
-            'edit' => 'Edit Sms Broad Cast',
-
-        ],
-        'commission' => [
-        'table' => [
-            'id' => 'Id',
-            'payment_method' => 'Payment Method',
-            'total_price' => 'Total Price',
-            'comission_amount' => 'Commission Amount',
-            'commission_price' => 'Commission Price',
-            'net_amount' => 'Net Amount',
-            'date' => 'Date',
-            'delivery_date' => 'Delivery Date',
-
-        ],
-            'management' => 'Commission Management',
-            'active' => 'Active Commission',
-            'start_date' => 'Start Date',
-            'end_date' => 'End Date',
-
-        ],
+                ],
+                'management' => 'Sms Broad Cast Management',
+                'active' => 'Active Sms Broad Cast',
+                'create' => 'Create Sms Broad Cast',
+                'edit' => 'Edit Sms Broad Cast',
+            ],
+            'commission' => [
+                'table' => [
+                    'id' => 'Id',
+                    'payment_method' => 'Payment Method',
+                    'total_price' => 'Total Price',
+                    'comission_amount' => 'Commission Amount',
+                    'commission_price' => 'Commission Price',
+                    'net_amount' => 'Net Amount',
+                    'date' => 'Date',
+                    'delivery_date' => 'Delivery Date',
+                ],
+                'management' => 'Commission Management',
+                'active' => 'Active Commission',
+                'start_date' => 'Start Date',
+                'end_date' => 'End Date',
+            ],
             'gallerySettings' => 'Gallery Setting Management',
             'active' => 'Active Gallery Setting',
-        'receipt' => [
-            'management' => 'Receipt Management',
-            'active' => 'Active Receipt',
+            'receipt' => [
+                'management' => 'Receipt Management',
+                'active' => 'Active Receipt',
+            ],
+            'tableBookingSetting' => [
+                'management' => 'Table Booking Setting Management',
+                'edit' => 'Edit Table Booking Setting',
+                'maximum_tables_to_book_a_day' => 'Maximum Tables To Book A Day',
+                'monday' => 'Monday',
+            ],
+            'tableBooking' => [
+                'table' => [
+                    'person_name' => 'Guest Name',
+                    'number_guests' => 'No. of Guests',
+                    'date_of_booking' => 'Date Of Booking',
+                    'person_mobile' => 'Guest Mobile',
+                    'person_comments' => 'Guest Comments',
+                    'created_at' => 'Created At',
+                ],
+                'management' => 'Table Booking Management',
+                'active' => 'Active Table Booking',
+                'create' => 'Create Table Booking',
+                'edit' => 'Edit Table Booking',
+                'view' => 'View Table Booking',
+            ],
+            'smsTransaction' => [
+                'tabs' => [
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
+                    'content' => [
+                        'overview' => [
+                            'merchant_id' => 'Restaurant Name',
+                            'credits' => 'Credits',
+                            'status' => 'Status',
+                            'created_at' => 'Created At',
+                            'desc' => 'Description',
+                            'last_updated' => 'Last Updated',
+                        ],
+                    ],
+                ],
+                'table' => [
+                    'id' => 'Id',
+                    'merchant_id' => 'Restaurant Name',
+                    'sms_package_id' => 'Package Name',
+                    'credits' => 'Credits',
+                    'status' => 'Status',
+                    'paid_by' => 'Paid By',
+                    'created_at' => 'Created At',
+                ],
 
-        ],
-        'tableBookingSetting' => [
-            'management' => 'Table Booking Setting Management',
-            'edit' => 'Edit Table Booking Setting',
-            'maximum_tables_to_book_a_day' => 'Maximum Tables To Book A Day',
-            'monday' => 'Monday',
-
-        ],
-        'tableBooking' => [
-        'table' => [
-            'person_name' => 'Guest Name',
-            'number_guests' => 'No. of Guests',
-            'date_of_booking' => 'Date Of Booking',
-            'person_mobile' => 'Guest Mobile',
-            'person_comments' => 'Guest Comments',
-            'created_at' => 'Created At',
-
-        ],
-            'management' => 'Table Booking Management',
-            'active' => 'Active Table Booking',
-            'create' => 'Create Table Booking',
-            'edit' => 'Edit Table Booking',
-            'view' => 'View Table Booking',
-        ],
-        'smsTransaction' => [
-        'tabs' => [
-        'titles' => [
-            'overview' => 'Overview',
-            'history' => 'History',
-
-        ],
-        'content' => [
-        'overview' => [
-            'merchant_id' => 'Restaurant Name',
-            'credits' => 'Credits',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'desc' => 'Description',
-            'last_updated' => 'Last Updated',
-
-        ],
-
-        ],
-
-        ],
-        'table' => [
-            'id' => 'Id',
-            'merchant_id' => 'Restaurant Name',
-            'sms_package_id' => 'Package Name',
-            'credits' => 'Credits',
-            'status' => 'Status',
-            'paid_by' => 'Paid By',
-            'created_at' => 'Created At',
-
-        ],
-
-            'management' => 'Sms Transaction Management',
-            'active' => 'Active Sms Transaction',
-            'create' => 'Create Sms Transaction',
-            'edit' => 'Edit Sms Transaction',
-            'view' => 'View Sms Transaction',
-        ],
+                'management' => 'Sms Transaction Management',
+                'active' => 'Active Sms Transaction',
+                'create' => 'Create Sms Transaction',
+                'edit' => 'Edit Sms Transaction',
+                'view' => 'View Sms Transaction',
+            ],
             'smsLog' => [
                 'table' => [
                     'id' => 'Id',
-                    'gateway'=> 'Gateway',
+                    'gateway' => 'Gateway',
                     'merchant_id' => 'Restaurant Name',
                     'phone' => 'Phone',
                     'message' => 'Message',
                     'response' => 'Response',
                     'status' => 'Status',
                     'created_at' => 'Created At',
-
                 ],
 
                 'management' => 'Sms Log Management',
@@ -251,47 +227,42 @@ return [
                 'edit' => 'Edit Sms Log',
                 'view' => 'View Sms Log',
             ],
-        'smsPackage' => [
-        'tabs' => [
-        'content' => [
-        'overview' => [
-            'title' => 'Title',
-            'desc' => 'Description',
-            'price' => 'Price',
-            'dis_price' => 'Discount',
-            'credit_limit' => 'Credit Limit',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'last_updated' => 'Last Updated',
-            'type' => 'Type',
-
-        ],
-
-        ],
-        'titles' => [
-            'overview' => 'Overview',
-            'history' => 'History',
-
-        ],
-
-        ],
-        'table' => [
-            'id' => 'Id',
-            'title' => 'Title',
-            'description' => 'Description',
-            'price' => 'Price',
-            'dis_price' => 'Discount',
-            'credit_limit' => 'Credit Limit',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-
-        ],
-            'management' => 'SmsPackage Management',
-            'active' => 'Active SmsPackage',
-            'create' => 'Create SmsPackage',
-            'edit' => 'Edit SmsPackage',
-            'view' => 'View SmsPackage',
-        ],
+            'smsPackage' => [
+                'tabs' => [
+                    'content' => [
+                        'overview' => [
+                            'title' => 'Title',
+                            'desc' => 'Description',
+                            'price' => 'Price',
+                            'dis_price' => 'Discount',
+                            'credit_limit' => 'Credit Limit',
+                            'status' => 'Status',
+                            'created_at' => 'Created At',
+                            'last_updated' => 'Last Updated',
+                            'type' => 'Type',
+                        ],
+                    ],
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
+                ],
+                'table' => [
+                    'id' => 'Id',
+                    'title' => 'Title',
+                    'description' => 'Description',
+                    'price' => 'Price',
+                    'dis_price' => 'Discount',
+                    'credit_limit' => 'Credit Limit',
+                    'status' => 'Status',
+                    'created_at' => 'Created At',
+                ],
+                'management' => 'SmsPackage Management',
+                'active' => 'Active SmsPackage',
+                'create' => 'Create SmsPackage',
+                'edit' => 'Edit SmsPackage',
+                'view' => 'View SmsPackage',
+            ],
             'deliveryChargeInfo' => [
                 'set' => 'Deliver Charges',
             ],
@@ -305,7 +276,6 @@ return [
                     'created_at' => 'Created At',
                     'free_delivery_above_sub_total' => 'Free Delivery Above Sub Total',
                     'are_rates_enabled' => 'Enabled Table Rates',
-
                 ],
                 'create' => 'Create Delivery Charge',
                 'edit' => 'Edit Delivery Charge',
@@ -326,7 +296,6 @@ return [
                 'view' => 'View Customer Review',
                 'create' => 'Create Customer Review',
                 'edit' => 'Edit Customer Review',
-
             ],
             'offer' => [
                 'table' => [
@@ -350,11 +319,8 @@ return [
                             'last_updated' => 'Last Updated',
                             'deleted_at' => 'Deleted At',
                         ],
-
                     ],
-
                 ],
-
             ],
             'cuisine' => [
                 'table' => [
@@ -368,12 +334,10 @@ return [
                 'active' => 'Active Cuisine',
                 'update' => 'Update Cuisine',
                 'view' => 'view Cuisine',
-
             ],
             'email' => [
                 'active' => 'Active Email',
                 'management' => 'Email Management',
-
             ],
             'merchant' => [
                 'table' => [
@@ -399,7 +363,6 @@ return [
                     'created_at' => 'Created At',
                     'trans_id' => 'Trans Id',
                     'charges_type' => 'Charges Type',
-
                 ],
                 'management' => 'Restaurant Management',
                 'active' => 'Active Restaurant',
@@ -440,11 +403,8 @@ return [
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
                             'deleted_at' => 'Deleted At',
-
                         ],
-
                     ],
-
                 ],
             ],
             'rating' => [
@@ -464,7 +424,6 @@ return [
                     'titles' => [
                         'overview' => 'Overview',
                         'history' => 'History',
-
                     ],
                     'content' => [
                         'overview' => [
@@ -474,11 +433,8 @@ return [
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
                         ],
-
                     ],
-
                 ],
-
             ],
             'dish' => [
                 'table' => [
@@ -487,12 +443,11 @@ return [
                     'status' => 'Status',
                     'icon' => 'Icon',
                     'created_at' => 'Created At',
-
                 ],
                 'tabs' => [
                     'titles' => [
                         'overview' => 'Overview',
-                        'history' => 'History'
+                        'history' => 'History',
                     ],
                 ],
                 'management' => 'Dish Management',
@@ -500,14 +455,13 @@ return [
                 'create' => 'Create Dish',
                 'edit' => 'Edit Dish',
                 'active' => 'Active Dish',
-
             ],
             'cookingReference' => [
                 'table' => [
                     'id' => 'Id',
                     'name' => 'Name',
                     'status' => 'Status',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'Cooking Reference Management',
                 'create' => 'Create Cooking Reference',
@@ -528,7 +482,7 @@ return [
                             'foodcanadd' => 'Foodcanadd',
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Apdated',
-                            'deleted_at' => 'Deleted At'
+                            'deleted_at' => 'Deleted At',
                         ],
                     ],
                     'titles' => [
@@ -544,15 +498,13 @@ return [
                     'meta_description' => 'Meta Description',
                     'meta_keywords' => 'Meta Keywords',
                     'page_status' => 'Page Status',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'Cms Management',
                 'create' => 'Cms Create',
                 'edit' => 'Cms Edit',
                 'active' => 'Cms Active',
                 'view' => 'Cms View',
-
-
             ],
             'category' => [
                 'management' => 'Category Management',
@@ -561,11 +513,10 @@ return [
                 'active' => 'Active Category',
                 'view' => 'View Category',
                 'tabs' => [
-                'titles' => [
-                    'overview' => 'Overview',
-                    'history' => 'History',
-
-                ],
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
                     'content' => [
                         'overview' => [
                             'title' => 'Title',
@@ -576,7 +527,7 @@ return [
                             'expiry' => 'expiry',
                             'created_at' => 'Created At',
                             'last_updated' => 'last_updated',
-                            'deleted_at' => 'deleted_at'
+                            'deleted_at' => 'deleted_at',
                         ],
                     ],
                 ],
@@ -589,9 +540,8 @@ return [
                     'status' => 'Status',
                     'cat_image' => 'Cat Image',
                     'dish_item' => 'Dish Product',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
-
             ],
             'addOnItem' => [
                 'tabs' => [
@@ -603,7 +553,7 @@ return [
                             'status' => 'Status',
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
-                            'deleted_at' => 'Deleted At'
+                            'deleted_at' => 'Deleted At',
                         ],
                     ],
                 ],
@@ -615,7 +565,7 @@ return [
                     'status' => 'Status',
                     'addon_price' => 'AddOn Price',
                     'addon_item_image' => 'AddOn Product Image',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'AddOn Product Management',
                 'create' => 'AddOn Product Create',
@@ -629,7 +579,6 @@ return [
                     'merchant_id' => 'Restaurant Name',
                     'expiry_date' => 'Expiry Date',
                     'created_at' => 'Created At',
-
                 ],
 
                 'management' => 'Sponsored Management',
@@ -655,7 +604,6 @@ return [
                         'overview' => 'Overview',
                         'history' => 'History',
                     ],
-
                 ],
                 'table' => [
                     'id' => 'Id',
@@ -671,16 +619,14 @@ return [
                 'size_name' => 'Qty Name',
                 'status' => 'Status',
                 'view' => 'View Product Size',
-
             ],
             'package' => [
                 'edit' => 'Edit Package',
                 'tabs' => [
-                'titles' => [
-                    'overview' => 'Overview',
-                    'history' => 'History',
-
-                ],
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History',
+                    ],
                     'content' => [
                         'overview' => [
                             'size_name' => 'Qty Name',
@@ -698,9 +644,7 @@ return [
                             'foodcanadd' => 'Number of Food Product Can Add',
                             'limitbysell' => 'Limit Restaurant By Sell',
                         ],
-
                     ],
-
                 ],
                 'management' => 'Package Management',
                 'create' => 'Create Package',
@@ -719,22 +663,20 @@ return [
                     'limitbysell' => 'Limit By Sell',
                     'status' => 'Status',
                     'created_at' => 'Created At',
-
                 ],
             ],
             'Ingredient' => [
                 'tabs' => [
                     'titles' => [
                         'overview' => 'Overview',
-                        'history' => 'History'
+                        'history' => 'History',
                     ],
-
                 ],
                 'table' => [
                     'id' => 'Id',
                     'ing_name' => 'ingredient Name',
                     'status' => 'Status',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'Ingredient Management',
                 'create' => 'Create Ingredient',
@@ -742,8 +684,7 @@ return [
                 'status' => 'Ingredient Status',
                 'edit' => 'Edit Ingredient',
                 'active' => 'Active Ingredient',
-                'view' => 'View Ingredient'
-
+                'view' => 'View Ingredient',
             ],
             'dishes' => [
                 'view' => 'View',
@@ -751,13 +692,12 @@ return [
                     'id' => 'Id',
                     'name' => 'Name',
                     'status' => 'status',
-                    'created_at' => 'Created At'
-
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'Management',
                 'create' => 'Create',
                 'dish_name' => 'Dish Name',
-                'type' => 'Type'
+                'type' => 'Type',
             ],
             'currency' => [
                 'create' => 'Create currency',
@@ -775,8 +715,7 @@ return [
                     'currency_symbol' => 'Currency Symbol',
                     'convertion_rate' => 'Convertion Rate',
                     'created_at' => 'Created At',
-                    'view' => 'View'
-
+                    'view' => 'View',
                 ],
                 'tabs' => [
                     'titles' => [
@@ -791,11 +730,8 @@ return [
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
                             'deleted_at' => 'Deleted At',
-
                         ],
-
                     ],
-
                 ],
             ],
 
@@ -810,11 +746,8 @@ return [
                     'voucher_status' => 'Voucher Status',
                     'use_only_once' => 'Use Only Once',
                     'used' => 'Used',
-
                 ],
-
             ],
-
 
             /*'package' => [
                 'tabs' => [
@@ -850,9 +783,6 @@ return [
 
                 ],
             ],*/
-
-
-
 
             /*'package' => [
                 'tabs' => [
@@ -902,9 +832,9 @@ return [
                     'is_disable_pointearn' => 'Is Disable Pointearn',
                     'ingredient_ref' => 'Ingredient Name',
                     'status' => 'Status',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
-                "active" => 'Active Product',
+                'active' => 'Active Product',
                 'management' => 'Product Management',
                 'edit' => 'Edit Product',
                 'create' => 'Create Product',
@@ -926,13 +856,12 @@ return [
                             'ingredient_ref' => 'Ingredient Id',
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Update',
-                            'deleted_at' => 'Deleted At'
-
+                            'deleted_at' => 'Deleted At',
                         ],
                     ],
                     'titles' => [
                         'overview' => 'Overview',
-                        'history' => 'History'
+                        'history' => 'History',
                     ],
                 ],
             ],
@@ -945,21 +874,18 @@ return [
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
                             'deleted_at' => 'Deleted At',
-
                         ],
-
                     ],
                     'titles' => [
                         'overview' => 'Overview',
-                        'history' => 'History'
+                        'history' => 'History',
                     ],
-
                 ],
                 'table' => [
                     'id' => 'Id',
                     'ing_name' => 'Ingredient Name',
                     'status' => 'Status',
-                    'created_at' => 'Created At'
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'Ingredient Management',
                 'create' => 'Create Ingredient',
@@ -967,17 +893,15 @@ return [
                 'status' => 'Ingredient Status',
                 'edit' => 'Edit Ingredient',
                 'active' => 'Active',
-                'view' => 'View'
-
+                'view' => 'View',
             ],
 
             'orderStatus' => [
                 'tabs' => [
-                'titles' => [
-                    'overview' => 'Overview',
-                    'history' => 'History Overview',
-
-                ],
+                    'titles' => [
+                        'overview' => 'Overview',
+                        'history' => 'History Overview',
+                    ],
                 ],
                 'create' => 'Create Order Status',
                 'view' => 'View Order Status',
@@ -995,10 +919,10 @@ return [
                     'deleted_at' => 'Deleted On',
                     'edit' => 'Edit',
                     'create' => 'Create',
-                    'view' => 'View'
+                    'view' => 'View',
                 ],
                 'active' => 'Active Order Status',
-                'management' => 'Order Status Management'
+                'management' => 'Order Status Management',
             ],
             'addOnCategory' => [
                 'table' => [
@@ -1006,8 +930,7 @@ return [
                     'addon_cat_item_name' => 'AddOn Category Name',
                     'addon_cat_desc' => 'AddOn Category Description',
                     'status' => 'Status',
-                    'created_at' => 'Created At'
-
+                    'created_at' => 'Created At',
                 ],
                 'management' => 'AddOn Category Managment',
                 'create' => 'Create AddOn Category ',
@@ -1022,14 +945,13 @@ return [
                             'status' => 'Status',
                             'created_at' => 'Created At',
                             'last_updated' => 'Last Updated',
-                            'deleted_at' => 'Deleted At'
+                            'deleted_at' => 'Deleted At',
                         ],
                     ],
                     'titles' => [
                         'overview' => 'Overview',
                         'history' => 'History',
                     ],
-
                 ],
             ],
         ],
@@ -1041,7 +963,6 @@ return [
                 'create' => 'Create Alert Setting',
                 'edit' => 'Edit Alert Setting',
                 'view' => 'View Alert Setting',
-
             ],
             'roles' => [
                 'create' => 'Create Role',
@@ -1107,9 +1028,7 @@ return [
                             'code' => 'Code',
                             'symbol' => 'symbol',
                             'rate' => 'Rate',
-                            'icon' => 'Icon'
-
-
+                            'icon' => 'Icon',
                         ],
                     ],
                 ],
@@ -1118,12 +1037,11 @@ return [
             ],
         ],
         'settings' => [
-            'settings' => 'Settings'
+            'settings' => 'Settings',
         ],
     ],
 
     'frontend' => [
-
         'auth' => [
             'login_box_title' => 'Log in to your account',
             'login_button' => 'Login',
@@ -1191,6 +1109,5 @@ return [
                 'google_lng' => 'Google Longitude',
             ],
         ],
-
     ],
 ];

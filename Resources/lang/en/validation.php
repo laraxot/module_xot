@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Validation Language Lines
@@ -115,15 +114,13 @@ return [
     */
 
     'attributes' => [
-
         'backend' => [
-        'alertSetting' => [
-            'disable_email_alert' => 'Check if want to disable email alert notification?',
-            'disable_sound' => 'Check if want to disable sound alert?',
-            'email_address' => 'Email',
-            'email' => 'Email',
-
-        ],
+            'alertSetting' => [
+                'disable_email_alert' => 'Check if want to disable email alert notification?',
+                'disable_sound' => 'Check if want to disable sound alert?',
+                'email_address' => 'Email',
+                'email' => 'Email',
+            ],
             'deliveryCharge' => [
                 'distance_unit' => 'Distance Unit',
             ],
@@ -141,26 +138,24 @@ return [
                 'use_only_once' => 'Use Only Once',
             ],
             'takeaway' => [
-            'smsBroadCast' => [
-                'send_to_all' => 'Send to All Customer',
-                'send_to_paid_customer' => 'Send to Customer Who already buy your products',
-                'send_to_custom' => 'Send to specific mobile numbers',
-                'message' => 'SMS Message',
-
-            ],
-            'tableBooking' => [
-                'number_guests' => 'Number Of Guests',
-                'date_of_booking' => 'Booking Date',
-                'person_name' => 'Name',
-                'time_booked' => 'Booking Time',
-                'person_email' => 'Email',
-                'person_mobile' => 'Mobile',
-                'person_comments' => 'Your Instructions',
-                'send_email' => 'Send Email Confirmation?',
-                'message' => 'Message To Client',
-                'status' => 'Status',
-
-            ],
+                'smsBroadCast' => [
+                    'send_to_all' => 'Send to All Customer',
+                    'send_to_paid_customer' => 'Send to Customer Who already buy your products',
+                    'send_to_custom' => 'Send to specific mobile numbers',
+                    'message' => 'SMS Message',
+                ],
+                'tableBooking' => [
+                    'number_guests' => 'Number Of Guests',
+                    'date_of_booking' => 'Booking Date',
+                    'person_name' => 'Name',
+                    'time_booked' => 'Booking Time',
+                    'person_email' => 'Email',
+                    'person_mobile' => 'Mobile',
+                    'person_comments' => 'Your Instructions',
+                    'send_email' => 'Send Email Confirmation?',
+                    'message' => 'Message To Client',
+                    'status' => 'Status',
+                ],
                 'tableBookingSetting' => [
                     'monday' => 'Monday',
                     'tuesday' => 'Tuesday',
@@ -177,76 +172,73 @@ return [
                     'subject' => 'Subject',
                     'email_sender' => 'Sender Email',
                     'email_subject' => 'Email Subject',
-
                 ],
-            'merchant_setting' => [
-                'logo' => 'Restaurant Logo',
-                'header_image' => 'Restaurant Header/Background',
-                'enable_order_verification' => 'Enabled Order SMS Verification',
-                'order_sms_code_waiting' => 'Customer can request sms code every',
-                'food_hide' => 'Hide',
-                'food_disable' => 'Disable',
-                'disable_food_gallery' => 'Disable Food Gallery',
-                'merchant_active_menu_default' => 'Default Menu',
-                'merchant_active_menu_1' => 'Activate Menu 1',
-                'merchant_active_menu_2' => 'Activate Menu 2',
-                'merchant_close_store' => 'Close Store?',
-                'merchant_show_time' => 'Show Restaurant Current Time?',
-                'merchant_disable_ordering' => 'Disabled Ordering?',
-                'website' => 'Website address',
-                'merchant_enable_voucher' => 'Enabled Voucher?',
-                'delivery_time_required' => 'Make Delivery Time Required?',
-                'disable_credit_card_payment' => 'Disabled Offline Credit Card Payment?',
-                'disable_cash_on_delivery' => 'Disabled Cash On delivery?',
-                'min_order_delivery_purchase_amount' => 'Minimum Purchase Amount',
-                'max_order_delivery_purchase_amount' => 'Maximum Purchase Amount',
-                'min_order_pickup_purchase_amount' => 'Minimum Purchase Amount',
-                'max_order_pickup_purchase_amount' => 'Maximum Purchase Amount.',
-                'packaging_charge' => 'Packaging Charge',
-                'packaging_incremental' => 'Packaging Incremental?',
-                'tax' => 'Tax',
-                'delivery_charges' => 'Delivery Charges',
-                'apply_tax_to_delivery_charges' => 'Do not apply tax to delivery charges',
-                'delivery_estimate_time' => 'Delivery Estimation',
-                'delivery_distance' => 'Delivery Distance Covered',
-                'enable_tip' => 'Enabled Tip',
-                'default_tip' => 'Default Tip',
-                'time_zone' => 'Time Zone',
-                'monday_start_time' => 'Monday Start Time',
-                'tuesday_start_time' => 'Tuesday Start Time',
-                'wednesday_start_time' => 'Wednesday Start Time',
-                'monday_end_time' => 'Monday End Time',
-                'tuesday_end_time' => 'Tuesday End Time',
-                'wednesday_end_time' => 'Wednesday End Time',
-                'thursday_start_time' => 'Thursday Start Time',
-                'thursday_end_time' => 'Thursday End Time',
-                'friday_start_time' => 'Friday Start Time',
-                'friday_end_time' => 'Friday End Time',
-                'saturday_start_time' => 'Saturday Start Time',
-                'saturday_end_time' => 'Saturday End Time',
-                'sunday_start_time' => 'Sunday Start Time',
-                'sunday_end_time' => 'Sunday End Time',
-                'accept_preorder' => 'Accept Pre-orders',
-                'close_message' => 'Close Message',
-
-            ],
-            'smsTransaction' => [
-                'merchant_id' => 'Restaurant Name',
-                'credits' => 'SMS Credits',
-                'status' => 'Status',
-                'sms_package_id' => 'Sms Package',
-                'paid_by' => 'Paid By',
-            ],
-            'smsPackage' => [
-                'title' => 'Title',
-                'description' => 'Description',
-                'price' => 'Price',
-                'dis_price' => 'Discount',
-                'credit_limit' => 'SMS Credit Limit',
-                'status' => 'Status',
-                'created_at' => 'Created At',
-
-            ],
+                'merchant_setting' => [
+                    'logo' => 'Restaurant Logo',
+                    'header_image' => 'Restaurant Header/Background',
+                    'enable_order_verification' => 'Enabled Order SMS Verification',
+                    'order_sms_code_waiting' => 'Customer can request sms code every',
+                    'food_hide' => 'Hide',
+                    'food_disable' => 'Disable',
+                    'disable_food_gallery' => 'Disable Food Gallery',
+                    'merchant_active_menu_default' => 'Default Menu',
+                    'merchant_active_menu_1' => 'Activate Menu 1',
+                    'merchant_active_menu_2' => 'Activate Menu 2',
+                    'merchant_close_store' => 'Close Store?',
+                    'merchant_show_time' => 'Show Restaurant Current Time?',
+                    'merchant_disable_ordering' => 'Disabled Ordering?',
+                    'website' => 'Website address',
+                    'merchant_enable_voucher' => 'Enabled Voucher?',
+                    'delivery_time_required' => 'Make Delivery Time Required?',
+                    'disable_credit_card_payment' => 'Disabled Offline Credit Card Payment?',
+                    'disable_cash_on_delivery' => 'Disabled Cash On delivery?',
+                    'min_order_delivery_purchase_amount' => 'Minimum Purchase Amount',
+                    'max_order_delivery_purchase_amount' => 'Maximum Purchase Amount',
+                    'min_order_pickup_purchase_amount' => 'Minimum Purchase Amount',
+                    'max_order_pickup_purchase_amount' => 'Maximum Purchase Amount.',
+                    'packaging_charge' => 'Packaging Charge',
+                    'packaging_incremental' => 'Packaging Incremental?',
+                    'tax' => 'Tax',
+                    'delivery_charges' => 'Delivery Charges',
+                    'apply_tax_to_delivery_charges' => 'Do not apply tax to delivery charges',
+                    'delivery_estimate_time' => 'Delivery Estimation',
+                    'delivery_distance' => 'Delivery Distance Covered',
+                    'enable_tip' => 'Enabled Tip',
+                    'default_tip' => 'Default Tip',
+                    'time_zone' => 'Time Zone',
+                    'monday_start_time' => 'Monday Start Time',
+                    'tuesday_start_time' => 'Tuesday Start Time',
+                    'wednesday_start_time' => 'Wednesday Start Time',
+                    'monday_end_time' => 'Monday End Time',
+                    'tuesday_end_time' => 'Tuesday End Time',
+                    'wednesday_end_time' => 'Wednesday End Time',
+                    'thursday_start_time' => 'Thursday Start Time',
+                    'thursday_end_time' => 'Thursday End Time',
+                    'friday_start_time' => 'Friday Start Time',
+                    'friday_end_time' => 'Friday End Time',
+                    'saturday_start_time' => 'Saturday Start Time',
+                    'saturday_end_time' => 'Saturday End Time',
+                    'sunday_start_time' => 'Sunday Start Time',
+                    'sunday_end_time' => 'Sunday End Time',
+                    'accept_preorder' => 'Accept Pre-orders',
+                    'close_message' => 'Close Message',
+                ],
+                'smsTransaction' => [
+                    'merchant_id' => 'Restaurant Name',
+                    'credits' => 'SMS Credits',
+                    'status' => 'Status',
+                    'sms_package_id' => 'Sms Package',
+                    'paid_by' => 'Paid By',
+                ],
+                'smsPackage' => [
+                    'title' => 'Title',
+                    'description' => 'Description',
+                    'price' => 'Price',
+                    'dis_price' => 'Discount',
+                    'credit_limit' => 'SMS Credit Limit',
+                    'status' => 'Status',
+                    'created_at' => 'Created At',
+                ],
                 'deliveryCharge' => [
                     'min_distance' => 'Minimum Distance',
                     'max_distance' => 'Maximum Distance',
@@ -265,7 +257,6 @@ return [
                 'cuisine' => [
                     'name' => 'Cuisine Name',
                     'update' => 'Update Cuisine',
-
                 ],
                 'currency' => [
                     'currency_code' => 'Currency Code',
@@ -284,7 +275,6 @@ return [
                     'ing_name' => 'Ingredient Name',
                     'status' => 'Ingredient Status',
                     'edit' => 'Edit Ingredient',
-
                 ],
                 'merchant' => [
                     'resturant_slug' => 'Restaurant Slug',
@@ -319,8 +309,6 @@ return [
                     'deleted_at' => 'Deleted At',
                     'package_expire' => 'Package Expire',
                     'cuisine' => 'Cuisine',
-
-
                 ],
                 'rating' => [
                     'range1' => 'Range 1',
@@ -330,9 +318,7 @@ return [
                 'cookingReference' => [
                     'name' => 'Cooking Ref. name',
                     'status' => 'Status',
-
                 ],
-
 
                 'cms' => [
                     'page_name' => 'Page Name',
@@ -356,8 +342,7 @@ return [
                 'addOnCategory' => [
                     'addon_cat_item_name' => 'AddOn Name',
                     'addon_cat_desc' => 'Description',
-                    'status' => 'Status'
-
+                    'status' => 'Status',
                 ],
                 'sponserd' => [
                     'create' => 'Create Sponsored',
@@ -401,7 +386,7 @@ return [
                     'gallery_disable' => 'Gallery Disabled?',
                 ],
                 'orderStatus' => [
-                    'order_status' => 'Order Status'
+                    'order_status' => 'Order Status',
                 ],
                 'smsAlert' => [
                     'enable_alerts' => 'Enabled SMS alert?',
@@ -412,7 +397,7 @@ return [
                 ],
                 'dishes' => [
                     'dish_name' => 'Dish Name',
-                    'type' => 'Type'
+                    'type' => 'Type',
                 ],
                 'category' => [
                     'cat_name' => 'Food Category Name',
@@ -420,8 +405,7 @@ return [
                     'status' => 'Status',
                     'cat_image' => 'Featured Image',
                     'dish_item' => 'Dish',
-                    'addon_item_image' => 'Product Image'
-
+                    'addon_item_image' => 'Product Image',
                 ],
             ],
             'access' => [
@@ -502,5 +486,4 @@ return [
             'actions' => 'Actions',
         ],
     ],
-
 ];

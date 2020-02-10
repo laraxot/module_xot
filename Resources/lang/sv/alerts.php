@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Alert Language Lines
@@ -27,7 +26,7 @@ return [
             'deleted_permanently' => 'Användaren har nu raderats permanent.',
             'restored' => 'Användaren har nu återställts.',
             'updated' => 'Användaren har nu uppdaterats.',
-            'updated_password' => "Användarens lösenord har nu uppdaterats.",
-        ]
+            'updated_password' => 'Användarens lösenord har nu uppdaterats.',
+        ],
     ],
 ];

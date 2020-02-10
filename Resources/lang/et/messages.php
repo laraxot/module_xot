@@ -1,8 +1,7 @@
 <?php
 
 return [
-
-    /**
+    /*
      *
      * Shared translations.
      *
@@ -10,19 +9,17 @@ return [
     'title' => 'Laraveli installer',
     'next' => 'Järgmine samm',
 
-
-    /**
+    /*
      *
      * Home page translations.
      *
      */
     'welcome' => [
-        'title'   => 'Tere tulemast Laraveli installerisse',
+        'title' => 'Tere tulemast Laraveli installerisse',
         'message' => 'Tere tulemast installatsiooniviisardisse.',
     ],
 
-
-    /**
+    /*
      *
      * Requirements page translations.
      *
@@ -31,8 +28,7 @@ return [
         'title' => 'Nõuded',
     ],
 
-
-    /**
+    /*
      *
      * Permissions page translations.
      *
@@ -41,8 +37,7 @@ return [
         'title' => 'Õigused',
     ],
 
-
-    /**
+    /*
      *
      * Environment page translations.
      *
@@ -54,8 +49,7 @@ return [
         'errors' => 'Ei saanud .env faili salvesta, palun loo see manuaalselt.',
     ],
 
-
-    /**
+    /*
      *
      * Final page translations.
      *
