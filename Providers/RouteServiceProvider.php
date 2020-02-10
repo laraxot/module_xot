@@ -114,6 +114,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
                 if ('guid' == $pk) {
                     $pk_full = 'guid';
                 } // pezza momentanea
+
+                $value=Str::slug($value); //retrocompatibilita'
                 $rows = $rows->where([$pk_full => $value]);
                 $row  = $rows->first();
 
