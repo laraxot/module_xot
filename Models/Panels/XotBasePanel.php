@@ -28,7 +28,7 @@ abstract class XotBasePanel {
     public $row = null;
     public $rows = null;
     public $parent = null;
-    protected static $model;
+    //protected static $model;
 
     public function __construct($model = null) {
         $this->row = $model;
@@ -113,7 +113,7 @@ abstract class XotBasePanel {
     public function orderBy() {
         return [];
     }
-    //*
+    /*
     public function fields(){
         return [];
     }
