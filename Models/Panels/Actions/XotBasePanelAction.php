@@ -2,6 +2,9 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
 
@@ -19,7 +22,19 @@ abstract class XotBasePanelAction {
     abstract public function setRows($rows);
     public function btn($params=[]);
     */
+    public $name=null;
+
     abstract public function handle();
+
+    public function getName(){
+        if($this->name!=null) return $this->name;
+        $this->name=Str::snake(class_basename($this));
+        $str='_action';
+        if(Str::endsWith($this->name,$str)){
+            $this->name=Str::before($this->name,$str);
+        }
+        return $this->name;
+    }
 
     public function setRows($rows) {
         $this->rows = $rows;
@@ -39,7 +54,8 @@ abstract class XotBasePanelAction {
 
     public function btnContainer($params = []) {
         $request = \Request::capture();
-        $title = $this->name;
+        $title = $this->getName();
+
         $title = str_replace('_', ' ', $title);
         $url = $request->fullUrlWithQuery(['_act' => $this->name]);
 
@@ -52,16 +68,17 @@ abstract class XotBasePanelAction {
 
     public function btnItem($params = []) {
         extract($params);
+        $name=$this->getName();
         $url = RouteService::urlAct(
             [
                 'row' => $row,
                 'act' => 'show',
                 'query' => [
-                    '_act' => $this->name,
+                    '_act' => $name,
                     //'stato'=>6,
                 ],
             ]);
-        $title = str_replace('_', ' ', $this->name);
+        $title = str_replace('_', ' ', $name);
 
         return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'</i>&nbsp;'.$title.'

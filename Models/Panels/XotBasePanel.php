@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 //----------  SERVICES --------------------------
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\PanelService as Panel;
@@ -80,7 +81,7 @@ abstract class XotBasePanel {
         }
         $rows = $this->rows($data)->get();
         $primary_field = $this->row->getKeyName();
-        $c = new \Modules\Xot\Services\ChainService($primary_field, 'parent_id', 'pos', $rows);
+        $c = new ChainService($primary_field, 'parent_id', 'pos', $rows);
         $options = collect($c->chain_table)->map(function ($item) {
             return [
                 'id' => $this->optionId($item),
@@ -126,11 +127,12 @@ abstract class XotBasePanel {
                 $rel_name = $item->name;
                 $pivot_class = with(new $this::$model())->$rel_name()->getPivotClass();
                 $pivot = new $pivot_class();
-                $pivot_panel = StubService::getByModel($pivot, 'panel', $create = true);
+                $pivot_panel = StubService::getByModel($pivot, 'panel', true);
                 //ddd('preso ['.$pivot_class.']['.get_class($pivot_panel).']');
-                $pivot_rules = collect($pivot_panel->rules())->map(function ($pivot_rule_val, $pivot_rule_key) use ($item) {
-                    return [$item->name.'.*.pivot.'.$pivot_rule_key => $pivot_rule_val];
-                })->collapse()->all();
+                $pivot_rules = collect($pivot_panel->rules())
+                            ->map(function ($pivot_rule_val, $pivot_rule_key) use ($item) {
+                                return [$item->name.'.*.pivot.'.$pivot_rule_key => $pivot_rule_val];
+                            })->collapse()->all();
 
                 return $pivot_rules;
             }
@@ -195,16 +197,24 @@ abstract class XotBasePanel {
 
     public function containerActions() {
         $actions = collect($this->actions())->filter(function ($item) {
+            $item->getName();
+
             return isset($item->onContainer) && $item->onContainer;
-        })->all();
+        })
+        //->all()
+        ;
 
         return $actions;
     }
 
     public function itemActions() {
         $actions = collect($this->actions())->filter(function ($item) {
+            $item->getName();
+
             return isset($item->onItem) && $item->onItem;
-        })->all();
+        })
+        //->all()
+        ;
 
         return $actions;
     }
@@ -227,7 +237,6 @@ abstract class XotBasePanel {
      *
      * This query determines which instances of the model may be attached to other resources.
      *
-     * @param Request                               $request
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -531,25 +540,25 @@ abstract class XotBasePanel {
         return $fields;
     }
 
-    public function formCreate($params=[]){
-        $fields=$this->createFields();
-        $row=$this->row;
-        $res='';
+    public function formCreate($params = []) {
+        $fields = $this->createFields();
+        $row = $this->row;
+        $res = '';
         //$res.='<h3>'.$this->storeUrl().'</h3>'; //4 debug
-        $res.=Form::bsOpenPanel($this,'store');
-        $res.='<div class="clearfix">';
-        foreach($fields as $field){
-            $res.=ThemeService::inputHtml(['row'=>$row,'field'=>$field]);
+        $res .= Form::bsOpenPanel($this, 'store');
+        $res .= '<div class="clearfix">';
+        foreach ($fields as $field) {
+            $res .= ThemeService::inputHtml(['row' => $row, 'field' => $field]);
         }
-        $res.='</div>';
+        $res .= '</div>';
         //$res.=Form::bsSubmit('save');
-        $res.='<p class="form-submit">
+        $res .= '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
         </p>';
-        $res.=Form::close();
+        $res .= Form::close();
+
         return $res;
     }
-
 
     public function createFields() {
         $excepts = [];
@@ -783,61 +792,59 @@ abstract class XotBasePanel {
     }
 
     public function langUrl($lang) {
-    	//$row=$this->row;
-    	//$row->lang=$lang;
-    	//return '/wip'.$this->url();
-        $route_name = \Route::currentRouteName();        
+        //$row=$this->row;
+        //$row->lang=$lang;
+        //return '/wip'.$this->url();
+        $route_name = \Route::currentRouteName();
         $route_params = \Route::current()->parameters();
-        $route_params['lang']=$lang;
+        $route_params['lang'] = $lang;
         [$containers,$items] = params2ContainerItem($route_params);
-        $n_items=count($items);
+        $n_items = count($items);
         //ddd($n_items);//1
         //ddd($route_name); container0.show
-        for($i=0;$i<$n_items;$i++){
-            $route_params['item'.$i]->lang=$lang;
+        for ($i = 0; $i < $n_items; ++$i) {
+            $route_params['item'.$i]->lang = $lang;
             //ddd($route_params['item'.$i]->guidLang);
         }
-
 
         return '/wip['.__LINE__.']['.__FILE__.']';
     }
 
-    public function relatedUrlRecursive($params) {    
-
-        $obj=$this;
-        $items=[];
-        $items[]=$this;
-        while(isset($obj->parent)){
-            $items[]=$obj->parent;
-            $obj=$obj->parent;
+    public function relatedUrlRecursive($params) {
+        $obj = $this;
+        $items = [];
+        $items[] = $this;
+        while (isset($obj->parent)) {
+            $items[] = $obj->parent;
+            $obj = $obj->parent;
         }
 
-        $count=count($items);
-        $parz=[];
-        $routename=[];
-        for($i=0;$i<$count;$i++){
-            $j=$count-$i-1;
-            $parz['container'.$i]=$items[$j]->postType();
-            $parz['item'.$i]=$items[$j]->row;
-            $routename[]='container'.$i;
+        $count = count($items);
+        $parz = [];
+        $routename = [];
+        for ($i = 0; $i < $count; ++$i) {
+            $j = $count - $i - 1;
+            $parz['container'.$i] = $items[$j]->postType();
+            $parz['item'.$i] = $items[$j]->row;
+            $routename[] = 'container'.$i;
         }
-        $parz['container'.$count]=$params['related_name'];
-        $parz['lang']=\App::getLocale();
-        $routename[]='container'.$i;
-        $routename=implode('.',$routename).'.'.$params['act'];
-        $route=route($routename,$parz);
+        $parz['container'.$count] = $params['related_name'];
+        $parz['lang'] = \App::getLocale();
+        $routename[] = 'container'.$i;
+        $routename = implode('.', $routename).'.'.$params['act'];
+        $route = route($routename, $parz);
+
         return $route;
-
     }
-
 
     public function relatedUrl($params) {
         $params['row'] = $this->row;
+
         return RouteService::urlRelated($params);
     }
 
     public function indexUrl() {
-        $url = RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'index']);
+        $url = RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index']);
         $data = [];
         $filters = $this->filters();
 
@@ -871,35 +878,35 @@ abstract class XotBasePanel {
     }
 
     public function indexEditUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'index_edit']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index_edit']);
     }
 
     public function editUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'edit']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'edit']);
     }
 
     public function updateUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'update']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'update']);
     }
 
     public function showUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'show']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'show']);
     }
 
     public function createUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'create']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'create']);
     }
 
     public function storeUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'store']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'store']);
     }
 
     public function destroyUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'destroy']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'destroy']);
     }
 
     public function detachUrl() {
-        return RouteService::urlModel(['model' => $this->row,'panel_parent'=>$this->parent, 'act' => 'detach']);
+        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'detach']);
     }
 
     public function gearUrl() {
@@ -1055,9 +1062,12 @@ abstract class XotBasePanel {
         if (null == $act) {
             return null;
         }
+        $action = $this->itemActions()->firstWhere('name', $act);
+        /*
         $action = collect($this->actions())
             ->where('onItem', true)
             ->firstWhere('name', $act);
+        */
         if (! is_object($action)) {
             return null;
         }
@@ -1077,10 +1087,12 @@ abstract class XotBasePanel {
         if (null == $act) {
             return null;
         }
+        $action = $this->containerActions()->firstWhere('name', $act);
+        /*
         $action = collect($this->actions())
             ->where('onContainer', true)
             ->firstWhere('name', $act);
-
+        */
         if (! is_object($action)) {
             return null;
         }
@@ -1106,8 +1118,12 @@ abstract class XotBasePanel {
         extract($params);
         $data = request()->all();
         $rows = $this->rows($data);
-        if(isset($data['_act'])) $act=$data['_act'];
-        if(isset($data['format'])) $out_format=$data['format'];
+        if (isset($data['_act'])) {
+            $act = $data['_act'];
+        }
+        if (isset($data['format'])) {
+            $out_format = $data['format'];
+        }
         //$act = isset($data['_act']) ? $data['_act'] : null;
         //$out_format = isset($data['format']) ? $data['format'] : null;
         $html = $this->callItemAction($act);
@@ -1152,8 +1168,8 @@ abstract class XotBasePanel {
     }
 
     public function pdf($params = []) {
-        if(!isset($params['view_params'])){
-            $params['view_params']=[];
+        if (! isset($params['view_params'])) {
+            $params['view_params'] = [];
         }
         $view = ThemeService::getView(); //progressioni::admin.schede.show
         $view .= '.pdf';
@@ -1180,11 +1196,11 @@ abstract class XotBasePanel {
         return self::$instance;
     }
 
-
-    public function related($relationship){
-        $related=$this->row->$relationship()->getRelated();
-        $panel_related=Panel::get($related);
+    public function related($relationship) {
+        $related = $this->row->$relationship()->getRelated();
+        $panel_related = Panel::get($related);
         $panel_related->setParent($this);
+
         return $panel_related;
     }
 }
