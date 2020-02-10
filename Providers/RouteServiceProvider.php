@@ -128,7 +128,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
                     echo PHP_EOL . ' value : ' . $value;
                     echo PHP_EOL . ' pk_full : ' . $pk_full;
                     echo PHP_EOL . '----------------------------------';
-                    ddd(\Modules\Blog\Model\Post::count());
+                    ddd(\Modules\Blog\Models\Post::count());
                 }
 
                 return $value;
