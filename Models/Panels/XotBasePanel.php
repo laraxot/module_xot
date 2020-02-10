@@ -28,6 +28,7 @@ abstract class XotBasePanel {
     public $row = null;
     public $rows = null;
     public $parent = null;
+    protected static $model;
 
     public function __construct($model = null) {
         $this->row = $model;
@@ -82,12 +83,15 @@ abstract class XotBasePanel {
         $rows = $this->rows($data)->get();
         $primary_field = $this->row->getKeyName();
         $c = new ChainService($primary_field, 'parent_id', 'pos', $rows);
-        $options = collect($c->chain_table)->map(function ($item) {
-            return [
-                'id' => $this->optionId($item),
-                'label' => str_repeat('------', $item->indent + 1).$this->optionLabel($item),
-            ];
-        })->pluck('label', 'id')
+        $options = collect($c->chain_table)->map(
+            function ($item) {
+                $label=str_repeat('------', $item->indent + 1).$this->optionLabel($item);
+                return [
+                    'id' => $this->optionId($item),
+                    'label' => $label,
+                ];
+            }
+        )->pluck('label', 'id')
         ->prepend('Root', 0)
         ->all();
 
@@ -109,36 +113,52 @@ abstract class XotBasePanel {
     public function orderBy() {
         return [];
     }
+    //*
+    public function fields(){
+        return [];
+    }
+    //*/
 
     public function rules($params = []) {
         $act = '';
         extract($params);
         switch ($act) {
-            case 'store':$fields = $this->createFields(); break;
-            case 'update':$fields = $this->editFields(); break;
-            default:$fields = $this->fields(); break;
+        case 'store':$fields = $this->createFields();
+            break;
+        case 'update':$fields = $this->editFields();
+            break;
+        default:$fields = $this->fields();
+            break;
         }
 
-        $rules = collect($fields)->map(function ($item) {
-            if (! isset($item->rules)) {
-                $item->rules = '';
-            }
-            if ('pivot_rules' == $item->rules) {
-                $rel_name = $item->name;
-                $pivot_class = with(new $this::$model())->$rel_name()->getPivotClass();
-                $pivot = new $pivot_class();
-                $pivot_panel = StubService::getByModel($pivot, 'panel', true);
-                //ddd('preso ['.$pivot_class.']['.get_class($pivot_panel).']');
-                $pivot_rules = collect($pivot_panel->rules())
-                            ->map(function ($pivot_rule_val, $pivot_rule_key) use ($item) {
-                                return [$item->name.'.*.pivot.'.$pivot_rule_key => $pivot_rule_val];
-                            })->collapse()->all();
+        $rules = collect($fields)->map(
+            function ($item) {
+                if (! isset($item->rules)) {
+                    $item->rules = '';
+                }
+                if ('pivot_rules' == $item->rules) {
+                    $rel_name = $item->name;
+                    $pivot_class = with(new $this::$model())
+                        ->$rel_name()
+                        ->getPivotClass();
+                    $pivot = new $pivot_class();
+                    $pivot_panel = StubService::getByModel($pivot, 'panel', true);
+                    //ddd('preso ['.$pivot_class.']['.get_class($pivot_panel).']');
+                    $pivot_rules = collect($pivot_panel->rules())
+                                ->map(
+                                    function ($pivot_rule_val, $pivot_rule_key) use ($item) {
+                                        $k=$item->name.'.*.pivot.'.$pivot_rule_key;
+                                        return [$k => $pivot_rule_val];
+                                    }
+                                )->collapse()->all();
 
-                return $pivot_rules;
-            }
+                    return $pivot_rules;
+                }
 
-            return [$item->name => $item->rules];
-        })->collapse()->all();
+                return [$item->name => $item->rules];
+            }
+        )->collapse()
+        ->all();
 
         return $rules;
     }
