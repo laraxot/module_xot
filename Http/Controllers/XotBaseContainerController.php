@@ -13,14 +13,16 @@ use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller {
+abstract class XotBaseContainerController extends Controller
+{
     protected $controller;
     protected $row;
     protected $module;
     protected $controller_exist;
 
     //public function __construct() { //o lo chiamavo "init".. etc etc
-    public function init($params) { //o lo chiamavo "init".. etc etc
+    public function init($params)
+    { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
         list($containers, $items) = params2ContainerItem($params);
@@ -46,6 +48,7 @@ abstract class XotBaseContainerController extends Controller {
             $controller = '\Modules\Xot\Http\Controllers\XotController';
             $this->controller = $controller;
         }
+
         $this->item_last = last($items);
         $this->container_last = last($containers);
         $this->last = last($params);
@@ -53,7 +56,8 @@ abstract class XotBaseContainerController extends Controller {
         return 'init';
     }
 
-    public function __call($method, $args) {
+    public function __call($method, $args)
+    {
         $params = \Route::current()->parameters();
         $lang = \App::getLocale();
         list($containers, $items) = params2ContainerItem($params);
@@ -74,14 +78,19 @@ abstract class XotBaseContainerController extends Controller {
                 ddd('['.$row.']['.$class.'] not exists on config/xra.php');
             }
         }
-        $panel = StubService::getByModel($row, 'panel', $create = true);
-        $policy = StubService::getByModel($row, 'policy', $create = true);
-        if (\Auth::check()) {
-            $authorized = \Auth::user()->can($method, $row);
-        } else {
+        $authorized = true;
+        if (is_object($row)) {
+            $panel = StubService::getByModel($row, 'panel', $create = true);
+            $policy = StubService::getByModel($row, 'policy', $create = true);
+            //if (\Auth::check()) {
+            //    $authorized = \Auth::user()->can($method, $row);
+            //} else {
             $authorized = Gate::allows($method, $row);
-            //$authorized=\Auth::guest()->can($method, $row);
+        }else{
+           // ddd($this->controller);
         }
+        //$authorized=\Auth::guest()->can($method, $row);
+        //}
         if (! $authorized && ! \Auth::check()) {
             $msg = ['msg' => 'ok', 'html' => '<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
             if ($request->ajax()) {
