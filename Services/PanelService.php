@@ -74,6 +74,9 @@ class PanelService {
     }
 
     public static function createPanel($model) {
+        if(!is_object($model)){
+            ddd('da fare');
+        }
         $class_full = get_class($model);
         $class_name = class_basename($model);
         $class = Str::before($class_full, $class_name);
