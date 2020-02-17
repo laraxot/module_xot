@@ -217,8 +217,11 @@ class ImageService {
         $basename = Str::before($basename, '?');
         self::$filename = public_path('/imgz/'.self::$width.'x'.self::$height.'/'.$basename);
         \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
-        $r = self::$img->save(self::$filename, 75);
+        try{
+            $r = self::$img->save(self::$filename, 75);
+        }catch(\Exception $e){
 
+        }
         return self::getInstance();
     }
 
