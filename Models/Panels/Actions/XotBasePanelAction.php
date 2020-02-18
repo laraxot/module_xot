@@ -37,6 +37,13 @@ abstract class XotBasePanelAction {
         return $this->name;
     }
 
+    public function getTitle() {
+        $title = $this->getName();
+        $title = str_replace('_', ' ', $title);
+
+        return $title;
+    }
+
     public function setRows($rows) {
         $this->rows = $rows;
     }
@@ -53,23 +60,45 @@ abstract class XotBasePanelAction {
         return $this->btnItem($params);
     }
 
-    public function btnContainer($params = []) {
+    public function urlContainer($params = []) {
         $request = \Request::capture();
-        $title = $this->getName();
+        $name = $this->getName();
+        $url = $request->fullUrlWithQuery(['_act' => $name]);
 
-        $title = str_replace('_', ' ', $title);
-        $url = $request->fullUrlWithQuery(['_act' => $this->name]);
+        return $url;
+    }
 
-        return '<a href="'.$url.'" class="btn btn-secondary" data-toggle="tooltip" title="'.$title.'">
+    public function btnContainer($params = []) {
+        $url = $this->urlContainer($params);
+
+        return '<a href="'.$url.'" class="btn btn-secondary" data-toggle="tooltip" title="'.$this->getTitle().'">
             '.$this->icon.'&nbsp;'.$title.'
             </a>';
     }
 
     //end btnContainer
+    public function urlItem($params = []) {
+        extract($params);
+        $this->setRow($row);
+        $name = $this->getName();
+        $url = RouteService::urlAct(
+            [
+                'row' => $this->row,
+                'act' => 'show',
+                'query' => [
+                    '_act' => $name,
+                    //'stato'=>6,
+                ],
+            ]);
+
+        return $url;
+    }
 
     public function btnItem($params = []) {
+        /*
         extract($params);
         $name = $this->getName();
+
         $url = RouteService::urlAct(
             [
                 'row' => $row,
@@ -79,7 +108,9 @@ abstract class XotBasePanelAction {
                     //'stato'=>6,
                 ],
             ]);
-        $title = str_replace('_', ' ', $name);
+        */
+        $url = $this->urlItem($params);
+        $title = $this->getTitle();
 
         return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'</i>&nbsp;'.$title.'
