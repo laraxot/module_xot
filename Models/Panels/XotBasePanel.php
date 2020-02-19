@@ -1085,16 +1085,11 @@ abstract class XotBasePanel {
         if (null == $act) {
             return null;
         }
-        $action = $this->itemActions()->firstWhere('name', $act);
-        /*
-        $action = collect($this->actions())
-            ->where('onItem', true)
+        $action = $this->itemActions()
             ->firstWhere('name', $act);
-        */
         if (! is_object($action)) {
             return null;
         }
-        $action->setRows($this->row); //retrocompatibilita' da eliminare
         $action->setRow($this->row);
         $method = request()->getMethod();
         if ('GET' == $method) {
@@ -1110,12 +1105,8 @@ abstract class XotBasePanel {
         if (null == $act) {
             return null;
         }
-        $action = $this->containerActions()->firstWhere('name', $act);
-        /*
-        $action = collect($this->actions())
-            ->where('onContainer', true)
+        $action = $this->containerActions()
             ->firstWhere('name', $act);
-        */
         if (! is_object($action)) {
             return null;
         }

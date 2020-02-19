@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
@@ -20,6 +21,10 @@ abstract class XotBasePanelAction {
     abstract public function setRows($rows);
     public function btn($params=[]);
     */
+    public $onContainer = false;
+    public $onItem = false;
+    public $row=null;
+    public $rows=null;
     public $name = null;
 
     abstract public function handle();
@@ -53,11 +58,20 @@ abstract class XotBasePanelAction {
     }
 
     public function btn($params = []) {
+        extract($params);
+        if(isset($row)){
+            $this->setRow($row);
+        }
+        if(isset($this->onItem) && $this->onItem && is_object($this->row)){
+            return $this->btnItem($params);
+        }
+        return $this->btnContainer($params);
+        /*
         if ($this->onContainer) {
             return $this->btnContainer($params);
         }
-
         return $this->btnItem($params);
+        */
     }
 
     public function urlContainer($params = []) {
@@ -70,8 +84,9 @@ abstract class XotBasePanelAction {
 
     public function btnContainer($params = []) {
         $url = $this->urlContainer($params);
+        $title = $this->getTitle();
 
-        return '<a href="'.$url.'" class="btn btn-secondary" data-toggle="tooltip" title="'.$this->getTitle().'">
+        return '<a href="'.$url.'" class="btn btn-secondary" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'&nbsp;'.$title.'
             </a>';
     }
@@ -89,7 +104,8 @@ abstract class XotBasePanelAction {
                     '_act' => $name,
                     //'stato'=>6,
                 ],
-            ]);
+            ]
+        );
 
         return $url;
     }
@@ -111,10 +127,15 @@ abstract class XotBasePanelAction {
         */
         $url = $this->urlItem($params);
         $title = $this->getTitle();
+        $method=Str::camel($this->getName());
 
-        return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
+        if (Gate::allows($method, $this->row)) {
+            return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'</i>&nbsp;'.$title.'
             </a>';
+        } else {
+            return '<button type="button" class="btn btn-secondary btn-lg" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.$method.'</button>';
+        }
     }
 
     //end btnItem

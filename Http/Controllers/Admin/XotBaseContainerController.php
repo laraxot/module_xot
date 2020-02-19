@@ -92,7 +92,7 @@ abstract class XotBaseContainerController extends Controller {
             $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
         }
 
-        //ddd($this->item_last->n);
+
         return $panel->out(
             [
                 'is_ajax' => $request->ajax(),
@@ -101,24 +101,31 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
+
     public function ContainerItem2Panel($container, $item) {
-        $types = Str::camel(Str::plural($container));
-        if (is_object($item)) {
-            if (method_exists($item, $types)) {
-                $rows = $item->$types();
-                $related = $rows->getRelated();
-                $row = $related;
+        list($containers, $items) = params2ContainerItem();
+        if (count($containers) > count($items)) {
+            $types = Str::camel(Str::plural($container));
+            if (is_object($item)) {
+                if (method_exists($item, $types)) {
+                    $rows = $item->$types();
+                    $related = $rows->getRelated();
+                    $row = $related;
+                } else {
+                    $rows = null;
+                    $row = $item;
+                }
             } else {
-                $rows = null;
-                $row = $item;
+                $row = xotModel($container);
+                $rows = $row; // o NULL ???
             }
-        } else {
-            $row = xotModel($container);
-            $rows = $row; // o NULL ???
+            $panel = Panel::get($row);
+            //$panel->setRow($row);
+            $panel->setRows($rows);
+
+            return $panel;
         }
-        $panel = Panel::get($row);
-        //$panel->setRow($row);
-        $panel->setRows($rows);
+        $panel = Panel::get($item);
 
         return $panel;
     }
