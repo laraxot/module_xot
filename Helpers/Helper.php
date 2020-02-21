@@ -270,7 +270,7 @@ if (! \function_exists('xotModel')) {
     function xotModel($name) {
         $model = tenantConfig('xra.model.'.$name);
         if ('' == $model) {
-            ddd($name);
+            abort(403, 'Unauthorized path '.$name);
         }
 
         return new $model();
