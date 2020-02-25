@@ -34,6 +34,12 @@ class XotServiceProvider extends XotBaseServiceProvider {
         //$route_params = Route::current()->parameters();
         //ddd($route_params);
         Relation::morphMap($map);
+        /*
+        $morph_map=Relation::morphMap();
+        ddd($morph_map);
+        ddd(Relation::$morphMap);
+        //*/
+        
         $this->commands([
             \Modules\Xot\Console\CreateAllRepositoriesCommand::class,
             \Modules\Xot\Console\PanelMakeCommand::class,

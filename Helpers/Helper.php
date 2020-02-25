@@ -215,6 +215,26 @@ if (! \function_exists('params2ContainerItem')) {
     }
 }
 
+if (! \function_exists('getModuleFromModel')) {
+    function getModuleFromModel($model){
+        $class = get_class($model);
+        $module_name = Str::before(Str::after($class, 'Modules\\'), '\\Models\\');
+        $mod = \Module::find($module_name);
+
+        return $mod;
+    }
+}
+
+if (! \function_exists('getModuleNameFromModel')) {
+    function getModuleNameFromModel($model){
+        $class = get_class($model);
+        $module_name = Str::before(Str::after($class, 'Modules\\'), '\\Models\\');
+        
+        return $module_name;
+    }
+}
+
+
 if (! \function_exists('getModuleModels')) {
     function getModuleModels($module) {
         if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
