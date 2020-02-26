@@ -5,15 +5,19 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class StubService {
+class StubService
+{
     //-- model (object) or class (string)
     //-- stub_name name of stub
     //-- create yes or not
 
-    public static function missingClass($params) {
+    public static function fromModel($params)
+    {
         extract($params);
-        $class_name = class_basename($class);
+        $class=get_class($model);
+        $class_name = class_basename($model);
         $class_ns = substr($class, 0, -(strlen($class_name) + 1));
+        $params['class']=$class;
         $params['class_name'] = $class_name;
         $params['namespace'] = $class_ns;
         $params['namespace_root'] = substr($params['namespace'], 0, -(strlen('Models') + 1));
@@ -52,13 +56,27 @@ class StubService {
                 $params['namespace'] = $params['namespace_root'].'\Repositories';
                 $params['class_name'] = $params['class_name'].'Repository';
                 break;
+            case 'transformer_collection':
+                $file=$dir.'/../Transformers/'.$class_name.'Collection.php';
+                $file=str_replace(['\\','/'], [DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'].'\Transformers';
+                $params['class_name'] = $params['class_name'].'Collection';
+            break;
+            case 'transformer_resource':
+                $file=$dir.'/../Transformers/'.$class_name.'Resource.php';
+                $file=str_replace(['\\','/'], [DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'].'\Transformers';
+                $params['class_name'] = $params['class_name'].'Resource';
+            break;
+
             default:
                 ddd('['.$stub_name.'] Unkwonn !');
                 break;
         }
 
         $class_full = $params['namespace'].'\\'.$params['class_name'];
-        if (File::exists($file)) {
+        if (File::exists($file))
+        {
             return $class_full;
         }
         /*
@@ -85,7 +103,8 @@ class StubService {
         \Session::flash($msg);
     }
 
-    public static function getByModel($model, $name, $create = false) {
+    public static function getByModel($model, $name, $create = false)
+    {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();
@@ -120,7 +139,8 @@ class StubService {
         //return redirect()->back();
     }
 
-    public static function replaces($params) {
+    public static function replaces($params)
+    {
         extract($params);
         $replaces = [
             'DummyNamespace' => $namespace,
@@ -137,7 +157,8 @@ class StubService {
         return $replaces;
     }
 
-    public static function create($model, $name) {
+    public static function create($model, $name)
+    {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
@@ -187,7 +208,8 @@ class StubService {
         }
     }
 
-    public static function fields($model) {
+    public static function fields($model)
+    {
         $fillables = $model->getFillable();
         if (0 == count($fillables)) {
             $fillables = $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
@@ -259,7 +281,8 @@ class StubService {
         return $fields;
     }
 
-    public static function updatePanel($params) {
+    public static function updatePanel($params)
+    {
         extract($params);
         $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
         $func_stub = File::get($func_file);
