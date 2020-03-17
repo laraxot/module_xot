@@ -145,7 +145,9 @@ abstract class XotBasePanelAction {
         extract($params);
         $container = null;
         $item = $row;
-        UpdateJob::dispatch($container, $item);
+        $up= UpdateJob::dispatchNow($container, $item);
+        return $up;
+        //ddd($up);
         /*
         $panel = Panel::get($row);
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -158,6 +160,6 @@ abstract class XotBasePanelAction {
         //----
         //\Session::flash('status', 'aggiornato! ['.$row->getKey().']!');
 
-        return $this->handle();
+        //return $this->handle();
     }
 }
