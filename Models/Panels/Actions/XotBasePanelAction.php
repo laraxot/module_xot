@@ -162,4 +162,9 @@ abstract class XotBasePanelAction {
 
         //return $this->handle();
     }
+
+    public function pdf($params = []) {
+        $panel=Panel::get($this->row);
+        return $panel->pdf($params);
+    }
 }
