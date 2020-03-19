@@ -147,6 +147,21 @@ abstract class XotBasePanel
         default:$fields = $this->fields();
             break;
         }
+        $act=request()->input('_act');
+        if ($act!='') {
+            $fields=collect($fields)->filter(
+                function ($item) use($act){
+                    if (! isset($item->except)) {
+                        $item->except = [];
+                    }
+                    return ! in_array($act, $item->except);
+                }
+            )->all();
+        }
+
+        //ddd($fields);
+
+
 
         $rules = collect($fields)->map(
             function ($item) {
@@ -226,6 +241,16 @@ abstract class XotBasePanel
 
         return $msg;
     }
+    /**
+     * Get the filters available for the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function filters(Request $request = null) {
+        return [];
+    }
 
     public function getXotModelName()
     {
@@ -261,6 +286,14 @@ abstract class XotBasePanel
         ;
 
         return $actions;
+    }
+
+    public function btnItemAction($act){
+        $itemActions=$this->itemActions();
+        $itemAction=$itemActions->firstWhere('name',$act);
+        if(is_object($itemAction)){
+            return $itemAction->btn(['row'=>$this->row]);
+        };
     }
 
     /**
@@ -652,6 +685,8 @@ abstract class XotBasePanel
     {
         $excepts = [];
         $excepts[] = 'id'; //??
+       // $excepts[] = request()->input('_act');
+
         if (is_object($this->rows)) {
             $getters = ['getForeignKeyName', 'getMorphType', 'getForeignPivotKeyName', 'getRelatedPivotKeyName', 'getRelatedKeyName'];
             foreach ($getters as $k => $v) {
@@ -672,7 +707,7 @@ abstract class XotBasePanel
                 ! in_array($item->name, $excepts)
                 ;
         })->all();
-
+        //ddd($fields);
         return $fields;
     }
 

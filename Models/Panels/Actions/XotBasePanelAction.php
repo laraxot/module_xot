@@ -142,10 +142,35 @@ abstract class XotBasePanelAction {
 
     public function updateRow($params = []) {
         $row = $this->row;
-        extract($params);
         $container = null;
+        extract($params);
+
         $item = $row;
+        //$item=\Modules\Food\Models\Restaurant::first();
         $up= UpdateJob::dispatchNow($container, $item);
+        //try{
+            //$tmp=new UpdateJob($container, $item);
+        //}catch(\Exception $e){
+            //debug_getter_obj(['obj'=>$e]);
+            //ddd($e->getMessage());
+            //ddd($e->errors());
+            /*
+            ValidationException {#1787 ▼
+                +validator: Validator {#1784 ▶}
+                +response: null
+                +status: 422
+                +errorBag: "default"
+                +redirectTo: null
+                #message: "The given data was invalid."
+                #code: 0
+                #file: "C:\var\www\multi\laravel\vendor\laravel\framework\src\Illuminate\Validation\Validator.php"
+                #line: 315
+                trace: {▶}
+              }
+              */
+           // $up->set
+        //}
+
         return $up;
         //ddd($up);
         /*

@@ -36,6 +36,7 @@ class UpdateJob implements ShouldQueue {
             $data = $this->getData();
         }
         $this->data = $data;
+
     }
 
     /**
@@ -178,11 +179,9 @@ class UpdateJob implements ShouldQueue {
         extract($params);
         $items = $model->$name();
         $related = $items->getRelated();
-        //ddd($related);
         $container_obj = $model;
         //$items_key = $container_obj->getKeyName();
         $items_key = $related->getKeyName();
-        //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
 
         if (! isset($data['to'])) {

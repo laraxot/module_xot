@@ -13,16 +13,14 @@ use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller
-{
+abstract class XotBaseContainerController extends Controller {
     protected $controller;
     protected $row;
     protected $module;
     protected $controller_exist;
 
     //public function __construct() { //o lo chiamavo "init".. etc etc
-    public function init($params)
-    { //o lo chiamavo "init".. etc etc
+    public function init($params) { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
         list($containers, $items) = params2ContainerItem($params);
@@ -48,6 +46,8 @@ abstract class XotBaseContainerController extends Controller
             $controller = '\Modules\Xot\Http\Controllers\XotController';
             $this->controller = $controller;
         }
+        $this->item=$items;
+        $this->containers = $containers;
 
         $this->item_last = last($items);
         $this->container_last = last($containers);
@@ -56,14 +56,117 @@ abstract class XotBaseContainerController extends Controller
         return 'init';
     }
 
-    public function __call($method, $args)
-    {
+    public function notAuthorized($method){
+        $lang=\App::getLocale();
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        if (!\Auth::check()) {
+            $html='<h3>Before Login </h3>
+            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
+                <i class="fab fa-facebook-square fa-3x  "></i>
+            </button>';
+            $msg = ['msg' => 'ok', 'html' => $html];
+            if ($request->ajax()) {
+                return response()->json($msg, 200);
+            }
+            $referer = url()->current();
+            $referer = \Request::path();
+
+            return redirect()->route('login', ['lang' => $lang, 'referer' => $referer])
+                            ->withErrors(['active' => 'login before']);
+        }
+        return abort(403,$method);
+
+    }
+
+    public function getModel(){
         $params = \Route::current()->parameters();
+        list($containers, $items) = params2ContainerItem($params);
+
+        if (count($items) ==0 ) { // es /it/article
+            $class = config('xra.model.'.last($containers));
+            $row = new $class();
+            return $row;
+        }
+        if (count($items)==count($containers)) {
+            return last($items);
+        }
+
+        $item_last=last($items);
+        $container_last=last($containers);
+        /**
+         * da capire se usare il plurale o meno
+         **/
+        $method=Str::camel($container_last);
+        if($plural=1){ //mi serve per capirmi, equivalenza sempre vera
+            $method=Str::plural($method);
+        }
+        if(!method_exists($item_last , $method )){
+            exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
+        }
+        $related=$item_last->$method()->getRelated();
+        return $related;
+
+    }
+
+    public function __callPanelAct($method, $args){
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $act=$request->_act;
+        $method_act=Str::camel($act);
+        $model=$this->getModel();
+
+        $authorized=Gate::allows($method_act, $model);
+        if(!$authorized){
+            return $this->notAuthorized($method_act, $model);
+        }
+
+        $panel=Panel::get($model);
+
+        return $panel->out(
+            [
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
+            ]
+        );
+
+
+    }//end call panel act
+
+    public function __callRouteAct($method, $args){
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $model=$this->getModel();
+        $authorized=Gate::allows($method, $model);
+        if (!$authorized) {
+            $msg=[
+                'model'=>$model,
+                'class'=>get_class($model),
+                'method'=>$method,
+            ];
+            ddd($msg);
+            return $this->notAuthorized($method, $model);
+        }
+        $panel = app($this->controller)
+            ->$method($request, $this->container_last, $this->item_last);
+        return $panel->out(
+            [
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
+            ]
+        );
+    }
+
+    public function __call($method, $args) {
+        $params = \Route::current()->parameters();
+        /*
         $lang = \App::getLocale();
         list($containers, $items) = params2ContainerItem($params);
+        */
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        //$request = Request::capture();
         $a = $this->init($params);
+        if ('' != $request->_act) {
+            return $this->__callPanelAct($method, $args);
+        }
+        return $this->__callRouteAct($method, $args);
+        //$request = Request::capture();
         $controller = $this->controller;
         $row = $this->last;
         // ddd($this->authorize($method,$row));
@@ -86,8 +189,8 @@ abstract class XotBaseContainerController extends Controller
             //    $authorized = \Auth::user()->can($method, $row);
             //} else {
             $authorized = Gate::allows($method, $row);
-        }else{
-           // ddd($this->controller);
+        } else {
+            // ddd($this->controller);
         }
         //$authorized=\Auth::guest()->can($method, $row);
         //}
