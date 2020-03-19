@@ -39,19 +39,24 @@ class XotServiceProvider extends XotBaseServiceProvider {
         ddd($morph_map);
         ddd(Relation::$morphMap);
         //*/
-        
+
         $this->commands([
             \Modules\Xot\Console\CreateAllRepositoriesCommand::class,
             \Modules\Xot\Console\PanelMakeCommand::class,
             \Modules\Xot\Console\FixProvidersCommand::class,
         ]);
-
-        if (false) {
+        if (true) {
             // --- meglio ficcare un controllo anche sull'env
             if (isset($_SERVER['SERVER_NAME']) && 'localhost' != $_SERVER['SERVER_NAME']
-                && isset($_SERVER['REQUEST_SCHEME']) && 'https' == $_SERVER['REQUEST_SCHEME']
+                && isset($_SERVER['REQUEST_SCHEME']) && 'http' == $_SERVER['REQUEST_SCHEME']
             ) {
                 URL::forceScheme('https');
+                /**
+                 * da fare in htaccess
+                 **/
+                if (!request()->secure() /* && in_array(env('APP_ENV'), ['stage', 'production']) */) {
+                    exit(redirect()->secure(request()->getRequestUri()));
+                }
             }
         }
         //*
