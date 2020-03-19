@@ -157,8 +157,21 @@ class UpdateJob implements ShouldQueue {
             if (! isset($v['pivot'])) {
                 $v['pivot'] = [];
             }
-            $res = $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
-            $model->$name()->touch();
+            //ddd('a');
+            /*
+            echo '<hr/><pre>'.print_r($v['pivot'],1).'</pre><hr/>';
+            $res = $model->$name()
+                    ->where('related_id',$k)
+                    ->where('auth_user_id',$v['pivot']['auth_user_id'])
+                    ->update($v['pivot']);
+            */
+            $res = $model->$name()
+                ->syncWithoutDetaching([$k => $v['pivot']]);
+            //->where('auth_user_id',1)
+            //->syncWithoutDetaching([$k => $v['pivot']])
+                ;
+                //->updateOrCreate(['related_id'=>$k,'auth_user_id'=>1],$v['pivot']);
+            //$model->$name()->touch();
         }
     }
 
