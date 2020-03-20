@@ -82,6 +82,10 @@ abstract class XotBaseContainerController extends Controller {
         $params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($params);
 
+        if (count($containers)==0) {
+            return new \Modules\Xot\Models\Home;
+        }
+
         if (count($items) ==0 ) { // es /it/article
             $class = config('xra.model.'.last($containers));
             $row = new $class();
