@@ -129,7 +129,7 @@ class UpdateJob implements ShouldQueue {
         }else{
             $rows->create($data);
         }
-        
+
     }
 
     /**
