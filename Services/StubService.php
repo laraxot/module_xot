@@ -14,13 +14,13 @@ class StubService
     public static function fromModel($params)
     {
         extract($params);
-        $class=get_class($model);
+        $class = get_class($model);
         $class_name = class_basename($model);
-        $class_ns = substr($class, 0, -(strlen($class_name) + 1));
-        $params['class']=$class;
+        $class_ns = substr($class, 0, - (strlen($class_name) + 1));
+        $params['class'] = $class;
         $params['class_name'] = $class_name;
         $params['namespace'] = $class_ns;
-        $params['namespace_root'] = substr($params['namespace'], 0, -(strlen('Models') + 1));
+        $params['namespace_root'] = substr($params['namespace'], 0, - (strlen('Models') + 1));
         /*
         if(!isset($model)){ // Cannot instantiate abstract class Modules\Food\Models\BaseModel
         $model=new $class;
@@ -41,10 +41,10 @@ class StubService
         $stub_name = $stub;
         switch ($stub_name) {
             case 'migration_morph_pivot':
-                $file = $dir.'/../Database/Migrations/'.date('Y_m_d_Hi00').'_create_'.Str::snake($class_name).'_table.php';
+                $file = $dir . '/../Database/Migrations/' . date('Y_m_d_Hi00') . '_create_' . Str::snake($class_name) . '_table.php';
                 break;
             case 'morph_pivot':
-                $file = $dir.'/'.$class_name.'.php';
+                $file = $dir . '/' . $class_name . '.php';
                 self::missingClass([
                     'class' => $class,
                     'stub' => 'migration_morph_pivot',
@@ -52,31 +52,35 @@ class StubService
                 ]);
                 break;
             case 'repository':
-                $file = $dir.'/../Repositories/'.$class_name.'Repository.php';
-                $params['namespace'] = $params['namespace_root'].'\Repositories';
-                $params['class_name'] = $params['class_name'].'Repository';
+                $file = $dir . '/../Repositories/' . $class_name . 'Repository.php';
+                $params['namespace'] = $params['namespace_root'] . '\Repositories';
+                $params['class_name'] = $params['class_name'] . 'Repository';
                 break;
             case 'transformer_collection':
-                $file=$dir.'/../Transformers/'.$class_name.'Collection.php';
-                $file=str_replace(['\\','/'], [DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR], $file);
-                $params['namespace'] = $params['namespace_root'].'\Transformers';
-                $params['class_name'] = $params['class_name'].'Collection';
-            break;
+                $file = $dir . '/../Transformers/' . $class_name . 'Collection.php';
+                $file = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'] . '\Transformers';
+                $params['class_name'] = $params['class_name'] . 'Collection';
+                break;
             case 'transformer_resource':
-                $file=$dir.'/../Transformers/'.$class_name.'Resource.php';
-                $file=str_replace(['\\','/'], [DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR], $file);
-                $params['namespace'] = $params['namespace_root'].'\Transformers';
-                $params['class_name'] = $params['class_name'].'Resource';
-            break;
-
+                $file = $dir . '/../Transformers/' . $class_name . 'Resource.php';
+                $file = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'] . '\Transformers';
+                $params['class_name'] = $params['class_name'] . 'Resource';
+                break;
+            case 'policy':
+                $file = $dir . '/Policies/' . $class_name . 'Policy.php';
+                $file = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'] . '\Models\Policies';
+                $params['class_name'] = $params['class_name'] . 'Policy';
+                break;
             default:
-                ddd('['.$stub_name.'] Unkwonn !');
+                ddd('[' . $stub_name . '] Unkwonn !');
                 break;
         }
 
-        $class_full = $params['namespace'].'\\'.$params['class_name'];
-        if (File::exists($file))
-        {
+        $class_full = $params['namespace'] . '\\' . $params['class_name'];
+        if (File::exists($file)) {
             return $class_full;
         }
         /*
@@ -85,7 +89,7 @@ class StubService
         }
          */
 
-        $stub_file = __DIR__.'/../Console/stubs/'.$stub_name.'.stub';
+        $stub_file = __DIR__ . '/../Console/stubs/' . $stub_name . '.stub';
         $stub = File::get($stub_file);
         $replace = self::replaces($params);
         $stub = str_replace(array_keys($replace), array_values($replace), $stub);
@@ -98,15 +102,15 @@ class StubService
         //
 
         File::put($file, $stub);
-        $msg = (' ['.$class.'] is under creating , refresh page');
+        $msg = (' [' . $class . '] is under creating , refresh page');
 
         \Session::flash($msg);
     }
 
     public static function getByModel($model, $name, $create = false)
     {
-        if (! is_object($model)) {
-            echo '<h3>Model: ['.$model.']</h3>';
+        if (!is_object($model)) {
+            echo '<h3>Model: [' . $model . ']</h3>';
             $params = \Route::current()->parameters();
 
             return null;
@@ -115,7 +119,7 @@ class StubService
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
         $class = substr($class_full, 0, -strlen($class_name));
-        $panel = $class.Str::plural(Str::studly($name)).'\\'.$class_name.Str::studly($name);
+        $panel = $class . Str::plural(Str::studly($name)) . '\\' . $class_name . Str::studly($name);
         try {
             if (class_exists($panel)) {
                 return new $panel();
@@ -123,8 +127,8 @@ class StubService
         } catch (\Exception $e) {
             ddd($e);
         }
-        if (! $create) {
-            ddd($panel.' NOT EXISTS !');
+        if (!$create) {
+            ddd($panel . ' NOT EXISTS !');
         } else {
             /* -- 4 debug
         $t= new $panel;
@@ -134,8 +138,8 @@ class StubService
         }
         self::create($model, $name);
         //return new $panel;
-        ddd($name.' ['.$class_full.']['.$panel.'] is under creating , refresh page');
-        \Session::flash('status', $name.' created');
+        ddd($name . ' [' . $class_full . '][' . $panel . '] is under creating , refresh page');
+        \Session::flash('status', $name . ' created');
         //return redirect()->back();
     }
 
@@ -163,13 +167,13 @@ class StubService
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
         $class = substr($class_full, 0, -strlen($class_name));
-        $panel_namespace = $class.Str::plural(Str::studly($name));
-        $panel = $panel_namespace.'\\'.$class_name.Str::studly($name);
+        $panel_namespace = $class . Str::plural(Str::studly($name));
+        $panel = $panel_namespace . '\\' . $class_name . Str::studly($name);
         //---- creazione panel
         $autoloader_reflector = new \ReflectionClass($model);
         $class_file_nanme = $autoloader_reflector->getFileName();
         $model_dir = dirname($class_file_nanme); // /home/vagrant/code/htdocs/lara/multi/laravel/Modules/LU/Models
-        $stub_file = __DIR__.'/../Console/stubs/'.$name.'.stub';
+        $stub_file = __DIR__ . '/../Console/stubs/' . $name . '.stub';
         $stub = File::get($stub_file);
 
         $search = [];
@@ -182,7 +186,7 @@ class StubService
         }
         $replace = [
             'DummyNamespace' => $panel_namespace,
-            'DummyClass' => $class_name.Str::studly($name),
+            'DummyClass' => $class_name . Str::studly($name),
             'DummyFullModel' => $class_full,
             'dummy_id' => $dummy_id,
             'dummy_title' => 'title', // prendo il primo campo stringa
@@ -197,13 +201,13 @@ class StubService
         //$stub=str_replace(chr(13),chr(13).'    ',$stub);
         //$stub=str_replace(chr(10),chr(10).'    ',$stub);
 
-        $panel_dir = $model_dir.'/'.Str::plural(Str::studly($name));
+        $panel_dir = $model_dir . '/' . Str::plural(Str::studly($name));
         File::makeDirectory($panel_dir, $mode = 0777, true, true);
-        $panel_file = $panel_dir.'/'.$class_name.Str::studly($name).'.php';
-        if (! File::exists($panel_file)) {
+        $panel_file = $panel_dir . '/' . $class_name . Str::studly($name) . '.php';
+        if (!File::exists($panel_file)) {
             File::put($panel_file, $stub);
         } else {
-            echo '<h3>['.$panel_file.'] Just exists</h3>';
+            echo '<h3>[' . $panel_file . '] Just exists</h3>';
             ddd(debug_backtrace());
         }
     }
@@ -215,14 +219,15 @@ class StubService
             $fillables = $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
             $fillables = collect($fillables)->except([
                 'created_at', 'updated_at', 'updated_by', 'created_by', 'deleted_at', 'deleted_by',
-                'deleted_ip', 'created_ip', 'updated_ip', ])->all();
+                'deleted_ip', 'created_ip', 'updated_ip',
+            ])->all();
             $autoloader_reflector = new \ReflectionClass($model);
             $class_filename = $autoloader_reflector->getFileName();
-            $fillables_str = chr(13).chr(10).'    protected $fillable=[\''.implode("','", $fillables)."'];".chr(13).chr(10);
+            $fillables_str = chr(13) . chr(10) . '    protected $fillable=[\'' . implode("','", $fillables) . "'];" . chr(13) . chr(10);
             $class_content = File::get($class_filename);
             $class_content_before = Str::before($class_content, '{');
             $class_content_after = Str::after($class_content, '{');
-            $class_content_new = $class_content_before.'{'.$fillables_str.$class_content_after;
+            $class_content_new = $class_content_before . '{' . $fillables_str . $class_content_after;
             File::put($class_filename, $class_content_new);
         }
         $fields = [];
@@ -237,7 +242,7 @@ class StubService
                     $tmp->type = str_replace('\\', '', $tmp->type);
                 }
                 $tmp->name = $input_name;
-                if ($col->getNotnull() && ! $col->getAutoincrement()) {
+                if ($col->getNotnull() && !$col->getAutoincrement()) {
                     $tmp->rules = 'required';
                 }
                 $tmp->comment = $col->getComment();
@@ -284,12 +289,12 @@ class StubService
     public static function updatePanel($params)
     {
         extract($params);
-        $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
+        $func_file = __DIR__ . '/../Console/stubs/panels/' . $func . '.stub';
         $func_stub = File::get($func_file);
         $autoloader_reflector = new \ReflectionClass($panel);
         $panel_file = $autoloader_reflector->getFileName();
         $panel_stub = File::get($panel_file);
-        $panel_stub = Str::replaceLast('}', $func_stub.chr(13).chr(10).'}', $panel_stub);
+        $panel_stub = Str::replaceLast('}', $func_stub . chr(13) . chr(10) . '}', $panel_stub);
         File::put($panel_file, $panel_stub);
     }
 }

@@ -13,14 +13,16 @@ use Modules\Xot\Services\StubService;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller {
+abstract class XotBaseContainerController extends Controller
+{
     protected $controller;
     protected $row;
     protected $module;
     protected $controller_exist;
 
     //public function __construct() { //o lo chiamavo "init".. etc etc
-    public function init($params) { //o lo chiamavo "init".. etc etc
+    public function init($params)
+    { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
         list($containers, $items) = params2ContainerItem($params);
@@ -30,11 +32,11 @@ abstract class XotBaseContainerController extends Controller {
 
         $container_first = Arr::first($containers);
         //ddd($container_first); //restaurant
-        $model_name = config('xra.model.'.$container_first); // ddd($model_name); //Modules\Food\Models\Restaurant
+        $model_name = config('xra.model.' . $container_first); // ddd($model_name); //Modules\Food\Models\Restaurant
         $pos = strpos($model_name, '\\Models\\');
         $mod = substr($model_name, 0, $pos);
         //$controller='\Modules\\'.$mod->name.'\Http\Controllers\\'.$tmp.'Controller';
-        $controller = $mod.'\Http\Controllers\\'.$tmp.'Controller';
+        $controller = $mod . '\Http\Controllers\\' . $tmp . 'Controller';
         try {
             if (class_exists($controller)) {
                 $this->controller = $controller;
@@ -46,7 +48,7 @@ abstract class XotBaseContainerController extends Controller {
             $controller = '\Modules\Xot\Http\Controllers\XotController';
             $this->controller = $controller;
         }
-        $this->item=$items;
+        $this->item = $items;
         $this->containers = $containers;
 
         $this->item_last = last($items);
@@ -56,12 +58,13 @@ abstract class XotBaseContainerController extends Controller {
         return 'init';
     }
 
-    public function notAuthorized($method){
-        $lang=\App::getLocale();
+    public function notAuthorized($method)
+    {
+        $lang = \App::getLocale();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         if (!\Auth::check()) {
-            $html='<h3>Before Login </h3>
-            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
+            $html = '<h3>Before Login </h3>
+            <button class="btn btn-social btn-facebook" onclick="location.href=\'' . url($lang . '/login/facebook') . '\'">
                 <i class="fab fa-facebook-square fa-3x  "></i>
             </button>';
             $msg = ['msg' => 'ok', 'html' => $html];
@@ -72,58 +75,58 @@ abstract class XotBaseContainerController extends Controller {
             $referer = \Request::path();
 
             return redirect()->route('login', ['lang' => $lang, 'referer' => $referer])
-                            ->withErrors(['active' => 'login before']);
+                ->withErrors(['active' => 'login before']);
         }
-        return abort(403,$method);
-
+        return abort(403, $method);
     }
 
-    public function getModel(){
+    public function getModel()
+    {
         $params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($params);
 
-        if (count($containers)==0) {
+        if (count($containers) == 0) {
             return new \Modules\Xot\Models\Home;
         }
 
-        if (count($items) ==0 ) { // es /it/article
-            $class = config('xra.model.'.last($containers));
+        if (count($items) == 0) { // es /it/article
+            $class = config('xra.model.' . last($containers));
             $row = new $class();
             return $row;
         }
-        if (count($items)==count($containers)) {
+        if (count($items) == count($containers)) {
             return last($items);
         }
 
-        $item_last=last($items);
-        $container_last=last($containers);
+        $item_last = last($items);
+        $container_last = last($containers);
         /**
          * da capire se usare il plurale o meno
          **/
-        $method=Str::camel($container_last);
-        if($plural=1){ //mi serve per capirmi, equivalenza sempre vera
-            $method=Str::plural($method);
+        $method = Str::camel($container_last);
+        if ($plural = 1) { //mi serve per capirmi, equivalenza sempre vera
+            $method = Str::plural($method);
         }
-        if(!method_exists($item_last , $method )){
-            exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
+        if (!method_exists($item_last, $method)) {
+            exit('' . get_class($item_last) . '->' . $method . '() NOT EXISTS');
         }
-        $related=$item_last->$method()->getRelated();
+        $related = $item_last->$method()->getRelated();
         return $related;
-
     }
 
-    public function __callPanelAct($method, $args){
+    public function __callPanelAct($method, $args)
+    {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $act=$request->_act;
-        $method_act=Str::camel($act);
-        $model=$this->getModel();
+        $act = $request->_act;
+        $method_act = Str::camel($act);
+        $model = $this->getModel();
 
-        $authorized=Gate::allows($method_act, $model);
-        if(!$authorized){
+        $authorized = Gate::allows($method_act, $model);
+        if (!$authorized) {
             return $this->notAuthorized($method_act, $model);
         }
 
-        $panel=Panel::get($model);
+        $panel = Panel::get($model);
 
         return $panel->out(
             [
@@ -131,19 +134,21 @@ abstract class XotBaseContainerController extends Controller {
                 'method' => $request->getMethod(),
             ]
         );
+    } //end call panel act
 
-
-    }//end call panel act
-
-    public function __callRouteAct($method, $args){
+    public function __callRouteAct($method, $args)
+    {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $model=$this->getModel();
-        $authorized=Gate::allows($method, $model);
+        $model = $this->getModel();
+        $authorized = Gate::allows($method, $model);
         if (!$authorized) {
-            $msg=[
-                'model'=>$model,
-                'class'=>get_class($model),
-                'method'=>$method,
+            $policy_class = StubService::fromModel(['model' => $model, 'stub' => 'policy']);
+            $msg = [
+                'model' => $model,
+                'policy_class' => $policy_class,
+                //'policy_res'=>app($policy_class)->$
+                'model_class' => get_class($model),
+                'method' => $method,
             ];
             ddd($msg);
             return $this->notAuthorized($method, $model);
@@ -158,7 +163,8 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
-    public function __call($method, $args) {
+    public function __call($method, $args)
+    {
         $params = \Route::current()->parameters();
         /*
         $lang = \App::getLocale();
@@ -174,15 +180,15 @@ abstract class XotBaseContainerController extends Controller {
         $controller = $this->controller;
         $row = $this->last;
         // ddd($this->authorize($method,$row));
-        if (! is_object($row) && '' != $row && '' != config('xra.model.'.$row)) {
-            $class = config('xra.model.'.$row);
+        if (!is_object($row) && '' != $row && '' != config('xra.model.' . $row)) {
+            $class = config('xra.model.' . $row);
             if ('' == $class) {
-                ddd('['.$row.'] not exists on config/xra.php');
+                ddd('[' . $row . '] not exists on config/xra.php');
             }
             try {
                 $row = new $class();
             } catch (\Exception $e) {
-                ddd('['.$row.']['.$class.'] not exists on config/xra.php');
+                ddd('[' . $row . '][' . $class . '] not exists on config/xra.php');
             }
         }
         $authorized = true;
@@ -198,8 +204,8 @@ abstract class XotBaseContainerController extends Controller {
         }
         //$authorized=\Auth::guest()->can($method, $row);
         //}
-        if (! $authorized && ! \Auth::check()) {
-            $msg = ['msg' => 'ok', 'html' => '<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
+        if (!$authorized && !\Auth::check()) {
+            $msg = ['msg' => 'ok', 'html' => '<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\'' . url($lang . '/login/facebook') . '\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
             if ($request->ajax()) {
                 return response()->json($msg, 200);
             }
@@ -207,11 +213,11 @@ abstract class XotBaseContainerController extends Controller {
             $referer = \Request::path();
 
             return redirect()->route('login', ['lang' => \App::getLocale(), 'referer' => $referer])
-                            ->withErrors(['active' => 'login before']);
+                ->withErrors(['active' => 'login before']);
         }
 
-        if (! $authorized) {
-            $method_name = $method.'SpecialCase';
+        if (!$authorized) {
+            $method_name = $method . 'SpecialCase';
             if (method_exists($panel, $method_name)) {
                 return $panel->$method_name();
             }
@@ -234,7 +240,7 @@ abstract class XotBaseContainerController extends Controller {
         }
         //if(in_array($method,['update','store'])){
         if ('GET' != $request->getMethod()) {
-            if (! $request->ajax()) {
+            if (!$request->ajax()) {
                 $route_action = \Route::currentRouteAction();
                 $act = Str::after($route_action, '@');
                 //$rules=$panel->rules(['act'=>$act]);
@@ -246,7 +252,7 @@ abstract class XotBaseContainerController extends Controller {
             }
         }
         //return app($controller)->$method($request, $this->container_last, $this->item_last);
-        $controller_single = (substr($controller, 0, -strlen('Controller')).'\\'.Str::studly($method).'Controller');
+        $controller_single = (substr($controller, 0, -strlen('Controller')) . '\\' . Str::studly($method) . 'Controller');
         /*-- to do --
             non passare piu' request ma passare direttamente $data
         */
