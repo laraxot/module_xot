@@ -398,7 +398,7 @@ if (! \function_exists('transFields')) {
             $trans = $view_noact.'.field.'.$ris->name_dot.'_'.$tf;
             $ris->$tf = isset($$tf) ? $$tf : trans($trans);
             if ($ris->$tf == $trans) {
-                $ris->$tf = '';
+                $ris->$tf = $ris->name_dot;
             }
         }
 

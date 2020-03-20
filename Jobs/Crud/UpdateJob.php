@@ -122,7 +122,14 @@ class UpdateJob implements ShouldQueue {
      **/
     public function updateRelationshipsMorphOne($params) {
         extract($params);
-        $model->$name()->update($data);
+        /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
+        $rows=$model->$name();
+        if($rows->exists()){
+            $rows->update($data);
+        }else{
+            $rows->create($data);
+        }
+        
     }
 
     /**
