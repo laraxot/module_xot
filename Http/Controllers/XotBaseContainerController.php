@@ -91,6 +91,10 @@ abstract class XotBaseContainerController extends Controller
 
         if (count($items) == 0) { // es /it/article
             $class = config('xra.model.' . last($containers));
+            if ($class == null) {
+                $err_msg = 'add [' . last($containers) . '] on xra.php';
+                abort(503, $err_msg);
+            }
             $row = new $class();
             return $row;
         }
