@@ -44,12 +44,27 @@ class StubService
                 $file = $dir . '/../Database/Migrations/' . date('Y_m_d_Hi00') . '_create_' . Str::snake($class_name) . '_table.php';
                 break;
             case 'morph_pivot':
+                $file = $dir .'/'.$class_name . 'Morph.php';
+                $file = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $file);
+                $params['namespace'] = $params['namespace_root'] . '\Models';
+                $params['class_name'] = $params['class_name'] . 'Morph';
+                /*
+                $msg=[
+                    'file'=>$file,
+                    'model'=>$model,
+                    'class_name'=>$class_name,
+                ];
+                ddd($msg);
+                ddd(get_class($model));
+                */
+                /*
                 $file = $dir . '/' . $class_name . '.php';
                 self::missingClass([
                     'class' => $class,
                     'stub' => 'migration_morph_pivot',
                     'model' => $model,
                 ]);
+                */
                 break;
             case 'repository':
                 $file = $dir . '/../Repositories/' . $class_name . 'Repository.php';
@@ -80,6 +95,7 @@ class StubService
         }
 
         $class_full = $params['namespace'] . '\\' . $params['class_name'];
+
         if (File::exists($file)) {
             return $class_full;
         }
