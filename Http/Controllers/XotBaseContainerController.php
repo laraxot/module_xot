@@ -37,6 +37,7 @@ abstract class XotBaseContainerController extends Controller
         $mod = substr($model_name, 0, $pos);
         //$controller='\Modules\\'.$mod->name.'\Http\Controllers\\'.$tmp.'Controller';
         $controller = $mod . '\Http\Controllers\\' . $tmp . 'Controller';
+        //ddd($controller);
         try {
             if (class_exists($controller)) {
                 $this->controller = $controller;
