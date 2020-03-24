@@ -4,10 +4,8 @@ namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
-use Modules\Theme\Services\ThemeService; //4 guestPolicy
+//---- services ---
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\StubService;
 
@@ -27,235 +25,73 @@ abstract class XotBaseContainerController extends Controller {
         $tmp = collect($containers)->map(function ($item) {
             return Str::studly($item);
         })->implode('\\');
+        if (! isset($params['module'])) {
+            return;
+        }
+        $mod = \Module::find($params['module']);
+        if (is_object($mod)) {
+            $mod_name = $mod->getName();
+        }
 
-        $container_first = Arr::first($containers);
-        //ddd($container_first); //restaurant
-        $model_name = config('xra.model.'.$container_first); // ddd($model_name); //Modules\Food\Models\Restaurant
-        $pos = strpos($model_name, '\\Models\\');
-        $mod = substr($model_name, 0, $pos);
-        //$controller='\Modules\\'.$mod->name.'\Http\Controllers\\'.$tmp.'Controller';
-        $controller = $mod.'\Http\Controllers\\'.$tmp.'Controller';
+        if (null == $mod) {
+            if (Str::startsWith($params['module'], 'trasferte')) { //CASO ECCEZZIONALE DA GESTIRE DIVERSAMENTE
+                $mod = (object) ['name' => 'Trasferte'];
+                $mod_name = 'Trasferte';
+            }
+        }
+        $controller = '\Modules\\'.$mod_name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        //ddd($controller);
         try {
             if (class_exists($controller)) {
                 $this->controller = $controller;
             } else {
-                $controller = '\Modules\Xot\Http\Controllers\XotController';
+                $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
                 $this->controller = $controller;
             }
         } catch (\Exception $e) {
-            $controller = '\Modules\Xot\Http\Controllers\XotController';
+            $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
             $this->controller = $controller;
         }
-        $this->item=$items;
-        $this->containers = $containers;
-
         $this->item_last = last($items);
         $this->container_last = last($containers);
         $this->last = last($params);
-
-        return 'init';
-    }
-
-    public function notAuthorized($method){
-        $lang=\App::getLocale();
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        if (!\Auth::check()) {
-            $html='<h3>Before Login </h3>
-            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
-                <i class="fab fa-facebook-square fa-3x  "></i>
-            </button>';
-            $msg = ['msg' => 'ok', 'html' => $html];
-            if ($request->ajax()) {
-                return response()->json($msg, 200);
-            }
-            $referer = url()->current();
-            $referer = \Request::path();
-
-            return redirect()->route('login', ['lang' => $lang, 'referer' => $referer])
-                            ->withErrors(['active' => 'login before']);
-        }
-        return abort(403,$method);
-
-    }
-
-    public function getModel(){
-        $params = \Route::current()->parameters();
-        list($containers, $items) = params2ContainerItem($params);
-
-        if (count($containers)==0) {
-            return new \Modules\Xot\Models\Home;
-        }
-
-        if (count($items) ==0 ) { // es /it/article
-            $class = config('xra.model.'.last($containers));
-            $row = new $class();
-            return $row;
-        }
-        if (count($items)==count($containers)) {
-            return last($items);
-        }
-
-        $item_last=last($items);
-        $container_last=last($containers);
-        /**
-         * da capire se usare il plurale o meno
-         **/
-        $method=Str::camel($container_last);
-        if($plural=1){ //mi serve per capirmi, equivalenza sempre vera
-            $method=Str::plural($method);
-        }
-        if(!method_exists($item_last , $method )){
-            exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
-        }
-        $related=$item_last->$method()->getRelated();
-        return $related;
-
-    }
-
-    public function __callPanelAct($method, $args){
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $act=$request->_act;
-        $method_act=Str::camel($act);
-        $model=$this->getModel();
-
-        $authorized=Gate::allows($method_act, $model);
-        if(!$authorized){
-            return $this->notAuthorized($method_act, $model);
-        }
-
-        $panel=Panel::get($model);
-
-        return $panel->out(
-            [
-                'is_ajax' => $request->ajax(),
-                'method' => $request->getMethod(),
-            ]
-        );
-
-
-    }//end call panel act
-
-    public function __callRouteAct($method, $args){
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $model=$this->getModel();
-        $authorized=Gate::allows($method, $model);
-        if (!$authorized) {
-            $msg=[
-                'model'=>$model,
-                'class'=>get_class($model),
-                'method'=>$method,
-            ];
-            ddd($msg);
-            return $this->notAuthorized($method, $model);
-        }
-        $panel = app($this->controller)
-            ->$method($request, $this->container_last, $this->item_last);
-        return $panel->out(
-            [
-                'is_ajax' => $request->ajax(),
-                'method' => $request->getMethod(),
-            ]
-        );
     }
 
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-
-        $lang = \App::getLocale();
-        list($containers, $items) = params2ContainerItem($params);
-        if (count($containers)==0) {
-            return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
-        }
-
-
-        $a = $this->init($params);
-        if ('' != $request->_act) {
-            return $this->__callPanelAct($method, $args);
-        }
-        return $this->__callRouteAct($method, $args);
-        //$request = Request::capture();
+        $this->init($params);
         $controller = $this->controller;
         $row = $this->last;
-        // ddd($this->authorize($method,$row));
-        if (! is_object($row) && '' != $row && '' != config('xra.model.'.$row)) {
-            $class = config('xra.model.'.$row);
-            if ('' == $class) {
-                ddd('['.$row.'] not exists on config/xra.php');
-            }
-            try {
-                $row = new $class();
-            } catch (\Exception $e) {
-                ddd('['.$row.']['.$class.'] not exists on config/xra.php');
+        if (is_object($row) && \Auth::user()->cannot($method, $row)) {
+            //ddd('non autorizzato ['.$method.']['.get_class($row).']');
+            //return response()->deny('testxxx');
+            $msg = 'user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
+            abort(403, $msg);
+            //return response()->view('adm_theme::errors.403', [], 403);
+        }
+        //$request = Request::capture();
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        if (in_array($method, ['update'])) {
+            $model = $this->item_last;
+            $panel = StubService::getByModel($model, 'panel', $create = true);
+
+            if (is_object($panel)) {
+                //$request->prepareForValidation();
+                //$request->validate($panel->rules(), $panel->rulesMessages());
+                $request->validatePanel($panel);
             }
         }
-        $authorized = true;
-        if (is_object($row)) {
-            $panel = StubService::getByModel($row, 'panel', $create = true);
-            $policy = StubService::getByModel($row, 'policy', $create = true);
-            //if (\Auth::check()) {
-            //    $authorized = \Auth::user()->can($method, $row);
-            //} else {
-            $authorized = Gate::allows($method, $row);
+        if (false == $this->container_last) {
+            return app('\Modules\Xot\Http\Controllers\Admin\HomeController')->$method($request);
+        }
+        //ddd(['controller'=>$controller,'method'=>$method,'container_last'=>$this->container_last]);
+
+        if ('' != $request->_act) {
+            $panel = $this->ContainerItem2Panel($this->container_last, $this->item_last);
         } else {
-            // ddd($this->controller);
-        }
-        //$authorized=\Auth::guest()->can($method, $row);
-        //}
-        if (! $authorized && ! \Auth::check()) {
-            $msg = ['msg' => 'ok', 'html' => '<h3>Before Login </h3><button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\';"><i class="fab fa-facebook-square fa-3x  "></i></button>'];
-            if ($request->ajax()) {
-                return response()->json($msg, 200);
-            }
-            $referer = url()->current();
-            $referer = \Request::path();
-
-            return redirect()->route('login', ['lang' => \App::getLocale(), 'referer' => $referer])
-                            ->withErrors(['active' => 'login before']);
+            $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
         }
 
-        if (! $authorized) {
-            $method_name = $method.'SpecialCase';
-            if (method_exists($panel, $method_name)) {
-                return $panel->$method_name();
-            }
-            $row_name = is_object($row) ? get_class($row) : $row;
-            $panel_name = is_object($panel) ? get_class($panel) : '---';
-            $policy_name = is_object($policy) ? get_class($policy) : '---';
-            $msg = [
-                'err_msg' => 'Not Authorized',
-                'row' => $row_name,
-                'method' => $method,
-                'logged' => \Auth::check(),
-                'panel' => $panel_name,
-                'policy' => $policy_name,
-                'special_case' => $method_name,
-                //'special_case_exists'=>'NO',
-                'tips' => 'modify policy or create special case',
-            ];
-            ddd($msg);
-            abort(403);
-        }
-        //if(in_array($method,['update','store'])){
-        if ('GET' != $request->getMethod()) {
-            if (! $request->ajax()) {
-                $route_action = \Route::currentRouteAction();
-                $act = Str::after($route_action, '@');
-                //$rules=$panel->rules(['act'=>$act]);
-                /* -- questo funziona..
-                $request->merge(['published_at'=>\Carbon\Carbon::now()]);
-                */
-                //$request->validate($rules, $panel->rulesMessages());
-                $request->validatePanel($panel, $act);
-            }
-        }
-        //return app($controller)->$method($request, $this->container_last, $this->item_last);
-        $controller_single = (substr($controller, 0, -strlen('Controller')).'\\'.Str::studly($method).'Controller');
-        /*-- to do --
-            non passare piu' request ma passare direttamente $data
-        */
-        //  \Debugbar::disable();
-        $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
 
         return $panel->out(
             [
@@ -263,35 +99,34 @@ abstract class XotBaseContainerController extends Controller {
                 'method' => $request->getMethod(),
             ]
         );
-        /*
-        $row=app($controller)->$method($request, $this->container_last, $this->item_last);
-        $rows=app($controller)::$rows;
-        $panel=Panel::get($row);
-        $html=ThemeService::view(['panel' => $panel, 'row' => $row])
-                ->with('row', $row)
-                ->with('rows', $rows)
-                ->with('_panel', $panel)
-                ;
-        if ('GET' == $request->getMethod()) {
-            return $html;
-        }
-
-        if ($request->ajax()) {
-            return json_encode(['msg' => 'ok','html'=>(string)$html]);
-        } else {
-            return $html;
-        }
-        */
     }
 
-    /*------------
-     public function update(?User $user, Post $post) -> https://laravel.com/docs/5.8/authorization
 
-    $request = \str_replace('\\Controllers\\', '\\Requests\\', $controller);
-            $request = \mb_substr($request, 0, -\mb_strlen('Controller'));
-            $pos = \mb_strrpos($request, '\\');
-            $request = \mb_substr($request, 0, $pos + 1).Str::studly($method).\mb_substr($request, $pos + 1);
-            $request = $request::capture();
-            $request->validate($request->rules(), $request->messages());
-    -------------*/
-}
+    public function ContainerItem2Panel($container, $item) {
+        list($containers, $items) = params2ContainerItem();
+        if (count($containers) > count($items)) {
+            $types = Str::camel(Str::plural($container));
+            if (is_object($item)) {
+                if (method_exists($item, $types)) {
+                    $rows = $item->$types();
+                    $related = $rows->getRelated();
+                    $row = $related;
+                } else {
+                    $rows = null;
+                    $row = $item;
+                }
+            } else {
+                $row = xotModel($container);
+                $rows = $row; // o NULL ???
+            }
+            $panel = Panel::get($row);
+            //$panel->setRow($row);
+            $panel->setRows($rows);
+
+            return $panel;
+        }
+        $panel = Panel::get($item);
+
+        return $panel;
+    }
+}//end class

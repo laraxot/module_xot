@@ -397,8 +397,8 @@ if (! \function_exists('transFields')) {
         foreach ($trans_fields as $tf) {
             $trans = $view_noact.'.field.'.$ris->name_dot.'_'.$tf;
             $ris->$tf = isset($$tf) ? $$tf : trans($trans);
-            if ($ris->$tf == $trans) {
-                //$ris->$tf = $ris->name_dot;
+            if ($ris->$tf == $trans && !config('xra.show_trans_key')) {
+                $ris->$tf = $ris->name_dot;
             }
         }
 
