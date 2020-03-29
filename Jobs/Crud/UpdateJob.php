@@ -36,6 +36,7 @@ class UpdateJob implements ShouldQueue {
             $data = $this->getData();
         }
         $this->data = $data;
+
     }
 
     /**
@@ -121,7 +122,14 @@ class UpdateJob implements ShouldQueue {
      **/
     public function updateRelationshipsMorphOne($params) {
         extract($params);
-        $model->$name()->update($data);
+        /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
+        $rows=$model->$name();
+        if($rows->exists()){
+            $rows->update($data);
+        }else{
+            $rows->create($data);
+        }
+
     }
 
     /**
@@ -156,8 +164,21 @@ class UpdateJob implements ShouldQueue {
             if (! isset($v['pivot'])) {
                 $v['pivot'] = [];
             }
-            $res = $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
-            $model->$name()->touch();
+            //ddd('a');
+            /*
+            echo '<hr/><pre>'.print_r($v['pivot'],1).'</pre><hr/>';
+            $res = $model->$name()
+                    ->where('related_id',$k)
+                    ->where('auth_user_id',$v['pivot']['auth_user_id'])
+                    ->update($v['pivot']);
+            */
+            $res = $model->$name()
+                ->syncWithoutDetaching([$k => $v['pivot']]);
+            //->where('auth_user_id',1)
+            //->syncWithoutDetaching([$k => $v['pivot']])
+                ;
+                //->updateOrCreate(['related_id'=>$k,'auth_user_id'=>1],$v['pivot']);
+            //$model->$name()->touch();
         }
     }
 
@@ -178,11 +199,9 @@ class UpdateJob implements ShouldQueue {
         extract($params);
         $items = $model->$name();
         $related = $items->getRelated();
-        //ddd($related);
         $container_obj = $model;
         //$items_key = $container_obj->getKeyName();
         $items_key = $related->getKeyName();
-        //ddd($items_key);//auth_user_id
         $items_0 = $items->get()->pluck($items_key);
 
         if (! isset($data['to'])) {

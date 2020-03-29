@@ -543,10 +543,30 @@ class RouteService {
             ]);
         }
         $route_params['item'.($cont_i)] = $route_key_val;
+        if(inAdmin() && !isset($route_params['module']) ){
+            $container0=$route_params['container0'];
+            $model=xotModel($container0);
+            $module_name = getModuleNameFromModel($model);
+            $route_params['module'] = $module_name;
+        }
         try {
             $url = route($routename, $route_params);
         } catch (\Exception $e) {
-            $url = '#routename_err['.__FILE__.']['.__LINE__.']';
+            
+
+            /*
+            $msg=[
+                'route_name'=>$routename,
+                'route_params'=>$route_params,
+                'inAdmin'=>inAdmin(),
+                'file'=>__FILE__,
+                'LINE'=>__LINE__,
+                'e'=>$e,
+                
+            ];
+            ddd($msg);
+            //*/
+            $url = '#routename_err['.$routename.']['.__FILE__.']['.__LINE__.']';
         }
         if (Str::endsWith($url, '?')) {
             $url = Str::before($url, '?');

@@ -48,11 +48,14 @@ abstract class XotBasePolicy {
     }
 
     public function store(User $user, $post) {
+        /*
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
-
         return false;
+        non e' stato creato..
+        */
+        return true;
     }
 
     public function indexAttach(User $user, $post) {

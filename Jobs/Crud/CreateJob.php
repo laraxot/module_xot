@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class createJob implements ShouldQueue {
+class CreateJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;

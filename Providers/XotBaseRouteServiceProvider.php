@@ -6,6 +6,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Route;
 
 abstract class XotBaseRouteServiceProvider extends ServiceProvider {
+
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso
         if (method_exists($this, 'bootCallback')) {
@@ -13,6 +14,7 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider {
         }
         parent::boot();
     }
+
 
     public function map() {
         $this->mapApiRoutes();

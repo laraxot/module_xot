@@ -41,6 +41,7 @@ trait CommonTrait {
 
         foreach ($data1 as $k => $v) {
             $func = $act.'Relationships'.$v->relationship_type; //updateRelationshipsMorphOne
+            //echo '<h3>'.$func.'</h3>';
             //$this->$func(['model'=>$model,'name'=>$v->name,'data'=>$v->data]);
             $parz = array_merge($params, ['model' => $model, 'name' => $v->name, 'data' => $v->data]);
             self::$func($parz);

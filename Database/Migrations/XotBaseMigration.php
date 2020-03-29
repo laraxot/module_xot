@@ -10,10 +10,20 @@ use Illuminate\Support\Str;
 //use Modules\Customer\Models\Customer as MyModel;
 //use Modules\Blog\Models\Place;
 
-class XotBaseMigration extends Migration {
-    private $model;
+abstract class XotBaseMigration extends Migration {
+    protected $model;
 
+
+    //*
     public function __construct() {
+        if($this->model==null){
+            $this->model=$this->getModel();
+        }
+        $this->model=new $this->model();
+    }
+    //*/
+    public function getModel(){
+
         //ddd(class_basename($this));//CreateDevicesTable
         //ddd(get_class($this));
         $name = class_basename($this);
@@ -32,12 +42,16 @@ class XotBaseMigration extends Migration {
         $model_dir = $mod_path.DIRECTORY_SEPARATOR.$mod_name.DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR.$name.'.php';
         //ddd($model_ns);//     \Modules\Customer\Models\Device
         //ddd($model_dir);//    C:\var\www\multi\laravel\Modules\Customer\Models\Device.php
-        $model = new $model_ns();
+        //$model = new $model_ns();
+        //return $model;
         //ddd($model->getTable());
-        $this->model = $model;
+        return $model_ns;
     }
 
+
+
     public function getTable() {
+
         //return with(new MyModel())->getTable();
         return $this->model->getTable();
     }

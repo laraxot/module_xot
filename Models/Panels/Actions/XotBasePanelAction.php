@@ -142,10 +142,37 @@ abstract class XotBasePanelAction {
 
     public function updateRow($params = []) {
         $row = $this->row;
-        extract($params);
         $container = null;
+        extract($params);
+
         $item = $row;
-        UpdateJob::dispatch($container, $item);
+        //$item=\Modules\Food\Models\Restaurant::first();
+        $up= UpdateJob::dispatchNow($container, $item);
+        //try{
+            //$tmp=new UpdateJob($container, $item);
+        //}catch(\Exception $e){
+            //debug_getter_obj(['obj'=>$e]);
+            //ddd($e->getMessage());
+            //ddd($e->errors());
+            /*
+            ValidationException {#1787 ▼
+                +validator: Validator {#1784 ▶}
+                +response: null
+                +status: 422
+                +errorBag: "default"
+                +redirectTo: null
+                #message: "The given data was invalid."
+                #code: 0
+                #file: "C:\var\www\multi\laravel\vendor\laravel\framework\src\Illuminate\Validation\Validator.php"
+                #line: 315
+                trace: {▶}
+              }
+              */
+           // $up->set
+        //}
+
+        return $up;
+        //ddd($up);
         /*
         $panel = Panel::get($row);
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -158,6 +185,11 @@ abstract class XotBasePanelAction {
         //----
         //\Session::flash('status', 'aggiornato! ['.$row->getKey().']!');
 
-        return $this->handle();
+        //return $this->handle();
+    }
+
+    public function pdf($params = []) {
+        $panel=Panel::get($this->row);
+        return $panel->pdf($params);
     }
 }
