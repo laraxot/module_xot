@@ -24,5 +24,6 @@ class TenantService {
         $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
 
         return $path;
-    }
+    }//end function
+
 }
