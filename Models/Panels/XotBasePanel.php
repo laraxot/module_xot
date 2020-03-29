@@ -888,6 +888,15 @@ abstract class XotBasePanel
         return '<img src="'.asset($src).'" >';
     }
 
+
+    public function imgSrc($params){
+        $row=$this->row;
+        $params['src'] = $row->image_src;
+        $img = new ImageService($params);
+        $src = $img->fit()->save()->src();
+        return $src;
+    }
+
     public function microdataSchemaOrg()
     {
         return '';
