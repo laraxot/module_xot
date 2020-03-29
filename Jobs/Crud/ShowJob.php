@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class showJob implements ShouldQueue {
+class ShowJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
