@@ -230,6 +230,9 @@ class StubService
 
     public static function fields($model)
     {
+        if(!method_exists($model,'getFillable')){
+            return [];
+        }
         $fillables = $model->getFillable();
         if (0 == count($fillables)) {
             $fillables = $model->getConnection()->getSchemaBuilder()->getColumnListing($model->getTable());
