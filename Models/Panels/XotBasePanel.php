@@ -891,10 +891,27 @@ abstract class XotBasePanel
 
     public function imgSrc($params){
         $row=$this->row;
+        //$src=$row->image_src;
         $params['src'] = $row->image_src;
+        extract($params);
+        $img=$row->images
+            ->where('src',$src)
+            ->where('width',$width)
+            ->where('height',$height)
+            ->first();
+        if($img!=''){
+            return $img->src_out;
+        }
         $img = new ImageService($params);
-        $src = $img->fit()->save()->src();
-        return $src;
+        $src_out = $img->fit()->save()->src();
+        $row->images()->create([
+            'src'=>$src,
+            'src_out'=>$src_out,
+            'width'=>$width,
+            'height'=>$height,
+        ]);
+        //ddd($src_out);
+        return $src_out;
     }
 
     public function microdataSchemaOrg()
@@ -1089,6 +1106,21 @@ abstract class XotBasePanel
         }
 
         return [$row];
+    }
+
+
+    public function getRowTabs(){
+        $data = [];
+        foreach($this->tabs() as $tab){
+            $tmp=(object)[];
+            $tmp->title=$tab;
+            $tmp->url=$this->relatedUrl(['related_name'=>$tab,'act'=>'index']);
+            $tmp->active=false;
+            $data[]=$tmp;
+        }
+        return $data;
+
+
     }
 
     public function getTabs()

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Bus;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ArtisanService;
 
+use Modules\Blog\Models\Home;
+
 class HomeController extends Controller {
     public function index(Request $request) {
         //$command=new \Modules\Xot\Commands\PurchasePodcast(\Auth::user());
@@ -17,8 +19,30 @@ class HomeController extends Controller {
         if ('' != $out) {
             return $out;
         }
+        $lang=\App::getLocale();
+        $home=Home::with('post')->firstOrCreate(['post_id'=>1]);
 
-        return ThemeService::view('pub_theme::home.index');
+        $pathToFile=ThemeService::view_path('pub_theme::img/photo/test.jpg');
+        //return '['.$pathToFile.']';
+        /*
+        $res=$home->addMedia($pathToFile)
+        ->preservingOriginal()
+        ->toMediaCollection('images')
+        //*/
+        /*
+
+        */
+        ;
+        //ddd($res);
+
+        //*/
+        //return $home->getFirstMediaUrl();
+
+
+
+
+        return ThemeService::view('pub_theme::home.index')
+            ->with('home', $home);
     }
 
     public function redirect(Request $request) {
