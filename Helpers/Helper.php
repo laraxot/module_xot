@@ -401,6 +401,9 @@ if (! \function_exists('transFields')) {
                 $ris->$tf = $ris->name_dot;
             }
         }
+        if($ris->help==$ris->name_dot){
+            $ris->help='';
+        }
 
 
         /*
