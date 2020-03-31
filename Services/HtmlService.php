@@ -9,6 +9,7 @@ namespace Modules\Xot\Services;
 use Spipu\Html2Pdf\Html2Pdf;
 
 class HtmlService {
+
     public static function toPdf($params) {
         require_once __DIR__.'/vendor/autoload.php';
         $pdforientation = 'L'; //default;
@@ -18,6 +19,7 @@ class HtmlService {
             $html2pdf = new Html2Pdf($pdforientation, 'A4', 'it');
             $html2pdf->setTestTdInOnePage(false);
             $html2pdf->WriteHTML($html);
+
             if ('content_PDF' == $out) {
                 return $html2pdf->Output($filename.'.pdf', 'S');
             }
