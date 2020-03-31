@@ -1348,7 +1348,7 @@ abstract class XotBasePanel
         if (request()->input('debug')) {
             return $html;
         }
-        $params['html'] = $html;
+        $params['html'] = (string)$html;
 
         return HtmlService::toPdf($params);
     }
