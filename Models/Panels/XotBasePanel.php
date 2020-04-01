@@ -1338,12 +1338,15 @@ abstract class XotBasePanel
         }
         $view = ThemeService::getView(); //progressioni::admin.schede.show
         $view .= '.pdf';
+        $view = str_replace('.store.', '.show.', $view);
+
         $html = view($view)
                     ->with('view', $view)
                     ->with('row', $this->row)
                     ->with('rows', $this->rows)
                     ->with($params['view_params'])
                     ;
+
         //ddd($this->rows->get());
         if (request()->input('debug')) {
             return $html;
