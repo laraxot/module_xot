@@ -189,7 +189,15 @@ abstract class XotBasePanelAction {
     }
 
     public function pdf($params = []) {
+        if ($this->row==null ) {
+            $this->row=clone($this->rows)->get()[0];
+            if(!is_object($this->row)){
+                die('<h3>Nulla da creare nel PDF</h3>');
+                //$this->row=$this->rows->getModel();
+            }
+        }
         $panel=Panel::get($this->row);
+        $panel->setRows($this->rows);
         return $panel->pdf($params);
     }
 }
