@@ -472,6 +472,10 @@ abstract class XotBasePanel
             //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
                 //return new \Modules\Xot\Transformers\JsonResource($item);
         }
+        if($format=='geoJson'){
+            $out = new \Modules\Geo\Transformers\GeoJsonResource($item);
+            return $out;
+        }
 
         return null;
     }
@@ -895,11 +899,14 @@ abstract class XotBasePanel
         $params['src'] = $row->image_src;
         extract($params);
         $img=$row->images
-            ->where('src',$src)
-            ->where('width',$width)
-            ->where('height',$height)
+            ->where('src', $src)
+            ->where('width', $width)
+            ->where('height', $height)
             ->first();
-        if($img!=''){
+        if ($img!='') {
+            if(Str::startsWith($img->src_out,'\\')){
+                $img->src_out=Str::after($img->src_out,'\\');
+            }
             return $img->src_out;
         }
         $img = new ImageService($params);
