@@ -87,7 +87,9 @@ abstract class XotBaseContainerController extends Controller
         list($containers, $items) = params2ContainerItem($params);
 
         if (count($containers) == 0) {
-            return new \Modules\Xot\Models\Home;
+            $home_class=config('xra.model.home');
+            ddd($home_class);
+            return new $home_class;
         }
 
         if (count($items) == 0) { // es /it/article
