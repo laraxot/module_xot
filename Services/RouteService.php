@@ -497,6 +497,66 @@ class RouteService {
         return $data;
     }
 
+    public static function getContainersClass(){
+        $route_current = \Route::current();
+        $route_params = is_object($route_current) ? $route_current->parameters() : [];
+        list($containers, $items) = params2ContainerItem($route_params);
+        $classes=[];
+        for($i=0;$i<count($containers);$i++){
+            $v=$containers[$i];
+            if($i==0){
+                $tmp=config('xra.model.'.$v);
+            }else{
+                $types = Str::camel(Str::plural($v));
+                $tmp=get_class($items[$i-1]->$types()->getRelated());
+            }
+            $classes[]=$tmp;
+        }
+        return $classes;
+
+    }
+
+    public static function getRouteN($params){
+        extract($params);
+    }
+
+    public static function urlPanel($params) {
+        $lang = \App::getLocale();
+        extract($params);
+        $row=$panel->row;
+        $row_class=get_class($row);
+        $containers_class=self::getContainersClass();
+        $n=collect($containers_class)->search($row_class);
+        $route_name=self::getRoutenameN(['n'=>$n,'act'=>$act]);
+
+        $route_current = \Route::current();
+        $route_params = is_object($route_current) ? $route_current->parameters() : [];
+        $route_params['item'.$n]=$row;
+
+        try{
+            $route=route($route_name,$route_params);
+        }catch(\Exception $e){
+            ddd($parz);
+        }
+
+        return $route;
+    }
+
+    public static function getRoutenameN($params){
+        extract($params);
+        $tmp = [];
+        if (in_admin()) {
+            $tmp[] = 'admin';
+        }
+        for ($i = 0; $i <= $n ; ++$i) {
+            $tmp[] = 'container'.$i;
+        }
+        $tmp[] = $act;
+        $routename = implode('.', $tmp);
+        return $routename;
+    }
+
+
     public static function urlModel($params) {
         $lang = \App::getLocale();
         extract($params);
@@ -552,7 +612,7 @@ class RouteService {
         try {
             $url = route($routename, $route_params);
         } catch (\Exception $e) {
-            
+
 
             /*
             $msg=[
@@ -562,7 +622,7 @@ class RouteService {
                 'file'=>__FILE__,
                 'LINE'=>__LINE__,
                 'e'=>$e,
-                
+
             ];
             ddd($msg);
             //*/
