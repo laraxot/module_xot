@@ -1033,7 +1033,8 @@ abstract class XotBasePanel
 
     public function editUrl()
     {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'edit']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'edit']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'edit']);
     }
 
     public function updateUrl()
@@ -1328,7 +1329,7 @@ abstract class XotBasePanel
             return response()->json(
                 [
                     'msg' => 'ok',
-                    'html' => (string) $html,
+                    'html' => $view .(string) $html,
                     'view' => $view,
                     'view_work' => $view_work,
                 ]
