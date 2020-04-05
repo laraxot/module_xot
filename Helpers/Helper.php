@@ -420,7 +420,7 @@ if (! \function_exists('transFields')) {
 
         $ris->attributes = collect(array_merge($attrs_default, $attributes, $params['attributes']))
                         ->filter(function ($item, $key) {
-                            return in_array($key, ['style', 'class', 'placeholder', 'readonly','id']) || Str::startsWith($key, 'data-');
+                            return in_array($key, ['style', 'class', 'placeholder', 'readonly','id', 'value', 'name']) || Str::startsWith($key, 'data-');
                         })
                         //->only('class','placeholder','readonly')
                         ->all();
