@@ -51,6 +51,11 @@ abstract class XotBasePanel
         $this->parent = $parent;
     }
 
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
     public function optionId($row)
     {
         return $row->getKey();
@@ -986,9 +991,12 @@ abstract class XotBasePanel
 
     public function relatedUrl($params)
     {
+        /*
         $params['row'] = $this->row;
-
         return RouteService::urlRelated($params);
+        */
+        $params['panel']=$this;
+        return RouteService::urlRelatedPanel($params);
     }
 
     public function indexUrl()
