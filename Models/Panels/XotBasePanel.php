@@ -1329,7 +1329,7 @@ abstract class XotBasePanel
             return response()->json(
                 [
                     'msg' => 'ok',
-                    'html' => $view .(string) $html,
+                    'html' => (string) $html,
                     'view' => $view,
                     'view_work' => $view_work,
                 ]
