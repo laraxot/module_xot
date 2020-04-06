@@ -156,14 +156,15 @@ class UpdateJob implements ShouldQueue {
      **/
     public function updateRelationshipsMorphToMany($params) {
         extract($params);
+        //ddd(\Request::all());
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
-            if (! is_array($v)) {
-                $v = [];
-            }
-            if (! isset($v['pivot'])) {
-                $v['pivot'] = [];
-            }
+            if (is_array($v)) {
+
+
+                if (! isset($v['pivot'])) {
+                    $v['pivot'] = [];
+                }
             //ddd('a');
             /*
             echo '<hr/><pre>'.print_r($v['pivot'],1).'</pre><hr/>';
@@ -172,8 +173,12 @@ class UpdateJob implements ShouldQueue {
                     ->where('auth_user_id',$v['pivot']['auth_user_id'])
                     ->update($v['pivot']);
             */
-            $res = $model->$name()
-                ->syncWithoutDetaching([$k => $v['pivot']]);
+                $res = $model->$name()
+                    ->syncWithoutDetaching([$k => $v['pivot']]);
+            }else{
+                $res = $model->$name()
+                    ->syncWithoutDetaching([$v]);
+            }
             //->where('auth_user_id',1)
             //->syncWithoutDetaching([$k => $v['pivot']])
                 ;

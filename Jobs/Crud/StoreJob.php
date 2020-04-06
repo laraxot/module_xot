@@ -155,6 +155,9 @@ class StoreJob implements ShouldQueue {
     public function storeRelationshipsMorphToMany($params) {
         extract($params);
 
+        //ddd(\Request::all());
+        //return ;
+
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {
@@ -172,6 +175,7 @@ class StoreJob implements ShouldQueue {
                 **/
                 $model->$name()->syncWithoutDetaching([$k => $v['pivot']]);
             } else {
+                $res = $model->$name()->syncWithoutDetaching([$v]);
                 /*
                 $rows1=$model->$name();
                 $related=$rows1->getRelated();
@@ -179,6 +183,7 @@ class StoreJob implements ShouldQueue {
                 //ddd($params);
                 */
                 //$model->$name()->attach()
+                //ddd('semplice assegnazione');
             }
         }
     }
