@@ -242,6 +242,9 @@ if (! \function_exists('getModuleFromModel')) {
 if (! \function_exists('getModuleNameFromModel')) {
     function getModuleNameFromModel($model)
     {
+        if(!is_object($model)){
+            return null;
+        }
         $class = get_class($model);
         $module_name = Str::before(Str::after($class, 'Modules\\'), '\\Models\\');
 
@@ -368,6 +371,12 @@ if (! \function_exists('tenantConfig')) {
 if (! \function_exists('transFields')) {
     function transFields($params)
     {
+        $model=Form::getModel();
+        $module_name=getModuleNameFromModel($model);
+        $trans_root=Str::lower($module_name).'::'.Str::snake(class_basename($model));
+        //ddd() );
+        //debug_getter_obj(['obj'=>$module]);
+        //ddd($module_name->getNamespace());
         extract($params);
         //ddd($params);
         if (isset($attributes)) {
@@ -391,11 +400,13 @@ if (! \function_exists('transFields')) {
         $ris->name_dot = preg_replace($pattern, '.', $ris->name_dot);
 
         list($ns, $key) = explode('::', $view);
-        $view_noact = $ns.'::'.implode('.', array_slice(explode('.', $key), $start, -1));
+        if($module_name==null){
+            $trans_root = $ns.'::'.implode('.', array_slice(explode('.', $key), $start, -1));
+        }
 
         $trans_fields = ['label', 'placeholder', 'help'];
         foreach ($trans_fields as $tf) {
-            $trans = $view_noact.'.field.'.$ris->name_dot.'_'.$tf;
+            $trans = $trans_root.'.field.'.Str::snake($ris->name_dot).'_'.$tf;
             $ris->$tf = isset($$tf) ? $$tf : trans($trans);
             if ($ris->$tf == $trans && !config('xra.show_trans_key')) {
                 $ris->$tf = $ris->name_dot;
@@ -406,14 +417,7 @@ if (! \function_exists('transFields')) {
         }
 
 
-        /*
-        $trans = $view_noact.'.field.'.$ris->name_dot;
-        $ris->label = isset($label) ? $label : trans($trans);
-        $trans = $view_noact.'.field.'.$ris->name_dot.'_placeholder';
-        $ris->placeholder = isset($placeholder) ? $placeholder : trans($trans);
-        //if($ris->label==$trans) $ris->label=$name;
-        if($ris->placeholder==$trans) $ris->placeholder=' ';
-        */
+
 
         $attributes = $params;
         $attrs_default = ['class' => 'form-control', 'placeholder' => $ris->placeholder];
