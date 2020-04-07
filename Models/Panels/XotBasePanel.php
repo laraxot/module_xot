@@ -293,6 +293,14 @@ abstract class XotBasePanel
         return $actions;
     }
 
+    public function urlItemAction($act){
+        $itemActions=$this->itemActions();
+        $itemAction=$itemActions->firstWhere('name',$act);
+        if(is_object($itemAction)){
+            return $itemAction->urlItem(['row'=>$this->row]);
+        };
+    }
+
     public function btnItemAction($act){
         $itemActions=$this->itemActions();
         $itemAction=$itemActions->firstWhere('name',$act);

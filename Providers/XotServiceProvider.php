@@ -74,7 +74,7 @@ class XotServiceProvider extends XotBaseServiceProvider
 
     public function mergeConfigs()
     {
-        $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra'];
+        $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra','social'];
         foreach ($configs as $v) {
             $tmp = tenantConfig($v);
             //ddd($tmp);
