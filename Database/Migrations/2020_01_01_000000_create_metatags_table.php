@@ -9,7 +9,7 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 //----- models -----
 use Modules\Xot\Models\Metatag as MyModel;
 
-class CreateImageTable extends XotBaseMigration {
+class CreateMetatagsTable extends XotBaseMigration {
     public function up() {
         //-- CREATE --
         if (! $this->tableExists()) {
