@@ -92,6 +92,7 @@ abstract class XotBaseContainerController extends Controller {
             $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
         }
 
+        //ddx(['panel' => $panel]);
 
         return $panel->out(
             [
@@ -100,7 +101,6 @@ abstract class XotBaseContainerController extends Controller {
             ]
         );
     }
-
 
     public function ContainerItem2Panel($container, $item) {
         list($containers, $items) = params2ContainerItem();

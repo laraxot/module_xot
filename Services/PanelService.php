@@ -34,18 +34,24 @@ class PanelService {
     }
 
     public static function panel() {
-    	if(!is_object(self::$model)){
-    		ddd('wip');
-    	}
+        if (! is_object(self::$model)) {
+            ddd('wip');
+        }
         $class_full = get_class(self::$model);
         $class_name = class_basename(self::$model);
         //$class = Str::before($class_full, $class_name);
         $class = substr($class_full, 0, -strlen($class_name));
         $panel_class = $class.'Panels\\'.$class_name.'Panel';
+        /*
         if (! class_exists($panel_class)) {
             $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
         }
-        self::$panel = new $panel_class(self::$model);
+        */
+        try {
+            self::$panel = new $panel_class(self::$model);
+        } catch (\Exception $e) {
+            $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
+        }
 
         return self::$panel;
     }
@@ -77,7 +83,7 @@ class PanelService {
     }
 
     public static function createPanel($model) {
-        if(!is_object($model)){
+        if (! is_object($model)) {
             ddd('da fare');
         }
         $class_full = get_class($model);
