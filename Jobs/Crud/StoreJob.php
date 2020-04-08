@@ -188,6 +188,14 @@ class StoreJob implements ShouldQueue {
         }
     }
 
+    public function storeRelationshipsHasManyThrough($params){
+        /*
+        Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
+        */
+        //$this->storeRelationshipsMorphToMany($params); //
+
+    }
+
     public function storeRelationshipsBelongsToMany($params) {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
