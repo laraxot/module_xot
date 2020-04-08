@@ -44,6 +44,7 @@ abstract class XotBasePanel {
 
     public function setParent($parent) {
         $this->parent = $parent;
+        return $this;
     }
 
     public function getParent() {
@@ -275,7 +276,7 @@ abstract class XotBasePanel {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
         if (is_object($itemAction)) {
-            return $itemAction->urlItem(['row' => $this->row]);
+            return $itemAction->urlItem(['row' => $this->row,'panel'=>$this]);
         }
     }
 
