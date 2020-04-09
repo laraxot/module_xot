@@ -452,17 +452,14 @@ abstract class XotBasePanel {
         }
         if ('json' == $format) {
             $transformer = StubService::fromModel(['model' => $item, 'stub' => 'transformer_resource']);
-
             return $item->toJson();
             //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
                 //return new \Modules\Xot\Transformers\JsonResource($item);
         }
         if ('geoJson' == $format) {
             $out = new \Modules\Geo\Transformers\GeoJsonResource($item);
-
             return $out;
         }
-
         return null;
     }
 
@@ -1254,7 +1251,7 @@ abstract class XotBasePanel {
             $html = $this->callContainerAction($act);
         }
         if (null == $html) {
-            $html = $this->formatData($rows, $data);
+            $html = $this->formatData($rows, $data); //formatContainerData
         }
         if (null == $html) {
             $html = $this->formatItemData($this->row, $data);
