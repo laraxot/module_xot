@@ -866,8 +866,9 @@ abstract class XotBasePanel {
         //$src=$row->image_src;
         $params['src'] = $row->image_src;
         extract($params);
-        $img = $row->images
-            ->where('src', $src)
+        $images = $row->images;
+        if($images==null) return ;
+        $img=$images->where('src', $src)
             ->where('width', $width)
             ->where('height', $height)
             ->first();
@@ -1067,7 +1068,7 @@ abstract class XotBasePanel {
             $tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
             $tmp->active = false; //in_array($tab,$containers);
             $row[] = $tmp;
-        } 
+        }
 
         return [$row];
     }
