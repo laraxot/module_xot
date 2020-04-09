@@ -994,6 +994,7 @@ abstract class XotBasePanel {
 
     public function indexEditUrl() {
         return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index_edit']);
+        //return RouteService::urlPanel(['panel' => $this, 'act' => 'index_edit']);
     }
 
     public function editUrl() {
@@ -1066,7 +1067,7 @@ abstract class XotBasePanel {
             $tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
             $tmp->active = false; //in_array($tab,$containers);
             $row[] = $tmp;
-        }
+        } 
 
         return [$row];
     }
@@ -1077,6 +1078,8 @@ abstract class XotBasePanel {
             $tmp = (object) [];
             $tmp->title = $tab;
             $tmp->url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index']);
+            $tmp->index_edit_url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index_edit']);
+            $tmp->create_url = $this->relatedUrl(['related_name' => $tab, 'act'=>'create']);
             $tmp->active = false;
             $data[] = $tmp;
         }

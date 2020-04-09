@@ -523,20 +523,40 @@ class RouteService {
     public static function urlPanel($params) {
         $lang = \App::getLocale();
         extract($params);
-        $row=$panel->row;
-        $row_class=get_class($row);
-        $containers_class=self::getContainersClass();
-        $n=collect($containers_class)->search($row_class);
-        $route_name=self::getRoutenameN(['n'=>$n,'act'=>$act]);
+        $parents=collect([]);
+        $panel_curr=$panel;
 
+        while($panel_curr->getParent()!=null){
+            $parents->prepend($panel_curr->getParent());
+            $panel_curr=$panel_curr->getParent();
+        }
+        $container_root=$panel->row;
+        if ($parents->count()>0) {
+            $container_root=$parents->first()->row;
+        }
+        $containers_class=self::getContainersClass();
+        $n=collect($containers_class)->search(get_class($container_root));
+        if($n===null){
+            $n=0;
+        }
+        $route_name=self::getRoutenameN(['n'=>$n+$parents->count(),'act'=>$act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
-        $route_params['item'.$n]=$row;
+
+        $i=0;
+        foreach($parents as $parent){
+            $route_params['container'.($n+$i)]=$parent->row->post_type;
+            $route_params['item'.($n+$i)]=$parent->row;
+            $i++;
+        }
+
+        $route_params['container'.($n+$i)]=$panel->row->post_type;
+        $route_params['item'.($n+$i)]=$panel->row;
 
         try{
             $route=route($route_name,$route_params);
         }catch(\Exception $e){
-            ddd($parz);
+            dddx($parz);
         }
 
         return $route;
