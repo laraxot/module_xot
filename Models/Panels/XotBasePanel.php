@@ -645,6 +645,10 @@ abstract class XotBasePanel {
     }
 
      public function formEdit($params = []) {
+        $submit_btn = '<p class="form-submit">
+            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
+        </p>';
+        extract($params);
         $fields = $this->editFields();
         $row = $this->row;
         $res = '';
@@ -656,9 +660,7 @@ abstract class XotBasePanel {
         }
         $res .= '</div>';
         //$res.=Form::bsSubmit('save');
-        $res .= '<p class="form-submit">
-            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
-        </p>';
+        $res.= $submit_btn;
         $res .= Form::close();
 
         return $res;
