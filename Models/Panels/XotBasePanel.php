@@ -129,6 +129,10 @@ abstract class XotBasePanel {
     public function rules($params = []) {
         $act = '';
         extract($params);
+        if($act==''){
+            $route_action = \Route::currentRouteAction();
+            $act = Str::after($route_action, '@');
+        }
         switch ($act) {
         case 'store':$fields = $this->createFields();
             break;

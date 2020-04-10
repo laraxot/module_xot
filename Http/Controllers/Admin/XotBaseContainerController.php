@@ -78,6 +78,7 @@ abstract class XotBaseContainerController extends Controller {
             if (is_object($panel)) {
                 //$request->prepareForValidation();
                 //$request->validate($panel->rules(), $panel->rulesMessages());
+
                 $request->validatePanel($panel);
             }
         }
