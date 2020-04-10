@@ -413,6 +413,7 @@ if (! \function_exists('transFields')) {
             $ris->$tf = isset($$tf) ? $$tf : trans($trans);
             if ($ris->$tf == $trans && ! config('xra.show_trans_key')) {
                 $ris->$tf = $ris->name_dot;
+                //$ris->$tf = $trans;
             }
         }
         if ($ris->help == $ris->name_dot) {

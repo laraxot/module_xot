@@ -640,6 +640,26 @@ abstract class XotBasePanel {
         return $res;
     }
 
+     public function formEdit($params = []) {
+        $fields = $this->editFields();
+        $row = $this->row;
+        $res = '';
+        //$res.='<h3>'.$this->storeUrl().'</h3>'; //4 debug
+        $res .= Form::bsOpenPanel($this, 'update');
+        $res .= '<div class="clearfix">';
+        foreach ($fields as $field) {
+            $res .= ThemeService::inputHtml(['row' => $row, 'field' => $field]);
+        }
+        $res .= '</div>';
+        //$res.=Form::bsSubmit('save');
+        $res .= '<p class="form-submit">
+            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
+        </p>';
+        $res .= Form::close();
+
+        return $res;
+    }
+
     public function createFields() {
         $excepts = [];
         if (is_object($this->rows)) {
