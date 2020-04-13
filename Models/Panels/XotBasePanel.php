@@ -847,6 +847,11 @@ abstract class XotBasePanel {
     public function btnSubmit() {
         return Form::bsSubmit('save');
     }
+    /*
+    public function btnDelete(){
+
+    }
+    */
 
     public function btn($act, $params = []) {
         extract($params);
