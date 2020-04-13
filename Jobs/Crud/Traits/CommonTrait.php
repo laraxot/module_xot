@@ -2,6 +2,8 @@
 
 namespace Modules\Xot\Jobs\Crud\Traits;
 
+use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
+
 //----------- Requests ----------
 use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
@@ -24,6 +26,8 @@ trait CommonTrait {
     public function manageRelationships($params) {
         extract($params);
         $methods = get_class_methods($model);
+        //dddx($model->post_type);
+        Relation::morphMap([$model->post_type=>get_class($model)]);
         /*
         if(!is_array($methods)){
             $methods=[];
@@ -34,12 +38,17 @@ trait CommonTrait {
         })->map(function ($v, $k) use ($model) {
             return (object) [
                 'relationship_type' => class_basename($model->$k()),
+                'related' => $model->$k()->getRelated(),
                 'data' => $v,
                 'name' => $k,
             ];
         })->all();
 
         foreach ($data1 as $k => $v) {
+            //Relation::morphMap();
+            //if($v->related->post_type!=null){
+                //dddx($v);
+            //}
             $func = $act.'Relationships'.$v->relationship_type; //updateRelationshipsMorphOne
             //echo '<h3>'.$func.'</h3>';
             //$this->$func(['model'=>$model,'name'=>$v->name,'data'=>$v->data]);

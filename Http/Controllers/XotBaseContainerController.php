@@ -88,7 +88,6 @@ abstract class XotBaseContainerController extends Controller
 
         if (count($containers) == 0) {
             $home_class=config('xra.model.home');
-            ddd($home_class);
             return new $home_class;
         }
 
@@ -147,6 +146,9 @@ abstract class XotBaseContainerController extends Controller
     {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $model = $this->getModel();
+        if(!is_object($model)){
+            dddx($model);
+        }
         $authorized = Gate::allows($method, $model);
         if (!$authorized) {
             $policy_class = StubService::fromModel(['model' => $model, 'stub' => 'policy']);

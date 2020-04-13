@@ -12,6 +12,10 @@ class StubService {
 
     public static function fromModel($params) {
         extract($params);
+        if(!is_object($model)){
+            //dddx($model);
+            return false;
+        }
         $class = get_class($model);
         $class_name = class_basename($model);
         $class_ns = substr($class, 0, -(strlen($class_name) + 1));
