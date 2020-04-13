@@ -137,6 +137,11 @@ class StubService {
         //$class=Str::before($class_full,$class_name);
         $class = substr($class_full, 0, -strlen($class_name));
         $panel = $class.Str::plural(Str::studly($name)).'\\'.$class_name.Str::studly($name);
+        if(!class_exists($panel)){
+            self::create($model, $name);
+        }
+
+
         try {
             return new $panel();
         } catch (\Exception $e) {

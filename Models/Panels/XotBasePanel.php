@@ -1299,7 +1299,8 @@ abstract class XotBasePanel {
                 '_panel' => $this,
             ];
             if (is_object($rows)) {
-                $related=$rows->getRelated();
+                //$related=$rows->getRelated();
+                $related=$rows->getModel(); //builder
                 $morph_map=[$related->post_type=>get_class($related)];
                 //dddx($morph_map);
                 \Illuminate\Database\Eloquent\Relations\Relation::morphMap($morph_map);

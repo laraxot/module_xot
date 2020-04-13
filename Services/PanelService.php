@@ -42,11 +42,11 @@ class PanelService {
         //$class = Str::before($class_full, $class_name);
         $class = substr($class_full, 0, -strlen($class_name));
         $panel_class = $class.'Panels\\'.$class_name.'Panel';
-        /*
+        //*
         if (! class_exists($panel_class)) {
             $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
         }
-        */
+        //*/
         try {
             self::$panel = new $panel_class(self::$model);
         } catch (\Exception $e) {
