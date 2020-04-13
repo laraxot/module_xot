@@ -1043,7 +1043,8 @@ abstract class XotBasePanel {
     }
 
     public function createUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'create']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'create']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'create']);
     }
 
     public function storeUrl() {
