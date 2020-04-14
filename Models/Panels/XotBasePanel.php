@@ -1012,7 +1012,7 @@ abstract class XotBasePanel {
             $filters[$k]->field_value = $field_value;
             switch ($where) {
                 case 'Year':
-                    $value = $field_value->year;
+                    $value = $field_value->year; 
                 break;
                 case 'ofYear':
                     $value = \Request::input('year', date('Y'));
@@ -1025,15 +1025,16 @@ abstract class XotBasePanel {
         $queries = collect($filters)->pluck('value', 'param_name')->all();
         $node = class_basename($this->row).'-'.$this->row->getKey();
         $queries['page'] = Cache::get('page');
-
+        
+        $queries=array_merge(request()->query(),$queries);
         $url = (url_queries($queries, $url)).'#'.$node;
 
         return $url;
     }
 
     public function indexEditUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index_edit']);
-        //return RouteService::urlPanel(['panel' => $this, 'act' => 'index_edit']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index_edit']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'index_edit']);
     }
 
     public function editUrl() {
@@ -1042,7 +1043,8 @@ abstract class XotBasePanel {
     }
 
     public function updateUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'update']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'update']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'update']);
     }
 
     public function showUrl() {
@@ -1056,15 +1058,18 @@ abstract class XotBasePanel {
     }
 
     public function storeUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'store']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'store']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'store']);
     }
 
     public function destroyUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'destroy']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'destroy']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'destroy']);
     }
 
     public function detachUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'detach']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'detach']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'detach']);
     }
 
     public function gearUrl() {

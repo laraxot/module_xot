@@ -553,7 +553,20 @@ class RouteService {
             ++$i;
         }
 
-        $route_params['container'.($n + $i)] = $panel->row->post_type;
+        $post_type=$panel->row->post_type;
+        if($post_type==null){
+            $post_type=Str::snake(class_basename($panel->row));
+            
+            if($panel->getParent()!=null){
+                $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
+                if(Str::startsWith($post_type,$parent_post_type.'_')){
+                    $post_type=Str::after($post_type,$parent_post_type.'_');
+                }
+            }
+            
+        }
+
+        $route_params['container'.($n + $i)] = $post_type;
         $route_params['item'.($n + $i)] = $panel->row;
 
         try {
