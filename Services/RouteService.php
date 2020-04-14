@@ -569,15 +569,26 @@ class RouteService {
         $route_params['container'.($n + $i)] = $post_type;
         $route_params['item'.($n + $i)] = $panel->row;
 
+        
+if (inAdmin() && ! isset($route_params['module'])) {
+    $container0 = $route_params['container0'];
+    $model = xotModel($container0);
+    $module_name = getModuleNameFromModel($model);
+    $route_params['module'] = $module_name;
+}
+
+
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
+            //return '#['.__LINE__.']['.__FILE__.']';
             dddx(
-                [
+                [   'e'=>$e->getMessage(),
                     'route_name'=>$route_name,
                     'route_params'=>$route_params,
                 ]
             );
+
         }
 
         //--- aggiungo le query string all'url corrente
