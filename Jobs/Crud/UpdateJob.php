@@ -2,6 +2,8 @@
 
 namespace Modules\Xot\Jobs\Crud;
 
+use Illuminate\Support\Arr;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -158,6 +160,10 @@ class UpdateJob implements ShouldQueue {
         extract($params);
         //ddd(\Request::all());
         //$res=$model->$name()->syncWithoutDetaching($data);
+        //dddx([$name, Arr::isAssoc($data)]);
+        if(!Arr::isAssoc($data)){
+            $model->$name()->sync($data);
+        }
         foreach ($data as $k => $v) {
             if (is_array($v)) {
 
@@ -176,8 +182,8 @@ class UpdateJob implements ShouldQueue {
                 $res = $model->$name()
                     ->syncWithoutDetaching([$k => $v['pivot']]);
             }else{
-                $res = $model->$name()
-                    ->syncWithoutDetaching([$v]);
+               // $res = $model->$name()
+                 //   ->syncWithoutDetaching([$v]);
             }
             //->where('auth_user_id',1)
             //->syncWithoutDetaching([$k => $v['pivot']])
