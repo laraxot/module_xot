@@ -497,83 +497,84 @@ class RouteService {
         return $data;
     }
 
-    public static function getContainersClass(){
+    public static function getContainersClass() {
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         list($containers, $items) = params2ContainerItem($route_params);
-        $classes=[];
-        for($i=0;$i<count($containers);$i++){
-            $v=$containers[$i];
-            if($i==0){
-                $tmp=config('xra.model.'.$v);
-            }else{
+        $classes = [];
+        for ($i = 0; $i < count($containers); ++$i) {
+            $v = $containers[$i];
+            if (0 == $i) {
+                $tmp = config('xra.model.'.$v);
+            } else {
                 $types = Str::camel(Str::plural($v));
-                $tmp=get_class($items[$i-1]->$types()->getRelated());
+                $tmp = get_class($items[$i - 1]->$types()->getRelated());
             }
-            $classes[]=$tmp;
+            $classes[] = $tmp;
         }
-        return $classes;
 
+        return $classes;
     }
 
-    public static function getRouteN($params){
+    public static function getRouteN($params) {
         extract($params);
     }
 
     public static function urlPanel($params) {
         $lang = \App::getLocale();
         extract($params);
-        $parents=collect([]);
-        $panel_curr=$panel;
+        $parents = collect([]);
+        $panel_curr = $panel;
 
-        while($panel_curr->getParent()!=null){
+        while (null != $panel_curr->getParent()) {
             $parents->prepend($panel_curr->getParent());
-            $panel_curr=$panel_curr->getParent();
+            $panel_curr = $panel_curr->getParent();
         }
-        $container_root=$panel->row;
-        if ($parents->count()>0) {
-            $container_root=$parents->first()->row;
+        $container_root = $panel->row;
+        if ($parents->count() > 0) {
+            $container_root = $parents->first()->row;
         }
-        $containers_class=self::getContainersClass();
-        $n=collect($containers_class)->search(get_class($container_root));
-        if($n===null){
-            $n=0;
+        $containers_class = self::getContainersClass();
+        $n = collect($containers_class)->search(get_class($container_root));
+        if (null === $n) {
+            $n = 0;
         }
-        $route_name=self::getRoutenameN(['n'=>$n+$parents->count(),'act'=>$act]);
+        $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
 
-        $i=0;
-        foreach($parents as $parent){
-            $route_params['container'.($n+$i)]=$parent->row->post_type;
-            $route_params['item'.($n+$i)]=$parent->row;
-            $i++;
+        $i = 0;
+        foreach ($parents as $parent) {
+            $route_params['container'.($n + $i)] = $parent->row->post_type;
+            $route_params['item'.($n + $i)] = $parent->row;
+            ++$i;
         }
 
-        $route_params['container'.($n+$i)]=$panel->row->post_type;
-        $route_params['item'.($n+$i)]=$panel->row;
+        $route_params['container'.($n + $i)] = $panel->row->post_type;
+        $route_params['item'.($n + $i)] = $panel->row;
 
-        try{
-            $route=route($route_name,$route_params);
-        }catch(\Exception $e){
+        try {
+            $route = route($route_name, $route_params);
+        } catch (\Exception $e) {
             dddx($parz);
         }
 
-        return $route;
+        //--- aggiungo le query string all'url corrente
+        return url_queries(request()->query(), $route);
     }
 
-    public static function urlRelatedPanel($params){
+    public static function urlRelatedPanel($params) {
         $lang = \App::getLocale();
         extract($params);
-        $parents=collect([]);
-        $panel_curr=$panel;
+        $parents = collect([]);
+        $panel_curr = $panel;
 
-        while($panel_curr->getParent()!=null){
+        while (null != $panel_curr->getParent()) {
             $parents->prepend($panel_curr->getParent());
-            $panel_curr=$panel_curr->getParent();
+            $panel_curr = $panel_curr->getParent();
         }
-        $container_root=$panel->row;
-        if ($parents->count()>0) {
+        $container_root = $panel->row;
+        if ($parents->count() > 0) {
             /*
             $tmp='['.$parents->count().']';
             foreach($parents as $parent){
@@ -581,55 +582,55 @@ class RouteService {
             }
             return $tmp;
             */
-            $container_root=$parents->first()->row;
+            $container_root = $parents->first()->row;
         }
-        $containers_class=self::getContainersClass();
-        $n=collect($containers_class)->search(get_class($container_root));
-        if($n===null){
-            $n=0;
+        $containers_class = self::getContainersClass();
+        $n = collect($containers_class)->search(get_class($container_root));
+        if (null === $n) {
+            $n = 0;
         }
-        $route_name=self::getRoutenameN(['n'=>$n+1+$parents->count(),'act'=>$act]);
+        $route_name = self::getRoutenameN(['n' => $n + 1 + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
 
-        $i=0;
-        foreach($parents as $parent){
-            $route_params['container'.($n+$i)]=$parent->row->post_type;
-            $route_params['item'.($n+$i)]=$parent->row;
-            $i++;
+        $i = 0;
+        foreach ($parents as $parent) {
+            $route_params['container'.($n + $i)] = $parent->row->post_type;
+            $route_params['item'.($n + $i)] = $parent->row;
+            ++$i;
         }
-        $route_params['container'.($n+$i)]=$panel->row->post_type;
-        $route_params['item'.($n+$i)]=$panel->row;
-        $i++;
-        $route_params['container'.($n+$i)]=$related_name;
+        $route_params['container'.($n + $i)] = $panel->row->post_type;
+        $route_params['item'.($n + $i)] = $panel->row;
+        ++$i;
+        $route_params['container'.($n + $i)] = $related_name;
 
-        try{
-            return str_replace(url(''),'',route($route_name,$route_params));
-        }catch(\Exception $e){
+        try {
+            return str_replace(url(''), '', route($route_name, $route_params));
+        } catch (\Exception $e) {
             dd([
-                'route_name'=>$route_name,
-                'route_params'=>$route_params,
-                'line'=>__LINE__,
-                'file'=>__FILE__,
-                'e'=>$e->getMessage(),
+                'route_name' => $route_name,
+                'route_params' => $route_params,
+                'line' => __LINE__,
+                'file' => __FILE__,
+                'e' => $e->getMessage(),
             ]);
         }
     }
 
-    public static function getRoutenameN($params){
+    public static function getRoutenameN($params) {
         extract($params);
         $tmp = [];
         if (in_admin()) {
             $tmp[] = 'admin';
         }
-        for ($i = 0; $i <= $n ; ++$i) {
+        for ($i = 0; $i <= $n; ++$i) {
             $tmp[] = 'container'.$i;
         }
         $tmp[] = $act;
         $routename = implode('.', $tmp);
+
         return $routename;
     }
-
 
     public static function urlModel($params) {
         $lang = \App::getLocale();
@@ -677,17 +678,15 @@ class RouteService {
             ]);
         }
         $route_params['item'.($cont_i)] = $route_key_val;
-        if(inAdmin() && !isset($route_params['module']) ){
-            $container0=$route_params['container0'];
-            $model=xotModel($container0);
+        if (inAdmin() && ! isset($route_params['module'])) {
+            $container0 = $route_params['container0'];
+            $model = xotModel($container0);
             $module_name = getModuleNameFromModel($model);
             $route_params['module'] = $module_name;
         }
         try {
             $url = route($routename, $route_params);
         } catch (\Exception $e) {
-
-
             /*
             $msg=[
                 'route_name'=>$routename,

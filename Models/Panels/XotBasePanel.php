@@ -44,6 +44,7 @@ abstract class XotBasePanel {
 
     public function setParent($parent) {
         $this->parent = $parent;
+
         return $this;
     }
 
@@ -129,7 +130,7 @@ abstract class XotBasePanel {
     public function rules($params = []) {
         $act = '';
         extract($params);
-        if($act==''){
+        if ('' == $act) {
             $route_action = \Route::currentRouteAction();
             $act = Str::after($route_action, '@');
         }
@@ -280,7 +281,7 @@ abstract class XotBasePanel {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
         if (is_object($itemAction)) {
-            return $itemAction->urlItem(['row' => $this->row,'panel'=>$this]);
+            return $itemAction->urlItem(['row' => $this->row, 'panel' => $this]);
         }
     }
 
@@ -456,14 +457,17 @@ abstract class XotBasePanel {
         }
         if ('json' == $format) {
             $transformer = StubService::fromModel(['model' => $item, 'stub' => 'transformer_resource']);
+
             return $item->toJson();
             //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
                 //return new \Modules\Xot\Transformers\JsonResource($item);
         }
         if ('geoJson' == $format) {
             $out = new \Modules\Geo\Transformers\GeoJsonResource($item);
+
             return $out;
         }
+
         return null;
     }
 
@@ -644,7 +648,7 @@ abstract class XotBasePanel {
         return $res;
     }
 
-     public function formEdit($params = []) {
+    public function formEdit($params = []) {
         $submit_btn = '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
         </p>';
@@ -660,7 +664,7 @@ abstract class XotBasePanel {
         }
         $res .= '</div>';
         //$res.=Form::bsSubmit('save');
-        $res.= $submit_btn;
+        $res .= $submit_btn;
         $res .= Form::close();
 
         return $res;
@@ -847,6 +851,7 @@ abstract class XotBasePanel {
     public function btnSubmit() {
         return Form::bsSubmit('save');
     }
+
     /*
     public function btnDelete(){
 
@@ -898,8 +903,10 @@ abstract class XotBasePanel {
         $params['src'] = $row->image_src;
         extract($params);
         $images = $row->images;
-        if($images==null) return ;
-        $img=$images->where('src', $src)
+        if (null == $images) {
+            return;
+        }
+        $img = $images->where('src', $src)
             ->where('width', $width)
             ->where('height', $height)
             ->first();
@@ -1039,7 +1046,8 @@ abstract class XotBasePanel {
     }
 
     public function showUrl() {
-        return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'show']);
+        //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'show']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => 'show']);
     }
 
     public function createUrl() {
@@ -1112,7 +1120,7 @@ abstract class XotBasePanel {
             $tmp->title = $tab;
             $tmp->url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index']);
             $tmp->index_edit_url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index_edit']);
-            $tmp->create_url = $this->relatedUrl(['related_name' => $tab, 'act'=>'create']);
+            $tmp->create_url = $this->relatedUrl(['related_name' => $tab, 'act' => 'create']);
             $tmp->active = false;
             $data[] = $tmp;
         }
@@ -1301,8 +1309,8 @@ abstract class XotBasePanel {
             ];
             if (is_object($rows)) {
                 //$related=$rows->getRelated();
-                $related=$rows->getModel(); //builder
-                $morph_map=[$related->post_type=>get_class($related)];
+                $related = $rows->getModel(); //builder
+                $morph_map = [$related->post_type => get_class($related)];
                 //dddx($morph_map);
                 \Illuminate\Database\Eloquent\Relations\Relation::morphMap($morph_map);
                 $with['rows'] = $rows->paginate(20);
