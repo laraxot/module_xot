@@ -542,6 +542,9 @@ class RouteService {
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
+        if (!isset($route_params['lang'])) {
+            $route_params['lang']=\App::getLocale();
+        }
 
         $i = 0;
         foreach ($parents as $parent) {
@@ -556,7 +559,12 @@ class RouteService {
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
-            dddx($parz);
+            dddx(
+                [
+                    'route_name'=>$route_name,
+                    'route_params'=>$route_params,
+                ]
+            );
         }
 
         //--- aggiungo le query string all'url corrente
