@@ -419,6 +419,12 @@ abstract class XotBasePanel {
             return $query;
         }
         $direction = isset($sort['order']) ? $sort['order'] : 'asc';
+        $tmp=explode('|',$column);
+        if(count($tmp)>1){
+            $column=$tmp[0];
+            $direction = $tmp[1];
+
+        }
         $query = $query->orderBy($column, $direction);
 
         return $query;
