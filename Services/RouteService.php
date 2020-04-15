@@ -548,34 +548,34 @@ class RouteService {
 
         $i = 0;
         foreach ($parents as $parent) {
-            $route_params['container'.($n + $i)] = $parent->row->post_type;
+            $route_params['container'.($n + $i)] = $parent->postType(); //$parent->row->post_type;
             $route_params['item'.($n + $i)] = $parent->row;
             ++$i;
         }
 
-        $post_type=$panel->row->post_type;
-        if($post_type==null){
+        $post_type=$panel->postType();
+        /*
+        if( $post_type==null) {
             $post_type=Str::snake(class_basename($panel->row));
-            
+
             if($panel->getParent()!=null){
                 $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
                 if(Str::startsWith($post_type,$parent_post_type.'_')){
                     $post_type=Str::after($post_type,$parent_post_type.'_');
                 }
             }
-            
         }
+        */
 
         $route_params['container'.($n + $i)] = $post_type;
         $route_params['item'.($n + $i)] = $panel->row;
 
-        
-if (inAdmin() && ! isset($route_params['module'])) {
-    $container0 = $route_params['container0'];
-    $model = xotModel($container0);
-    $module_name = getModuleNameFromModel($model);
-    $route_params['module'] = $module_name;
-}
+        if (inAdmin() && ! isset($route_params['module'])) {
+            $container0 = $route_params['container0'];
+            $model = xotModel($container0);
+            $module_name = getModuleNameFromModel($model);
+            $route_params['module'] = $module_name;
+        }
 
 
         try {
@@ -586,6 +586,9 @@ if (inAdmin() && ! isset($route_params['module'])) {
                 [   'e'=>$e->getMessage(),
                     'route_name'=>$route_name,
                     'route_params'=>$route_params,
+                    'last row'=>$panel->row,
+                    'last route key '=>$panel->row->getRouteKey(),
+                    'last route key name'=>$panel->row->getRouteKeyName(),
                 ]
             );
 
