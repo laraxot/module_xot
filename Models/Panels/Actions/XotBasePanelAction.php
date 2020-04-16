@@ -23,8 +23,8 @@ abstract class XotBasePanelAction {
     */
     public $onContainer = false;
     public $onItem = false;
-    public $row=null;
-    public $rows=null;
+    public $row = null;
+    public $rows = null;
     public $name = null;
 
     abstract public function handle();
@@ -59,12 +59,13 @@ abstract class XotBasePanelAction {
 
     public function btn($params = []) {
         extract($params);
-        if(isset($row)){
+        if (isset($row)) {
             $this->setRow($row);
         }
-        if(isset($this->onItem) && $this->onItem && is_object($this->row)){
+        if (isset($this->onItem) && $this->onItem && is_object($this->row)) {
             return $this->btnItem($params);
         }
+
         return $this->btnContainer($params);
         /*
         if ($this->onContainer) {
@@ -75,9 +76,14 @@ abstract class XotBasePanelAction {
     }
 
     public function urlContainer($params = []) {
+        extract($params);
         $request = \Request::capture();
         $name = $this->getName();
         $url = $request->fullUrlWithQuery(['_act' => $name]);
+        if (isset($panel)) {
+            $url = $panel->indexUrl();
+            $url = url_queries(['_act' => $name], $url);
+        }
 
         return $url;
     }
@@ -127,7 +133,7 @@ abstract class XotBasePanelAction {
         */
         $url = $this->urlItem($params);
         $title = $this->getTitle();
-        $method=Str::camel($this->getName());
+        $method = Str::camel($this->getName());
 
         if (Gate::allows($method, $this->row)) {
             return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
@@ -147,28 +153,28 @@ abstract class XotBasePanelAction {
 
         $item = $row;
         //$item=\Modules\Food\Models\Restaurant::first();
-        $up= UpdateJob::dispatchNow($container, $item);
+        $up = UpdateJob::dispatchNow($container, $item);
         //try{
-            //$tmp=new UpdateJob($container, $item);
+        //$tmp=new UpdateJob($container, $item);
         //}catch(\Exception $e){
-            //debug_getter_obj(['obj'=>$e]);
-            //ddd($e->getMessage());
-            //ddd($e->errors());
-            /*
-            ValidationException {#1787 ▼
-                +validator: Validator {#1784 ▶}
-                +response: null
-                +status: 422
-                +errorBag: "default"
-                +redirectTo: null
-                #message: "The given data was invalid."
-                #code: 0
-                #file: "C:\var\www\multi\laravel\vendor\laravel\framework\src\Illuminate\Validation\Validator.php"
-                #line: 315
-                trace: {▶}
-              }
-              */
-           // $up->set
+        //debug_getter_obj(['obj'=>$e]);
+        //ddd($e->getMessage());
+        //ddd($e->errors());
+        /*
+        ValidationException {#1787 ▼
+            +validator: Validator {#1784 ▶}
+            +response: null
+            +status: 422
+            +errorBag: "default"
+            +redirectTo: null
+            #message: "The given data was invalid."
+            #code: 0
+            #file: "C:\var\www\multi\laravel\vendor\laravel\framework\src\Illuminate\Validation\Validator.php"
+            #line: 315
+            trace: {▶}
+          }
+          */
+        // $up->set
         //}
 
         return $up;
@@ -189,15 +195,16 @@ abstract class XotBasePanelAction {
     }
 
     public function pdf($params = []) {
-        if ($this->row==null ) {
-            $this->row=clone($this->rows)->get()[0];
-            if(!is_object($this->row)){
+        if (null == $this->row) {
+            $this->row = clone($this->rows)->get()[0];
+            if (! is_object($this->row)) {
                 die('<h3>Nulla da creare nel PDF</h3>');
                 //$this->row=$this->rows->getModel();
             }
         }
-        $panel=Panel::get($this->row);
+        $panel = Panel::get($this->row);
         $panel->setRows($this->rows);
+
         return $panel->pdf($params);
     }
 }

@@ -277,6 +277,14 @@ abstract class XotBasePanel {
         return $actions;
     }
 
+    public function urlContainerAction($act) {
+        $containerActions = $this->containerActions();
+        $containerAction = $containerActions->firstWhere('name', $act);
+        if (is_object($containerAction)) {
+            return $containerAction->urlContainer(['rows' => $this->rows, 'panel' => $this]);
+        }
+    }
+
     public function urlItemAction($act) {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
@@ -419,11 +427,10 @@ abstract class XotBasePanel {
             return $query;
         }
         $direction = isset($sort['order']) ? $sort['order'] : 'asc';
-        $tmp=explode('|',$column);
-        if(count($tmp)>1){
-            $column=$tmp[0];
+        $tmp = explode('|', $column);
+        if (count($tmp) > 1) {
+            $column = $tmp[0];
             $direction = $tmp[1];
-
         }
         $query = $query->orderBy($column, $direction);
 
@@ -1018,7 +1025,7 @@ abstract class XotBasePanel {
             $filters[$k]->field_value = $field_value;
             switch ($where) {
                 case 'Year':
-                    $value = $field_value->year; 
+                    $value = $field_value->year;
                 break;
                 case 'ofYear':
                     $value = \Request::input('year', date('Y'));
@@ -1031,8 +1038,8 @@ abstract class XotBasePanel {
         $queries = collect($filters)->pluck('value', 'param_name')->all();
         $node = class_basename($this->row).'-'.$this->row->getKey();
         $queries['page'] = Cache::get('page');
-        
-        $queries=array_merge(request()->query(),$queries);
+
+        $queries = array_merge(request()->query(), $queries);
         $url = (url_queries($queries, $url)).'#'.$node;
 
         return $url;
