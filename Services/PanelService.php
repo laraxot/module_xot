@@ -35,7 +35,7 @@ class PanelService {
 
     public static function panel() {
         if (! is_object(self::$model)) {
-            ddd('wip');
+            dddx(['model'=>self::$model,'message'=>'is not an object']);
         }
         $class_full = get_class(self::$model);
         $class_name = class_basename(self::$model);
