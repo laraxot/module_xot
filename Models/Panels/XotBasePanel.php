@@ -912,12 +912,13 @@ abstract class XotBasePanel
     }
 
     
-    public function btnDelete()
+    public function btnDelete($params = [])
     {
+        extract($params);
         $act='destroy';
         $parz = [
             'id' => $this->row->getKey(),
-            'btn_class' => 'btn',
+            'btn_class' => 'btn '.$class,
             'route' => $this->destroyUrl(),
             'act' => $act,
         ];
