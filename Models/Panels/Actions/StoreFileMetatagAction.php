@@ -12,10 +12,10 @@ class StoreFileMetatagAction extends XotBasePanelAction {
      public function handle(){
         $data=$this->row->toArray();
         $content=var_export($data, true);
-        $filename=base_path('config/'.$this->row->tennant_name.'/metatag.test');
+        $filename=base_path('config/'.$this->row->tennant_name.'/metatag.php');
         $filename=str_replace(['\\','/'],[DIRECTORY_SEPARATOR,DIRECTORY_SEPARATOR],$filename);
         //return $filename;
-        $content='<'.'?php'.chr(13).'return '.$content;
+        $content='<'.'?php'.chr(13).'return '.$content.';';
         File::put($filename, $content);
 
      }

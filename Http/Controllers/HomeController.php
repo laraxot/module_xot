@@ -8,6 +8,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Bus;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ArtisanService;
+use Modules\Xot\Services\PanelService as Panel;
+
 
 use Modules\Blog\Models\Home;
 
@@ -22,7 +24,7 @@ class HomeController extends Controller {
         $lang=\App::getLocale();
         $home=Home::with('post')->firstOrCreate(['post_id'=>1]);
 
-        $pathToFile=ThemeService::view_path('pub_theme::img/photo/test.jpg');
+        //$pathToFile=ThemeService::view_path('pub_theme::img/photo/test.jpg');
         //return '['.$pathToFile.']';
         /*
         $res=$home->addMedia($pathToFile)
@@ -42,7 +44,7 @@ class HomeController extends Controller {
 
 
         return ThemeService::view('pub_theme::home.index')
-            ->with('home', $home);
+            ->with('home', $home)->with('_panel',Panel::get($home));
     }
 
     public function redirect(Request $request) {

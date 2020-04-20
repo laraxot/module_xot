@@ -19,6 +19,7 @@ use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\RouteService;
+use Modules\Xot\Services\ImportService;
 use Modules\Xot\Services\StubService;
 
 abstract class XotBasePanel
@@ -1029,12 +1030,42 @@ abstract class XotBasePanel
         //ddd($n_items);//1
         //ddd($route_name); container0.show
         for ($i = 0; $i < $n_items; ++$i) {
-            $route_params['item'.$i]->lang = $lang;
+            $v=$items[$i];
+            $tmp=$v->postLang($lang)->first();
+            if(is_object($tmp)){
+                $guid=$tmp->guid;
+            }else{
+                $guid='#';
+                //dddx(\App::getLocale());
+                $new_post=$v->post->replicate();
+                $fields=['title','subtitle','txt','meta_description','meta_keywords'];
+                foreach($fields as $field){
+                    $trans=ImportService::trans(['q'=>$new_post->$field,'from'=>\App::getLocale(),'to'=>$lang]);
+                    /*
+                    dddx([ 
+                        'from'=>\App::getLocale(),
+                        'to'=>$lang,
+                        'trans'=>$trans,
+
+                    ]);
+                    */
+                    $new_post->$field=$trans;
+                }
+                $new_post->lang=$lang;
+                $new_post->save();
+                $guid=$new_post->guid;
+            }
+            
+            $route_params['item'.$i] = $guid;
             //ddd($route_params['item'.$i]->guidLang);
         }
-
-        return '/wip['.__LINE__.']['.__FILE__.']';
-        //return $route_name[]
+        //dddx($route_params);
+        //return '/wip['.__LINE__.']['.__FILE__.']';
+        try {
+            return route($route_name, $route_params);
+        }catch(\Exception $e){
+            return url($lang);
+        }
     }
 
     public function relatedUrlRecursive($params)
