@@ -542,8 +542,8 @@ class RouteService {
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
-        if (!isset($route_params['lang'])) {
-            $route_params['lang']=\App::getLocale();
+        if (! isset($route_params['lang'])) {
+            $route_params['lang'] = \App::getLocale();
         }
 
         $i = 0;
@@ -553,7 +553,7 @@ class RouteService {
             ++$i;
         }
 
-        $post_type=$panel->postType();
+        $post_type = $panel->postType();
         /*
         if( $post_type==null) {
             $post_type=Str::snake(class_basename($panel->row));
@@ -577,25 +577,25 @@ class RouteService {
             $route_params['module'] = $module_name;
         }
 
-
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
             //return '#['.__LINE__.']['.__FILE__.']';
             dddx(
-                [   'e'=>$e->getMessage(),
-                    'route_name'=>$route_name,
-                    'route_params'=>$route_params,
-                    'last row'=>$panel->row,
-                    'last route key '=>$panel->row->getRouteKey(),
-                    'last route key name'=>$panel->row->getRouteKeyName(),
+                ['e' => $e->getMessage(),
+                    'route_name' => $route_name,
+                    'route_params' => $route_params,
+                    'last row' => $panel->row,
+                    'last route key ' => $panel->row->getRouteKey(),
+                    'last route key name' => $panel->row->getRouteKeyName(),
                 ]
             );
-
         }
 
         //--- aggiungo le query string all'url corrente
-        return url_queries(request()->query(), $route);
+        $queries = collect(request()->query())->except(['_act'])->all();
+
+        return url_queries($queries, $route);
     }
 
     public static function urlRelatedPanel($params) {
