@@ -22,7 +22,8 @@ use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 
-abstract class XotBasePanel {
+abstract class XotBasePanel
+{
     public $out = null;
     public $force_exit = false;
     public $msg = 'msg from panel';
@@ -31,44 +32,53 @@ abstract class XotBasePanel {
     public $parent = null;
     //protected static $model;
 
-    public function __construct($model = null) {
+    public function __construct($model = null)
+    {
         $this->row = $model;
     }
 
-    public function setRow($row) {
+    public function setRow($row)
+    {
         $this->row = $row;
     }
 
-    public function setRows($rows) {
+    public function setRows($rows)
+    {
         $this->rows = $rows;
     }
 
-    public function setParent($parent) {
+    public function setParent($parent)
+    {
         $this->parent = $parent;
 
         return $this;
     }
 
-    public function getParent() {
+    public function getParent()
+    {
         return $this->parent;
     }
 
-    public function optionId($row) {
+    public function optionId($row)
+    {
         return $row->getKey();
     }
 
-    public function hasLang() {
+    public function hasLang()
+    {
         return false;
     }
 
     /**
      * on select the option label.
      */
-    public function optionLabel($row) {
+    public function optionLabel($row)
+    {
         return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
     }
 
-    public function optionsSelect() {
+    public function optionsSelect()
+    {
         $opts = [];
         foreach ($this->rows as $row) {
             $id = $this->optionId($row);
@@ -79,7 +89,8 @@ abstract class XotBasePanel {
         return $opts;
     }
 
-    public function options($data = null) {
+    public function options($data = null)
+    {
         if (null == $data) {
             $data = request()->all();
         }
@@ -87,7 +98,8 @@ abstract class XotBasePanel {
         return $this->rows($data)->get();
     }
 
-    public function optionsTree($data = null) {
+    public function optionsTree($data = null)
+    {
         if (null == $data) {
             $data = request()->all();
         }
@@ -110,19 +122,23 @@ abstract class XotBasePanel {
         return $options;
     }
 
-    public function optionIdName() {
+    public function optionIdName()
+    {
         return $this->row->getKeyName();
     }
 
-    public function optionLabelName() {
+    public function optionLabelName()
+    {
         return 'matr';
     }
 
-    public function search() {
+    public function search()
+    {
         return [];
     }
 
-    public function orderBy() {
+    public function orderBy()
+    {
         return [];
     }
 
@@ -132,7 +148,8 @@ abstract class XotBasePanel {
     }
     //*/
 
-    public function rules($params = []) {
+    public function rules($params = [])
+    {
         $act = '';
         extract($params);
         if ('' == $act) {
@@ -195,11 +212,13 @@ abstract class XotBasePanel {
         return $rules;
     }
 
-    public function pivotRules($params) {
+    public function pivotRules($params)
+    {
         extract($params);
     }
 
-    public function rulesMessages() {
+    public function rulesMessages()
+    {
         $lang = \App::getLocale();
         $rules_msg_fields = collect($this->fields())->filter(function ($value, $key) use ($lang) {
             return isset($value->rules_messages) && isset($value->rules_messages[$lang]);
@@ -246,19 +265,23 @@ abstract class XotBasePanel {
      *
      * @return array
      */
-    public function filters(Request $request = null) {
+    public function filters(Request $request = null)
+    {
         return [];
     }
 
-    public function getXotModelName() {
+    public function getXotModelName()
+    {
         return collect(config('xra.model'))->search(static::$model);
     }
 
-    public function indexNav() {
+    public function indexNav()
+    {
         return null;
     }
 
-    public function containerActions() {
+    public function containerActions()
+    {
         $actions = collect($this->actions())->filter(function ($item) {
             $item->getName();
 
@@ -270,7 +293,8 @@ abstract class XotBasePanel {
         return $actions;
     }
 
-    public function itemActions() {
+    public function itemActions()
+    {
         $actions = collect($this->actions())->filter(function ($item) {
             $item->getName();
 
@@ -282,7 +306,8 @@ abstract class XotBasePanel {
         return $actions;
     }
 
-    public function urlContainerAction($act) {
+    public function urlContainerAction($act)
+    {
         $containerActions = $this->containerActions();
         $containerAction = $containerActions->firstWhere('name', $act);
         if (is_object($containerAction)) {
@@ -290,7 +315,8 @@ abstract class XotBasePanel {
         }
     }
 
-    public function urlItemAction($act) {
+    public function urlItemAction($act)
+    {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
         if (is_object($itemAction)) {
@@ -298,7 +324,8 @@ abstract class XotBasePanel {
         }
     }
 
-    public function btnItemAction($act) {
+    public function btnItemAction($act)
+    {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
         if (is_object($itemAction)) {
@@ -314,7 +341,8 @@ abstract class XotBasePanel {
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function indexQuery($data, $query) {
+    public static function indexQuery($data, $query)
+    {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         return $query;
     }
@@ -328,12 +356,14 @@ abstract class XotBasePanel {
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function relatableQuery(Request $request, $query) {
+    public static function relatableQuery(Request $request, $query)
+    {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
          //return $query->where('user_id', $request->user()->id);
     }
 
-    public function applyJoin($query) {
+    public function applyJoin($query)
+    {
         $model = $query->getModel();
         if (method_exists($model, 'scopeWithPost')) {
             $query = $query->withPost('a');
@@ -342,7 +372,8 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    public function applyFilter($query, $filters) {
+    public function applyFilter($query, $filters)
+    {
         //https://github.com/spatie/laravel-query-builder
         $lang = \App::getLocale();
         $filters_fields = $this->filters();
@@ -384,7 +415,8 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    public function applySearch($query, $q) {
+    public function applySearch($query, $q)
+    {
         $tipo = 0; //0 a mano , 1 repository, 2 = scout
 
         switch ($tipo) {
@@ -420,7 +452,8 @@ abstract class XotBasePanel {
 
     //end applySearch
 
-    public function applySort($query, $sort) {
+    public function applySort($query, $sort)
+    {
         if (! is_array($sort)) {
             return $query;
         }
@@ -443,7 +476,8 @@ abstract class XotBasePanel {
     }
 
     //-- da studiare --
-    protected static function applySearchNova($query, $search) {
+    protected static function applySearchNova($query, $search)
+    {
         return $query->where(function ($query) use ($search) {
             if (is_numeric($search) && in_array($query->getModel()->getKeyType(), ['int', 'integer'])) {
                 $query->orWhere($query->getModel()->getQualifiedKeyName(), $search);
@@ -465,7 +499,8 @@ abstract class XotBasePanel {
         });
     }
 
-    public function formatItemData($item, $params) {
+    public function formatItemData($item, $params)
+    {
         if (null == $item) {
             return null;
         }
@@ -489,7 +524,8 @@ abstract class XotBasePanel {
         return null;
     }
 
-    public function formatData($data, $params) {
+    public function formatData($data, $params)
+    {
         if (null == $data) {
             return null;
         }
@@ -605,7 +641,8 @@ abstract class XotBasePanel {
     }//end callAction
     */
 
-    public function indexRows(Request $request, $query) {
+    public function indexRows(Request $request, $query)
+    {
         $data = $request->all();
 
         $filters = $data;
@@ -633,7 +670,8 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    public function indexFields() {
+    public function indexFields()
+    {
         $fields = collect($this->fields())->filter(function ($item) {
             if (! isset($item->except)) {
                 $item->except = [];
@@ -646,7 +684,8 @@ abstract class XotBasePanel {
         return $fields;
     }
 
-    public function formCreate($params = []) {
+    public function formCreate($params = [])
+    {
         $fields = $this->createFields();
         $row = $this->row;
         $res = '';
@@ -666,7 +705,8 @@ abstract class XotBasePanel {
         return $res;
     }
 
-    public function formEdit($params = []) {
+    public function formEdit($params = [])
+    {
         $submit_btn = '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
         </p>';
@@ -688,7 +728,8 @@ abstract class XotBasePanel {
         return $res;
     }
 
-    public function createFields() {
+    public function createFields()
+    {
         $excepts = [];
         if (is_object($this->rows)) {
             if (method_exists($this->rows, 'getForeignKeyName')) {
@@ -710,7 +751,8 @@ abstract class XotBasePanel {
         return $fields;
     }
 
-    public function editFields() {
+    public function editFields()
+    {
         $excepts = [];
         $excepts[] = 'id'; //??
         // $excepts[] = request()->input('_act');
@@ -742,7 +784,8 @@ abstract class XotBasePanel {
     /*
         -- in ingresso "qs" che e' array con le cose da aggiungere
     */
-    public function addQuerystringsUrl($params) {
+    public function addQuerystringsUrl($params)
+    {
         extract($params);
 
         return $request->fullUrlWithQuery($qs); // fa il merge in automatico
@@ -759,7 +802,8 @@ abstract class XotBasePanel {
 
     //------- navigazioni ---
 
-    public function yearNavRedirect() {
+    public function yearNavRedirect()
+    {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $params = \Route::current()->parameters();
@@ -798,7 +842,8 @@ abstract class XotBasePanel {
         return $nav;
     }
 
-    public function yearNav() {
+    public function yearNav()
+    {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $params = \Route::current()->parameters();
@@ -825,7 +870,8 @@ abstract class XotBasePanel {
         return $nav;
     }
 
-    public function monthYearNav() { //possiamo trasformarlo in una macro
+    public function monthYearNav()
+    { //possiamo trasformarlo in una macro
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $params = \Route::current()->parameters();
@@ -866,11 +912,13 @@ abstract class XotBasePanel {
     }
 
     //-- nella registrazione 1 tasto, nelle modifiche 3
-    public function btnSubmit() {
+    public function btnSubmit()
+    {
         return Form::bsSubmit('save');
     }
 
-    public function btnDelete($params = []) {
+    public function btnDelete($params = [])
+    {
         extract($params);
         $act = 'destroy';
         $parz = [
@@ -883,7 +931,8 @@ abstract class XotBasePanel {
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
 
-    public function btn($act, $params = []) {
+    public function btn($act, $params = [])
+    {
         extract($params);
         $parents = [];
         $parent = $this->parent;
@@ -910,7 +959,8 @@ abstract class XotBasePanel {
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
 
-    public function imageHtml($params) {
+    public function imageHtml($params)
+    {
         /*
         * mettere imageservice, o quello di spatie ?
         *
@@ -922,7 +972,8 @@ abstract class XotBasePanel {
         return '<img src="'.asset($src).'" >';
     }
 
-    public function imgSrc($params) {
+    public function imgSrc($params)
+    {
         $row = $this->row;
         //$src=$row->image_src;
         $params['src'] = $row->image_src;
@@ -954,19 +1005,23 @@ abstract class XotBasePanel {
         return $src_out;
     }
 
-    public function microdataSchemaOrg() {
+    public function microdataSchemaOrg()
+    {
         return '';
     }
 
-    public function show_ldJson() {
+    public function show_ldJson()
+    {
         return [];
     }
 
-    public function url() {
+    public function url()
+    {
         return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
     }
 
-    public function langUrl($lang) {
+    public function langUrl($lang)
+    {
         //$row=$this->row;
         //$row->lang=$lang;
         //return '/wip'.$this->url();
@@ -979,29 +1034,34 @@ abstract class XotBasePanel {
         //ddd($route_name); container0.show
         for ($i = 0; $i < $n_items; ++$i) {
             $v = $items[$i];
-            $tmp = $v->postLang($lang)->first();
-            if (is_object($tmp)) {
-                $guid = $tmp->guid;
-            } else {
-                $guid = '#';
-                //dddx(\App::getLocale());
-                $new_post = $v->post->replicate();
-                $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
-                foreach ($fields as $field) {
-                    $trans = ImportService::trans(['q' => $new_post->$field, 'from' => \App::getLocale(), 'to' => $lang]);
-                    /*
-                    dddx([
-                        'from'=>\App::getLocale(),
-                        'to'=>$lang,
-                        'trans'=>$trans,
+            if (method_exists($v, 'postLang')) {
+                $tmp = $v->postLang($lang)->first();
+                if (is_object($tmp)) {
+                    $guid = $tmp->guid;
+                } else {
+                    $guid = '#';
+                    //dddx(\App::getLocale());
+                    $new_post = $v->post->replicate();
+                    $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
+                    foreach ($fields as $field) {
+                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => \App::getLocale(), 'to' => $lang]);
+                        /*
+                        dddx([
+                            'from'=>\App::getLocale(),
+                            'to'=>$lang,
+                            'trans'=>$trans,
 
-                    ]);
-                    */
-                    $new_post->$field = $trans;
+                        ]);
+                        */
+                        $new_post->$field = $trans;
+                    }
+                    $new_post->lang = $lang;
+                    $new_post->save();
+                    $guid = $new_post->guid;
                 }
-                $new_post->lang = $lang;
-                $new_post->save();
-                $guid = $new_post->guid;
+            } else {
+                $route_key_name=$v->getRouteKeyName();
+                $guid=$v->$route_key_name;
             }
 
             $route_params['item'.$i] = $guid;
@@ -1016,7 +1076,8 @@ abstract class XotBasePanel {
         }
     }
 
-    public function relatedUrlRecursive($params) {
+    public function relatedUrlRecursive($params)
+    {
         $obj = $this;
         $items = [];
         $items[] = $this;
@@ -1043,7 +1104,8 @@ abstract class XotBasePanel {
         return $route;
     }
 
-    public function relatedUrl($params) {
+    public function relatedUrl($params)
+    {
         /*
         $params['row'] = $this->row;
         return RouteService::urlRelated($params);
@@ -1053,7 +1115,8 @@ abstract class XotBasePanel {
         return RouteService::urlRelatedPanel($params);
     }
 
-    public function indexUrl() {
+    public function indexUrl()
+    {
         $url = RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index']);
         $data = [];
         $filters = $this->filters();
@@ -1089,47 +1152,56 @@ abstract class XotBasePanel {
         return $url;
     }
 
-    public function indexEditUrl() {
+    public function indexEditUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index_edit']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'index_edit']);
     }
 
-    public function editUrl() {
+    public function editUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'edit']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'edit']);
     }
 
-    public function updateUrl() {
+    public function updateUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'update']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'update']);
     }
 
-    public function showUrl() {
+    public function showUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'show']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'show']);
     }
 
-    public function createUrl() {
+    public function createUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'create']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'create']);
     }
 
-    public function storeUrl() {
+    public function storeUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'store']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'store']);
     }
 
-    public function destroyUrl() {
+    public function destroyUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'destroy']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'destroy']);
     }
 
-    public function detachUrl() {
+    public function detachUrl()
+    {
         //return RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'detach']);
         return RouteService::urlPanel(['panel' => $this, 'act' => 'detach']);
     }
 
-    public function gearUrl() {
+    public function gearUrl()
+    {
         return '#';
     }
 
@@ -1143,7 +1215,8 @@ abstract class XotBasePanel {
         return $post_type;
     }*/
 
-    public function postType() {
+    public function postType()
+    {
         $post_type = collect(config('xra.model'))->search(get_class($this->row));
         if (false === $post_type) {
             $post_type = snake_case(class_basename($this->row));
@@ -1152,7 +1225,8 @@ abstract class XotBasePanel {
         return $post_type;
     }
 
-    public function getItemTabs() {
+    public function getItemTabs()
+    {
         $item = $this->row;
         $tabs = $this->tabs();
         $routename = \Route::currentRouteName();
@@ -1175,7 +1249,8 @@ abstract class XotBasePanel {
         return [$row];
     }
 
-    public function getRowTabs() {
+    public function getRowTabs()
+    {
         $data = [];
         foreach ($this->tabs() as $tab) {
             $tmp = (object) [];
@@ -1190,7 +1265,8 @@ abstract class XotBasePanel {
         return $data;
     }
 
-    public function getTabs() {
+    public function getTabs()
+    {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $act = last(explode('.', $routename));
@@ -1254,7 +1330,8 @@ abstract class XotBasePanel {
         return $data;
     }
 
-    public function rows($data) {
+    public function rows($data)
+    {
         $filters = $data;
         $q = isset($data['q']) ? $data['q'] : null;
         $out_format = isset($data['format']) ? $data['format'] : null;
@@ -1293,7 +1370,8 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    public function callItemAction($act) {
+    public function callItemAction($act)
+    {
         if (null == $act) {
             return null;
         }
@@ -1313,7 +1391,8 @@ abstract class XotBasePanel {
         return $out;
     }
 
-    public function callContainerAction($act) {
+    public function callContainerAction($act)
+    {
         if (null == $act) {
             return null;
         }
@@ -1335,7 +1414,8 @@ abstract class XotBasePanel {
         return $out;
     }
 
-    public function out($params = []) {
+    public function out($params = [])
+    {
         //--- default vars ---//
         $is_ajax = false;
         $method = 'GET';
@@ -1400,13 +1480,15 @@ abstract class XotBasePanel {
         return $html;
     }
 
-    public function pdf($params = []) {
+    public function pdf($params = [])
+    {
         if (! isset($params['view_params'])) {
             $params['view_params'] = [];
         }
         $view = ThemeService::getView(); //progressioni::admin.schede.show
         $view .= '.pdf';
         $view = str_replace('.store.', '.show.', $view);
+        extract($params);
 
         $html = view($view)
                     ->with('view', $view)
@@ -1424,7 +1506,8 @@ abstract class XotBasePanel {
         return HtmlService::toPdf($params);
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (null === self::$instance) {
             self::$instance = new self();
         }
@@ -1432,7 +1515,8 @@ abstract class XotBasePanel {
         return self::$instance;
     }
 
-    public function related($relationship) {
+    public function related($relationship)
+    {
         $related = $this->row->$relationship()->getRelated();
         $panel_related = Panel::get($related);
         $panel_related->setParent($this);

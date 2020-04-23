@@ -8,11 +8,13 @@ use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 use Route;
 
-class RouteService {
+class RouteService
+{
     protected static $namespace_start = '';
     protected static $curr = null;
 
-    public static function getGroupOpts($v, $namespace) {
+    public static function getGroupOpts($v, $namespace)
+    {
         $group_opts = [
             'prefix' => self::getPrefix($v, $namespace),
             'namespace' => self::getNamespace($v, $namespace),
@@ -22,7 +24,8 @@ class RouteService {
         return $group_opts;
     }
 
-    public static function getPrefix($v, $namespace) {
+    public static function getPrefix($v, $namespace)
+    {
         if (\in_array('prefix', \array_keys($v), true)) {
             return $v['prefix'];
         }
@@ -46,7 +49,8 @@ class RouteService {
         return $prefix;
     }
 
-    public static function getAs($v, $namespace) {
+    public static function getAs($v, $namespace)
+    {
         if (\in_array('as', \array_keys($v), true)) {
             return $v['as'];
         }
@@ -60,7 +64,8 @@ class RouteService {
         return $as.'.';
     }
 
-    public static function getNamespace($v, $namespace) {
+    public static function getNamespace($v, $namespace)
+    {
         if (\in_array('namespace', \array_keys($v), true)) {
             return $v['namespace'];
         }
@@ -76,7 +81,8 @@ class RouteService {
         return Str::studly($namespace);
     }
 
-    public static function getAct($v, $namespace) {
+    public static function getAct($v, $namespace)
+    {
         if (\in_array('act', \array_keys($v), true)) {
             return $v['act'];
         }
@@ -91,7 +97,8 @@ class RouteService {
         return Str::camel($v['act']);
     }
 
-    public static function getParamName($v, $namespace) {
+    public static function getParamName($v, $namespace)
+    {
         if (\in_array('param_name', \array_keys($v), true)) {
             return $v['param_name'];
         }
@@ -104,7 +111,8 @@ class RouteService {
         return $param_name;
     }
 
-    public static function getParamsName($v, $namespace) {
+    public static function getParamsName($v, $namespace)
+    {
         $param_name = self::getParamName($v, $namespace);
         if (! \is_array($param_name)) {
             $params_name = [$param_name];
@@ -115,7 +123,8 @@ class RouteService {
         return $params_name;
     }
 
-    public static function getResourceOpts($v, $namespace) {
+    public static function getResourceOpts($v, $namespace)
+    {
         $param_name = self::getParamName($v, $namespace);
         $params_name = self::getParamsName($v, $namespace);
         $opts = [
@@ -136,7 +145,8 @@ class RouteService {
         return $opts;
     }
 
-    public static function getController($v, $namespace) {
+    public static function getController($v, $namespace)
+    {
         if (\in_array('controller', \array_keys($v), true)) {
             return $v['controller'];
         }
@@ -152,7 +162,8 @@ class RouteService {
         return $v['controller'];
     }
 
-    public static function getUri($v, $namespace) {
+    public static function getUri($v, $namespace)
+    {
         $uri = \mb_strtolower($v['name']);
         /*
         $v['prefix']=self::getPrefix($v,$namespace);
@@ -163,7 +174,8 @@ class RouteService {
         return $uri;
     }
 
-    public static function getMethod($v, $namespace) {
+    public static function getMethod($v, $namespace)
+    {
         if (\in_array('method', \array_keys($v), true)) {
             return $v['method'];
         }
@@ -171,7 +183,8 @@ class RouteService {
         return ['get', 'post'];
     }
 
-    public static function getUses($v, $namespace) {
+    public static function getUses($v, $namespace)
+    {
         $controller = self::getController($v, $namespace);
         $act = self::getAct($v, $namespace);
         $uses = $controller.'@'.$act;
@@ -179,7 +192,8 @@ class RouteService {
         return $uses;
     }
 
-    public static function getCallback($v, $namespace, $curr) {
+    public static function getCallback($v, $namespace, $curr)
+    {
         $as = Str::slug($v['name']); //!!!!!! test da controllare
         $uses = self::getUses($v, $namespace);
         if (null != $curr) {
@@ -192,7 +206,8 @@ class RouteService {
         return $callback;
     }
 
-    public static function dynamic_route($array, $namespace = null, $namespace_start = null, $curr = null) {
+    public static function dynamic_route($array, $namespace = null, $namespace_start = null, $curr = null)
+    {
         if (null != $namespace_start) {
             self::$namespace_start = $namespace_start;
         } /*
@@ -214,7 +229,8 @@ class RouteService {
     //end function
 
     //--------------------------------------------------------------------------------
-    public static function createRouteResource($v, $namespace) {
+    public static function createRouteResource($v, $namespace)
+    {
         if (null == $v['name']) {
             return;
         }
@@ -228,7 +244,8 @@ class RouteService {
     }
 
     // ------------------------------------------------------------------------------
-    public static function createRouteSubs($v, $namespace, $curr) {
+    public static function createRouteSubs($v, $namespace, $curr)
+    {
         if (! isset($v['subs'])) {
             return;
         }
@@ -255,7 +272,8 @@ class RouteService {
     }
 
     //---------------------------------------------------
-    public static function createRouteActs($v, $namespace, $curr) {
+    public static function createRouteActs($v, $namespace, $curr)
+    {
         if (! isset($v['acts'])) {
             return;
         }
@@ -277,7 +295,8 @@ class RouteService {
 
     // /--------------------------------------------------------
 
-    public static function routes() {
+    public static function routes()
+    {
         if ('' != \Request::path()) {
             $tmp = \explode('/', \Request::path());
             $tmp = \array_slice($tmp, 0, 2);
@@ -299,7 +318,8 @@ class RouteService {
 
     //end routes
     //------------------------------------------------------------------
-    public static function prefixedResourceNames($prefix) {
+    public static function prefixedResourceNames($prefix)
+    {
         if ('.' == \mb_substr($prefix, -1)) {
             $prefix = \mb_substr($prefix, 0, -1);
         }
@@ -313,7 +333,8 @@ class RouteService {
 
     //end prefixedResourceNames
 
-    public static function containerN($params) {
+    public static function containerN($params)
+    {
         extract($params);
         if (! isset($model)) {
             ddd($params);
@@ -387,7 +408,8 @@ class RouteService {
     return $routename_n;
     }
      */
-    public static function routenameSon($params) {
+    public static function routenameSon($params)
+    {
         $container_i = self::containerN($params);
         $routename = \Route::currentRouteName();
         extract($params);
@@ -414,7 +436,8 @@ class RouteService {
         return $rountename_son;
     }
 
-    public static function urlSon($params, $son_name = '') {
+    public static function urlSon($params, $son_name = '')
+    {
         $container_i = self::containerN($params);
         $routename_son = self::routenameSon($params);
         extract($params);
@@ -436,7 +459,8 @@ class RouteService {
         return $route;
     }
 
-    public static function tabs($params) {
+    public static function tabs($params)
+    {
         extract($params);
         $route_params = \Route::current()->parameters();
         $routename = \Route::currentRouteName();
@@ -497,7 +521,8 @@ class RouteService {
         return $data;
     }
 
-    public static function getContainersClass() {
+    public static function getContainersClass()
+    {
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         list($containers, $items) = params2ContainerItem($route_params);
@@ -516,11 +541,13 @@ class RouteService {
         return $classes;
     }
 
-    public static function getRouteN($params) {
+    public static function getRouteN($params)
+    {
         extract($params);
     }
 
-    public static function urlPanel($params) {
+    public static function urlPanel($params)
+    {
         $lang = \App::getLocale();
         extract($params);
         $parents = collect([]);
@@ -598,7 +625,8 @@ class RouteService {
         return url_queries($queries, $route);
     }
 
-    public static function urlRelatedPanel($params) {
+    public static function urlRelatedPanel($params)
+    {
         $lang = \App::getLocale();
         extract($params);
         $parents = collect([]);
@@ -630,11 +658,11 @@ class RouteService {
 
         $i = 0;
         foreach ($parents as $parent) {
-            $route_params['container'.($n + $i)] = $parent->row->post_type;
+            $route_params['container'.($n + $i)] = $parent->postType();
             $route_params['item'.($n + $i)] = $parent->row;
             ++$i;
         }
-        $route_params['container'.($n + $i)] = $panel->row->post_type;
+        $route_params['container'.($n + $i)] = $panel->postType();
         $route_params['item'.($n + $i)] = $panel->row;
         ++$i;
         $route_params['container'.($n + $i)] = $related_name;
@@ -652,7 +680,8 @@ class RouteService {
         }
     }
 
-    public static function getRoutenameN($params) {
+    public static function getRoutenameN($params)
+    {
         extract($params);
         $tmp = [];
         if (in_admin()) {
@@ -667,7 +696,8 @@ class RouteService {
         return $routename;
     }
 
-    public static function urlModel($params) {
+    public static function urlModel($params)
+    {
         $lang = \App::getLocale();
         extract($params);
         $route_current = \Route::current();
@@ -743,7 +773,8 @@ class RouteService {
         return $url;
     }
 
-    public static function routenameN($params) {
+    public static function routenameN($params)
+    {
         //--- default data
         $routename = \Route::currentRouteName();
         $act = last(explode('.', $routename));
@@ -765,7 +796,8 @@ class RouteService {
      * in = row , related.
      *
      **/
-    public static function urlRelated($params) {
+    public static function urlRelated($params)
+    {
         extract($params);
         try {
             $params = \Route::current()->parameters();
@@ -793,7 +825,8 @@ class RouteService {
         return $route;
     }
 
-    public static function urlAct($params) {
+    public static function urlAct($params)
+    {
         $query = [];
         extract($params);
         $mutator = $act.'_url';
