@@ -47,4 +47,6 @@ return [
         'save' => 'Salva',
         'view' => 'Visualizza',
     ],
+
+    'save' => 'Salva',
 ];

@@ -914,7 +914,8 @@ abstract class XotBasePanel
     //-- nella registrazione 1 tasto, nelle modifiche 3
     public function btnSubmit()
     {
-        return Form::bsSubmit('save');
+        //return Form::bsSubmit('save');
+        return Form::bsSubmit(trans('xot::buttons.save'));
     }
 
     public function btnDelete($params = [])

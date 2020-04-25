@@ -56,4 +56,6 @@ return [
         'save' => 'Save',
         'view' => 'View',
     ],
+
+    'save' => 'Save',
 ];
