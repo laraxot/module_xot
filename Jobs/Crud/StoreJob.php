@@ -70,6 +70,9 @@ class StoreJob implements ShouldQueue
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
             $data['lang'] = \App::getLocale();
         }
+        if (! isset($data['auth_user_id']) && in_array('auth_user_id', $row->getFillable())) {
+            $data['auth_user_id'] =\Auth::id();
+        }
 
         $row = $row->fill($data);
         $row->save();
@@ -93,7 +96,8 @@ class StoreJob implements ShouldQueue
                 //dddx(class_basename($item->$types()));
                 //dddx(get_class_methods($item->$types()));
                 $func='saveParent'.Str::studly(class_basename($item->$types()));
-                dddx($func);
+                //dddx($func);
+                $tmp = $this->$func();
             }
 
 
@@ -109,6 +113,69 @@ class StoreJob implements ShouldQueue
         \Session::flash('status', 'creato ! ['.$row->getKey().']!');
 
         return $panel;
+    }
+
+
+    public function saveParentHasManyDeep(){
+        $row = $this->row;
+        $data = $this->data;
+        $types = $this->types;
+        $item = $this->item;
+
+        $rows= $item->$types();
+        //debug_getter_obj(['obj'=>$rows]);
+        //dddx(get_class_methods($rows));
+        $fields=[
+         "getQualifiedFarKeyName",
+    "getFirstKeyName",
+     "getQualifiedFirstKeyName",
+     "getForeignKeyName",
+     "getQualifiedForeignKeyName",
+     "getLocalKeyName",
+     "getQualifiedLocalKeyName",
+     "getSecondLocalKeyName",
+     "getBaseQuery",
+     "getParent",
+     "getRelated",
+     //"getRelationExistenceQuery",
+     //"getRelationExistenceQueryForSelfRelation",
+     //"getRelationExistenceQueryForThroughSelfRelation",
+     "getThroughParents",
+     "getForeignKeys",
+     "getLocalKeys",
+     "getQualifiedParentKeyName",
+     //"getMorphedModel",
+
+
+        ];
+        $ris=[];
+        foreach($fields as $field){
+            $ris[$field]=$rows->$field();
+        }
+        dddx($ris);
+        /*
+        "getQualifiedFarKeyName" => "bell_boys.post_id"
+        "getFirstKeyName" => "post_id"
+        "getQualifiedFirstKeyName" => "restaurant_morph.post_id"
+        "getForeignKeyName" => "post_id"
+        "getQualifiedForeignKeyName" => "bell_boys.post_id"
+        "getLocalKeyName" => "post_id"
+        "getQualifiedLocalKeyName" => "restaurants.post_id"
+        "getSecondLocalKeyName" => "post_id"
+    */
+
+        //dddx($rows->getParent()); //restaurantMorph
+        //dddx($rows->getRelated());//bellboy
+        //dddx($rows->getThroughParents());//restaurantMorph , Profile
+        //$arr=['bell_boys.auth_user_id'=>$row->auth_user_id];
+        //$rows->updateOrCreate($arr);
+        //$rows->associate($row); //Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::associate()
+        //$rows->save($row); //Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::save()
+        //$rows->sync($row);//Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::sync()
+        //$rows->attach($row);//Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::attach()
+        //match??
+        //$rows->saveMany([$row]);//Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::saveMany()
+
     }
 
     //end handle
