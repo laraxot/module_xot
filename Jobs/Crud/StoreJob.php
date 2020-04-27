@@ -12,8 +12,7 @@ use Illuminate\Support\Str;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class StoreJob implements ShouldQueue
-{
+class StoreJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -31,8 +30,7 @@ class StoreJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null)
-    {
+    public function __construct($container, $item, $data = null) {
         $this->container = $container;
         $this->item = $item;
 
@@ -59,8 +57,7 @@ class StoreJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
-    {
+    public function handle() {
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
@@ -71,7 +68,7 @@ class StoreJob implements ShouldQueue
             $data['lang'] = \App::getLocale();
         }
         if (! isset($data['auth_user_id']) && in_array('auth_user_id', $row->getFillable())) {
-            $data['auth_user_id'] =\Auth::id();
+            $data['auth_user_id'] = \Auth::id();
         }
 
         $row = $row->fill($data);
@@ -95,13 +92,11 @@ class StoreJob implements ShouldQueue
                 //$tmp=$item->$types()->attach($row, $pivot_data);
                 //dddx(class_basename($item->$types()));
                 //dddx(get_class_methods($item->$types()));
-                $func='saveParent'.Str::studly(class_basename($item->$types()));
+                $this->row = $row;
+                $func = 'saveParent'.Str::studly(class_basename($item->$types()));
                 //dddx($func);
                 $tmp = $this->$func();
             }
-
-
-
 
             //$tmp=$item->$types()->attach($row->getKey(),$pivot_data);
             //$tmp = $item->$types()->save($row, $pivot_data);
@@ -115,44 +110,54 @@ class StoreJob implements ShouldQueue
         return $panel;
     }
 
-
-    public function saveParentHasManyDeep(){
+    public function saveParentHasManyDeep() {
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
         $item = $this->item;
 
-        $rows= $item->$types();
+        $rows = $item->$types();
         //debug_getter_obj(['obj'=>$rows]);
         //dddx(get_class_methods($rows));
-        $fields=[
-         "getQualifiedFarKeyName",
-    "getFirstKeyName",
-     "getQualifiedFirstKeyName",
-     "getForeignKeyName",
-     "getQualifiedForeignKeyName",
-     "getLocalKeyName",
-     "getQualifiedLocalKeyName",
-     "getSecondLocalKeyName",
-     "getBaseQuery",
-     "getParent",
-     "getRelated",
-     //"getRelationExistenceQuery",
-     //"getRelationExistenceQueryForSelfRelation",
-     //"getRelationExistenceQueryForThroughSelfRelation",
-     "getThroughParents",
-     "getForeignKeys",
-     "getLocalKeys",
-     "getQualifiedParentKeyName",
-     //"getMorphedModel",
-
-
+        $fields = [
+            'getQualifiedFarKeyName',
+            'getFirstKeyName',
+            'getQualifiedFirstKeyName',
+            'getForeignKeyName',
+            'getQualifiedForeignKeyName',
+            'getLocalKeyName',
+            'getQualifiedLocalKeyName',
+            'getSecondLocalKeyName',
+            'getBaseQuery',
+            'getParent',
+            'getRelated',
+            //"getRelationExistenceQuery",
+            //"getRelationExistenceQueryForSelfRelation",
+            //"getRelationExistenceQueryForThroughSelfRelation",
+            'getThroughParents',
+            'getForeignKeys',
+            'getLocalKeys',
+            'getQualifiedParentKeyName',
+            //"getMorphedModel",
         ];
-        $ris=[];
-        foreach($fields as $field){
-            $ris[$field]=$rows->$field();
+        $ris = [];
+        $ris['row'] = $row;
+        $ris['item'] = $item;
+        $ris['types'] = $types;
+        $ris['data'] = $data;
+        foreach ($fields as $field) {
+            $ris[$field] = $rows->$field();
         }
-        dddx($ris);
+        $ris['item_profiles'] = $item->profiles;
+        $ris['row_profile'] = $row->profile;
+        $profile_c = collect($item->profiles)->where('post_id', $row->profile->post_id)->count();
+
+        if (0 == $profile_c) {
+            //dddx($row->profile);
+            //$item->profiles()->associate($row->profile); //Illuminate\Database\Eloquent\Relations\MorphToMany::associate()
+            //$item->profiles()->syncWithoutDetaching($row->profile);
+            $item->profiles()->save($row->profile);
+        }
         /*
         "getQualifiedFarKeyName" => "bell_boys.post_id"
         "getFirstKeyName" => "post_id"
@@ -175,13 +180,11 @@ class StoreJob implements ShouldQueue
         //$rows->attach($row);//Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::attach()
         //match??
         //$rows->saveMany([$row]);//Call to undefined method Staudenmeir\EloquentHasManyDeep\HasManyDeep::saveMany()
-
     }
 
     //end handle
 
-    public function storeRelationshipsPivot($params)
-    {
+    public function storeRelationshipsPivot($params) {
         /*
         extract($params);
         $types=Str::plural($container);
@@ -193,12 +196,23 @@ class StoreJob implements ShouldQueue
         */
     }
 
-    public function storeRelationshipsHasOne($params)
-    {
+    public function storeRelationshipsHasOne($params) {
         extract($params);
         $rows = $model->$name();
+        /*
+        $pk = $rows->getRelated()->getKeyName();
+        if ('auth_user_id' == $pk) {
+            dddx($data);
+        }
+        */
         //debug_getter_obj(['obj'=>$rows]);
-        $related = $rows->create($data);
+        try {
+            $related = $rows->create($data);
+        } catch (\Exception $e) {
+            //"SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1' for key 'PRIMARY' (SQL: insert into `liveuser_users` (`first_name`, `last_name`, `email`, `auth_user_id`, `created_by`, `updated_by`, `updated_at`, `created_at`) values (gfdsfs, fdsfds, fds
+            //dddx(['e' => $e->getMessage(), 'data' => $data]);
+            $related = $rows->update($data);
+        }
         if (! $model->$name()->exists()) {//collegamento non riuscito
             $pk_local = $rows->getLocalKeyName();
             $pk_fore = $rows->getForeignKeyName();
@@ -207,14 +221,12 @@ class StoreJob implements ShouldQueue
         }
     }
 
-    public function storeRelationshipsHasMany($params)
-    {
+    public function storeRelationshipsHasMany($params) {
         extract($params);
         //$rows = $model->$name();
     }
 
-    public function storeRelationshipsBelongsTo($params)
-    {
+    public function storeRelationshipsBelongsTo($params) {
         extract($params);
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
@@ -228,8 +240,7 @@ class StoreJob implements ShouldQueue
         }
     }
 
-    public function storeRelationshipsMorphOne($params)
-    {
+    public function storeRelationshipsMorphOne($params) {
         extract($params);
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = \App::getLocale();
@@ -241,8 +252,7 @@ class StoreJob implements ShouldQueue
         }
     }
 
-    public function storeRelationshipsMorphToMany($params)
-    {
+    public function storeRelationshipsMorphToMany($params) {
         extract($params);
 
         //ddd(\Request::all());
@@ -278,16 +288,14 @@ class StoreJob implements ShouldQueue
         }
     }
 
-    public function storeRelationshipsHasManyThrough($params)
-    {
+    public function storeRelationshipsHasManyThrough($params) {
         /*
         Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
         */
         //$this->storeRelationshipsMorphToMany($params); //
     }
 
-    public function storeRelationshipsBelongsToMany($params)
-    {
+    public function storeRelationshipsBelongsToMany($params) {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
@@ -297,8 +305,7 @@ class StoreJob implements ShouldQueue
         $model->$name()->syncWithoutDetaching($data);
     }
 
-    public function saveMultiselectTwoSides($params)
-    {
+    public function saveMultiselectTwoSides($params) {
         //passo request o direttamente data ?
         extract($params);
         $items = $model->$name();
