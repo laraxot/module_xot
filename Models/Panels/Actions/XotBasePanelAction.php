@@ -99,11 +99,15 @@ abstract class XotBasePanelAction {
 
     //end btnContainer
     public function urlItem($params = []) {
+        //dddx($params);
         extract($params);
         $this->setRow($row);
         $name = $this->getName();
-        $url = RouteService::urlAct(
-            [
+        //$url = RouteService::urlPanel(['panel' => $panel, 'act' => 'show']);
+        //*
+        try {
+            $url = RouteService::urlAct(
+                [
                 'row' => $this->row,
                 'act' => 'show',
                 'query' => [
@@ -111,8 +115,11 @@ abstract class XotBasePanelAction {
                     //'stato'=>6,
                 ],
             ]
-        );
-
+            );
+        }catch(\Exception $e){
+            dddx(['e'=>$e->getMessage()]);
+        }
+        //*/
         return $url;
     }
 
