@@ -310,6 +310,13 @@ abstract class XotBasePanel
     {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
+        if (!is_object($itemAction)) {
+            dddx([
+                'act'=>$act,
+                'this'=>$this,
+                'itemActions'=>$itemActions,
+            ]);
+        }
         $itemAction->setPanel($this);
         return $itemAction;
     }
