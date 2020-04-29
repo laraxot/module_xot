@@ -2,13 +2,12 @@
 
 namespace Modules\Xot\Jobs\Crud;
 
-use Illuminate\Support\Arr;
-
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
@@ -38,7 +37,6 @@ class UpdateJob implements ShouldQueue {
             $data = $this->getData();
         }
         $this->data = $data;
-
     }
 
     /**
@@ -125,13 +123,12 @@ class UpdateJob implements ShouldQueue {
     public function updateRelationshipsMorphOne($params) {
         extract($params);
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
-        $rows=$model->$name();
-        if($rows->exists()){
+        $rows = $model->$name();
+        if ($rows->exists()) {
             $rows->update($data);
-        }else{
+        } else {
             $rows->create($data);
         }
-
     }
 
     /**
@@ -161,33 +158,31 @@ class UpdateJob implements ShouldQueue {
         //ddd(\Request::all());
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
-        if(!Arr::isAssoc($data)){
+        if (! Arr::isAssoc($data)) {
             $model->$name()->sync($data);
         }
         foreach ($data as $k => $v) {
             if (is_array($v)) {
-
-
                 if (! isset($v['pivot'])) {
                     $v['pivot'] = [];
                 }
-            //ddd('a');
-            /*
-            echo '<hr/><pre>'.print_r($v['pivot'],1).'</pre><hr/>';
-            $res = $model->$name()
-                    ->where('related_id',$k)
-                    ->where('auth_user_id',$v['pivot']['auth_user_id'])
-                    ->update($v['pivot']);
-            */
+                //ddd('a');
+                /*
+                echo '<hr/><pre>'.print_r($v['pivot'],1).'</pre><hr/>';
+                $res = $model->$name()
+                        ->where('related_id',$k)
+                        ->where('auth_user_id',$v['pivot']['auth_user_id'])
+                        ->update($v['pivot']);
+                */
                 $res = $model->$name()
                     ->syncWithoutDetaching([$k => $v['pivot']]);
-            }else{
-               // $res = $model->$name()
+            } else {
+                // $res = $model->$name()
                  //   ->syncWithoutDetaching([$v]);
             }
             //->where('auth_user_id',1)
             //->syncWithoutDetaching([$k => $v['pivot']])
-                ;
+
                 //->updateOrCreate(['related_id'=>$k,'auth_user_id'=>1],$v['pivot']);
             //$model->$name()->touch();
         }
