@@ -1472,11 +1472,13 @@ abstract class XotBasePanel {
             $tmp->url = $parent->indexUrl();
             $tmp->title = $parent->postType();
             $bread[] = $tmp;
-
-            $tmp = (object) [];
-            $tmp->url = $parent->showUrl();
-            $tmp->title = $parent->row->title;
-            $bread[] = $tmp;
+            try {
+                $tmp = (object) [];
+                $tmp->url = $parent->showUrl();
+                $tmp->title = $parent->row->title;
+                $bread[] = $tmp;
+            } catch (\exception $e) {
+            }
         }
 
         return $bread;
