@@ -1454,4 +1454,31 @@ abstract class XotBasePanel {
 
         return $module_name;
     }
+
+    public function breadcrumbs() {
+        $curr = $this;
+        $parents = [];
+        while (null != $curr) {
+            $parents[] = $curr;
+            $curr = $curr->getParent();
+        }
+        $bread = [];
+        $tmp = (object) [];
+        $tmp->url = asset(\App::getLocale());
+        $tmp->title = 'Home';
+        $bread[] = $tmp;
+        foreach ($parents as $parent) {
+            $tmp = (object) [];
+            $tmp->url = $parent->indexUrl();
+            $tmp->title = $parent->postType();
+            $bread[] = $tmp;
+
+            $tmp = (object) [];
+            $tmp->url = $parent->showUrl();
+            $tmp->title = $parent->row->title;
+            $bread[] = $tmp;
+        }
+
+        return $bread;
+    }
 }
