@@ -36,11 +36,18 @@ trait CommonTrait {
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
         })->map(function ($v, $k) use ($model) {
+            $rows=$model->$k();
+            $related=null;
+            if(method_exists($rows,'getRelated')){
+                $related=$rows->getRelated();
+            }
             return (object) [
-                'relationship_type' => class_basename($model->$k()),
-                'related' => $model->$k()->getRelated(),
+                'relationship_type' => class_basename($rows),
+                'is_relation'=>$rows instanceof \Illuminate\Database\Eloquent\Relations\Relation,
+                'related' => $related,
                 'data' => $v,
                 'name' => $k,
+                'rows'=>$rows,
             ];
         })->all();
 
@@ -53,7 +60,25 @@ trait CommonTrait {
             //echo '<h3>'.$func.'</h3>';
             //$this->$func(['model'=>$model,'name'=>$v->name,'data'=>$v->data]);
             $parz = array_merge($params, ['model' => $model, 'name' => $v->name, 'data' => $v->data]);
-            self::$func($parz);
+            /*
+            if(!method_exists($this,$func)){
+                dddx(
+                    [
+                        'func'=>$func,
+                        'model'=>$model,
+                        'model_class'=>get_class($model),
+                        'name'=>$v->name,
+                        'data'=>$v->data,
+                        'v'=>$v,
+                    ]
+                );
+            }
+            */
+            //if($v->is_relation){
+            if(method_exists($this,$func)){
+                self::$func($parz);
+            }
+            
         }
 
         if (isset($data['pivot'])) {
