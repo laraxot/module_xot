@@ -80,6 +80,9 @@ class StoreJob implements ShouldQueue {
             if (isset($data['pivot'])) {
                 $pivot_data = $data['pivot'];
             }
+            if (! isset($pivot_data['auth_user_id'])){
+                $pivot_data['auth_user_id']=\Auth::id();
+            }
             //ddd($types);
             //$item->$types()->
             //$tmp = $item->$types()->save($row, $pivot_data);
