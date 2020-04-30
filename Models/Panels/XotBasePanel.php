@@ -1115,7 +1115,11 @@ abstract class XotBasePanel
                 } else {
                     $guid = '#';
                     //dddx(\App::getLocale());
-                    $new_post = $v->post->replicate();
+                    $v_post=$v->post;
+                    if ($v_post==null) {
+                        break;
+                    }
+                    $new_post = $v_post->replicate();
                     $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
                     foreach ($fields as $field) {
                         $trans = ImportService::trans(['q' => $new_post->$field, 'from' => \App::getLocale(), 'to' => $lang]);

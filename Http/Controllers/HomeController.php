@@ -13,8 +13,10 @@ use Modules\Xot\Services\PanelService as Panel;
 
 use Modules\Blog\Models\Home;
 
-class HomeController extends Controller {
-    public function index(Request $request) {
+class HomeController extends Controller
+{
+    public function index(Request $request)
+    {
         //$command=new \Modules\Xot\Commands\PurchasePodcast(\Auth::user());
         //Bus::dispatch($command);
         $out = ArtisanService::act($request->act);
@@ -22,7 +24,7 @@ class HomeController extends Controller {
             return $out;
         }
         $lang=\App::getLocale();
-        $home=Home::with('post')->firstOrCreate(['post_id'=>1]);
+        $home=Home::with('post')->firstOrCreate(['id'=>1]);
 
         //$pathToFile=ThemeService::view_path('pub_theme::img/photo/test.jpg');
         //return '['.$pathToFile.']';
@@ -44,10 +46,11 @@ class HomeController extends Controller {
 
 
         return ThemeService::view('pub_theme::home.index')
-            ->with('home', $home)->with('_panel',Panel::get($home));
+            ->with('home', $home)->with('_panel', Panel::get($home));
     }
 
-    public function redirect(Request $request) {
+    public function redirect(Request $request)
+    {
         return redirect($request->url);
     }
 }
