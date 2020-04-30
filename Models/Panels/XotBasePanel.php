@@ -1200,7 +1200,12 @@ abstract class XotBasePanel
         if ($id!=null) {
             $model=$model->find($id);
         }
-        $panel=Panel::get($model)->setParent($this);
+        $panel=Panel::get($model);
+        if (!is_object($panel)) {
+            //dddx($model);
+            return null;
+        }
+        $panel=$panel->setParent($this);
         return $panel;
     }
 
