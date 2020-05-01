@@ -957,6 +957,7 @@ abstract class XotBasePanel
         $class='btn btn-primary mb-2';
         $icon='';
         $label='';
+        $data_title='';
         $title='';
         $lang=\App::getLocale();
         extract($params);
@@ -971,7 +972,7 @@ abstract class XotBasePanel
 
 
 
-        if ($title=='') {
+        if ($data_title=='') {
             $title=trans($module_name.'::'.class_basename($this->row).'.act.'.$act);
         }
         if (isset($guest_url) && !\Auth::check()) {
@@ -986,12 +987,19 @@ abstract class XotBasePanel
             switch ($modal) {
                 case 'iframe':
                     return
-                    '<button type="button" data-title="'.$title.'" 
-                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'" data-target="#myModalIframe">
+                    '<button type="button" data-title="'.$data_title.'" 
+                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'" 
+                    data-target="#myModalIframe">
                     '.$icon.' '.$title.'
                     </button>';
                 break;
                 case 'ajax':
+                    return
+                    '<button type="button" data-title="'.$data_title.'" 
+                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'" 
+                    data-target="#myModalAjax">
+                    '.$icon.' '.$title.'
+                    </button>';
                 break;
             }
         }
