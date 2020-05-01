@@ -631,17 +631,18 @@ class RouteService {
         $i = 0;
         foreach ($parents as $parent) {
             $route_params['container'.($n + $i)] = $parent->postType();
-            $route_params['item'.($n + $i)] = $parent->row;
+            $route_params['item'.($n + $i)] = $parent->guid();
             ++$i;
         }
         $route_params['container'.($n + $i)] = $panel->postType();
-        $route_params['item'.($n + $i)] = $panel->row;
+        $route_params['item'.($n + $i)] = $panel->guid();
         ++$i;
         $route_params['container'.($n + $i)] = $related_name;
 
         try {
             return str_replace(url(''), '', route($route_name, $route_params));
         } catch (\Exception $e) {
+            return '#['.__LINE__.']['.__FILE__.']';
             dd([
                 'route_name' => $route_name,
                 'route_params' => $route_params,

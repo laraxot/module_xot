@@ -981,22 +981,22 @@ abstract class XotBasePanel
         if (isset($guest_notice) && $guest_notice && !\Auth::check()) {
             $url=route('login.notice', ['lang'=>$lang,'referrer'=>$url]);
         }
-        
+
 
         if (isset($modal)) {
             switch ($modal) {
                 case 'iframe':
                     return
-                    '<button type="button" data-title="'.$data_title.'" 
-                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'" 
+                    '<button type="button" data-title="'.$data_title.'"
+                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'"
                     data-target="#myModalIframe">
                     '.$icon.' '.$title.'
                     </button>';
                 break;
                 case 'ajax':
                     return
-                    '<button type="button" data-title="'.$data_title.'" 
-                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'" 
+                    '<button type="button" data-title="'.$data_title.'"
+                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'"
                     data-target="#myModalAjax">
                     '.$icon.' '.$title.'
                     </button>';
@@ -1325,6 +1325,13 @@ abstract class XotBasePanel
         }
 
         return $post_type;
+    }
+
+    public function guid(){
+        $row=$this->row;
+        $key=$row->getRouteKeyName();
+        //dddx([$key,$row->$key,$row->post,$row]);
+        return $row->$key;
     }
 
     public function getItemTabs()
