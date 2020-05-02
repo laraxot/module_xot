@@ -75,6 +75,11 @@ abstract class XotBasePanelAction
         if (isset($row)) {
             $this->setRow($row);
         }
+        /* se metto questo if errore nella pagina menù ristoranti
+        if (isset($this->panel)) {
+            $this->setRow($this->panel->row);
+        }
+        */
         if (isset($this->onItem) && $this->onItem && is_object($this->row)) {
             return $this->btnItem($params);
         }
@@ -174,7 +179,7 @@ abstract class XotBasePanelAction
         $url = $this->urlItem($params);
         $title = $this->getTitle();
         $method = Str::camel($this->getName());
-        dddx($params);
+        
         extract($params);
         if (Gate::allows($method, $this->row)) {
             if (isset($modal)) {

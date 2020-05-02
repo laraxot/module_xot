@@ -1327,7 +1327,8 @@ abstract class XotBasePanel
         return $post_type;
     }
 
-    public function guid(){
+    public function guid()
+    {
         $row=$this->row;
         $key=$row->getRouteKeyName();
         //dddx([$key,$row->$key,$row->post,$row]);
