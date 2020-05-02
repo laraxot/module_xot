@@ -53,6 +53,13 @@ abstract class XotBasePanelAction
         return $title;
     }
 
+     public function getUrl($params=[]){
+          if (isset($this->onItem) && $this->onItem ) {
+            return $this->urlItem($params);
+        }
+        return $this->urlContainer($params);
+     }
+
     public function setRows($rows)
     {
         $this->rows = $rows;
@@ -80,7 +87,7 @@ abstract class XotBasePanelAction
             $this->setRow($this->panel->row);
         }
         //*/
-        if (isset($this->onItem) && $this->onItem && is_object($this->row)) {
+        if (isset($this->onItem) && $this->onItem ) {
             return $this->btnItem($params);
         }
 
@@ -110,28 +117,32 @@ abstract class XotBasePanelAction
     public function btnHtml($params=[])
     {
         $method = Str::camel($this->getName());
-
+        $title = $this->getTitle();
+        $label=$title;
+        $url= $this->getUrl();
+        $class = 'btn-secondary mb-2';
+        $modal='';
         extract($params);
-        //if (Gate::allows($method, $this->row)) {
-        if (isset($modal)) {
-            switch ($modal) {
-                    case 'iframe':
-                        return
-                        '<button type="button" data-title="'.$title.'"
-						data-href="'.$url.'" data-toggle="modal" class="btn btn-secondary mb-2" data-target="#myModalIframe">
-                        '.$this->icon.'
-                        </button>';
-                    break;
-                    case 'ajax':
-                    break;
-                }
+        if($label!=''){
+            $label='&nbsp;'.$label;
         }
-        return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
-            '.$this->icon.'</i>&nbsp;'.$title.'
+        if (!Gate::allows($method, $this->panel->row)) {
+             return '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->panel->row).' '.$method.'</button>';
+        }
+        switch ($modal) {
+            case 'iframe':
+                return
+                '<button type="button" data-title="'.$title.'"
+                data-href="'.$url.'" data-toggle="modal" class="btn '.$class.'" data-target="#myModalIframe">
+                '.$this->icon.'
+                </button>';
+            break;
+            case 'ajax':
+            break;
+        }
+        return '<a href="'.$url.'" class="btn '.$class.'" data-toggle="tooltip" title="'.$title.'">
+            '.$this->icon.'</i>'.$label.'
             </a>';
-        //} else {
-        //    return '<button type="button" class="btn btn-secondary btn-lg" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->row).' '.$method.'</button>';
-        //}
     }
 
 
@@ -154,6 +165,9 @@ abstract class XotBasePanelAction
         extract($params);
         if(isset($row)){
             $this->setRow($row);
+        }
+        if(!isset($this->panel)){
+            $this->panel=Panel::get($this->row);
         }
         $name = $this->getName();
         $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
