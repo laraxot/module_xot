@@ -75,11 +75,11 @@ abstract class XotBasePanelAction
         if (isset($row)) {
             $this->setRow($row);
         }
-        /* se metto questo if errore nella pagina menù ristoranti
+        //* se metto questo if errore nella pagina menù ristoranti
         if (isset($this->panel)) {
             $this->setRow($this->panel->row);
         }
-        */
+        //*/
         if (isset($this->onItem) && $this->onItem && is_object($this->row)) {
             return $this->btnItem($params);
         }
@@ -117,7 +117,7 @@ abstract class XotBasePanelAction
             switch ($modal) {
                     case 'iframe':
                         return
-                        '<button type="button" data-title="'.$title.'" 
+                        '<button type="button" data-title="'.$title.'"
 						data-href="'.$url.'" data-toggle="modal" class="btn btn-secondary mb-2" data-target="#myModalIframe">
                         '.$this->icon.'
                         </button>';
@@ -133,7 +133,7 @@ abstract class XotBasePanelAction
         //    return '<button type="button" class="btn btn-secondary btn-lg" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->row).' '.$method.'</button>';
         //}
     }
-    
+
 
     public function btnContainer($params = [])
     {
@@ -152,10 +152,13 @@ abstract class XotBasePanelAction
     {
         //dddx($params);
         extract($params);
-        $this->setRow($row);
+        if(isset($row)){
+            $this->setRow($row);
+        }
         $name = $this->getName();
-        //$url = RouteService::urlPanel(['panel' => $panel, 'act' => 'show']);
-        //*
+        $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
+        $url = url_queries(['_act' => $name], $url);
+        /*
         try {
             $url = RouteService::urlAct(
                 [
@@ -179,14 +182,14 @@ abstract class XotBasePanelAction
         $url = $this->urlItem($params);
         $title = $this->getTitle();
         $method = Str::camel($this->getName());
-        
+
         extract($params);
         if (Gate::allows($method, $this->row)) {
             if (isset($modal)) {
                 switch ($modal) {
                     case 'iframe':
                         return
-                        '<button type="button" data-title="'.$title.'" 
+                        '<button type="button" data-title="'.$title.'"
 						data-href="'.$url.'" data-toggle="modal" class="btn btn-secondary mb-2" data-target="#myModalIframe">
                         '.$this->$icon.'
                         </button>';
