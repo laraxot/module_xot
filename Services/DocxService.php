@@ -56,15 +56,18 @@ class DocxService {
         $tpl = new TemplateProcessor($this->docx_input);
         //$tpl->setValue('customer_title', 'test');
         $tpl->setValues($this->values);
-
+        $info = pathinfo($this->docx_input);
+        //dddx($info);
+        $filename_out = $info['basename'];
+        $filename_out_path = storage_path($filename_out);
         try {
-            $tpl->saveAs(storage_path('tmp.docx'));
+            $tpl->saveAs($filename_out_path);
         } catch (\Exception $e) {
             //handle exception
             ddd($e);
         }
 
-        return response()->download(storage_path('tmp.docx'));
+        return response()->download($filename_out_path);
     }
 
     public static function rows2Data_test($row, $prefix) {

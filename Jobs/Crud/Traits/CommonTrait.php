@@ -3,7 +3,6 @@
 namespace Modules\Xot\Jobs\Crud\Traits;
 
 use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
-
 //----------- Requests ----------
 use Modules\Xot\Http\Requests\XotRequest;
 //------------ services ----------
@@ -12,6 +11,9 @@ use Modules\Xot\Services\PanelService as Panel;
 trait CommonTrait {
     public function getData() {
         $panel = Panel::get($this->row);
+        if (! is_object($panel)) {
+            //dddx($this->row);
+        }
         $request = XotRequest::capture();
         $request->validatePanel($panel);
         $data = $request->all();
@@ -27,7 +29,7 @@ trait CommonTrait {
         extract($params);
         $methods = get_class_methods($model);
         //dddx($model->post_type);
-        Relation::morphMap([$model->post_type=>get_class($model)]);
+        Relation::morphMap([$model->post_type => get_class($model)]);
         /*
         if(!is_array($methods)){
             $methods=[];
@@ -36,18 +38,19 @@ trait CommonTrait {
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
         })->map(function ($v, $k) use ($model) {
-            $rows=$model->$k();
-            $related=null;
-            if(method_exists($rows,'getRelated')){
-                $related=$rows->getRelated();
+            $rows = $model->$k();
+            $related = null;
+            if (method_exists($rows, 'getRelated')) {
+                $related = $rows->getRelated();
             }
+
             return (object) [
                 'relationship_type' => class_basename($rows),
-                'is_relation'=>$rows instanceof \Illuminate\Database\Eloquent\Relations\Relation,
+                'is_relation' => $rows instanceof \Illuminate\Database\Eloquent\Relations\Relation,
                 'related' => $related,
                 'data' => $v,
                 'name' => $k,
-                'rows'=>$rows,
+                'rows' => $rows,
             ];
         })->all();
 
@@ -75,10 +78,9 @@ trait CommonTrait {
             }
             */
             //if($v->is_relation){
-            if(method_exists($this,$func)){
+            if (method_exists($this, $func)) {
                 self::$func($parz);
             }
-            
         }
 
         if (isset($data['pivot'])) {

@@ -3,14 +3,12 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Database\Eloquent\Builder;
-
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
 
 //--- bases ---
 
-class RouteServiceProvider extends XotBaseRouteServiceProvider
-{
+class RouteServiceProvider extends XotBaseRouteServiceProvider {
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -20,8 +18,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 
-    public function bootCallback()
-    {
+    public function bootCallback() {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -43,8 +40,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
         //ddd('preso');
     }
 
-    public function registerRoutePattern(Router $router)
-    {
+    public function registerRoutePattern(Router $router) {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');
@@ -74,8 +70,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
 
     //end registerRoutePattern
 
-    public function registerRouteBind(Router $router)
-    {
+    public function registerRouteBind(Router $router) {
         //--------- ROUTE BIND
 
         //*
@@ -117,8 +112,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
                 } // pezza momentanea
 
                 $value = Str::slug($value); //retrocompatibilita'
-                if ($pk_full=='guid') {
-                    $rows=$rows->whereHas('post', function (Builder $query) use ($value) {
+                if ('guid' == $pk_full) {
+                    $rows = $rows->whereHas('post', function (Builder $query) use ($value) {
                         $query->where('guid', $value);
                     });
                 } else {
@@ -141,13 +136,20 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
                 if (is_object($row)) {
                     return $row;
                 }
-                if ($debug = 0) {
+                if ($debug = 1) {
+                    /*
                     echo PHP_EOL.'----------------------------------';
                     echo PHP_EOL.' model class : '.get_class($model);
                     echo PHP_EOL.' value : '.$value;
                     echo PHP_EOL.' pk_full : '.$pk_full;
                     echo PHP_EOL.'----------------------------------';
-                    ddd(\Modules\Blog\Models\Post::count());
+                    */
+                    $msg = [
+                        'pk_full' => $pk_full,
+                        'value' => $value,
+                        'rows' => $rows,
+                    ];
+                    dddx($msg);
                 }
 
                 return $value;
