@@ -33,11 +33,6 @@ abstract class XotBasePolicy {
     public function edit(User $user, $post) {
         //return true;
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
-            if (null == $post->created_by) {
-                $post->fill(['created_by' => $user->handle]);
-                $post->save();
-            }
-
             return true;
         }
 

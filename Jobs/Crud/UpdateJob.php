@@ -160,6 +160,8 @@ class UpdateJob implements ShouldQueue {
         //dddx([$name, Arr::isAssoc($data)]);
         if (! Arr::isAssoc($data)) {
             $model->$name()->sync($data);
+            //$model->$name()->attach($data);
+            //dddx($data);
         }
         foreach ($data as $k => $v) {
             if (is_array($v)) {
