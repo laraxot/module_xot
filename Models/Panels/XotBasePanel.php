@@ -259,10 +259,15 @@ abstract class XotBasePanel {
     }
 
     public function containerActions() {
-        $actions = collect($this->actions())->filter(function ($item) {
+        $panel = $this;
+        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
             $item->getName();
 
             return isset($item->onContainer) && $item->onContainer;
+        })->map(function ($item) use ($panel) {
+            $item->setPanel($panel);
+
+            return $item;
         })
         //->all()
         ;
@@ -271,10 +276,15 @@ abstract class XotBasePanel {
     }
 
     public function itemActions() {
-        $actions = collect($this->actions())->filter(function ($item) {
+        $panel = $this;
+        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
             $item->getName();
 
             return isset($item->onItem) && $item->onItem;
+        })->map(function ($item) use ($panel) {
+            $item->setPanel($panel);
+
+            return $item;
         })
         //->all()
         ;

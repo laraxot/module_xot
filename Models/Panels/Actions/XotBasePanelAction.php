@@ -16,8 +16,7 @@ use Modules\Xot\Services\RouteService;
 //---- Traits ----
 //use Modules\Xot\Traits\Updater;
 
-abstract class XotBasePanelAction
-{
+abstract class XotBasePanelAction {
     /*
     abstract public function setRows($rows);
     public function btn($params=[]);
@@ -31,8 +30,13 @@ abstract class XotBasePanelAction
 
     abstract public function handle();
 
-    public function getName()
-    {
+    /*
+    public function __construct() {
+        parent::__construct();
+    }
+    */
+
+    public function getName() {
         if (null != $this->name) {
             return $this->name;
         }
@@ -45,39 +49,34 @@ abstract class XotBasePanelAction
         return $this->name;
     }
 
-    public function getTitle()
-    {
+    public function getTitle() {
         $title = $this->getName();
         $title = str_replace('_', ' ', $title);
 
         return $title;
     }
 
-     public function getUrl($params=[]){
-          if (isset($this->onItem) && $this->onItem ) {
+    public function getUrl($params = []) {
+        if (isset($this->onItem) && $this->onItem) {
             return $this->urlItem($params);
         }
-        return $this->urlContainer($params);
-     }
 
-    public function setRows($rows)
-    {
+        return $this->urlContainer($params);
+    }
+
+    public function setRows($rows) {
         $this->rows = $rows;
     }
 
-    public function setRow($row)
-    {
+    public function setRow($row) {
         $this->row = $row;
     }
 
-    public function setPanel($panel)
-    {
+    public function setPanel($panel) {
         $this->panel = $panel;
     }
 
-
-    public function btn($params = [])
-    {
+    public function btn($params = []) {
         extract($params);
         if (isset($row)) {
             $this->setRow($row);
@@ -87,7 +86,7 @@ abstract class XotBasePanelAction
             $this->setRow($this->panel->row);
         }
         //*/
-        if (isset($this->onItem) && $this->onItem ) {
+        if (isset($this->onItem) && $this->onItem) {
             return $this->btnItem($params);
         }
 
@@ -100,8 +99,7 @@ abstract class XotBasePanelAction
         */
     }
 
-    public function urlContainer($params = [])
-    {
+    public function urlContainer($params = []) {
         extract($params);
         $request = \Request::capture();
         $name = $this->getName();
@@ -114,20 +112,19 @@ abstract class XotBasePanelAction
         return $url;
     }
 
-    public function btnHtml($params=[])
-    {
+    public function btnHtml($params = []) {
         $method = Str::camel($this->getName());
         $title = $this->getTitle();
-        $label=$title;
-        $url= $this->getUrl();
+        $label = $title;
+        $url = $this->getUrl();
         $class = 'btn-secondary mb-2';
-        $modal='';
+        $modal = '';
         extract($params);
-        if($label!=''){
-            $label='&nbsp;'.$label;
+        if ('' != $label) {
+            $label = '&nbsp;'.$label;
         }
-        if (!Gate::allows($method, $this->panel->row)) {
-             return '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->panel->row).' '.$method.'</button>';
+        if (! Gate::allows($method, $this->panel->row)) {
+            return '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->panel->row).' '.$method.'</button>';
         }
         switch ($modal) {
             case 'iframe':
@@ -140,18 +137,18 @@ abstract class XotBasePanelAction
             case 'ajax':
             break;
         }
+
         return '<a href="'.$url.'" class="btn '.$class.'" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'</i>'.$label.'
             </a>';
     }
 
-
-    public function btnContainer($params = [])
-    {
+    public function btnContainer($params = []) {
         $url = $this->urlContainer($params);
         $title = $this->getTitle();
-        $params['url']=$url;
-        $params['title']=$title;
+        $params['url'] = $url;
+        $params['title'] = $title;
+
         return $this->btnHtml($params);
         /*'<a href="'.$url.'" class="btn btn-secondary" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'&nbsp;'.$title.'
@@ -159,15 +156,14 @@ abstract class XotBasePanelAction
     }
 
     //end btnContainer
-    public function urlItem($params = [])
-    {
+    public function urlItem($params = []) {
         //dddx($params);
         extract($params);
-        if(isset($row)){
+        if (isset($row)) {
             $this->setRow($row);
         }
-        if(!isset($this->panel)){
-            $this->panel=Panel::get($this->row);
+        if (! isset($this->panel)) {
+            $this->panel = Panel::get($this->row);
         }
         $name = $this->getName();
         $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
@@ -191,8 +187,7 @@ abstract class XotBasePanelAction
         return $url;
     }
 
-    public function btnItem($params = [])
-    {
+    public function btnItem($params = []) {
         $url = $this->urlItem($params);
         $title = $this->getTitle();
         $method = Str::camel($this->getName());
@@ -212,6 +207,7 @@ abstract class XotBasePanelAction
                     break;
                 }
             }
+
             return '<a href="'.$url.'" class="btn btn-success" data-toggle="tooltip" title="'.$title.'">
             '.$this->icon.'</i>&nbsp;'.$title.'
             </a>';
@@ -222,8 +218,7 @@ abstract class XotBasePanelAction
 
     //end btnItem
 
-    public function updateRow($params = [])
-    {
+    public function updateRow($params = []) {
         $row = $this->row;
         $container = null;
         extract($params);
@@ -271,8 +266,7 @@ abstract class XotBasePanelAction
         //return $this->handle();
     }
 
-    public function pdf($params = [])
-    {
+    public function pdf($params = []) {
         if (null == $this->row) {
             $this->row = clone($this->rows)->get()[0];
             if (! is_object($this->row)) {
