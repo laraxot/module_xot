@@ -81,22 +81,14 @@ abstract class XotBasePanelAction {
         if (isset($row)) {
             $this->setRow($row);
         }
-        //* se metto questo if errore nella pagina menù ristoranti
-        if (isset($this->panel)) {
-            $this->setRow($this->panel->row);
+        if (isset($panel)) {
+            $this->setPanel($panel);
         }
-        //*/
         if (isset($this->onItem) && $this->onItem) {
             return $this->btnItem($params);
         }
 
         return $this->btnContainer($params);
-        /*
-        if ($this->onContainer) {
-            return $this->btnContainer($params);
-        }
-        return $this->btnItem($params);
-        */
     }
 
     public function urlContainer($params = []) {

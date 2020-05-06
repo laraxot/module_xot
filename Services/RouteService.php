@@ -583,6 +583,7 @@ class RouteService {
             return '#['.__LINE__.']['.__FILE__.']';
             dddx(
                 ['e' => $e->getMessage(),
+                    'params' => $params,
                     'route_name' => $route_name,
                     'route_params' => $route_params,
                     'last row' => $panel->row,
