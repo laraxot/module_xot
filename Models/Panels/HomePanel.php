@@ -151,6 +151,8 @@ class HomePanel extends XotBasePanel {
      * @return array
      */
     public function actions(Request $request = null) {
-        return [];
+        return [
+            new Actions\ArtisanAction(),
+        ];
     }
 }
