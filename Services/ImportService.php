@@ -459,7 +459,6 @@ class ImportService {
 
     //-------------------------------------------------------------------------
     public static function trans($params) {
-
         $i = \rand(0, 20);
         if ($i > 0 && $i < 10) {
             return self::googleTrans($params);
@@ -500,14 +499,14 @@ class ImportService {
         $urldata = \file_get_contents('http://'.$host.'/get?q='.$q.'&langpair='.$from.'|'.$to.'');
         $data = \json_decode($urldata, true);
         if (200 != $data['responseStatus']) {
-           /* if (true == self::$debug) {
-                if (403 == $data['responseStatus']) {
-                    $details = ($data['responseDetails']);
-                } else {
-                    $details = $data['responseDetails'];
-                }
-                $translation = "<font style='color:red;'>Error ".$data->responseStatus.': '.$details.'</font>';
-            }*/
+            /* if (true == self::$debug) {
+                 if (403 == $data['responseStatus']) {
+                     $details = ($data['responseDetails']);
+                 } else {
+                     $details = $data['responseDetails'];
+                 }
+                 $translation = "<font style='color:red;'>Error ".$data->responseStatus.': '.$details.'</font>';
+             }*/
 
             return;
         }
