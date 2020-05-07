@@ -1063,8 +1063,11 @@ abstract class XotBasePanel {
         return [];
     }
 
-    public function url() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+    public function url($params = []) {
+        $act = 'show';
+        extract($params);
+        //return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => $act]);
     }
 
     public function langUrl($lang) {
