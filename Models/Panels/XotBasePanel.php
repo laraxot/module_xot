@@ -900,12 +900,27 @@ abstract class XotBasePanel {
     }
 
     public function btnDelete($params = []) {
+        $class = 'btn-primary mb-2';
         extract($params);
         $act = 'destroy';
         $parz = [
             'id' => $this->row->getKey(),
             'btn_class' => 'btn '.$class,
             'route' => $this->destroyUrl(),
+            'act' => $act,
+        ];
+
+        return view('formx::includes.components.btn.'.$act)->with($parz);
+    }
+
+    public function btnDetach($params = []) {
+        $class = 'btn-primary mb-2';
+        extract($params);
+        $act = 'detach';
+        $parz = [
+            'id' => $this->row->getKey(),
+            'btn_class' => 'btn '.$class,
+            'route' => $this->detachUrl(),
             'act' => $act,
         ];
 
@@ -1048,8 +1063,11 @@ abstract class XotBasePanel {
         return [];
     }
 
-    public function url() {
-        return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+    public function url($params = []) {
+        $act = 'show';
+        extract($params);
+        //return RouteService::urlModel(['model' => $this->row, 'act' => 'show']);
+        return RouteService::urlPanel(['panel' => $this, 'act' => $act]);
     }
 
     public function langUrl($lang) {

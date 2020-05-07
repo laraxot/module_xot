@@ -91,6 +91,14 @@ abstract class XotBasePanelAction {
         return $this->btnContainer($params);
     }
 
+    public function url($params = []) {
+        if (isset($this->onItem) && $this->onItem) {
+            return $this->urlItem($params);
+        }
+
+        return $this->urlContainer($params);
+    }
+
     public function urlContainer($params = []) {
         extract($params);
         $request = \Request::capture();
@@ -106,7 +114,8 @@ abstract class XotBasePanelAction {
 
     public function btnHtml($params = []) {
         $method = Str::camel($this->getName());
-        $title = $this->getTitle();
+        $data_title = $this->getTitle();
+        $title = '';
         $label = $title;
         $url = $this->getUrl();
         $class = 'btn-secondary mb-2';
@@ -121,17 +130,17 @@ abstract class XotBasePanelAction {
         switch ($modal) {
             case 'iframe':
                 return
-                '<button type="button" data-title="'.$title.'"
+                '<button type="button" data-title="'.$data_title.'"
                 data-href="'.$url.'" data-toggle="modal" class="btn '.$class.'" data-target="#myModalIframe">
-                '.$this->icon.'
+                '.$this->icon.' '.$title.'
                 </button>';
             break;
             case 'ajax':
             break;
         }
 
-        return '<a href="'.$url.'" class="btn '.$class.'" data-toggle="tooltip" title="'.$title.'">
-            '.$this->icon.'</i>'.$label.'
+        return '<a href="'.$url.'" class="btn '.$class.'" title="'.$title.'">
+            '.$this->icon.'</i>'.$title.'
             </a>';
     }
 
