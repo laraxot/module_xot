@@ -144,10 +144,15 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                     echo PHP_EOL.' pk_full : '.$pk_full;
                     echo PHP_EOL.'----------------------------------';
                     */
+                    $related = $rows->getRelated();
                     $msg = [
                         'pk_full' => $pk_full,
                         'value' => $value,
                         'rows' => $rows,
+                        'related' => $related,
+                        'related_class' => get_class($related),
+
+                        'row' => $rows->first(),
                     ];
                     dddx($msg);
                 }
