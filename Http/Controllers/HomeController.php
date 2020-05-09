@@ -26,11 +26,16 @@ class HomeController extends Controller {
         if ('' != $request->_act) {
             return $home_panel->callItemActionWithGate($request->_act);
         }
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
 
-        return ThemeService::view('pub_theme::home.index')
+        $out = ThemeService::view('pub_theme::home.index')
             ->with('home', $home)
             ->with('_panel', $home_panel)
             ;
+
+        return $out;
+
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 
     public function redirect(Request $request) {

@@ -439,6 +439,12 @@ if (! \function_exists('transFields')) {
     }
 }
 
+if (! \function_exists('deltaTime')) {
+    function deltaTime() {
+        echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
+    }
+}
+
 if (! \function_exists('debug_getter_obj')) {
     function debug_getter_objOLD($params) {
         extract($params);

@@ -12,6 +12,8 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
      * Boot the application events.
      */
     public function boot() {
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -20,6 +22,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
         if (method_exists($this, 'bootCallback')) {
             $this->bootCallback();
         }
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 
     /**
@@ -31,12 +34,15 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
         //dd(__NAMESPACE__);
         //$ns=dirname(get_class($this));
         //dd(get_class($this).' '.$this->module_ns);
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
+
         $this->app->register(''.$this->module_ns.'\RouteServiceProvider');
         //get_called_class
         //dd(get_class($this));
         if (method_exists($this, 'registerCallback')) {
             $this->registerCallback();
         }
+        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 
     /**
