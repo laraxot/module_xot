@@ -928,6 +928,9 @@ abstract class XotBasePanel {
     }
 
     public function btnHtml($params) {
+        //da fare
+        //return FormXService::btnHtml($params);
+
         $module_name = getModuleNameFromModel($this->row);
         $class = 'btn btn-primary mb-2';
         $icon = '';
@@ -935,6 +938,8 @@ abstract class XotBasePanel {
         $data_title = '';
         $title = '';
         $lang = \App::getLocale();
+        $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
+
         extract($params);
         $url = RouteService::urlPanel(['panel' => $this, 'act' => $act]);
         $method = Str::camel($act);
@@ -942,7 +947,14 @@ abstract class XotBasePanel {
             $class .= ' btn-confirm-delete';
         }
         if (! Gate::allows($method, $this->row)) {
-            return '['.get_class($this->row).']['.$method.']';
+            //return '['.get_class($this->row).']['.$method.']';
+
+            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.'</button>';
+            if (false === $error_label) {
+                return null;
+            }
+
+            return $html;
         }
 
         if ('' == $data_title) {

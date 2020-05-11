@@ -120,12 +120,18 @@ abstract class XotBasePanelAction {
         $url = $this->getUrl();
         $class = 'btn-secondary mb-2';
         $modal = '';
+        $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
         extract($params);
         if ('' != $label) {
             $label = '&nbsp;'.$label;
         }
         if (! Gate::allows($method, $this->panel->row)) {
-            return '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can" disabled>'.$this->icon.' '.get_class($this->panel->row).' '.$method.'</button>';
+            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.'</button>';
+            if (false === $error_label) {
+                return null;
+            }
+
+            return $html;
         }
         switch ($modal) {
             case 'iframe':
