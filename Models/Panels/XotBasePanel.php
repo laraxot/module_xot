@@ -938,7 +938,7 @@ abstract class XotBasePanel {
         $data_title = '';
         $title = '';
         $lang = \App::getLocale();
-        $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
+        $error_label = $icon.' '.get_class($this->row);
 
         extract($params);
         $url = RouteService::urlPanel(['panel' => $this, 'act' => $act]);
