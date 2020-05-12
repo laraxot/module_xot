@@ -297,6 +297,7 @@ abstract class XotBasePanel {
         $itemAction = $itemActions->firstWhere('name', $act);
         if (! is_object($itemAction)) {
             dddx([
+                'error' => 'nessuna azione con questo nome',
                 'act' => $act,
                 'this' => $this,
                 'itemActions' => $itemActions,
