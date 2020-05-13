@@ -114,7 +114,7 @@ trait CrudContainerItemNoPostTrait {
                 ->with('_panel', $panel)
                 ;
         */
-        return $item;                
+        return $item;
     }
 
     public function update(Request $request, $container, $item) {
@@ -136,7 +136,7 @@ trait CrudContainerItemNoPostTrait {
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
         return $item;
 
-        /* sono vecchio mi serve per ricordare cosa facevo prima 
+        /* sono vecchio mi serve per ricordare cosa facevo prima
         if ($request->ajax()) {
             return json_encode(['msg' => 'ok']);
         } else {
@@ -605,7 +605,7 @@ trait CrudContainerItemNoPostTrait {
 
     //*
     public function getXotModel($name) { //spostare in helper ?
-        $model = tenantConfig('xra.model.'.$name);
+        $model = Tenant::config('xra.model.'.$name);
         //ddd($model);
         if (null == $model) {
             echo '<h3>not exists ['.$name.'] on config xra.model</h3>';

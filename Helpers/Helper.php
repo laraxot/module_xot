@@ -1,43 +1,47 @@
 <?php
 
 use Illuminate\Support\Str;
+use Modules\Xot\Services\TenantService as Tenant;
 
-//namespace Modules\XRA\Helpers;
-
+//------------------------------------------------
 if (! \function_exists('snake_case')) {
     function snake_case($str) {
         return Str::snake($str);
     }
 }
 
-/*
-if (! \function_exists('ddd')) {
-    function ddd($params)
-    {
-
-        //try{
-        //    \header('Content-type: text/html');
-        //}catch(\Exception $e)
-        //        dd($e);
-            // headers already sent
-        //}
-
-        $tmp = \debug_backtrace();
-        $file = $tmp[0]['file'];
-        $file = \str_replace('/', DIRECTORY_SEPARATOR, $file);
-        $doc_root = $_SERVER['DOCUMENT_ROOT'];
-        $doc_root = \str_replace('/', DIRECTORY_SEPARATOR, $doc_root);
-        $dir_piece = \explode(DIRECTORY_SEPARATOR, __DIR__);
-        $dir_piece = \array_slice($dir_piece, 0, -6);
-        $dir_copy = \implode(DIRECTORY_SEPARATOR, $dir_piece);
-        $file = \str_replace($dir_copy, $doc_root, $file);
-        echo '<h3>LINE: ['.$tmp[0]['line'].']<br/>
-        FILE: ['.$file.']<br/>
-        </h3>';
-        dd($params);
+if (! \function_exists('str_slug')) {
+    function str_slug($str) {
+        return Str::slug($str);
     }
 }
-*/
+
+if (! function_exists('str_singular')) {
+    function str_singular($str) {
+        return Str::singular($str);
+    }
+}
+
+if (! function_exists('starts_with')) {
+    function starts_with($str, $str1) {
+        return Str::startsWith($str, $str1);
+    }
+}
+
+if (! function_exists('ends_with')) {
+    function ends_with($str, $str1) {
+        return Str::endsWith($str, $str1);
+    }
+}
+
+if (! function_exists('str_contains')) {
+    function str_contains($str, $str1) {
+        return Str::contains($str, $str1);
+    }
+}
+
+//-------------------------------------------
+
 if (! \function_exists('dddx')) {
     function dddx($params) {
         $tmp = \debug_backtrace();
@@ -49,12 +53,6 @@ if (! \function_exists('dddx')) {
         $dir_piece = \array_slice($dir_piece, 0, -6);
         $dir_copy = \implode(DIRECTORY_SEPARATOR, $dir_piece);
         $file = \str_replace($dir_copy, $doc_root, $file);
-        /*
-        echo '<h3>LINE: ['.$tmp[0]['line'].']<br/>
-        FILE: ['.$file.']<br/>
-        </h3>';
-        dd($params);
-        */
         dd(
             [
                 '_' => $params,
@@ -63,12 +61,6 @@ if (! \function_exists('dddx')) {
                 //'file_1' => $file, //da sistemare
             ]
         );
-    }
-}
-
-if (! \function_exists('str_slug')) {
-    function str_slug($str) {
-        return Str::slug($str);
     }
 }
 
@@ -87,7 +79,7 @@ if (! \function_exists('getFilename')) {
         return $filename;
     }
 }
-
+/*
 if (! \function_exists('setConfig')) {
     function setConfig($params) {
         $data = getConfig($params);
@@ -101,8 +93,6 @@ if (! \function_exists('setConfig')) {
         } else {
             arraySave(['filename' => $config_files[0], 'data' => $data]);
         }
-        //\Session::flash('status', $params['msg'].' '.\Carbon\Carbon::now());
-        //return \Redirect::back();
     }
 }
 
@@ -120,13 +110,6 @@ if (! \function_exists('getConfig')) {
         }
 
         return $data;
-    }
-}
-if (! \function_exists('req_uri')) {
-    function req_uri() {
-        $req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-
-        return $req_uri;
     }
 }
 
@@ -166,22 +149,32 @@ if (! \function_exists('getConfigFile')) {
         return [$config_file];
     }
 }
+*/
+if (! \function_exists('req_uri')) {
+    function req_uri() {
+        $req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 
+        return $req_uri;
+    }
+}
+
+/*
 if (! \function_exists('arraySave')) {
     function arraySave($params) {
         \XRA\Extend\Services\ArrayService::save($params);
-        /*
-        \extract($params);
-        $writer = new Zend\Config\Writer\PhpArray();
-        $content = $writer->toString($data);
-        $content = \str_replace('\\\\', '\\', $content);
-        $content = \str_replace('\\\\', '\\', $content);
+
+        // \extract($params);
+        // $writer = new Zend\Config\Writer\PhpArray();
+        // $content = $writer->toString($data);
+        // $content = \str_replace('\\\\', '\\', $content);
+        // $content = \str_replace('\\\\', '\\', $content);
         //$content=str_replace("\\'","\'", $content);
-        $content = \str_replace("'".storage_path(), 'storage_path()'.".'", $content);
-        \File::put($filename, $content);
-        */
+        //$content = \str_replace("'".storage_path(), 'storage_path()'.".'", $content);
+        //\File::put($filename, $content);
+
     }
 }
+*/
 
 if (! \function_exists('in_admin')) {
     function in_admin() {
@@ -317,7 +310,7 @@ if (! \function_exists('getModuleModels')) {
         return $data;
     }
 }
-
+/*
 if (! \function_exists('tenantName')) {
     function tenantName($params = []) {
         if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
@@ -330,17 +323,6 @@ if (! \function_exists('tenantName')) {
 
         return $server_name;
     }//end function
-}
-
-if (! \function_exists('xotModel')) {
-    function xotModel($name) {
-        $model = tenantConfig('xra.model.'.$name);
-        if ('' == $model) {
-            abort(403, 'Unauthorized path '.$name);
-        }
-
-        return new $model();
-    }
 }
 
 if (! \function_exists('tenantConfig')) {
@@ -369,6 +351,18 @@ if (! \function_exists('tenantConfig')) {
         $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
         \Config::set($group, $merge_conf);  // non so se metterlo ..
         return config($key);
+    }
+}
+*/
+
+if (! \function_exists('xotModel')) {
+    function xotModel($name) {
+        $model = Tenant::config('xra.model.'.$name);
+        if ('' == $model) {
+            abort(403, 'Unauthorized path '.$name);
+        }
+
+        return new $model();
     }
 }
 
@@ -577,7 +571,7 @@ if (! \function_exists('dottedToBrackets')) {
         return $str;
     }
 }
-
+/*
 if (! \function_exists('money_format')) {
     // funzione copiata da https://php.net/manual/en/function.money-format.php
     // Improvement to Rafael M. Salvioni's solution for money_format on Windows: when no currency symbol is selected, in the formatting, the minus sign was also lost when the locale puts it in position 3 or 4. Changed $currency = '';  to: $currency = $cprefix .$csuffix;
@@ -668,6 +662,7 @@ if (! \function_exists('money_format')) {
         return $format;
     }
 }
+*/
 
 /*
 |--------------------------------------------------------------------------
@@ -737,30 +732,6 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
                 (isset($parts['fragment']) ? "#{$parts['fragment']}" : '');
         }
     }
-
-if (! function_exists('str_singular')) {
-    function str_singular($str) {
-        return Str::singular($str);
-    }
-}
-
-if (! function_exists('starts_with')) {
-    function starts_with($str, $str1) {
-        return Str::startsWith($str, $str1);
-    }
-}
-
-if (! function_exists('ends_with')) {
-    function ends_with($str, $str1) {
-        return Str::endsWith($str, $str1);
-    }
-}
-
-if (! function_exists('str_contains')) {
-    function str_contains($str, $str1) {
-        return Str::contains($str, $str1);
-    }
-}
 
 if (! function_exists('getRelationships')) {
     function getRelationships($model) { //working

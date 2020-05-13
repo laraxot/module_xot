@@ -16,6 +16,7 @@ use Modules\Theme\Services\ThemeService;
 //use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Contracts\RepositoryContract;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\TenantService as Tenant;
 
 //use Modules\Food\Repositories\LocationRepository;
 
@@ -477,7 +478,7 @@ trait CrudContainerItemRepositoryTrait {
 
     //*
     public function getXotModel($name) { //spostare in helper ?
-        $model = tenantConfig('xra.model.'.$name);
+        $model = Tenant::config('xra.model.'.$name);
         //ddd($model);
         if (null == $model) {
             echo '<h3>not exists ['.$name.'] on config xra.model</h3>';

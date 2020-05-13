@@ -5,6 +5,8 @@ namespace Modules\Xot\Providers;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
+//--- services ---
+use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
@@ -47,7 +49,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         $pattern = '/|'.$pattern.'|/i';
         $router->pattern('lang', $pattern);
         //---------- Container ROUTE PATTERN
-        $models = tenantConfig('xra.model');
+        $models = Tenant::config('xra.model');
         $pattern = collect(\array_keys($models))->implode('|');
         $pattern = '/|'.$pattern.'|/i';
 
@@ -151,7 +153,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         'rows' => $rows,
                         'related' => $related,
                         'related_class' => get_class($related),
-
+                        'lang' => \App::getLocale(),
                         'row' => $rows->first(),
                     ];
                     dddx($msg);

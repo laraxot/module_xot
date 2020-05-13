@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 //use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\TenantService as Tenant;
 
 trait CrudContainerItemNoPostTrait {
     public function index(Request $request, $container, $item) {
@@ -451,7 +452,7 @@ trait CrudContainerItemNoPostTrait {
 
     //*
     public function getXotModel($name) { //spostare in helper ?
-        $model = tenantConfig('xra.model.'.$name);
+        $model = Tenant::config('xra.model.'.$name);
         //ddd($model);
         if (null == $model) {
             return null;
