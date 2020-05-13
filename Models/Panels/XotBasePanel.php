@@ -939,7 +939,7 @@ abstract class XotBasePanel {
         $data_title = '';
         $title = '';
         $lang = \App::getLocale();
-        $error_label = $icon.' '.get_class($this->row);
+        $error_label = $icon.' ['.get_class($this->row).']['.']';
 
         extract($params);
         $url = RouteService::urlPanel(['panel' => $this, 'act' => $act]);
@@ -950,7 +950,7 @@ abstract class XotBasePanel {
         if (! Gate::allows($method, $this->row)) {
             //return '['.get_class($this->row).']['.$method.']';
 
-            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.'</button>';
+            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.' - '.$method.'</button>';
             if (false === $error_label) {
                 return null;
             }
