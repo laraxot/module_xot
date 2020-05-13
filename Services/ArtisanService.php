@@ -2,7 +2,7 @@
 
 namespace Modules\Xot\Services;
 
-use Artisan;
+use Illuminate\Support\Facades\Artisan;
 
 //----- TODO
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
