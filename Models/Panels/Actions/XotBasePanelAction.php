@@ -121,6 +121,7 @@ abstract class XotBasePanelAction {
         $class = 'btn-secondary mb-2';
         $modal = '';
         $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
+        $icon = $this->icon;
         extract($params);
         if ('' != $label) {
             $label = '&nbsp;'.$label;
@@ -138,7 +139,7 @@ abstract class XotBasePanelAction {
                 return
                 '<button type="button" data-title="'.$data_title.'"
                 data-href="'.$url.'" data-toggle="modal" class="btn '.$class.'" data-target="#myModalIframe">
-                '.$this->icon.' '.$title.'
+                '.$icon.' '.$title.'
                 </button>';
             break;
             case 'ajax':
@@ -146,7 +147,7 @@ abstract class XotBasePanelAction {
         }
 
         return '<a href="'.$url.'" class="btn '.$class.'" title="'.$title.'">
-            '.$this->icon.'</i>'.$title.'
+            '.$icon.'</i>'.$title.'
             </a>';
     }
 
