@@ -958,9 +958,12 @@ abstract class XotBasePanel {
             return $html;
         }
 
-        if ('' == $data_title) {
-            $title = trans($module_name.'::'.class_basename($this->row).'.act.'.$act);
+        if (isset($modal)) {
+            if ('' == $data_title) {
+                $title = trans($module_name.'::'.strtolower(class_basename($this->row)).'.act.'.$act);
+            }
         }
+
         if (isset($guest_url) && ! \Auth::check()) {
             $url = $guest_url;
         }
@@ -990,7 +993,6 @@ abstract class XotBasePanel {
         }
 
         return '<a href="'.$url.'"
-                    data-href="'.$url.'"
                     title="'.$title.'"
                     class="'.$class.'">
                     '.$icon.' '.$title.'
