@@ -19,4 +19,10 @@ trait HasPriceTrait {
     public function getPriceCompleteCurrencyAttribute($value) {
         return @money($this->price_complete * 100, $this->currency);
     }
+
+    public function getSubtotalCurrencyAttribute($value) {
+        $parz = $this->qty * $this->price;
+
+        return @money($parz * 100, $this->currency);
+    }
 }
