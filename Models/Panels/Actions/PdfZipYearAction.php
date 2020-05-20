@@ -32,7 +32,7 @@ class PdfZipYearAction extends XotBasePanelAction {
         $pdf_parz = [
             'pdforientation' => 'L',
             'view' => $this->pdf_view, //'progressioni::admin.schede.show.pdf',
-            // 'out' => 'content_PDF',
+            'out' => 'content_PDF',
         ];
 
         $zip = new ZipArchive();

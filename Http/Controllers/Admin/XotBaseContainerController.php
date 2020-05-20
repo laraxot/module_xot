@@ -55,10 +55,24 @@ abstract class XotBaseContainerController extends Controller {
         $this->item_last = last($items);
         $this->container_last = last($containers);
         $this->last = last($params);
+        if (1 == count($containers) && 0 == count($items)) {
+            $models = getModuleModels($mod_name);
+            if (isset($models[$this->last])) {
+                $class = $models[$this->last];
+                $this->last = app($class);
+            }
+            /*
+            dddx([config('xra.model.'.$this->last),
+                $mod_name,
+                getModuleModels($mod_name),
+            ]);
+            */
+        }
     }
 
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
+
         $this->init($params);
         $controller = $this->controller;
         $row = $this->last;
@@ -69,6 +83,7 @@ abstract class XotBaseContainerController extends Controller {
             abort(403, $msg);
             //return response()->view('adm_theme::errors.403', [], 403);
         }
+
         //$request = Request::capture();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         if (in_array($method, ['update'])) {

@@ -54,7 +54,7 @@ Route::group(
     }
 );
 
-if (in_admin()) {
+if (in_admin() || true) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO
     $areas_adm = [
         //$item1,

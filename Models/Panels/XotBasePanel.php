@@ -1492,6 +1492,28 @@ abstract class XotBasePanel {
         return $html;
     }
 
+    public function pdfFilename($params = []) {
+        $fields = ['matr', 'cognome', 'nome', 'anno'];
+        extract($params);
+        $filename_arr = [];
+        $filename_arr[] = $this->postType();
+        $filename_arr[] = $this->guid();
+        foreach ($fields as $field) {
+            if (isset($this->row->$field)) {
+                $filename_arr[] = $this->row->$field;
+            }
+        }
+        $filename_arr[] = date('Ymd');
+        $filename = implode('_', $filename_arr);
+        if (request()->input('debug')) {
+            $filename .= '.html';
+        } else {
+            $filename .= '.pdf';
+        }
+
+        return $filename;
+    }
+
     public function pdf($params = []) {
         if (! isset($params['view_params'])) {
             $params['view_params'] = [];
