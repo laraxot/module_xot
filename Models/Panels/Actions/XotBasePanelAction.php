@@ -8,9 +8,10 @@ use Illuminate\Support\Str;
 //use Laravel\Scout\Searchable;
 
 //----------  SERVICES --------------------------
+use Modules\FormX\Services\FormXService;
 use Modules\Xot\Jobs\Crud\UpdateJob;
-use Modules\Xot\Services\PanelService as Panel;
 //------------ jobs ----------------------------
+use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\RouteService;
 
 //---- Traits ----
@@ -113,6 +114,22 @@ abstract class XotBasePanelAction {
     }
 
     public function btnHtml($params = []) {
+        $params['panel'] = $this->panel;
+        $params['url'] = $this->getUrl();
+        $params['method'] = Str::camel($this->getName());
+        $params['act'] = 'show';
+        if (! isset($params['icon'])) {
+            $params['icon'] = $this->icon;
+        }
+        if (! isset($params['class'])) {
+            $params['class'] = 'btn btn-secondary mb-2';
+        }
+        if ($this->onContainer) {
+            $params['act'] = 'index';
+        }
+
+        return FormXService::btnHtml($params);
+        /*
         $method = Str::camel($this->getName());
         $data_title = $this->getTitle();
         $title = '';
@@ -149,6 +166,7 @@ abstract class XotBasePanelAction {
         return '<a href="'.$url.'" class="btn '.$class.'" title="'.$title.'">
             '.$icon.'</i>'.$title.'
             </a>';
+        */
     }
 
     public function btnContainer($params = []) {

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 //----------  SERVICES --------------------------
+use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
@@ -929,74 +930,11 @@ abstract class XotBasePanel {
     }
 
     public function btnHtml($params) {
-        //da fare
-        //return FormXService::btnHtml($params);
+        $params['panel'] = $this;
+        $params['url'] = RouteService::urlPanel($params);
+        $params['method'] = Str::camel($params['act']);
 
-        $module_name = getModuleNameFromModel($this->row);
-        $class = 'btn btn-primary mb-2';
-        $icon = '';
-        $label = '';
-        $data_title = '';
-        $title = '';
-        $lang = \App::getLocale();
-        $error_label = $icon.' ['.get_class($this->row).']['.']';
-
-        extract($params);
-        $url = RouteService::urlPanel(['panel' => $this, 'act' => $act]);
-        $method = Str::camel($act);
-        if (in_array($act, ['destroy', 'delete', 'detach'])) {
-            $class .= ' btn-confirm-delete';
-        }
-        if (! Gate::allows($method, $this->row)) {
-            //return '['.get_class($this->row).']['.$method.']';
-
-            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.' - '.$method.'</button>';
-            if (false === $error_label) {
-                return null;
-            }
-
-            return $html;
-        }
-
-        if (isset($modal)) {
-            if ('' == $data_title) {
-                $title = trans($module_name.'::'.strtolower(class_basename($this->row)).'.act.'.$act);
-            }
-        }
-
-        if (isset($guest_url) && ! \Auth::check()) {
-            $url = $guest_url;
-        }
-        if (isset($guest_notice) && $guest_notice && ! \Auth::check()) {
-            $url = route('login.notice', ['lang' => $lang, 'referrer' => $url]);
-        }
-
-        if (isset($modal)) {
-            switch ($modal) {
-                case 'iframe':
-                    return
-                    '<button type="button" data-title="'.$data_title.'"
-                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'"
-                    data-target="#myModalIframe">
-                    '.$icon.' '.$title.'
-                    </button>';
-                break;
-                case 'ajax':
-                    return
-                    '<button type="button" data-title="'.$data_title.'"
-                    data-href="'.$url.'" data-toggle="modal" class="'.$class.'"
-                    data-target="#myModalAjax">
-                    '.$icon.' '.$title.'
-                    </button>';
-                break;
-            }
-        }
-
-        return '<a href="'.$url.'"
-                    title="'.$title.'"
-                    class="'.$class.'">
-                    '.$icon.' '.$title.'
-                </a>';
+        return FormXService::btnHtml($params);
     }
 
     public function btn($act, $params = []) {

@@ -587,6 +587,8 @@ class RouteService {
                     'route_name' => $route_name,
                     'route_params' => $route_params,
                     'last row' => $panel->row,
+                    'panel post type' => $panel->postType(),
+                    'panel guid' => $panel->guid(),
                     'last route key ' => $panel->row->getRouteKey(),
                     'last route key name' => $panel->row->getRouteKeyName(),
                 ]
