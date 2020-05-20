@@ -25,19 +25,21 @@ Route::group(
     }
 );
 
-Route::group(
-    [
-        'prefix' => null,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
-    ],
-    function () {
-        Route::get('/', 'HomeController@index');
-        Route::get('/home', 'HomeController@index'); //togliere o tenere ?
-        Route::get('/redirect', 'HomeController@redirect');
-        //Route::get('/test01',   'HomeController@test01');
-    }
-);
+//Route::domain('food.local')->group(function () use ($middleware,$namespace) {
+    Route::group(
+        [
+            'prefix' => null,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
+        ],
+        function () {
+            Route::get('/', 'HomeController@index');
+            Route::get('/home', 'HomeController@index'); //togliere o tenere ?
+            Route::get('/redirect', 'HomeController@redirect');
+            //Route::get('/test01',   'HomeController@test01');
+        }
+    );
+//});
 
 $middleware = ['web', 'auth'/*,'verified'*/];
 $prefix = 'admin';
@@ -54,7 +56,7 @@ Route::group(
     }
 );
 
-if (in_admin() || true) {
+if (in_admin()) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO
     $areas_adm = [
         //$item1,
