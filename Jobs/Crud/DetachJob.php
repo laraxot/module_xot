@@ -11,8 +11,7 @@ use Illuminate\Queue\SerializesModels;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class DetachJob implements ShouldQueue
-{
+class DetachJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -30,8 +29,7 @@ class DetachJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null)
-    {
+    public function __construct($container, $item, $data = null) {
         $this->container = $container;
         $this->item = $item;
         $this->row = $item;
@@ -43,12 +41,14 @@ class DetachJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
-    {
+    public function handle() {
         //$this->row->detach();
-        [$containers,$items]=params2ContainerItem();
+        [$containers,$items] = params2ContainerItem();
         \Session::flash('status', 'scolletato');
-        $items[0]->bellBoys()->detach($this->row->id);
+        //$items[0]->bellBoys()->detach($this->row->id);
+        //dddx([$this, $containers, $items]);
+        $this->row->pivot->delete();
+
         return $this->panel;
     }
 }
