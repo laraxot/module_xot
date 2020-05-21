@@ -25,6 +25,9 @@ Route::group(
     }
 );
 
+//dddx(config());
+
+//dddx([$_SERVER, parseUrl($_SERVER['SERVER_NAME'])]);
 //Route::domain('food.local')->group(function () use ($middleware,$namespace) {
     Route::group(
         [
