@@ -91,17 +91,27 @@ class TenantService {
             $data['model'][$name] = $class;
             self::saveConfig(['name' => 'xra', 'data' => $data]);
         }
-        $model = new $class();
-        //*
         //$model = app($class);
-        $panel = Panel::get($model);
-        if (null == $panel) {
-            dddx(['name' => $name, 'model' => $model]);
+        if (! is_string($class)) {
+            dddx(
+                [
+                    'name' => $name,
+                    'class' => $class,
+                ]
+            );
         }
+        $model = new $class();
+
+        return $model;
+    }
+
+    public static function modelEager($name) {
+        $model = self::model($name);
+        $panel = Panel::get($model);
         $with = $panel->with();
-        $model = $model->load($with);
-        //$model = $model->with($with);
-        //*/
+        //$model = $model->load($with);
+        $model = $model->with($with);
+
         return $model;
     }
 }
