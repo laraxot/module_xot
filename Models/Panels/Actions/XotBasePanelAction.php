@@ -118,7 +118,10 @@ abstract class XotBasePanelAction {
         $params['url'] = $this->getUrl();
         $params['method'] = Str::camel($this->getName());
         $params['act'] = 'show';
-        $params['data_title'] = $this->getTitle();
+        //$params['data_title'] = $this->getTitle();
+        if (! isset($params['data_title'])) {
+            $params['icon'] = $this->icon;
+        }
         if (! isset($params['icon'])) {
             $params['icon'] = $this->icon;
         }
