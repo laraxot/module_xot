@@ -2,7 +2,13 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Arr;
+//use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+//---- services ----
+use Modules\Xot\Services\PanelService as Panel;
 
 class TenantService {
     public static function getName($params = []) {
@@ -54,5 +60,48 @@ class TenantService {
         $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
         \Config::set($group, $merge_conf);  // non so se metterlo ..
         return config($key);
+    }
+
+    public static function saveConfig($params) {
+        $name = 'xra';
+        $data = [];
+        extract($params);
+        $tennant_name = self::getName();
+        $config_data = config($tennant_name.'.'.$name);
+        $config_data = array_merge_recursive($config_data, $data);
+        $config_data = Arr::sortRecursive($config_data);
+
+        $path = config_path($tennant_name.'/'.$name.'.php');
+        $path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+        $content = '<'.'?'.'php'.chr(13).chr(13).' return '.var_export($config_data, true).';';
+        $content = str_replace('\\\\', '\\', $content);
+        File::put($path.'', $content);
+    }
+
+    public static function model($name) {
+        $name = Str::snake($name);
+        $class = self::config('xra.model.'.$name);
+        if ('' == $class) {
+            $models = getAllModulesModels();
+            if (! isset($models[$name])) {
+                abort(403, 'Unauthorized path '.$name);
+            }
+            $class = $models[$name];
+            $data = [];
+            $data['model'][$name] = $class;
+            self::saveConfig(['name' => 'xra', 'data' => $data]);
+        }
+        $model = new $class();
+        //*
+        //$model = app($class);
+        $panel = Panel::get($model);
+        if (null == $panel) {
+            dddx(['name' => $name, 'model' => $model]);
+        }
+        $with = $panel->with();
+        $model = $model->load($with);
+        //$model = $model->with($with);
+        //*/
+        return $model;
     }
 }

@@ -107,7 +107,15 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                 if (method_exists($model, 'scopeWithPost')) {
                     $rows = $rows->withPost($value); //scopeGlobal ?
                 }
-                $pk = ($model->getRouteKeyName());
+                try {
+                    $pk = $model->getRouteKeyName();
+                } catch (\Exception $e) {
+                    dddx(
+                        [
+                            'model' => $model,
+                        ]
+                    );
+                }
                 $pk_full = $model->getTable().'.'.$pk;
                 if ('guid' == $pk) {
                     $pk_full = 'guid';

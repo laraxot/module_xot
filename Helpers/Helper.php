@@ -239,27 +239,7 @@ if (! \function_exists('getModuleModels')) {
 
 if (! \function_exists('xotModel')) {
     function xotModel($name) {
-        $model = Tenant::config('xra.model.'.$name);
-        if ('' == $model) {
-            $models = getAllModulesModels();
-            $tennant_name = Tenant::getName();
-            if (isset($models[$name])) {
-                $class = $models[$name];
-                $config_data = config($tennant_name.'.xra');
-                $config_data['model'][$name] = $class;
-                $path = config_path($tennant_name.'/xra.php');
-                $path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
-                $content = '<'.'?'.'php'.chr(13).' return '.var_export($config_data, true).';';
-                $content = str_replace('\\\\', '\\', $content);
-                File::put($path.'.test', $content);
-                //dddx($path);
-                return app($class);
-            }
-
-            abort(403, 'Unauthorized path '.$name);
-        }
-
-        return new $model();
+        return Tenant::model($name);
     }
 }
 
@@ -267,7 +247,8 @@ if (! \function_exists('transFields')) {
     function transFields($params) {
         $model = Form::getModel();
         $module_name = getModuleNameFromModel($model);
-        $trans_root = Str::lower($module_name).'::'.Str::snake(class_basename($model));
+        $ns = Str::lower($module_name);
+        $trans_root = $ns.'::'.Str::snake(class_basename($model));
         //ddd() );
         //debug_getter_obj(['obj'=>$module]);
         //ddd($module_name->getNamespace());
