@@ -28,6 +28,7 @@ trait CommonTrait {
     public function manageRelationships($params) {
         extract($params);
         if (! is_object($model)) {
+            return;
             dddx(['model' => $model]);
         }
         $methods = get_class_methods($model);
