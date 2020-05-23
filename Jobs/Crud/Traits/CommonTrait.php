@@ -27,6 +27,9 @@ trait CommonTrait {
      */
     public function manageRelationships($params) {
         extract($params);
+        if (! is_object($model)) {
+            dddx(['model' => $model]);
+        }
         $methods = get_class_methods($model);
         //dddx($model->post_type);
         Relation::morphMap([$model->post_type => get_class($model)]);
