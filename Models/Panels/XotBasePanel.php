@@ -981,7 +981,7 @@ abstract class XotBasePanel {
         $src = $row->image_src;
         $str0 = '/laravel-filemanager/';
         if (Str::startsWith($src, $str0)) {
-            $src = Str::after($src, $str0);
+            $src = '/'.Str::after($src, $str0);
         }
         $params['src'] = $src;
         extract($params);
@@ -989,7 +989,7 @@ abstract class XotBasePanel {
         if (null == $images) {
             return;
         }
-        $img = $images->where('src', $src)
+        $img = $images->where('src', $src.'2')
             ->where('width', $width)
             ->where('height', $height)
             ->first();
@@ -1000,6 +1000,8 @@ abstract class XotBasePanel {
 
             return $img->src_out;
         }
+        $params['dirname'] = '/photos/'.$this->postType().'/'.$this->guid();
+        //dddx($params);
         $img = new ImageService($params);
         $src_out = $img->fit()->save()->src();
         $row->images()->create([
