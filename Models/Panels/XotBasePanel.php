@@ -989,7 +989,7 @@ abstract class XotBasePanel {
         if (null == $images) {
             return;
         }
-        $img = $images->where('src', $src.'2')
+        $img = $images->where('src', $src.'3')
             ->where('width', $width)
             ->where('height', $height)
             ->first();
