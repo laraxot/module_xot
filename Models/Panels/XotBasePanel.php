@@ -978,8 +978,12 @@ abstract class XotBasePanel {
 
     public function imgSrc($params) {
         $row = $this->row;
-        //$src=$row->image_src;
-        $params['src'] = $row->image_src;
+        $src = $row->image_src;
+        $str0 = '/laravel-filemanager/';
+        if (Str::startsWith($src, $str0)) {
+            $src = Str::after($src, $str0);
+        }
+        $params['src'] = $src;
         extract($params);
         $images = $row->images;
         if (null == $images) {
