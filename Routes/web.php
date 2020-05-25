@@ -36,7 +36,7 @@ Route::group(
             'namespace' => $namespace,
         ],
         function () {
-            Route::get('/', 'HomeController@index');
+            Route::get('/', 'HomeController@show'); //show o index ? homecontrller@show o pagecontroller@home ?
             Route::get('/home', 'HomeController@index'); //togliere o tenere ?
             Route::get('/redirect', 'HomeController@redirect');
             //Route::get('/test01',   'HomeController@test01');

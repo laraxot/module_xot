@@ -7,18 +7,10 @@ use Illuminate\Routing\Controller;
 //---- services ---
 use Modules\Blog\Models\Home;
 use Modules\Theme\Services\ThemeService;
-use Modules\Xot\Services\ArtisanService;
 use Modules\Xot\Services\PanelService as Panel;
 
 class HomeController extends Controller {
     public function index(Request $request) {
-        /*
-        $out = ArtisanService::act($request->act);
-        if ('' != $out) {
-            return $out;
-        }
-        */
-        //$lang = \App::getLocale();
         $home = Home::with('post')
             ->firstOrCreate(['id' => 1]);
         $home_panel = Panel::get($home);
@@ -26,16 +18,41 @@ class HomeController extends Controller {
         if ('' != $request->_act) {
             return $home_panel->callItemActionWithGate($request->_act);
         }
-        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
 
-        $out = ThemeService::view('pub_theme::home.index')
+        return  ThemeService::view('pub_theme::home.index')
             ->with('home', $home)
             ->with('_panel', $home_panel)
             ;
+    }
 
-        return $out;
+    public function show(Request $request) {
+        //*
+        $home = Home::with('post')
+                ->firstOrCreate(['id' => 1]);
+        $panel = Panel::get($home);
 
-        //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
+        return $panel->out();
+        //*/
+        /*
+        $lang = \App::getLocale();
+        $guid = 'chicken-taste-restaurant';
+        if (1) {
+            $item = \Modules\Food\Models\Restaurant::with('post')
+            ->whereHas('post',
+                function ($query) use ($guid,$lang) {
+                    $query->where('guid', 'like', $guid)
+                        ->where('lang', $lang);
+                }
+            )->first();
+        } else {
+            $post = \Modules\Blog\Models\Post::where('guid', 'like', $guid)
+            ->where('lang', $lang)->first();
+            $item = $post->linkable;
+        }
+        $panel = Panel::get($item);
+
+        return $panel->out();
+        //*/
     }
 
     public function redirect(Request $request) {
