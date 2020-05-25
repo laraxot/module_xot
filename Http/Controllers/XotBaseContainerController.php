@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Modules\Theme\Services\ThemeService; //4 guestPolicy
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\TenantService as Tenant;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -85,12 +86,15 @@ abstract class XotBaseContainerController extends Controller {
         list($containers, $items) = params2ContainerItem($params);
 
         if (0 == count($containers)) {
+            /*
             $home_class = config('xra.model.home');
-
             return new $home_class();
+            */
+            return Tenant::model('home');
         }
 
         if (0 == count($items)) { // es /it/article
+            /*
             $class = config('xra.model.'.last($containers));
             if (null == $class) {
                 $err_msg = 'add ['.last($containers).'] on xra.php';
@@ -99,6 +103,8 @@ abstract class XotBaseContainerController extends Controller {
             $row = new $class();
 
             return $row;
+            */
+            return Tenant::model(last($containers));
         }
         if (count($items) == count($containers)) {
             return last($items);
