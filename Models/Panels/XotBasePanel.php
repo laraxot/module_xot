@@ -58,6 +58,7 @@ abstract class XotBasePanel {
         return $row->getKey();
     }
 
+    //funzione/flag da settare a true ad ogni pannello/modello che abbia le traduzioni
     public function hasLang() {
         return false;
     }
@@ -989,13 +990,15 @@ abstract class XotBasePanel {
         if (null == $images) {
             return;
         }
-        $img = $images->where('src', $src.'3')
+        $src = $src.'';
+        $img = $images->where('src', $src)
             ->where('width', $width)
             ->where('height', $height)
             ->first();
-        if ('' != $img) {
+        if (is_object($img)) {
             if (Str::startsWith($img->src_out, '\\')) {
                 $img->src_out = Str::after($img->src_out, '\\');
+                $img->save();
             }
 
             return $img->src_out;
@@ -1004,6 +1007,7 @@ abstract class XotBasePanel {
         //dddx($params);
         $img = new ImageService($params);
         $src_out = $img->fit()->save()->src();
+
         $row->images()->create([
             'src' => $src,
             'src_out' => $src_out,

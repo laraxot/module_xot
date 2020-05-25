@@ -226,8 +226,14 @@ class ImageService {
 
     public static function save($params = []) {
         //extract($params);
+        $info = pathinfo(self::$src);
+        //dddx($info);
+        /*
         $basename = basename(self::$src);
         $basename = Str::before($basename, '?');
+        $basename = Str::slug($basename);
+        */
+        $basename = Str::slug($info['filename']).'.'.$info['extension'];
         self::$filename = public_path(self::$dirname.'/'.self::$width.'x'.self::$height.'/'.$basename);
         \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
         try {
@@ -243,7 +249,10 @@ class ImageService {
     }
 
     public static function src($params = []) {
-        return str_replace(public_path(), '', self::$filename);
+        $src = '/'.str_replace(public_path('/'), '', self::$filename);
+        $src = str_replace('//', '/', $src);
+
+        return $src;
     }
 
     public static function image_resized_canvas($params) {
