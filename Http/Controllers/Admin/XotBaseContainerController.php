@@ -4,10 +4,12 @@ namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 //---- services ---
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\StubService;
+use Modules\Xot\Services\TenantService as Tenant;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -70,7 +72,114 @@ abstract class XotBaseContainerController extends Controller {
         }
     }
 
+    public function getModel() {
+        $params = \Route::current()->parameters();
+        [$containers, $items] = params2ContainerItem($params);
+        if (0 == count($containers)) {
+            return Tenant::model('home');
+        }
+        if (0 == count($items)) { // es /it/article
+            return Tenant::model(last($containers));
+        }
+        if (count($items) == count($containers)) {
+            return last($items);
+        }
+
+        $item_last = last($items);
+        $container_last = last($containers);
+        /**
+         * da capire se usare il plurale o meno.
+         **/
+        $method = Str::camel($container_last);
+        if ($plural = 1) { //mi serve per capirmi, equivalenza sempre vera
+            $method = Str::plural($method);
+        }
+        if (! method_exists($item_last, $method)) {
+            exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
+        }
+        $related = $item_last->$method()->getRelated();
+
+        return $related;
+    }
+
+    public function __callPanelAct($act, $method, $args) {
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $act = $request->_act;
+        $method_act = Str::camel($act);
+        $model = $this->getModel();
+        //dddx($model);
+
+        $authorized = Gate::allows($method_act, $model);
+        if (! $authorized) {
+            return $this->notAuthorized($method_act, $model);
+        }
+
+        //$panel = Panel::get($model);
+        $panel = $this->ContainerItem2Panel($this->container_last, $this->item_last);
+
+        return $panel->callAction($act);
+        /*
+        return $panel->out(
+            [
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
+            ]
+        );
+        */
+    }
+
+    //end call panel act
+
+    public function __callRouteAct($method, $args) {
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $model = $this->getModel();
+        if (! is_object($model)) {
+            dddx($model);
+        }
+
+        $authorized = Gate::allows($method, $model);
+        if (! $authorized) {
+            $policy_class = StubService::fromModel(
+                [
+                    'model' => $model,
+                    'stub' => 'policy',
+                ]
+            );
+            $msg = [
+                'model' => $model,
+                'policy_class' => $policy_class,
+                //'policy_res'=>app($policy_class)->$
+                'model_class' => get_class($model),
+                'method' => $method,
+            ];
+            ddd($msg);
+
+            return $this->notAuthorized($method, $model);
+        }
+        $panel = app($this->controller)
+            ->$method($request, $this->container_last, $this->item_last);
+
+        return $panel->out(
+            [
+                'is_ajax' => $request->ajax(),
+                'method' => $request->getMethod(),
+            ]
+        );
+    }
+
     public function __call($method, $args) {
+        $params = \Route::current()->parameters();
+        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $a = $this->init($params);
+        $act = $request->_act;
+        if ('' != $act) {
+            return $this->__callPanelAct($act, $method, $args);
+        }
+
+        return $this->__callRouteAct($method, $args);
+    }
+
+    public function __callOLD($method, $args) {
         $params = \Route::current()->parameters();
 
         $this->init($params);

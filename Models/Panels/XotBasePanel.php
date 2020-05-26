@@ -1393,6 +1393,34 @@ abstract class XotBasePanel {
         return $this->callItemAction($act);
     }
 
+    public function callAction($act) {
+        $actions = collect($this->actions())
+            ->map(function ($item) {
+                $item->getName();
+
+                return $item;
+            });
+        $action = $actions->firstWhere('name', $act);
+        dddx($action);
+        if (! is_object($action)) {
+            abort(403, 'action '.$act.' not recognized');
+        }
+        $action->setPanel($this);
+        $data = request()->all();
+        $rows = $this->rows($data);
+        $action->setRows($rows);
+        //dddx([$action->rows, $this->rows]);
+        $method = request()->getMethod();
+        if ('GET' == $method) {
+            $out = $action->handle();
+        } else {
+            $out = $action->postHandle();
+        }
+
+        return $out;
+        //dddx([$action, $act, $actions]);
+    }
+
     public function callItemAction($act) {
         if (null == $act) {
             return null;
@@ -1421,7 +1449,7 @@ abstract class XotBasePanel {
         $action = $this->containerActions()
             ->firstWhere('name', $act);
         if (! is_object($action)) {
-            return null;
+            abort(403, 'action '.$act.' not recognized');
         }
         $data = request()->all();
         $rows = $this->rows($data);

@@ -28,6 +28,7 @@ abstract class XotBasePanelAction {
     public $rows = null;
     public $panel = null;
     public $name = null;
+    public $icon = '<i class="far fa-question-circle"></i>';
 
     abstract public function handle();
 
@@ -118,7 +119,7 @@ abstract class XotBasePanelAction {
         $params['url'] = $this->getUrl();
         $params['method'] = Str::camel($this->getName());
         $params['act'] = 'show';
-        //$params['data_title'] = $this->getTitle();
+        $params['data_title'] = $this->getTitle();
         if (! isset($params['data_title'])) {
             $params['icon'] = $this->icon;
         }
@@ -133,44 +134,6 @@ abstract class XotBasePanelAction {
         }
 
         return FormXService::btnHtml($params);
-        /*
-        $method = Str::camel($this->getName());
-        $data_title = $this->getTitle();
-        $title = '';
-        $label = $title;
-        $url = $this->getUrl();
-        $class = 'btn-secondary mb-2';
-        $modal = '';
-        $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
-        $icon = $this->icon;
-        extract($params);
-        if ('' != $label) {
-            $label = '&nbsp;'.$label;
-        }
-        if (! Gate::allows($method, $this->panel->row)) {
-            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.'</button>';
-            if (false === $error_label) {
-                return null;
-            }
-
-            return $html;
-        }
-        switch ($modal) {
-            case 'iframe':
-                return
-                '<button type="button" data-title="'.$data_title.'"
-                data-href="'.$url.'" data-toggle="modal" class="btn '.$class.'" data-target="#myModalIframe">
-                '.$icon.' '.$title.'
-                </button>';
-            break;
-            case 'ajax':
-            break;
-        }
-
-        return '<a href="'.$url.'" class="btn '.$class.'" title="'.$title.'">
-            '.$icon.'</i>'.$title.'
-            </a>';
-        */
     }
 
     public function btnContainer($params = []) {
