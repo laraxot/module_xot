@@ -167,7 +167,7 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
-    public function __call($method, $args) {
+    public function __callUFF($method, $args) {
         $params = \Route::current()->parameters();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $a = $this->init($params);
@@ -179,7 +179,7 @@ abstract class XotBaseContainerController extends Controller {
         return $this->__callRouteAct($method, $args);
     }
 
-    public function __callOLD($method, $args) {
+    public function __call($method, $args) {
         $params = \Route::current()->parameters();
 
         $this->init($params);
