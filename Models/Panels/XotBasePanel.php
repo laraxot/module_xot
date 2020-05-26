@@ -310,6 +310,22 @@ abstract class XotBasePanel {
         return $itemAction;
     }
 
+    public function containerAction($act) {
+        $actions = $this->containerActions();
+        $action = $actions->firstWhere('name', $act);
+        if (! is_object($action)) {
+            dddx([
+                'error' => 'nessuna azione con questo nome',
+                'act' => $act,
+                'this' => $this,
+                'Actions' => $actions,
+            ]);
+        }
+        $action->setPanel($this);
+
+        return $action;
+    }
+
     public function urlContainerAction($act) {
         $containerActions = $this->containerActions();
         $containerAction = $containerActions->firstWhere('name', $act);

@@ -2,11 +2,16 @@
 
 namespace Modules\Xot\Jobs\Crud;
 
+/*
+ * like a create
+ */
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
@@ -30,10 +35,30 @@ class AttachJob implements ShouldQueue {
      * @return void
      */
     public function __construct($container, $item, $data = null) {
-        $this->container = $container;
-        $this->item = $item;
-        $this->row = $item;
-        $this->panel = Panel::get($this->row);
+        $types = Str::camel(Str::plural($container));
+        if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
+            $rows = $item->$types();
+            $row = $rows->getRelated();
+        } else {
+            $rows = null;
+            $row = xotModel($container);
+        }
+        //$rows = $rows->paginate(20);
+        $panel = Panel::get($row);
+        $panel->setRows($rows);
+        if (! method_exists($rows, 'getPivotClass')) {
+            abort(403, 'not a pivot ');
+        }
+        $pivot_class = $rows->getPivotClass();
+        $pivot = new $pivot_class();
+        //$panel = StubService::getByModel($pivot, 'panel', true);
+        $panel = Panel::get($pivot);
+        $panel->pivot_key_names = [];
+        $panel->pivot_key_names[] = $rows->getForeignPivotKeyName();
+        if (method_exists($rows, 'getMorphType')) {
+            $panel->pivot_key_names[] = $rows->getMorphType();
+        }
+        $this->panel = $panel;
     }
 
     /**
@@ -42,16 +67,6 @@ class AttachJob implements ShouldQueue {
      * @return void
      */
     public function handle() {
-        dddx(get_defined_vars());
-        /*
-        //$this->row->detach();
-        [$containers,$items] = params2ContainerItem();
-        \Session::flash('status', 'scolletato');
-        //$items[0]->bellBoys()->detach($this->row->id);
-        //dddx([$this, $containers, $items]);
-        $this->row->pivot->delete();
-
         return $this->panel;
-        */
     }
 }

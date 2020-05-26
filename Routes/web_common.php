@@ -18,8 +18,8 @@ $cont_acts = [
     ], //end act_n
     [
         'name' => 'Attach',
-        'act' => 'indexAttach',
-        //'act'=>'attach',
+        //'act' => 'indexAttach',
+        'act' => 'attach',
     ], //end act_n
 ];
 

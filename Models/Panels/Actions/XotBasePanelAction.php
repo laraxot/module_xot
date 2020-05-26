@@ -29,6 +29,7 @@ abstract class XotBasePanelAction {
     public $panel = null;
     public $name = null;
     public $icon = '<i class="far fa-question-circle"></i>';
+    protected $data = [];
 
     abstract public function handle();
 
@@ -102,16 +103,28 @@ abstract class XotBasePanelAction {
     }
 
     public function urlContainer($params = []) {
+        $panel = $this->panel;
         extract($params);
         $request = \Request::capture();
         $name = $this->getName();
-        $url = $request->fullUrlWithQuery(['_act' => $name]);
-        if (isset($panel)) {
-            $url = $panel->indexUrl();
-            $url = url_queries(['_act' => $name], $url);
-        }
+        //$url = $request->fullUrlWithQuery(['_act' => $name]);
+        //if (isset($panel)) {
+        $url = $panel->indexUrl();
+        $url = url_queries(['_act' => $name], $url);
+        $url = url_queries($this->data, $url);
+        //}
 
         return $url;
+    }
+
+    public function with($key, $value = null) {
+        if (is_array($key)) {
+            $this->data = array_merge($this->data, $key);
+        } else {
+            $this->data[$key] = $value;
+        }
+
+        return $this;
     }
 
     public function btnHtml($params = []) {
