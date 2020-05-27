@@ -1260,7 +1260,7 @@ abstract class XotBasePanel {
         //dddx([$key,$row->$key,$row->post,$row]);
         $guid = $row->$key;
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
-            $title = $this->postType.' '.$this->row->getKey();
+            $title = $this->postType().' '.$this->row->getKey();
             $row->post()->create(['title' => $title, 'guid' => Str::slug($title)]);
         }
 
