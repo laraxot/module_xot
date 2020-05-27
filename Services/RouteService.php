@@ -581,19 +581,21 @@ class RouteService {
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
-            //return '#['.__LINE__.']['.__FILE__.']';
+            return '#['.__LINE__.']['.__FILE__.']';
+            /*
             dddx(
                 ['e' => $e->getMessage(),
-                    'params' => $params,
-                    'route_name' => $route_name,
-                    'route_params' => $route_params,
-                    'last row' => $panel->row,
-                    'panel post type' => $panel->postType(),
-                    'panel guid' => $panel->guid(),
-                    'last route key ' => $panel->row->getRouteKey(),
-                    'last route key name' => $panel->row->getRouteKeyName(),
+                'params' => $params,
+                'route_name' => $route_name,
+                'route_params' => $route_params,
+                'last row' => $panel->row,
+                'panel post type' => $panel->postType(),
+                'panel guid' => $panel->guid(),
+                'last route key ' => $panel->row->getRouteKey(),
+                'last route key name' => $panel->row->getRouteKeyName(),
                 ]
             );
+            */
         }
 
         //--- aggiungo le query string all'url corrente
