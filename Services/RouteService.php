@@ -580,7 +580,7 @@ class RouteService {
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
-            return '#['.__LINE__.']['.__FILE__.']';
+            //return '#['.__LINE__.']['.__FILE__.']';
             dddx(
                 ['e' => $e->getMessage(),
                     'params' => $params,
