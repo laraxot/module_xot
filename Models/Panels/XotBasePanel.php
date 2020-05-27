@@ -1258,7 +1258,13 @@ abstract class XotBasePanel {
         $row = $this->row;
         $key = $row->getRouteKeyName();
         //dddx([$key,$row->$key,$row->post,$row]);
-        return $row->$key;
+        $guid = $row->$key;
+        if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
+            $title = $this->postType.' '.$this->row->getKey();
+            $row->post()->create(['title' => $title, 'guid' => Str::slug($title)]);
+        }
+
+        return $guid;
     }
 
     public function getItemTabs() {

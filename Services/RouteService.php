@@ -567,8 +567,9 @@ class RouteService {
         }
         */
 
-        $route_params['container'.($n + $i)] = $post_type;
-        $route_params['item'.($n + $i)] = $panel->row;
+        $route_params['container'.($n + $i)] = $panel->postType();
+
+        $route_params['item'.($n + $i)] = $panel->guid();
 
         if (inAdmin() && ! isset($route_params['module'])) {
             $container0 = $route_params['container0'];
