@@ -13,17 +13,16 @@ use Illuminate\Support\Str;
 abstract class XotBaseMigration extends Migration {
     protected $model;
 
-
     //*
     public function __construct() {
-        if($this->model==null){
-            $this->model=$this->getModel();
+        if (null == $this->model) {
+            $this->model = $this->getModel();
         }
-        $this->model=new $this->model();
+        $this->model = new $this->model();
     }
-    //*/
-    public function getModel(){
 
+    //*/
+    public function getModel() {
         //ddd(class_basename($this));//CreateDevicesTable
         //ddd(get_class($this));
         $name = class_basename($this);
@@ -48,16 +47,17 @@ abstract class XotBaseMigration extends Migration {
         return $model_ns;
     }
 
-
-
     public function getTable() {
-
         //return with(new MyModel())->getTable();
         return $this->model->getTable();
     }
 
     public function getConn() {
         //$conn_name=with(new MyModel())->getConnectionName();
+        //\DB::reconnect('mysql');
+        //dddx(config('database'));
+        \DB::disconnect('mysql');
+        \DB::reconnect('mysql');
         $conn_name = $this->model->getConnectionName();
         $conn = Schema::connection($conn_name);
 
