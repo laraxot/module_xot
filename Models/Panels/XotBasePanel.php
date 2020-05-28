@@ -1257,7 +1257,7 @@ abstract class XotBasePanel {
     public function guid() {
         $row = $this->row;
         $key = $row->getRouteKeyName();
-        $msg=[
+        $msg = [
             'key' => $key,
             '$row->getKey()' => $row->getKey(),
             '$row->getKeyName()' => $row->getKeyName(),
@@ -1265,13 +1265,13 @@ abstract class XotBasePanel {
             '$row->$key' => $row->$key,
             '$row->post' => $row->post,
             '$row' => $row,
-        ]
+        ];
         //dddx($msg);
         $guid = $row->$key;
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
             $title = $this->postType().' '.$this->row->getKey();
-            if($row->id=='' && $row->post_id!=''){
-                $row->id=$row->post_id; //finche netson non riabilita migrazioni
+            if ('' == $row->id && '' != $row->post_id) {
+                $row->id = $row->post_id; //finche netson non riabilita migrazioni
             }
             $row->post()->create(
                 [
