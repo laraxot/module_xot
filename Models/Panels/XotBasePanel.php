@@ -1260,6 +1260,8 @@ abstract class XotBasePanel {
         dddx(
             [
                 'key' => $key,
+                '$row->getKey()' => $row->getKey(),
+                '$row->getKeyName()' => $row->getKeyName(),
                 '$row->$key' => $row->$key,
                 '$row->post' => $row->post,
                 '$row' => $row,
