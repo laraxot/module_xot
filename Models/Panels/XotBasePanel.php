@@ -1262,6 +1262,7 @@ abstract class XotBasePanel {
                 'key' => $key,
                 '$row->getKey()' => $row->getKey(),
                 '$row->getKeyName()' => $row->getKeyName(),
+                '$row->primary_key' => $row->primaryKey,
                 '$row->$key' => $row->$key,
                 '$row->post' => $row->post,
                 '$row' => $row,
