@@ -56,8 +56,8 @@ abstract class XotBaseMigration extends Migration {
         //$conn_name=with(new MyModel())->getConnectionName();
         //\DB::reconnect('mysql');
         //dddx(config('database'));
-        \DB::purge('mysql');
-        \DB::reconnect('mysql');
+        //\DB::purge('mysql');
+        //\DB::reconnect('mysql');
         $conn_name = $this->model->getConnectionName();
         $conn = Schema::connection($conn_name);
 

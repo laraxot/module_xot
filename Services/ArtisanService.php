@@ -11,7 +11,11 @@ class ArtisanService {
     public static function act($act) { //da fare anche in noconsole, e magari mettere un policy
         $module_name = \Request::input('module');
         switch ($act) {
-            case 'migrate': return ArtisanService::exe('migrate');
+            case 'migrate':
+                \DB::purge('mysql');
+                \DB::reconnect('mysql');
+
+                return ArtisanService::exe('migrate');
             case 'routelist': return ArtisanService::exe('route:list');
             case 'optimize': return ArtisanService::exe('optimize');
 
