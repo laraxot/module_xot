@@ -1273,7 +1273,9 @@ abstract class XotBasePanel {
             if ('' == $row->id && '' != $row->post_id) {
                 $row->id = $row->post_id; //finche netson non riabilita migrazioni
             }
-            $row->post()->create(
+            $row->post()->firstOrCreate(
+                [
+                ],
                 [
                     'title' => $title,
                     'guid' => Str::slug($title),
