@@ -1277,15 +1277,17 @@ abstract class XotBasePanel {
             } catch (\Exception $e) {
                 $title = $this->postType().' '.$this->row->getKey();
 
-                $row->post()->firstOrCreate(
+                $post = $row->post()->firstOrCreate(
                     [
+                        'lang' => \App::getLocale(),
                     ],
                     [
                         'title' => $title,
                         'guid' => Str::slug($title),
-                        'lang' => \App::getLocale(),
                     ]
                 );
+
+                return $post->guid;
             }
         }
 
