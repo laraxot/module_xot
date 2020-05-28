@@ -1269,13 +1269,14 @@ abstract class XotBasePanel {
         //dddx($msg);
         $guid = $row->$key;
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
+            if ('' == $row->id && '' != $row->post_id) {
+                $row->id = $row->post_id; //finche netson non riabilita migrazioni
+            }
             try {
                 return $row->post->guid;
             } catch (\Exception $e) {
                 $title = $this->postType().' '.$this->row->getKey();
-                if ('' == $row->id && '' != $row->post_id) {
-                    $row->id = $row->post_id; //finche netson non riabilita migrazioni
-                }
+
                 $row->post()->firstOrCreate(
                     [
                     ],
