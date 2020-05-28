@@ -1261,7 +1261,13 @@ abstract class XotBasePanel {
         $guid = $row->$key;
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
             $title = $this->postType().' '.$this->row->getKey();
-            $row->post()->create(['title' => $title, 'guid' => Str::slug($title)]);
+            $row->post()->create(
+                [
+                    'title' => $title,
+                    'guid' => Str::slug($title),
+                    'lang' => \App::getLocale(),
+                ]
+            );
         }
 
         return $guid;
@@ -1650,5 +1656,22 @@ abstract class XotBasePanel {
         }
 
         return $bread;
+    }
+
+    public function getExcerpt($length = 225) {
+        $row = $this->row;
+        $content = $row->subtitle ?? $row->txt;
+        $cleaned = strip_tags(
+            preg_replace(['/<pre>[\w\W]*?<\/pre>/', '/<h\d>[\w\W]*?<\/h\d>/'], '', $content), '<code>'
+        );
+        $truncated = substr($cleaned, 0, $length);
+
+        if (substr_count($truncated, '<code>') > substr_count($truncated, '</code>')) {
+            $truncated .= '</code>';
+        }
+
+        return strlen($cleaned) > $length
+            ? preg_replace('/\s+?(\S+)?$/', '', $truncated).'...'
+            : $cleaned;
     }
 }
