@@ -108,7 +108,7 @@ trait CrudBindTrait {
         if (isset($lang)) {
             \App::setLocale($lang);
         } else {
-            $lang = \App::getLocale();
+            $lang = app()->getLocale();
         }
         /*
         $bind = $this->getBindVar();
@@ -177,7 +177,7 @@ trait CrudBindTrait {
         if (isset($lang)) {
             \App::setLocale($lang);
         } else {
-            $lang = \App::getLocale();
+            $lang = app()->getLocale();
         }
         /*
         $bind = $this->getBindVar();

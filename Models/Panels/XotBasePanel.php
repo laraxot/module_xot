@@ -202,7 +202,7 @@ abstract class XotBasePanel {
     }
 
     public function rulesMessages() {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $rules_msg_fields = collect($this->fields())->filter(function ($value, $key) use ($lang) {
             return isset($value->rules_messages) && isset($value->rules_messages[$lang]);
         })
@@ -391,7 +391,7 @@ abstract class XotBasePanel {
 
     public function applyFilter($query, $filters) {
         //https://github.com/spatie/laravel-query-builder
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $filters_fields = $this->filters();
 
         $filters_rules = collect($filters_fields)->filter(function ($item) {
@@ -596,7 +596,7 @@ abstract class XotBasePanel {
             $cache_key = 'geoJson_6_'.Str::slug(url()->full());
             if ($cache_custom = 0) {
                 if (! Storage::disk('cache')->exists($cache_key.'.json')) {
-                    $lang = \App::getLocale();
+                    $lang = app()->getLocale();
                     $ris = $data
                                 ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
                                 ->where('latitude', '!=', '')
@@ -613,7 +613,7 @@ abstract class XotBasePanel {
             //*
             $minutes = 60 * 60 * 24;
             $out = Cache::store('file')->remember($cache_key, $minutes, function () use ($data) {
-                $lang = \App::getLocale();
+                $lang = app()->getLocale();
                 $ris = $data
                             ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
                             ->where('latitude', '!=', '')
@@ -1061,7 +1061,7 @@ abstract class XotBasePanel {
                     $guid = $tmp->guid;
                 } else {
                     $guid = '#';
-                    //dddx(\App::getLocale());
+                    //dddx(app()->getLocale());
                     $v_post = $v->post;
                     if (null == $v_post) {
                         break;
@@ -1069,10 +1069,10 @@ abstract class XotBasePanel {
                     $new_post = $v_post->replicate();
                     $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
                     foreach ($fields as $field) {
-                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => \App::getLocale(), 'to' => $lang]);
+                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => app()->getLocale(), 'to' => $lang]);
                         /*
                         dddx([
-                            'from'=>\App::getLocale(),
+                            'from'=>app()->getLocale(),
                             'to'=>$lang,
                             'trans'=>$trans,
 
@@ -1120,7 +1120,7 @@ abstract class XotBasePanel {
             $routename[] = 'container'.$i;
         }
         $parz['container'.$count] = $params['related_name'];
-        $parz['lang'] = \App::getLocale();
+        $parz['lang'] = app()->getLocale();
         $routename[] = 'container'.$i;
         $routename = implode('.', $routename).'.'.$params['act'];
         $route = route($routename, $parz);
@@ -1279,7 +1279,7 @@ abstract class XotBasePanel {
 
                 $post = $row->post()->firstOrCreate(
                     [
-                        'lang' => \App::getLocale(),
+                        'lang' => app()->getLocale(),
                     ],
                     [
                         'title' => $title,
@@ -1659,7 +1659,7 @@ abstract class XotBasePanel {
         }
         $bread = [];
         $tmp = (object) [];
-        $tmp->url = asset(\App::getLocale());
+        $tmp->url = asset(app()->getLocale());
         $tmp->title = 'Home';
         $bread[] = $tmp;
         foreach ($parents as $parent) {

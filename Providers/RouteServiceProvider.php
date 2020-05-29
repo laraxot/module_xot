@@ -81,7 +81,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
             return $value;
         });
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         for ($i = 0; $i < 4; ++$i) {
             $item_name = 'item'.$i;
             $container_name = 'container'.$i;
@@ -161,7 +161,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         'rows' => $rows,
                         'related' => $related,
                         'related_class' => get_class($related),
-                        'lang' => \App::getLocale(),
+                        'lang' => app()->getLocale(),
                         'row' => $rows->first(),
                     ];
                     dddx($msg);

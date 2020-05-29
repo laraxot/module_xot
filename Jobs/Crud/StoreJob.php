@@ -65,7 +65,7 @@ class StoreJob implements ShouldQueue {
         //ddd($data);
         //---------------------------
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if (! isset($data['auth_user_id']) && in_array('auth_user_id', $row->getFillable())) {
             $data['auth_user_id'] = \Auth::id();
@@ -246,7 +246,7 @@ class StoreJob implements ShouldQueue {
     public function storeRelationshipsMorphOne($params) {
         extract($params);
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if ($model->$name()->exists()) {
             $model->$name()->update($data);

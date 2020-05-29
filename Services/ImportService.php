@@ -430,7 +430,7 @@ class ImportService {
 
     //end function
     public static function pixabay($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $image_type = 'photo';
         //$q= necessary
         \extract($params);
@@ -450,7 +450,7 @@ class ImportService {
     }
 
     public static function pexels($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         //--- devono mandare via mail api key ..
         //dd($this->client);

@@ -27,6 +27,7 @@ class HomeController extends Controller {
 
     public function show(Request $request) {
         //*
+        //dddx(app()->getLocale());
         $home = Home::with('post')
                 ->firstOrCreate(['id' => 1]);
         $panel = Panel::get($home);
@@ -34,7 +35,7 @@ class HomeController extends Controller {
         return $panel->out();
         //*/
         /*
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $guid = 'chicken-taste-restaurant';
         if (1) {
             $item = \Modules\Food\Models\Restaurant::with('post')

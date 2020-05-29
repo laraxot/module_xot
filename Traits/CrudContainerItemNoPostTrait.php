@@ -62,7 +62,7 @@ trait CrudContainerItemNoPostTrait {
         }
 
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
 
         $item_new = $row->fill($data);
@@ -269,7 +269,7 @@ trait CrudContainerItemNoPostTrait {
     public function storeRelationshipsMorphOne($params) {
         extract($params);
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if ($model->$name()->exists()) {
             $model->$name()->update($data);

@@ -141,7 +141,7 @@ trait CrudSimpleTrait {
                     ->with('allrows', $allrows)
                     ->with('routename', $routename)
                     ->with('view', $view)
-                    ->with('lang', \App::getLocale())
+                    ->with('lang', app()->getLocale())
                     ;
         } else {
             return '<h3>La view ['.$view.'] non esiste</h3>['.__LINE__.']['.__FILE__.']';
@@ -154,7 +154,7 @@ trait CrudSimpleTrait {
                     ->with('allrows', $allrows)
                     ->with('routename', $routename)
                     //->with('view', $view)
-                    ->with('lang', \App::getLocale())
+                    ->with('lang', app()->getLocale())
                     ;
     }
 
@@ -189,7 +189,7 @@ trait CrudSimpleTrait {
                 ->with('params', $params)
                 ->with('row', $row)
                 ->with('view', $view)
-                ->with('lang', \App::getLocale())
+                ->with('lang', app()->getLocale())
                 ->with('routename', $routename);
     }
 
@@ -229,7 +229,7 @@ trait CrudSimpleTrait {
         return view($view)
                     ->with('params', $params)
                     ->with('row', $row)
-                    ->with('lang', \App::getLocale())
+                    ->with('lang', app()->getLocale())
                     ->with('view', $view);
     }
 
@@ -437,7 +437,7 @@ trait CrudSimpleTrait {
             if(isset($params[$pk])){
                 $pk_val = $params[$pk];
             }elseif($pk=='lang'){
-                $pk_val = \App::getLocale();
+                $pk_val = app()->getLocale();
             }
 
 
@@ -471,7 +471,7 @@ trait CrudSimpleTrait {
                 ->with('params', $params)
                 ->with('view', $view)
                 ->with('routename', $routename)
-                ->with('lang', \App::getLocale())
+                ->with('lang', app()->getLocale())
                 ;
     }
 

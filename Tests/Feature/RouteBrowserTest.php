@@ -21,7 +21,7 @@ class RouteBrowserTest extends TestCase {
 
     public function init() {
         $this->user = factory(User::class)->create();
-        $this->lang = \App::getLocale();
+        $this->lang = app()->getLocale();
         $this->init = true;
         $this->restaurant = factory(Restaurant::class)->create();
         $this->restaurant->each(function ($t) {

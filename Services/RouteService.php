@@ -340,7 +340,7 @@ class RouteService {
                         ->first();
                     if (is_object($other_lang)) {
                         $up = $other_lang->replicate();
-                        $up->lang = \App::getLocale();
+                        $up->lang = app()->getLocale();
                         $up->save();
                         $item_prev = $container_prev::firstOrCreate(['post_id' => $up->post_id]);
                     }
@@ -521,7 +521,7 @@ class RouteService {
     }
 
     public static function urlPanel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $parents = collect([]);
         $panel_curr = $panel;
@@ -543,7 +543,7 @@ class RouteService {
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         if (! isset($route_params['lang'])) {
-            $route_params['lang'] = \App::getLocale();
+            $route_params['lang'] = app()->getLocale();
         }
 
         $i = 0;
@@ -605,7 +605,7 @@ class RouteService {
     }
 
     public static function urlRelatedPanel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $parents = collect([]);
         $panel_curr = $panel;
@@ -675,7 +675,7 @@ class RouteService {
     }
 
     public static function urlModel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
@@ -785,7 +785,7 @@ class RouteService {
 
         //$related_name=collect(config('xra.model'))->search(get_class($related));
         if (! isset($params['lang'])) {
-            $params['lang'] = \App::getLocale();
+            $params['lang'] = app()->getLocale();
         }
 
         $params['container'.$cont_i] = $row_name;

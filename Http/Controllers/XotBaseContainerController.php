@@ -58,7 +58,7 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     public function notAuthorized($method) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         if (! \Auth::check()) {
             $html = '<h3>Before Login </h3>

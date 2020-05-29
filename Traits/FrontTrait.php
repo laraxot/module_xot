@@ -31,7 +31,7 @@ trait FrontTrait {
     }
 
     public function containerFunc(Request $request) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $params = \Route::current()->parameters();
         $containers = \array_keys(config('xra.model'));
         \extract($params);
@@ -140,7 +140,7 @@ trait FrontTrait {
     }
     */
     public function containerFuncB(Request $request) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $params = \Route::current()->parameters();
         $row = last($params); // meglio ultimo oggetto
         \extract($params);
@@ -202,7 +202,7 @@ trait FrontTrait {
         $data = $request->all();
         $data = \json_decode($data);
         $data['subtitle'] = \Request::format(); //html
-        $data['lang'] = \App::getLocale();
+        $data['lang'] = app()->getLocale();
         $data['type'] = 'restaurant';
         $row = Post::create($data); //usa i fillable
         //*

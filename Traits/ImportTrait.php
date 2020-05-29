@@ -167,7 +167,7 @@ trait ImportTrait {
     //end cacheUrl
     ///------------ SIMPLE ENGINES  complex has controller model etc
     public function pixabay($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $image_type = 'photo';
         //$q= necessary
         \extract($params);
@@ -187,7 +187,7 @@ trait ImportTrait {
     }
 
     public function pexels($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         //--- devono mandare via mail api key ..
         //dd($this->client);
@@ -195,7 +195,7 @@ trait ImportTrait {
     }
 
     public function qwantImg($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         /*
         $parz = [
