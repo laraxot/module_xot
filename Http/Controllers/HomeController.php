@@ -26,14 +26,14 @@ class HomeController extends Controller {
     }
 
     public function show(Request $request) {
-        //*
         //dddx(app()->getLocale());
         $home = Home::with('post')
-                ->firstOrCreate(['id' => 1]);
+        ->firstOrCreate(['id' => 1]);
+
         $panel = Panel::get($home);
 
         return $panel->out();
-        //*/
+
         /*
         $lang = app()->getLocale();
         $guid = 'chicken-taste-restaurant';
