@@ -33,7 +33,7 @@ class StoreJob implements ShouldQueue {
     public function __construct($container, $item, $data = null) {
         $this->container = $container;
         $this->item = $item;
-
+        //dd('['.__LINE__.']['.__FILE__.'][__construct]');
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) {
             $rows = $item->$types();
@@ -47,6 +47,7 @@ class StoreJob implements ShouldQueue {
         if (null == $data) {
             $data = $this->getData();
         }
+        //dd('['.__LINE__.']['.__FILE__.'][__construct]');
         $this->data = $data;
         $this->types = $types;
         $this->rows = $rows;
@@ -58,6 +59,7 @@ class StoreJob implements ShouldQueue {
      * @return void
      */
     public function handle() {
+        //dd('['.__LINE__.']['.__FILE__.']');
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
@@ -80,8 +82,8 @@ class StoreJob implements ShouldQueue {
             if (isset($data['pivot'])) {
                 $pivot_data = $data['pivot'];
             }
-            if (! isset($pivot_data['auth_user_id'])){
-                $pivot_data['auth_user_id']=\Auth::id();
+            if (! isset($pivot_data['auth_user_id'])) {
+                $pivot_data['auth_user_id'] = \Auth::id();
             }
             //ddd($types);
             //$item->$types()->

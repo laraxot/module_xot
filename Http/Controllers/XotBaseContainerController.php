@@ -58,25 +58,6 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     public function notAuthorized($method, $model) {
-        /*
-        $lang = app()->getLocale();
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        if (! \Auth::check()) {
-            $html = '<h3>Before Login </h3>
-            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
-                <i class="fab fa-facebook-square fa-3x  "></i>
-            </button>';
-            $msg = ['msg' => 'ok', 'html' => $html];
-            if ($request->ajax()) {
-                return response()->json($msg, 200);
-            }
-            $referer = url()->current();
-            $referer = \Request::path();
-
-            return redirect()->route('login', ['lang' => $lang, 'referer' => $referer])
-                ->withErrors(['active' => 'login before']);
-        }
-        */
         $lang = app()->getLocale();
         if (! \Auth::check()) {
             $request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -95,7 +76,7 @@ abstract class XotBaseContainerController extends Controller {
             return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
             ->withErrors(['active' => 'login before']);
         }
-        $msg = 'not can ['.$method.'] on ['.get_class($model).']';
+        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($model).']';
 
         return abort(403, $msg);
     }
@@ -160,6 +141,7 @@ abstract class XotBaseContainerController extends Controller {
             dddx($model);
         }
         $authorized = Gate::allows($method, $model);
+
         if (! $authorized) {
             $policy_class = StubService::fromModel(
                 [
@@ -178,6 +160,7 @@ abstract class XotBaseContainerController extends Controller {
 
             return $this->notAuthorized($method, $model);
         }
+        //dd('['.__LINE__.']['.__FILE__.']['.$this->controller.']['.$method.']');
         $panel = app($this->controller)
             ->$method($request, $this->container_last, $this->item_last);
 

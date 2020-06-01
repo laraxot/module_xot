@@ -15,8 +15,13 @@ trait CommonTrait {
             //dddx($this->row);
         }
         $request = XotRequest::capture();
-        $request->validatePanel($panel);
-        $data = $request->all();
+        if (count($request->all()) > 0) {
+            //dd(['['.__LINE__.']['.__FILE__.']', $request->all(), request()->all(), $_SESSION]);
+            $request->validatePanel($panel);
+            $data = $request->all();
+        } else {
+            $data = request()->all();
+        }
 
         return $data;
     }
