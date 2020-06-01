@@ -57,7 +57,8 @@ abstract class XotBaseContainerController extends Controller {
         return 'init';
     }
 
-    public function notAuthorized($method) {
+    public function notAuthorized($method, $model) {
+        /*
         $lang = app()->getLocale();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         if (! \Auth::check()) {
@@ -75,8 +76,28 @@ abstract class XotBaseContainerController extends Controller {
             return redirect()->route('login', ['lang' => $lang, 'referer' => $referer])
                 ->withErrors(['active' => 'login before']);
         }
+        */
+        $lang = app()->getLocale();
+        if (! \Auth::check()) {
+            $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+            if ($request->ajax()) {
+                $html = '<h3>Before Login </h3>
+            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
+                <i class="fab fa-facebook-square fa-3x  "></i>
+            </button>';
+                $msg = ['msg' => 'ok', 'html' => $html];
 
-        return abort(403, $method);
+                return response()->json($msg, 200);
+            }
+
+            $referer = \Request::path();
+
+            return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
+            ->withErrors(['active' => 'login before']);
+        }
+        $msg = 'not can ['.$method.'] on ['.get_class($model).']';
+
+        return abort(403, $msg);
     }
 
     public function getModel() {
@@ -153,7 +174,7 @@ abstract class XotBaseContainerController extends Controller {
                 'model_class' => get_class($model),
                 'method' => $method,
             ];
-            ddd($msg);
+            //ddd($msg);
 
             return $this->notAuthorized($method, $model);
         }
