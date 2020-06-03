@@ -4,7 +4,6 @@ namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
-//use Modules\Xot\Traits\CrudContainerItemRepositoryTrait as CrudTrait;
 use Modules\Xot\Traits\CrudContainerItemJobTrait as CrudTrait;
 
 abstract class XotBaseController extends Controller {

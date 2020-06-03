@@ -78,14 +78,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * Determine whether the user can delete the DocDummyModel.
-     *
-     * @param \Modules\LU\Models\User      $user
-     * @param \Modules\Blog\Models\Privacy $dummyModel
-     *
-     * @return mixed
-     */
+
     public function delete(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
@@ -94,14 +87,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * Determine whether the user can restore the DocDummyModel.
-     *
-     * @param \Modules\LU\Models\User      $user
-     * @param \Modules\Blog\Models\Privacy $dummyModel
-     *
-     * @return mixed
-     */
+
     public function restore(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
@@ -110,14 +96,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * Determine whether the user can permanently delete the DocDummyModel.
-     *
-     * @param \Modules\LU\Models\User      $user
-     * @param \Modules\Blog\Models\Privacy $dummyModel
-     *
-     * @return mixed
-     */
+
     public function forceDelete(User $user, $post) {
     }
 
@@ -143,14 +122,7 @@ abstract class XotBasePolicy {
     public function viewAny(User $user) {
     }
 
-    /**
-     * Determine whether the user can view the DocDummyModel.
-     *
-     * @param \Modules\LU\Models\User      $user
-     * @param \Modules\Blog\Models\Privacy $dummyModel
-     *
-     * @return mixed
-     */
+
     public function view(User $user, $post) {
     }
 }

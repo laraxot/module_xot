@@ -5,7 +5,7 @@ namespace Modules\Xot\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 //---- services ---
-//use Modules\Blog\Models\Home;
+
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\TenantService as Tenant;

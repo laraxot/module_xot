@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 //----- models -----
-//use Modules\Customer\Models\Customer as MyModel;
-//use Modules\Blog\Models\Place;
 
 abstract class XotBaseMigration extends Migration {
     protected $model;

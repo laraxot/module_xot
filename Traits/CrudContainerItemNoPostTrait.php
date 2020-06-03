@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 //-------- services -----
 //-------- models ------
-//use Modules\Blog\Models\Post; // deve essere slegato dal modulo Blog
+
 //------- services -------
 //use Modules\Theme\Services\ThemeService;  // qui restituisco il Panel che poi mostrera' i dati
 //use Modules\Xot\Services\PolicyService;
