@@ -11,19 +11,21 @@ $middleware = ['web'];
 
 $areas_prgs = include __DIR__.'/web_common.php';
 //$prefix = App::getLocale();
-$prefix = '{lang}';
-Route::group(
-    [
-        'prefix' => $prefix,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
-    ],
-    function () use ($areas_prgs,$namespace) {
-        RouteService::dynamic_route($areas_prgs, null, $namespace);
-        Route::get('/', 'HomeController@index');
-        Route::get('/home', 'HomeController@index');
-    }
-);
+if(!config('xra.disable_frontend_dynamic_route')){
+    $prefix = '{lang}';
+    Route::group(
+        [
+            'prefix' => $prefix,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
+        ],
+        function () use ($areas_prgs,$namespace) {
+            RouteService::dynamic_route($areas_prgs, null, $namespace);
+            Route::get('/', 'HomeController@index');
+            Route::get('/home', 'HomeController@index');
+        }
+    );
+}
 
 //dddx(config());
 
