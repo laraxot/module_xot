@@ -599,7 +599,7 @@ class RouteService {
         }
 
         //--- aggiungo le query string all'url corrente
-        $queries = collect(request()->query())->except(['_act'])->all();
+        $queries = collect(request()->query())->except(['_act', 'item0', 'item1'])->all();
 
         return url_queries($queries, $route);
     }

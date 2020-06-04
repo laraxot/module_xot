@@ -95,6 +95,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                 } else {
                     $item_prev = request()->{'item'.($i - 1)};
                     if (is_string($item_prev)) {
+                        dddx($item_prev);
                         $container_prev = request()->{'container'.($i - 1)};
                         $container_prev_obj = xotModel($container_prev);
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
