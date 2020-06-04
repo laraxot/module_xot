@@ -441,16 +441,26 @@ abstract class XotBasePanel {
                     $search_fields = with(new $this::$model())->getFillable();
                 }
                 $table = with(new $this::$model())->getTable();
-               if (strlen($q) > 1) {
-                   $query->where(function ($subquery) use ($search_fields,$q,$table) {
-                       foreach ($search_fields as $k => $v) {
-                           if (! Str::contains($v, '.')) {
-                               $v = $table.'.'.$v;
-                           }
-                           $subquery->orWhere($v, 'like', '%'.$q.'%');
-                       }
-                   });
-               }
+                if (strlen($q) > 1) {
+                    $query->where(function ($subquery) use ($search_fields,$q,$table) {
+                        foreach ($search_fields as $k => $v) {
+                            /*
+                            if (! Str::contains($v, '.')) {
+                                $v = $table.'.'.$v;
+                            }
+                            */
+                            if (Str::contains($v, '.')) {
+                                [$rel,$rel_field] = explode('.', $v);
+                                //dddx([$rel, $rel_field, $q]);
+                                $subquery->orWhereHas($rel, function ($subquery1) use ($rel_field,$q) {
+                                    $subquery1->where($rel_field, 'like', '%'.$q.'%');
+                                });
+                            } else {
+                                $subquery->orWhere($v, 'like', '%'.$q.'%');
+                            }
+                        }
+                    });
+                }
 
                 return $query;
                 break;
