@@ -86,17 +86,19 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
             $item_name = 'item'.$i;
             $container_name = 'container'.$i;
             $router->bind($item_name, function ($value) use ($container_name, $lang, $i) {
-                $container_curr = request()->$container_name;
+                //request()->route()->parameter($container_name);
+                //dddx([request()->route()->parameter($container_name), request()->$container_name]);
+                $container_curr = request()->route()->parameter($container_name);
                 $types = Str::camel(Str::plural($container_curr));
 
                 if (0 == $i) {
                     $model = xotModel($container_curr);
                     $rows = $model;
                 } else {
-                    $item_prev = request()->{'item'.($i - 1)};
+                    $item_prev = request()->route()->parameter('item'.($i - 1));
                     if (is_string($item_prev)) {
-                        dddx($item_prev);
-                        $container_prev = request()->{'container'.($i - 1)};
+                        //dddx($item_prev);
+                        $container_prev = request()->route()->parameter('container'.($i - 1));
                         $container_prev_obj = xotModel($container_prev);
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
                     }

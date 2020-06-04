@@ -130,6 +130,7 @@ abstract class XotBasePanelAction {
     public function btnHtml($params = []) {
         $params['panel'] = $this->panel;
         $params['url'] = $this->getUrl();
+
         $params['method'] = Str::camel($this->getName());
         $params['act'] = 'show';
         $params['data_title'] = $this->getTitle();
