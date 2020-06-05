@@ -11,7 +11,7 @@ $middleware = ['web'];
 
 $areas_prgs = include __DIR__.'/web_common.php';
 //$prefix = App::getLocale();
-if(!config('xra.disable_frontend_dynamic_route')){
+if (! config('xra.disable_frontend_dynamic_route')) {
     $prefix = '{lang}';
     Route::group(
         [
@@ -25,12 +25,11 @@ if(!config('xra.disable_frontend_dynamic_route')){
             Route::get('/home', 'HomeController@index');
         }
     );
-}
 
-//dddx(config());
+    //dddx(config());
 
-//dddx([$_SERVER, parseUrl($_SERVER['SERVER_NAME'])]);
-//Route::domain('food.local')->group(function () use ($middleware,$namespace) {
+    //dddx([$_SERVER, parseUrl($_SERVER['SERVER_NAME'])]);
+    //Route::domain('food.local')->group(function () use ($middleware,$namespace) {
     Route::group(
         [
             'prefix' => null,
@@ -44,8 +43,8 @@ if(!config('xra.disable_frontend_dynamic_route')){
             //Route::get('/test01',   'HomeController@test01');
         }
     );
-//});
-
+    //});
+}
 $middleware = ['web', 'auth'/*,'verified'*/];
 $prefix = 'admin';
 
