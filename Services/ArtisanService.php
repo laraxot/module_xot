@@ -30,6 +30,9 @@ class ArtisanService {
             case 'module-list': return ArtisanService::exe('module:list');
             case 'module-disable': return ArtisanService::exe('module:disable '.$module_name);
             case 'module-enable': return ArtisanService::exe('module:enable '.$module_name);
+            //----------------------------------------------------------------------
+            case 'spatiecache-clear': return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+
             default: return '';
         }
 
