@@ -32,6 +32,7 @@ class ArtisanService {
             case 'module-enable': return ArtisanService::exe('module:enable '.$module_name);
             //----------------------------------------------------------------------
             case 'spatiecache-clear': return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+            //case 'spatiecache-clear1': return ArtisanService::exe('responsecache:clear'); //The command "responsecache:clear" does not exist.
 
             default: return '';
         }
