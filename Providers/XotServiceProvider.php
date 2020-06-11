@@ -14,7 +14,7 @@ use Illuminate\Translation\Translator;
 //use Illuminate\Http\Request;
 use Laravel\Scout\EngineManager; // per slegarmi da tntsearch
 use Modules\Xot\Engines\FullTextSearchEngine;
-use Modules\Xot\Engines\Opcache;
+//use Modules\Xot\Engines\Opcache;
 //--- services ---
 use Modules\Xot\Services\TenantService as Tenant;
 use Modules\Xot\Services\TranslatorService;
@@ -65,7 +65,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
         }
         //*
         $this->registerTranslator();
-        $this->registerCacheOPCache();
+        //$this->registerCacheOPCache();
         //*/
         resolve(EngineManager::class)->extend('fulltext', function () {
             return new FullTextSearchEngine();
