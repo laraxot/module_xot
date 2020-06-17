@@ -63,6 +63,33 @@ abstract class XotBasePanel {
         return false;
     }
 
+    public function setLabel($label) {
+        $model = $this->row;
+        $res = $model::whereHas('post',
+            function (Builder $query) use ($label) {
+                $query->where('title', 'like', $label);
+            }
+        )->first();
+        if (is_object($res)) {
+            return $res;
+        }
+        $me = $model->create();
+        // dddx([$me, $me->getKey()]);
+        $post = $model->post()->create(
+            [
+                //'post_id' => $me->getKey(),
+                'title' => $label,
+                'lang' => \App::getLocale(),
+            ]
+        );
+        if (null == $post->post_id) {
+            $post->post_id = $me->getKey();
+            $post->save();
+        }
+
+        return $me;
+    }
+
     /**
      * on select the option label.
      */
@@ -1008,6 +1035,7 @@ abstract class XotBasePanel {
     public function imgSrc($params) {
         $row = $this->row;
         $src = $row->image_src;
+
         $str0 = '/laravel-filemanager/';
         if (Str::startsWith($src, $str0)) {
             $src = '/'.Str::after($src, $str0);
@@ -1016,7 +1044,7 @@ abstract class XotBasePanel {
         extract($params);
         $images = $row->images;
         if (null == $images) {
-            return;
+            $images = $row->images();
         }
         $src = $src.'';
         $img = $images->where('src', $src)

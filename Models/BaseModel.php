@@ -23,4 +23,8 @@ abstract class BaseModel extends Model {
         //'password'
     ];
     public $timestamps = true;
+
+    public function images() {
+        return $this->morphMany(Image::class, 'post');
+    }
 }

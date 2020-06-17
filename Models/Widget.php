@@ -8,7 +8,7 @@ class Widget extends BaseModel {
     protected $fillable = [
         'id', 'title', 'subtitle',
         'blade', 'pos', 'model', 'limit',
-        'order_by',
+        'order_by', 'image_src',
     ];
 
     public function linked() {

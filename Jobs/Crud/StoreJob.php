@@ -263,6 +263,23 @@ class StoreJob implements ShouldQueue {
         //ddd(\Request::all());
         //return ;
 
+        if (! Arr::isAssoc($data)) {
+            $data = collect($data)->map(
+                function ($item) use ($model,$name) {
+                    if (is_numeric($item)) {
+                        return $item;
+                    }
+                    $related = $model->$name()->getRelated();
+                    $related_panel = Panel::get($related);
+                    $res = $related_panel->setLabel($item);
+
+                    return $res->getKey().'';
+                }
+            )->all();
+            //dddx($data);
+            $model->$name()->sync($data);
+        }
+
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {
