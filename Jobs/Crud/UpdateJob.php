@@ -158,11 +158,12 @@ class UpdateJob implements ShouldQueue {
         //ddd(\Request::all());
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
-        if (! Arr::isAssoc($data)) {
-            //dddx($data);
-            //$model->$name()->sync($data);
-            //$model->$name()->attach($data);
-        }
+        //if (! Arr::isAssoc($data)) {
+        //dddx($data);
+        //$model->$name()->sync($data);
+        //$model->$name()->attach($data);
+        //}
+
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {
