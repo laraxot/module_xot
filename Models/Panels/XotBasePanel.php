@@ -1306,7 +1306,9 @@ abstract class XotBasePanel {
             '$row->post' => $row->post,
             '$row' => $row,
         ];
-        dddx($msg);
+        if (null == $row->getKey()) {
+            return null;
+        }
         $guid = $row->$key;
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
             if ('' == $row->id && '' != $row->post_id) {
