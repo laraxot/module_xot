@@ -133,6 +133,9 @@ class TenantService {
         }
         //$model = app($class);
         if (! is_string($class)) {
+            if (is_array($class)) {
+                return $class[0];
+            }
             dddx(
                 [
                     'name' => $name,
