@@ -2,15 +2,12 @@
 
 namespace Modules\Xot\Models;
 
-use Illuminate\Database\Eloquent\Model;
+//--- TRAITS ---
+use Modules\Xot\Models\Traits\HomeTrait;
 
 //------ ext models---
 
-class Home extends Model {
+class Home extends BaseModel {
+    use HomeTrait;
     protected $fillable = ['id', 'article_type', 'icon_src'];
-
-    //--------- relationship ---------------
-    public function widgets() {
-        return $this->morphMany(Widget::class, 'post')->orderBy('pos');
-    }
 }

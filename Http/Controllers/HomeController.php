@@ -2,21 +2,24 @@
 
 namespace Modules\Xot\Http\Controllers;
 
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 //---- services ---
 
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Schema;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\TenantService as Tenant;
 
 class HomeController extends Controller {
     public function index(Request $request) {
-        $home =Tenant::modelEager('home')->firstOrCreate(['id' => 1]);
-        /*
-        $home = Home::with('post')
-            ->firstOrCreate(['id' => 1]);
-            */
+        try {
+            $home = Tenant::modelEager('home')->firstOrCreate(['id' => 1]);
+        } catch (\Exception $e) {
+            dddx('run migrations');
+        }
+
         $home_panel = Panel::get($home);
 
         if ('' != $request->_act) {
@@ -29,10 +32,27 @@ class HomeController extends Controller {
             ;
     }
 
+    public function createHomesTable() {
+        Schema::create('homes', function (Blueprint $table) {
+            $table->increments('id');
+
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->timestamps();
+        });
+    }
+
     public function show(Request $request) {
-        $home = Tenant::modelEager('home')
+        try {
+            $home = Tenant::modelEager('home')
         ->firstOrCreate(['id' => 1]);
+        } catch (\Exception $e) {
+            $this->createHomesTable();
+            dddx('refresh (press F5)');
+        }
         $panel = Panel::get($home);
+
         return $panel->out();
     }
 

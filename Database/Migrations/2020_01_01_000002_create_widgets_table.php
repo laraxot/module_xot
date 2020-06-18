@@ -37,6 +37,10 @@ class CreateWidgetsTable extends XotBaseMigration {
                 if (! $this->hasColumn('title')) {
                     $table->string('title')->nullable()->after('post_type');
                 }
+
+                if (! $this->hasColumn('layout_position')) {
+                    $table->string('layout_position')->nullable()->after('post_type');
+                }
             }
         ); //end update
     }

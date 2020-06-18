@@ -8,7 +8,7 @@ class Widget extends BaseModel {
     protected $fillable = [
         'id', 'title', 'subtitle',
         'blade', 'pos', 'model', 'limit',
-        'order_by', 'image_src',
+        'order_by', 'image_src', 'layout_position',
     ];
 
     public function linked() {
@@ -25,7 +25,11 @@ class Widget extends BaseModel {
     }
 
     public function toHtml() {
-        $view = 'pub_theme::layouts.widgets.'.$this->blade;
+        $view = 'pub_theme::layouts.widgets';
+        if (null != $this->layout_position) {
+            $view .= '.'.$this->layout_position;
+        }
+        $view .= '.'.$this->blade;
         $view_params = [
             'lang' => \App::getLocale(),
             'view' => $view,
