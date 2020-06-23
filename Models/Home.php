@@ -3,11 +3,11 @@
 namespace Modules\Xot\Models;
 
 //--- TRAITS ---
-use Modules\Xot\Models\Traits\HomeTrait;
+use Modules\Xot\Models\Traits\WidgetTrait;
 
 //------ ext models---
 
 class Home extends BaseModel {
-    use HomeTrait;
+    use WidgetTrait;
     protected $fillable = ['id', 'article_type', 'icon_src'];
 }
