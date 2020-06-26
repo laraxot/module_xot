@@ -35,7 +35,7 @@ class WidgetPanel extends XotBasePanel {
      * @var array
      */
     public static function with() {
-        return [];
+        return ['linked'];
     }
 
     public function search() {
