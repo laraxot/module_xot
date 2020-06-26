@@ -1704,6 +1704,7 @@ abstract class XotBasePanel {
         $tmp->url = asset(app()->getLocale());
         $tmp->title = 'Home';
         $bread[] = $tmp;
+        //dddx($parents);
         foreach ($parents as $parent) {
             $tmp = (object) [];
             $tmp->url = $parent->indexUrl();
