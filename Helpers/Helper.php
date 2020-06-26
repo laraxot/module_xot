@@ -100,6 +100,43 @@ if (! \function_exists('inAdmin')) {
     }
 }
 
+
+/**
+     * Return true if current page is home.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isHome')) {
+    function isHome()
+    {
+        return Route::is('home');
+    }
+}
+    /**
+     * Return true if current page is an admin home page.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isAdminHome')) {
+    function isAdminHome()
+    {
+        return URL::current() == route('admin.index');
+    }
+}
+
+    /**
+     * https://gist.github.com/atorscho/5bcf63d077c11ed0e8ce
+     * Return true if current page is an admin page.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isAdmin')) {
+    function isAdmin()
+    {
+        return Route::is('*admin*');
+    }
+}
+
     /*
      * Replaces spaces with full text search wildcards
      *
