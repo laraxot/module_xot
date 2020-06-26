@@ -64,7 +64,7 @@ class StoreJob implements ShouldQueue {
         $data = $this->data;
         $types = $this->types;
         $item = $this->item;
-        //ddd($data);
+        //ddd($row, $data, $types, $item);
         //---------------------------
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
             $data['lang'] = app()->getLocale();
