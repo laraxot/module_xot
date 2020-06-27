@@ -3,8 +3,10 @@
 namespace Modules\Xot\Models;
 
 //------ ext models---
+use Modules\Xot\Models\Traits\WidgetTrait;
 
 class Widget extends BaseModel {
+    use WidgetTrait;
     protected $fillable = [
         'id', 'post_type', 'title', 'subtitle',
         'blade', 'pos', 'model', 'limit',
@@ -42,9 +44,9 @@ class Widget extends BaseModel {
         if (! view()->exists($view)) {
             dddx('View ['.$view.'] Not Exists !');
         }
-        try{
+        try {
             return view($view)->with($view_params);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             dddx($e);
         }
     }
