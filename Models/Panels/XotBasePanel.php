@@ -1724,7 +1724,14 @@ abstract class XotBasePanel {
 
     public function getExcerpt($length = 225) {
         $row = $this->row;
-        $content = $row->subtitle ?? $row->txt;
+        //$content = $row->subtitle ?? $row->txt;
+
+        if ($row->subtitle) {
+            $content = $row->subtitle;
+        } else {
+            $content = $row->txt;
+        }
+
         $cleaned = strip_tags(
             preg_replace(['/<pre>[\w\W]*?<\/pre>/', '/<h\d>[\w\W]*?<\/h\d>/'], '', $content), '<code>'
         );
