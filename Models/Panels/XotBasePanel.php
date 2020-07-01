@@ -1703,21 +1703,27 @@ abstract class XotBasePanel {
         $tmp = (object) [];
         $tmp->url = asset(app()->getLocale());
         $tmp->title = 'Home';
+        $tmp->obj = \Theme::xotModel('home');
+        $tmp->method = 'index';
         $bread[] = $tmp;
-        //dddx($parents);
         foreach ($parents as $parent) {
             $tmp = (object) [];
             $tmp->url = $parent->indexUrl();
             $tmp->title = $parent->postType();
+            $tmp->obj = \Theme::xotModel($tmp->title);
+            $tmp->method = 'index';
             $bread[] = $tmp;
             try {
                 $tmp = (object) [];
                 $tmp->url = $parent->showUrl();
                 $tmp->title = $parent->row->title;
+                $tmp->obj = \Theme::xotModel($parent->postType());
+                $tmp->method = 'show';
                 $bread[] = $tmp;
             } catch (\exception $e) {
             }
         }
+        //dddx($bread);
 
         return $bread;
     }
