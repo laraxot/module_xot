@@ -825,6 +825,35 @@ abstract class XotBasePanel {
         return $fields;
     }
 
+    public function indexEditFields() {
+        $excepts = [];
+        $excepts[] = 'id'; //??
+        // $excepts[] = request()->input('_act');
+
+        if (is_object($this->rows)) {
+            $getters = ['getForeignKeyName', 'getMorphType', 'getForeignPivotKeyName', 'getRelatedPivotKeyName', 'getRelatedKeyName'];
+            foreach ($getters as $k => $v) {
+                if (method_exists($this->rows, $v)) {
+                    $excepts[] = $this->rows->$v();
+                }
+            }
+        }
+        //ddd($excepts);
+        $fields = collect($this->fields())->filter(function ($item) use ($excepts) {
+            if (! isset($item->except)) {
+                $item->except = [];
+            }
+
+            return
+                //!in_array($item->type,['Password']) &&
+                ! in_array('index_edit', $item->except) &&
+                ! in_array($item->name, $excepts)
+                ;
+        })->all();
+        //ddd($fields);
+        return $fields;
+    }
+
     /*
         -- in ingresso "qs" che e' array con le cose da aggiungere
     */
