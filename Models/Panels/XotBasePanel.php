@@ -289,38 +289,46 @@ abstract class XotBasePanel {
         return null;
     }
 
-    public function containerActions() {
+    public function getActions($params = []) {
         $panel = $this;
-        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
-            $item->getName();
+        $filters = [];
+        extract($params);
+        $actions = collect($this->actions())->filter(
+            function ($item) use ($panel,$filters) {
+                $item->getName();
+                $res = true;
+                foreach ($filters as $k => $v) {
+                    if (! isset($item->$k)) {
+                        $item->$k = false;
+                    }
+                    if ($item->$k != $v) {
+                        return false;
+                    }
+                }
 
-            return isset($item->onContainer) && $item->onContainer;
-        })->map(function ($item) use ($panel) {
-            $item->setPanel($panel);
+                return $res;
+            }
+        )->map(
+            function ($item) use ($panel) {
+                $item->setPanel($panel);
 
-            return $item;
-        })
-        //->all()
-        ;
+                return $item;
+            }
+        );
 
         return $actions;
     }
 
-    public function itemActions() {
-        $panel = $this;
-        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
-            $item->getName();
+    public function containerActions($params = []) {
+        $params['filters']['onContainer'] = true;
 
-            return isset($item->onItem) && $item->onItem;
-        })->map(function ($item) use ($panel) {
-            $item->setPanel($panel);
+        return $this->getActions($params);
+    }
 
-            return $item;
-        })
-        //->all()
-        ;
+    public function itemActions($params = []) {
+        $params['filters']['onItem'] = true;
 
-        return $actions;
+        return $this->getActions($params);
     }
 
     public function itemAction($act) {
@@ -1779,5 +1787,9 @@ abstract class XotBasePanel {
         return strlen($cleaned) > $length
             ? preg_replace('/\s+?(\S+)?$/', '', $truncated).'...'
             : $cleaned;
+    }
+
+    public function indexEditSubs() {
+        return [];
     }
 }
