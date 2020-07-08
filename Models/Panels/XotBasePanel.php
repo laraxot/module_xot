@@ -1792,4 +1792,8 @@ abstract class XotBasePanel {
     public function indexEditSubs() {
         return [];
     }
+
+    public function swiperItem() {
+        return 'pub_theme::layouts.swiper.item';
+    }
 }
