@@ -17,6 +17,7 @@ class HomeController extends Controller {
         try {
             $home = Tenant::modelEager('home')->firstOrCreate(['id' => 1]);
         } catch (\Exception $e) {
+            
             dddx('run migrations');
         }
 
@@ -52,6 +53,9 @@ class HomeController extends Controller {
             dddx('refresh (press F5)');
         }
         $panel = Panel::get($home);
+        if ('' != $request->_act) {
+            return $panel->callItemActionWithGate($request->_act);
+        }
 
         return $panel->out();
     }
