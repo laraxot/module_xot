@@ -534,11 +534,14 @@ class RouteService {
         if ($parents->count() > 0) {
             $container_root = $parents->first()->row;
         }
+        /*
         $containers_class = self::getContainersClass();
         $n = collect($containers_class)->search(get_class($container_root));
         if (null === $n) {
             $n = 0;
         }
+        */
+        $n = 0;
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
