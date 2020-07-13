@@ -113,6 +113,7 @@ abstract class XotBaseContainerController extends Controller {
 
     public function __callPanelAct($method, $args) {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+
         $act = $request->_act;
         $method_act = Str::camel($act);
         $model = $this->getModel();
@@ -124,12 +125,15 @@ abstract class XotBaseContainerController extends Controller {
 
         $panel = Panel::get($model);
 
+        return $panel->callAction($act);
+        /*
         return $panel->out(
             [
                 'is_ajax' => $request->ajax(),
                 'method' => $request->getMethod(),
             ]
         );
+        */
     }
 
     //end call panel act
@@ -176,6 +180,7 @@ abstract class XotBaseContainerController extends Controller {
         $params = \Route::current()->parameters();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $a = $this->init($params);
+
         if ('' != $request->_act) {
             return $this->__callPanelAct($method, $args);
         }

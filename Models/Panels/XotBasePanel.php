@@ -682,23 +682,6 @@ abstract class XotBasePanel {
         return null;
     }
 
-    /*
-    public function callAction($query, $act) {
-        if (null == $act) {
-            return $query;
-        }
-        $action = collect($this->actions())
-            ->firstWhere('name', $act);
-        $action->setRows($query);
-        $out=$action->handle();
-        $this->out = $out;
-        if (null != $this->out) { //se c'e' un risultato
-            $this->force_exit = true;
-        }
-        return $out;
-    }//end callAction
-    */
-
     public function indexRows(Request $request, $query) {
         $data = $request->all();
 
@@ -1522,31 +1505,17 @@ abstract class XotBasePanel {
     }
 
     public function callAction($act) {
-        $actions = collect($this->actions())
-            ->map(function ($item) {
-                $item->getName();
+        $action = $this->getActions()->firstWhere('name', $act);
 
-                return $item;
-            });
-        $action = $actions->firstWhere('name', $act);
-        dddx($action);
-        if (! is_object($action)) {
-            abort(403, 'action '.$act.' not recognized');
-        }
+        $action->setRow($this->row);
         $action->setPanel($this);
-        $data = request()->all();
-        $rows = $this->rows($data);
-        $action->setRows($rows);
-        //dddx([$action->rows, $this->rows]);
+
         $method = request()->getMethod();
         if ('GET' == $method) {
-            $out = $action->handle();
+            return  $action->handle();
         } else {
-            $out = $action->postHandle();
+            return $action->postHandle();
         }
-
-        return $out;
-        //dddx([$action, $act, $actions]);
     }
 
     public function callItemAction($act) {
@@ -1610,6 +1579,7 @@ abstract class XotBasePanel {
         }
         //$act = isset($data['_act']) ? $data['_act'] : null;
         //$out_format = isset($data['format']) ? $data['format'] : null;
+
         $html = $this->callItemAction($act);
         if (null == $html) {
             $html = $this->callContainerAction($act);

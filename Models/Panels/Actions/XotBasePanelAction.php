@@ -185,6 +185,7 @@ abstract class XotBasePanelAction {
         $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
         $query_params['_act'] = $name;
         $url = url_queries($query_params, $url);
+        $url = url_queries($this->data, $url);
 
         return $url;
     }
