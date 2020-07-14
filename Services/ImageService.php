@@ -233,6 +233,10 @@ class ImageService {
         $basename = Str::before($basename, '?');
         $basename = Str::slug($basename);
         */
+        if (! isset($info['extension'])) {
+            $info['extension'] = 'jpg';
+        }
+
         $basename = Str::slug($info['filename']).'.'.$info['extension'];
         self::$filename = public_path(self::$dirname.'/'.self::$width.'x'.self::$height.'/'.$basename);
         \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
