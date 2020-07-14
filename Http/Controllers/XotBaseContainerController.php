@@ -60,7 +60,8 @@ abstract class XotBaseContainerController extends Controller {
     public function notAuthorized($method, $model) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
-            $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+            //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
+            $request =request();
             if ($request->ajax()) {
                 $html = '<h3>Before Login </h3>
             <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
@@ -112,8 +113,8 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     public function __callPanelAct($method, $args) {
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-
+        //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        $request = request();
         $act = $request->_act;
         $method_act = Str::camel($act);
         $model = $this->getModel();
@@ -178,10 +179,17 @@ abstract class XotBaseContainerController extends Controller {
 
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
+        
+        //$url=url()->full();
+        
+        //if($url!='http://food.local/it/restaurant/ristorante-1'){
+        //    dddx([$url,$request->all(),request()->all(),$_GET]);
+        //}
+        
         $a = $this->init($params);
 
-        if ('' != $request->_act) {
+        if ('' != request()->input('_act','') ) {
             return $this->__callPanelAct($method, $args);
         }
 
