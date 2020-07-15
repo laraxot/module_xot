@@ -64,7 +64,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
             7 => '[[:alnum:]_?!\bedit\b]+',
         ];
 
-        for ($i = 0; $i < 4; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             $container_name = 'container'.$i;
             //$router->pattern($container_name,$pattern_test[0]);
         }
@@ -82,7 +82,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
             return $value;
         });
         $lang = app()->getLocale();
-        for ($i = 0; $i < 4; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             $item_name = 'item'.$i;
             $container_name = 'container'.$i;
             $router->bind($item_name, function ($value) use ($container_name, $lang, $i) {
@@ -166,6 +166,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         'related_class' => get_class($related),
                         'lang' => app()->getLocale(),
                         'row' => $rows->first(),
+                        'url' => url()->full(),
                     ];
                     dddx($msg);
                 }

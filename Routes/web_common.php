@@ -65,6 +65,20 @@ $item2 = [     //questo per avere /it/restaurant/ristotest/photo/edit
                             'name' => '{container3}',
                             'param_name' => 'item3',
                             'acts' => $acts,
+                            'subs' => [
+                                [
+                                    'name' => '{container4}',
+                                    'param_name' => '',
+                                    'as' => 'container4.index_',
+                                    'acts' => $cont_acts,
+                                    'only' => [],
+                                ], //end sub_n
+                                [
+                                    'name' => '{container4}',
+                                    'param_name' => 'item4',
+                                    'acts' => $acts,
+                                ], //end sub_n
+                            ],
                         ], //end sub_n
                     ], //end subs
                 ], //end sub_n
