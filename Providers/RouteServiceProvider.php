@@ -10,7 +10,8 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
-class RouteServiceProvider extends XotBaseRouteServiceProvider {
+class RouteServiceProvider extends XotBaseRouteServiceProvider
+{
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -20,7 +21,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 
-    public function bootCallback() {
+    public function bootCallback()
+    {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -42,7 +44,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         //ddd('preso');
     }
 
-    public function registerRoutePattern(Router $router) {
+    public function registerRoutePattern(Router $router)
+    {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');
@@ -72,7 +75,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
     //end registerRoutePattern
 
-    public function registerRouteBind(Router $router) {
+    public function registerRouteBind(Router $router)
+    {
         //--------- ROUTE BIND
 
         //*
@@ -149,7 +153,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                 if (is_object($row)) {
                     return $row;
                 }
-                if ($debug = 1) {
+                if ($debug = 0) {
                     /*
                     echo PHP_EOL.'----------------------------------';
                     echo PHP_EOL.' model class : '.get_class($model);
@@ -157,13 +161,13 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                     echo PHP_EOL.' pk_full : '.$pk_full;
                     echo PHP_EOL.'----------------------------------';
                     */
-                    $related = $rows->getRelated();
+                    //$related = $rows->getRelated();
                     $msg = [
                         'pk_full' => $pk_full,
                         'value' => $value,
                         'rows' => $rows,
-                        'related' => $related,
-                        'related_class' => get_class($related),
+                        //'related' => $related,
+                        //'related_class' => get_class($related),
                         'lang' => app()->getLocale(),
                         'row' => $rows->first(),
                         'url' => url()->full(),
