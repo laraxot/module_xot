@@ -11,6 +11,8 @@ use ZipArchive;
 
 class ZipService {
     public static function fromRowsPdf($params) {
+        ini_set('max_execution_time',3600);
+        ini_set('memory_limit',-1);
         extract($params);
         $pdf_parz = [
             'pdforientation' => $pdforientation,
@@ -32,12 +34,12 @@ class ZipService {
             $filename = $panel->pdfFilename();
 
             $path = Storage::disk('cache')->path($filename);
-            //if (! File::exists($path)) {
-            $pdf_parz['filename'] = $filename;
-            $pdf_content = $panel->pdf($pdf_parz);
+            if (! File::exists($path)) {
+            	$pdf_parz['filename'] = $filename;
+            	$pdf_content = $panel->pdf($pdf_parz);
 
-            $res = Storage::disk('cache')->put($filename, $pdf_content);
-            //}
+            	$res = Storage::disk('cache')->put($filename, $pdf_content);
+            }
             $zip->addFile($path, $filename);
         }
         $zip->close();
