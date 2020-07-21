@@ -2,10 +2,12 @@
 
 namespace Modules\Xot\Models;
 
-use Illuminate\Database\Eloquent\Model;
+//--- TRAITS ---
+use Modules\Xot\Models\Traits\WidgetTrait;
 
 //------ ext models---
 
-class Home extends Model {
-    protected $fillable = [''];
+class Home extends BaseModel {
+    use WidgetTrait;
+    protected $fillable = ['id', 'article_type', 'icon_src'];
 }

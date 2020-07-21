@@ -15,8 +15,13 @@ trait CommonTrait {
             //dddx($this->row);
         }
         $request = XotRequest::capture();
-        $request->validatePanel($panel);
-        $data = $request->all();
+        if (count($request->all()) > 0) {
+            //dd(['['.__LINE__.']['.__FILE__.']', $request->all(), request()->all(), $_SESSION]);
+            $request->validatePanel($panel);
+            $data = $request->all();
+        } else {
+            $data = request()->all();
+        }
 
         return $data;
     }
@@ -27,6 +32,10 @@ trait CommonTrait {
      */
     public function manageRelationships($params) {
         extract($params);
+        if (! is_object($model)) {
+            return;
+            dddx(['model' => $model]);
+        }
         $methods = get_class_methods($model);
         //dddx($model->post_type);
         Relation::morphMap([$model->post_type => get_class($model)]);

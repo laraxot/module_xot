@@ -8,6 +8,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
+
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
@@ -33,7 +35,7 @@ class StoreJob implements ShouldQueue {
     public function __construct($container, $item, $data = null) {
         $this->container = $container;
         $this->item = $item;
-
+        //dd('['.__LINE__.']['.__FILE__.'][__construct]');
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) {
             $rows = $item->$types();
@@ -47,6 +49,7 @@ class StoreJob implements ShouldQueue {
         if (null == $data) {
             $data = $this->getData();
         }
+        //dd('['.__LINE__.']['.__FILE__.'][__construct]');
         $this->data = $data;
         $this->types = $types;
         $this->rows = $rows;
@@ -58,14 +61,15 @@ class StoreJob implements ShouldQueue {
      * @return void
      */
     public function handle() {
+        //dd('['.__LINE__.']['.__FILE__.']');
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
         $item = $this->item;
-        //ddd($data);
+        //ddd($row, $data, $types, $item);
         //---------------------------
         if (! isset($data['lang']) && in_array('lang', $row->getFillable())) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if (! isset($data['auth_user_id']) && in_array('auth_user_id', $row->getFillable())) {
             $data['auth_user_id'] = \Auth::id();
@@ -80,8 +84,8 @@ class StoreJob implements ShouldQueue {
             if (isset($data['pivot'])) {
                 $pivot_data = $data['pivot'];
             }
-            if (! isset($pivot_data['auth_user_id'])){
-                $pivot_data['auth_user_id']=\Auth::id();
+            if (! isset($pivot_data['auth_user_id'])) {
+                $pivot_data['auth_user_id'] = \Auth::id();
             }
             //ddd($types);
             //$item->$types()->
@@ -112,8 +116,11 @@ class StoreJob implements ShouldQueue {
 
         return $panel;
     }
-
+    
     public function saveParentHasManyDeep() {
+    }
+
+    public function saveParentHasManyDeep_OLD() {
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
@@ -246,7 +253,7 @@ class StoreJob implements ShouldQueue {
     public function storeRelationshipsMorphOne($params) {
         extract($params);
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if ($model->$name()->exists()) {
             $model->$name()->update($data);
@@ -260,6 +267,23 @@ class StoreJob implements ShouldQueue {
 
         //ddd(\Request::all());
         //return ;
+
+        if (! Arr::isAssoc($data)) {
+            $data = collect($data)->map(
+                function ($item) use ($model,$name) {
+                    if (is_numeric($item)) {
+                        return $item;
+                    }
+                    $related = $model->$name()->getRelated();
+                    $related_panel = Panel::get($related);
+                    $res = $related_panel->setLabel($item);
+
+                    return $res->getKey().'';
+                }
+            )->all();
+            //dddx($data);
+            $model->$name()->sync($data);
+        }
 
         foreach ($data as $k => $v) {
             if (is_array($v)) {

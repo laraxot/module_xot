@@ -8,7 +8,8 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 use Modules\LU\Models\User;
 
 /*-- se faccio l'extends
-Declaration of Modules\Blog\Models\Policies\EventPolicy::index(Modules\LU\Models\User $user, Modules\Blog\Models\Event $post) should be compatible with Modules\Xot\Models\Policies\XotBasePolicy::index(Modules\LU\Models\User $user,Post $post)
+Declaration of Modules\B log\Models\Policies\EventPolicy::index(Modules\LU\Models\User $user,
+Modules\B log\Models\Event $post) should be compatible with Modules\Xot\Models\Policies\XotBasePolicy::index(Modules\LU\Models\User $user,Post $post)
 -- */
 
 trait XotBasePolicyTrait {

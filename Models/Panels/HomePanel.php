@@ -34,7 +34,7 @@ class HomePanel extends XotBasePanel {
      * @var array
      */
     public static function with() {
-        return [];
+        return ['widgets'];
     }
 
     public function search() {
@@ -109,7 +109,7 @@ class HomePanel extends XotBasePanel {
      * @return array
      */
     public function tabs() {
-        $tabs_name = [];
+        $tabs_name = ['widget'];
 
         return $tabs_name;
     }
@@ -152,7 +152,7 @@ class HomePanel extends XotBasePanel {
      */
     public function actions(Request $request = null) {
         return [
-            new Actions\ArtisanAction(),
+            new Actions\ArtisanAction(request()->input('cmd')),
         ];
     }
 }

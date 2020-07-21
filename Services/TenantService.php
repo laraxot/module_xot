@@ -2,20 +2,53 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Arr;
+//use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+//---- services ----
+use Modules\Xot\Services\PanelService as Panel;
 
 class TenantService {
     public static function getName($params = []) {
         $default = 'localhost';
-        if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
-            $_SERVER['SERVER_NAME'] = $default;
-        }
-        $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
-        if (! file_exists(base_path('config/'.$server_name))) {
-            $server_name = $default;
+        $server_name = $default;
+        if (isset($_SERVER['SERVER_NAME']) && '127.0.0.1' != $_SERVER['SERVER_NAME']) {
+            $server_name = $_SERVER['SERVER_NAME'];
         }
 
-        return $server_name;
+        $server_name = \str_replace('www.', '', $server_name);
+        $tmp = explode('.', $server_name);
+        $subdomain = null;
+        $domain = null;
+        $ext = null;
+        $n_tmp = count($tmp);
+        switch ($n_tmp) {
+            case 3: [$subdomain,$domain,$ext] = $tmp; break;
+            case 2: [$domain,$ext] = $tmp; break;
+        }
+
+        if (null == $domain) {
+            $server_name = \str_replace('.', '-', $server_name);
+            $server_name = Str::slug($server_name);
+        } else {
+            $server_name = Str::slug($domain).'-'.$ext;
+        }
+        if (file_exists(base_path('config/'.$server_name))) {
+            if (null != $subdomain && file_exists(base_path('config/'.$server_name.'/'.$subdomain))) {
+                return $server_name.'/'.$subdomain;
+            }
+
+            return $server_name;
+        }
+        /*
+        {subdomain}.{domain}.{tld}
+        [$subdomain] = explode('.', request()->getHost(), PHP_URL_HOST);
+        dd([$subdomain, request()->getHost(), PHP_URL_HOST]);
+        */
+
+        return $default;
     }
 
     //end function
@@ -42,7 +75,19 @@ class TenantService {
             \Config::set('xra.model', $merge_conf);
         }
         $tenant_name = self::getName();
-        $extra_conf = config($tenant_name.'.'.$group);
+        $extra_conf = config(str_replace('/', '.', $tenant_name).'.'.$group); // ...
+        /*
+        dd(
+            [
+                'key' => $key,
+                'group' => $group,
+                'tenant_name' => $tenant_name,
+                'extra_conf' => $extra_conf,
+                'line' => __LINE__,
+                'file' => __FILE__,
+            ]
+        );
+        //*/
         $original_conf = config($group);
         //ddd($extra_conf);
         if (! is_array($original_conf)) {
@@ -52,7 +97,64 @@ class TenantService {
             $extra_conf = [];
         }
         $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
+
         \Config::set($group, $merge_conf);  // non so se metterlo ..
         return config($key);
+    }
+
+    public static function saveConfig($params) {
+        $name = 'xra';
+        $data = [];
+        extract($params);
+        $tennant_name = self::getName();
+        $config_data = config($tennant_name.'.'.$name);
+        $config_data = array_merge_recursive($config_data, $data);
+        $config_data = Arr::sortRecursive($config_data);
+
+        $path = config_path($tennant_name.'/'.$name.'.php');
+        $path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+        $content = '<'.'?'.'php'.chr(13).chr(13).' return '.var_export($config_data, true).';';
+        $content = str_replace('\\\\', '\\', $content);
+        File::put($path.'', $content);
+    }
+
+    public static function model($name) {
+        $name = Str::snake($name);
+        $class = self::config('xra.model.'.$name);
+        if ('' == $class) {
+            $models = getAllModulesModels();
+            if (! isset($models[$name])) {
+                abort(403, 'Unauthorized path '.$name);
+            }
+            $class = $models[$name];
+            $data = [];
+            $data['model'][$name] = $class;
+            self::saveConfig(['name' => 'xra', 'data' => $data]);
+        }
+        //$model = app($class);
+        if (! is_string($class)) {
+            if (is_array($class)) {
+                return $class[0];
+            }
+            dddx(
+                [
+                    'name' => $name,
+                    'class' => $class,
+                ]
+            );
+        }
+        $model = new $class();
+
+        return $model;
+    }
+
+    public static function modelEager($name) {
+        $model = self::model($name);
+        $panel = Panel::get($model);
+        $with = $panel->with();
+        //$model = $model->load($with);
+        $model = $model->with($with);
+
+        return $model;
     }
 }

@@ -16,6 +16,7 @@ class ImageService {
     protected static $height;
     protected static $src;
     protected static $filename;
+    protected static $dirname = '/imgz';
 
     public static function getInstance($params = []) {
         if (null === self::$instance) {
@@ -31,11 +32,20 @@ class ImageService {
 
     //---- setter
     public static function init($params) {
+        //$instance == self::getInstance();
         foreach ($params as $k => $v) {
             $func = 'set'.Str::studly($k);
+            //if (method_exists($instance, $func)) {
             self::$func($v);
+            //} else {
+            //    self::$k = $v;
+           // }
         }
         //return self::getInstance();
+    }
+
+    public static function setDirname($dirname) {
+        self::$dirname = $dirname;
     }
 
     public static function setImg($val) {
@@ -45,6 +55,9 @@ class ImageService {
         }
         if (Str::startsWith($val, '//')) {
             $val = 'http:'.$val;
+        }
+        if (Str::startsWith($val, '/photos/')) {
+            $val = public_path($val);
         }
         try {
             self::$img = Image::make($val);
@@ -213,15 +226,25 @@ class ImageService {
 
     public static function save($params = []) {
         //extract($params);
+        $info = pathinfo(self::$src);
+        //dddx($info);
+        /*
         $basename = basename(self::$src);
         $basename = Str::before($basename, '?');
-        self::$filename = public_path('/imgz/'.self::$width.'x'.self::$height.'/'.$basename);
-        \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
-        try{
-            $r = self::$img->save(self::$filename, 75);
-        }catch(\Exception $e){
-
+        $basename = Str::slug($basename);
+        */
+        if (! isset($info['extension'])) {
+            $info['extension'] = 'jpg';
         }
+
+        $basename = Str::slug($info['filename']).'.'.$info['extension'];
+        self::$filename = public_path(self::$dirname.'/'.self::$width.'x'.self::$height.'/'.$basename);
+        \File::makeDirectory(\dirname(self::$filename), 0775, true, true);
+        try {
+            $r = self::$img->save(self::$filename, 75);
+        } catch (\Exception $e) {
+        }
+
         return self::getInstance();
     }
 
@@ -230,7 +253,10 @@ class ImageService {
     }
 
     public static function src($params = []) {
-        return str_replace(public_path(), '', self::$filename);
+        $src = '/'.str_replace(public_path('/'), '', self::$filename);
+        $src = str_replace('//', '/', $src);
+
+        return $src;
     }
 
     public static function image_resized_canvas($params) {

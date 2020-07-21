@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 //use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,8 @@ abstract class XotBasePanelAction {
     public $rows = null;
     public $panel = null;
     public $name = null;
+    public $icon = '<i class="far fa-question-circle"></i>';
+    protected $data = [];
 
     abstract public function handle();
 
@@ -36,6 +39,13 @@ abstract class XotBasePanelAction {
         parent::__construct();
     }
     */
+
+    public function __construct() {
+        $data = request()->all();
+        foreach ($data as $k => $v) {
+            $this->$k = $v;
+        }
+    }
 
     public function getName() {
         if (null != $this->name) {
@@ -101,24 +111,40 @@ abstract class XotBasePanelAction {
     }
 
     public function urlContainer($params = []) {
+        $panel = $this->panel;
         extract($params);
         $request = \Request::capture();
         $name = $this->getName();
-        $url = $request->fullUrlWithQuery(['_act' => $name]);
-        if (isset($panel)) {
-            $url = $panel->indexUrl();
-            $url = url_queries(['_act' => $name], $url);
-        }
+        //$url = $request->fullUrlWithQuery(['_act' => $name]);
+        //if (isset($panel)) {
+        $url = $panel->indexUrl();
+        $url = url_queries(['_act' => $name], $url);
+        $url = url_queries($this->data, $url);
+        //}
 
         return $url;
     }
 
+    public function with($key, $value = null) {
+        if (is_array($key)) {
+            $this->data = array_merge($this->data, $key);
+        } else {
+            $this->data[$key] = $value;
+        }
+
+        return $this;
+    }
+
     public function btnHtml($params = []) {
         $params['panel'] = $this->panel;
-        $params['url'] = $this->getUrl();
+        $params['url'] = $this->getUrl($params);
+
         $params['method'] = Str::camel($this->getName());
         $params['act'] = 'show';
         $params['data_title'] = $this->getTitle();
+        if (! isset($params['data_title'])) {
+            $params['icon'] = $this->icon;
+        }
         if (! isset($params['icon'])) {
             $params['icon'] = $this->icon;
         }
@@ -130,44 +156,6 @@ abstract class XotBasePanelAction {
         }
 
         return FormXService::btnHtml($params);
-        /*
-        $method = Str::camel($this->getName());
-        $data_title = $this->getTitle();
-        $title = '';
-        $label = $title;
-        $url = $this->getUrl();
-        $class = 'btn-secondary mb-2';
-        $modal = '';
-        $error_label = $this->icon.' '.get_class($this->panel->row).' '.$method;
-        $icon = $this->icon;
-        extract($params);
-        if ('' != $label) {
-            $label = '&nbsp;'.$label;
-        }
-        if (! Gate::allows($method, $this->panel->row)) {
-            $html = '<button type="button" class="btn '.$class.'" data-toggle="tooltip" title="not can '.$data_title.'" disabled>'.$error_label.'</button>';
-            if (false === $error_label) {
-                return null;
-            }
-
-            return $html;
-        }
-        switch ($modal) {
-            case 'iframe':
-                return
-                '<button type="button" data-title="'.$data_title.'"
-                data-href="'.$url.'" data-toggle="modal" class="btn '.$class.'" data-target="#myModalIframe">
-                '.$icon.' '.$title.'
-                </button>';
-            break;
-            case 'ajax':
-            break;
-        }
-
-        return '<a href="'.$url.'" class="btn '.$class.'" title="'.$title.'">
-            '.$icon.'</i>'.$title.'
-            </a>';
-        */
     }
 
     public function btnContainer($params = []) {
@@ -185,6 +173,7 @@ abstract class XotBasePanelAction {
     //end btnContainer
     public function urlItem($params = []) {
         //dddx($params);
+        $query_params = [];
         extract($params);
         if (isset($row)) {
             $this->setRow($row);
@@ -194,23 +183,10 @@ abstract class XotBasePanelAction {
         }
         $name = $this->getName();
         $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
-        $url = url_queries(['_act' => $name], $url);
-        /*
-        try {
-            $url = RouteService::urlAct(
-                [
-                'row' => $this->row,
-                'act' => 'show',
-                'query' => [
-                    '_act' => $name,
-                    //'stato'=>6,
-                ],
-            ]
-            );
-        } catch (\Exception $e) {
-            dddx(['e'=>$e->getMessage()]);
-        }
-        //*/
+        $query_params['_act'] = $name;
+        $url = url_queries($query_params, $url);
+        $url = url_queries($this->data, $url);
+
         return $url;
     }
 

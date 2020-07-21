@@ -11,34 +11,40 @@ $middleware = ['web'];
 
 $areas_prgs = include __DIR__.'/web_common.php';
 //$prefix = App::getLocale();
-$prefix = '{lang}';
-Route::group(
-    [
-        'prefix' => $prefix,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
-    ],
-    function () use ($areas_prgs,$namespace) {
-        RouteService::dynamic_route($areas_prgs, null, $namespace);
-        Route::get('/', 'HomeController@index');
-        Route::get('/home', 'HomeController@index');
-    }
-);
+if (! config('xra.disable_frontend_dynamic_route')) {
+    $prefix = '{lang}';
+    Route::group(
+        [
+            'prefix' => $prefix,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
+        ],
+        function () use ($areas_prgs,$namespace) {
+            RouteService::dynamic_route($areas_prgs, null, $namespace);
+            Route::get('/', 'HomeController@show')->name('home');
+            Route::get('/home', 'HomeController@show')->name('home');
+        }
+    );
 
-Route::group(
-    [
-        'prefix' => null,
-        'middleware' => $middleware,
-        'namespace' => $namespace,
-    ],
-    function () {
-        Route::get('/', 'HomeController@index');
-        Route::get('/home', 'HomeController@index'); //togliere o tenere ?
-        Route::get('/redirect', 'HomeController@redirect');
-        //Route::get('/test01',   'HomeController@test01');
-    }
-);
+    //dddx(config());
 
+    //dddx([$_SERVER, parseUrl($_SERVER['SERVER_NAME'])]);
+    //Route::domain('food.local')->group(function () use ($middleware,$namespace) {
+    Route::group(
+        [
+            'prefix' => null,
+            'middleware' => $middleware,
+            'namespace' => $namespace,
+        ],
+        function () {
+            Route::get('/', 'HomeController@show')->name('home'); //show o index ? homecontrller@show o pagecontroller@home ?
+            Route::get('/home', 'HomeController@show')->name('home'); //togliere o tenere ?
+            Route::get('/redirect', 'HomeController@redirect')->name('redirect');
+            //Route::get('/test01',   'HomeController@test01');
+        }
+    );
+    //});
+}
 $middleware = ['web', 'auth'/*,'verified'*/];
 $prefix = 'admin';
 
@@ -54,7 +60,7 @@ Route::group(
     }
 );
 
-if (in_admin() || true) {
+if (in_admin()) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO
     $areas_adm = [
         //$item1,

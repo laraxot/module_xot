@@ -46,7 +46,7 @@ class TranslatorService extends BaseTranslator {
     }
 
     public static function parse($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $translator = app('translator');
         $tmp = ($translator->parseKey($key));
@@ -107,7 +107,7 @@ class TranslatorService extends BaseTranslator {
     }
 
     public static function set($key, $value) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         if (trans($key) == $value) {
             return;
         } //non serve salvare

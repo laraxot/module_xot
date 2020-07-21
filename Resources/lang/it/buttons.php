@@ -49,4 +49,5 @@ return [
     ],
 
     'save' => 'Salva',
+    'close' => 'Chiudi',
 ];

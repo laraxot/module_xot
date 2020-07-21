@@ -10,7 +10,8 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
-class RouteServiceProvider extends XotBaseRouteServiceProvider {
+class RouteServiceProvider extends XotBaseRouteServiceProvider
+{
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -20,7 +21,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 
-    public function bootCallback() {
+    public function bootCallback()
+    {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -42,7 +44,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         //ddd('preso');
     }
 
-    public function registerRoutePattern(Router $router) {
+    public function registerRoutePattern(Router $router)
+    {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');
@@ -64,7 +67,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
             7 => '[[:alnum:]_?!\bedit\b]+',
         ];
 
-        for ($i = 0; $i < 4; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             $container_name = 'container'.$i;
             //$router->pattern($container_name,$pattern_test[0]);
         }
@@ -72,7 +75,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
     //end registerRoutePattern
 
-    public function registerRouteBind(Router $router) {
+    public function registerRouteBind(Router $router)
+    {
         //--------- ROUTE BIND
 
         //*
@@ -81,21 +85,24 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
             return $value;
         });
-        $lang = \App::getLocale();
-        for ($i = 0; $i < 4; ++$i) {
+        $lang = app()->getLocale();
+        for ($i = 0; $i < 5; ++$i) {
             $item_name = 'item'.$i;
             $container_name = 'container'.$i;
             $router->bind($item_name, function ($value) use ($container_name, $lang, $i) {
-                $container_curr = request()->$container_name;
+                //request()->route()->parameter($container_name);
+                //dddx([request()->route()->parameter($container_name), request()->$container_name]);
+                $container_curr = request()->route()->parameter($container_name);
                 $types = Str::camel(Str::plural($container_curr));
 
                 if (0 == $i) {
                     $model = xotModel($container_curr);
                     $rows = $model;
                 } else {
-                    $item_prev = request()->{'item'.($i - 1)};
+                    $item_prev = request()->route()->parameter('item'.($i - 1));
                     if (is_string($item_prev)) {
-                        $container_prev = request()->{'container'.($i - 1)};
+                        //dddx($item_prev);
+                        $container_prev = request()->route()->parameter('container'.($i - 1));
                         $container_prev_obj = xotModel($container_prev);
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
                     }
@@ -107,7 +114,15 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                 if (method_exists($model, 'scopeWithPost')) {
                     $rows = $rows->withPost($value); //scopeGlobal ?
                 }
-                $pk = ($model->getRouteKeyName());
+                try {
+                    $pk = $model->getRouteKeyName();
+                } catch (\Exception $e) {
+                    dddx(
+                        [
+                            'model' => $model,
+                        ]
+                    );
+                }
                 $pk_full = $model->getTable().'.'.$pk;
                 if ('guid' == $pk) {
                     $pk_full = 'guid';
@@ -138,7 +153,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                 if (is_object($row)) {
                     return $row;
                 }
-                if ($debug = 1) {
+                if ($debug = 0) {
                     /*
                     echo PHP_EOL.'----------------------------------';
                     echo PHP_EOL.' model class : '.get_class($model);
@@ -146,15 +161,16 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                     echo PHP_EOL.' pk_full : '.$pk_full;
                     echo PHP_EOL.'----------------------------------';
                     */
-                    $related = $rows->getRelated();
+                    //$related = $rows->getRelated();
                     $msg = [
                         'pk_full' => $pk_full,
                         'value' => $value,
                         'rows' => $rows,
-                        'related' => $related,
-                        'related_class' => get_class($related),
-                        'lang' => \App::getLocale(),
+                        //'related' => $related,
+                        //'related_class' => get_class($related),
+                        'lang' => app()->getLocale(),
                         'row' => $rows->first(),
+                        'url' => url()->full(),
                     ];
                     dddx($msg);
                 }

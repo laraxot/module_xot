@@ -58,8 +58,36 @@ abstract class XotBasePanel {
         return $row->getKey();
     }
 
+    //funzione/flag da settare a true ad ogni pannello/modello che abbia le traduzioni
     public function hasLang() {
         return false;
+    }
+
+    public function setLabel($label) {
+        $model = $this->row;
+        $res = $model::whereHas('post',
+            function (Builder $query) use ($label) {
+                $query->where('title', 'like', $label);
+            }
+        )->first();
+        if (is_object($res)) {
+            return $res;
+        }
+        $me = $model->create();
+        // dddx([$me, $me->getKey()]);
+        $post = $model->post()->create(
+            [
+                //'post_id' => $me->getKey(),
+                'title' => $label,
+                'lang' => \App::getLocale(),
+            ]
+        );
+        if (null == $post->post_id) {
+            $post->post_id = $me->getKey();
+            $post->save();
+        }
+
+        return $me;
     }
 
     /**
@@ -71,9 +99,11 @@ abstract class XotBasePanel {
 
     public function optionsSelect() {
         $opts = [];
+
         foreach ($this->rows as $row) {
             $id = $this->optionId($row);
             $label = $this->optionLabel($row);
+
             $opts[$id] = $label;
         }
 
@@ -201,7 +231,7 @@ abstract class XotBasePanel {
     }
 
     public function rulesMessages() {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $rules_msg_fields = collect($this->fields())->filter(function ($value, $key) use ($lang) {
             return isset($value->rules_messages) && isset($value->rules_messages[$lang]);
         })
@@ -259,38 +289,46 @@ abstract class XotBasePanel {
         return null;
     }
 
-    public function containerActions() {
+    public function getActions($params = []) {
         $panel = $this;
-        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
-            $item->getName();
+        $filters = [];
+        extract($params);
+        $actions = collect($this->actions())->filter(
+            function ($item) use ($panel,$filters) {
+                $item->getName();
+                $res = true;
+                foreach ($filters as $k => $v) {
+                    if (! isset($item->$k)) {
+                        $item->$k = false;
+                    }
+                    if ($item->$k != $v) {
+                        return false;
+                    }
+                }
 
-            return isset($item->onContainer) && $item->onContainer;
-        })->map(function ($item) use ($panel) {
-            $item->setPanel($panel);
+                return $res;
+            }
+        )->map(
+            function ($item) use ($panel) {
+                $item->setPanel($panel);
 
-            return $item;
-        })
-        //->all()
-        ;
+                return $item;
+            }
+        );
 
         return $actions;
     }
 
-    public function itemActions() {
-        $panel = $this;
-        $actions = collect($this->actions())->filter(function ($item) use ($panel) {
-            $item->getName();
+    public function containerActions($params = []) {
+        $params['filters']['onContainer'] = true;
 
-            return isset($item->onItem) && $item->onItem;
-        })->map(function ($item) use ($panel) {
-            $item->setPanel($panel);
+        return $this->getActions($params);
+    }
 
-            return $item;
-        })
-        //->all()
-        ;
+    public function itemActions($params = []) {
+        $params['filters']['onItem'] = true;
 
-        return $actions;
+        return $this->getActions($params);
     }
 
     public function itemAction($act) {
@@ -307,6 +345,22 @@ abstract class XotBasePanel {
         $itemAction->setPanel($this);
 
         return $itemAction;
+    }
+
+    public function containerAction($act) {
+        $actions = $this->containerActions();
+        $action = $actions->firstWhere('name', $act);
+        if (! is_object($action)) {
+            dddx([
+                'error' => 'nessuna azione con questo nome',
+                'act' => $act,
+                'this' => $this,
+                'Actions' => $actions,
+            ]);
+        }
+        $action->setPanel($this);
+
+        return $action;
     }
 
     public function urlContainerAction($act) {
@@ -374,7 +428,7 @@ abstract class XotBasePanel {
 
     public function applyFilter($query, $filters) {
         //https://github.com/spatie/laravel-query-builder
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $filters_fields = $this->filters();
 
         $filters_rules = collect($filters_fields)->filter(function ($item) {
@@ -424,16 +478,26 @@ abstract class XotBasePanel {
                     $search_fields = with(new $this::$model())->getFillable();
                 }
                 $table = with(new $this::$model())->getTable();
-               if (strlen($q) > 1) {
-                   $query->where(function ($subquery) use ($search_fields,$q,$table) {
-                       foreach ($search_fields as $k => $v) {
-                           if (! Str::contains($v, '.')) {
-                               $v = $table.'.'.$v;
-                           }
-                           $subquery->orWhere($v, 'like', '%'.$q.'%');
-                       }
-                   });
-               }
+                if (strlen($q) > 1) {
+                    $query->where(function ($subquery) use ($search_fields,$q,$table) {
+                        foreach ($search_fields as $k => $v) {
+                            /*
+                            if (! Str::contains($v, '.')) {
+                                $v = $table.'.'.$v;
+                            }
+                            */
+                            if (Str::contains($v, '.')) {
+                                [$rel,$rel_field] = explode('.', $v);
+                                //dddx([$rel, $rel_field, $q]);
+                                $subquery->orWhereHas($rel, function ($subquery1) use ($rel_field,$q) {
+                                    $subquery1->where($rel_field, 'like', '%'.$q.'%');
+                                });
+                            } else {
+                                $subquery->orWhere($v, 'like', '%'.$q.'%');
+                            }
+                        }
+                    });
+                }
 
                 return $query;
                 break;
@@ -579,7 +643,7 @@ abstract class XotBasePanel {
             $cache_key = 'geoJson_6_'.Str::slug(url()->full());
             if ($cache_custom = 0) {
                 if (! Storage::disk('cache')->exists($cache_key.'.json')) {
-                    $lang = \App::getLocale();
+                    $lang = app()->getLocale();
                     $ris = $data
                                 ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
                                 ->where('latitude', '!=', '')
@@ -596,7 +660,7 @@ abstract class XotBasePanel {
             //*
             $minutes = 60 * 60 * 24;
             $out = Cache::store('file')->remember($cache_key, $minutes, function () use ($data) {
-                $lang = \App::getLocale();
+                $lang = app()->getLocale();
                 $ris = $data
                             ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
                             ->where('latitude', '!=', '')
@@ -617,23 +681,6 @@ abstract class XotBasePanel {
 
         return null;
     }
-
-    /*
-    public function callAction($query, $act) {
-        if (null == $act) {
-            return $query;
-        }
-        $action = collect($this->actions())
-            ->firstWhere('name', $act);
-        $action->setRows($query);
-        $out=$action->handle();
-        $this->out = $out;
-        if (null != $this->out) { //se c'e' un risultato
-            $this->force_exit = true;
-        }
-        return $out;
-    }//end callAction
-    */
 
     public function indexRows(Request $request, $query) {
         $data = $request->all();
@@ -762,6 +809,35 @@ abstract class XotBasePanel {
             return
                 //!in_array($item->type,['Password']) &&
                 ! in_array('edit', $item->except) &&
+                ! in_array($item->name, $excepts)
+                ;
+        })->all();
+        //ddd($fields);
+        return $fields;
+    }
+
+    public function indexEditFields() {
+        $excepts = [];
+        $excepts[] = 'id'; //??
+        // $excepts[] = request()->input('_act');
+
+        if (is_object($this->rows)) {
+            $getters = ['getForeignKeyName', 'getMorphType', 'getForeignPivotKeyName', 'getRelatedPivotKeyName', 'getRelatedKeyName'];
+            foreach ($getters as $k => $v) {
+                if (method_exists($this->rows, $v)) {
+                    $excepts[] = $this->rows->$v();
+                }
+            }
+        }
+        //ddd($excepts);
+        $fields = collect($this->fields())->filter(function ($item) use ($excepts) {
+            if (! isset($item->except)) {
+                $item->except = [];
+            }
+
+            return
+                //!in_array($item->type,['Password']) &&
+                ! in_array('index_edit', $item->except) &&
                 ! in_array($item->name, $excepts)
                 ;
         })->all();
@@ -978,26 +1054,36 @@ abstract class XotBasePanel {
 
     public function imgSrc($params) {
         $row = $this->row;
-        //$src=$row->image_src;
-        $params['src'] = $row->image_src;
+        $src = $row->image_src;
+
+        $str0 = '/laravel-filemanager/';
+        if (Str::startsWith($src, $str0)) {
+            $src = '/'.Str::after($src, $str0);
+        }
+        $params['src'] = $src;
         extract($params);
         $images = $row->images;
         if (null == $images) {
-            return;
+            $images = $row->images();
         }
+        $src = $src.'';
         $img = $images->where('src', $src)
             ->where('width', $width)
             ->where('height', $height)
             ->first();
-        if ('' != $img) {
+        if (is_object($img)) {
             if (Str::startsWith($img->src_out, '\\')) {
                 $img->src_out = Str::after($img->src_out, '\\');
+                $img->save();
             }
 
             return $img->src_out;
         }
+        $params['dirname'] = '/photos/'.$this->postType().'/'.$this->guid();
+        //dddx($params);
         $img = new ImageService($params);
         $src_out = $img->fit()->save()->src();
+
         $row->images()->create([
             'src' => $src,
             'src_out' => $src_out,
@@ -1035,7 +1121,7 @@ abstract class XotBasePanel {
                     $guid = $tmp->guid;
                 } else {
                     $guid = '#';
-                    //dddx(\App::getLocale());
+                    //dddx(app()->getLocale());
                     $v_post = $v->post;
                     if (null == $v_post) {
                         break;
@@ -1043,10 +1129,10 @@ abstract class XotBasePanel {
                     $new_post = $v_post->replicate();
                     $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
                     foreach ($fields as $field) {
-                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => \App::getLocale(), 'to' => $lang]);
+                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => app()->getLocale(), 'to' => $lang]);
                         /*
                         dddx([
-                            'from'=>\App::getLocale(),
+                            'from'=>app()->getLocale(),
                             'to'=>$lang,
                             'trans'=>$trans,
 
@@ -1094,7 +1180,7 @@ abstract class XotBasePanel {
             $routename[] = 'container'.$i;
         }
         $parz['container'.$count] = $params['related_name'];
-        $parz['lang'] = \App::getLocale();
+        $parz['lang'] = app()->getLocale();
         $routename[] = 'container'.$i;
         $routename = implode('.', $routename).'.'.$params['act'];
         $route = route($routename, $parz);
@@ -1231,8 +1317,43 @@ abstract class XotBasePanel {
     public function guid() {
         $row = $this->row;
         $key = $row->getRouteKeyName();
-        //dddx([$key,$row->$key,$row->post,$row]);
-        return $row->$key;
+        $msg = [
+            'key' => $key,
+            '$row->getKey()' => $row->getKey(),
+            '$row->getKeyName()' => $row->getKeyName(),
+            '$row->primary_key' => $row->primaryKey,
+            '$row->$key' => $row->$key,
+            '$row->post' => $row->post,
+            '$row' => $row,
+        ];
+        if (null == $row->getKey()) {
+            return null;
+        }
+        $guid = $row->$key;
+        if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
+            if ('' == $row->id && '' != $row->post_id) {
+                $row->id = $row->post_id; //finche netson non riabilita migrazioni
+            }
+            try {
+                return $row->post->guid;
+            } catch (\Exception $e) {
+                $title = $this->postType().' '.$this->row->getKey();
+
+                $post = $row->post()->firstOrCreate(
+                    [
+                        'lang' => app()->getLocale(),
+                    ],
+                    [
+                        'title' => $title,
+                        'guid' => Str::slug($title),
+                    ]
+                );
+
+                return $post->guid;
+            }
+        }
+
+        return $guid;
     }
 
     public function getItemTabs() {
@@ -1383,6 +1504,20 @@ abstract class XotBasePanel {
         return $this->callItemAction($act);
     }
 
+    public function callAction($act) {
+        $action = $this->getActions()->firstWhere('name', $act);
+
+        $action->setRow($this->row);
+        $action->setPanel($this);
+
+        $method = request()->getMethod();
+        if ('GET' == $method) {
+            return  $action->handle();
+        } else {
+            return $action->postHandle();
+        }
+    }
+
     public function callItemAction($act) {
         if (null == $act) {
             return null;
@@ -1411,7 +1546,7 @@ abstract class XotBasePanel {
         $action = $this->containerActions()
             ->firstWhere('name', $act);
         if (! is_object($action)) {
-            return null;
+            abort(403, 'action '.$act.' not recognized');
         }
         $data = request()->all();
         $rows = $this->rows($data);
@@ -1444,6 +1579,7 @@ abstract class XotBasePanel {
         }
         //$act = isset($data['_act']) ? $data['_act'] : null;
         //$out_format = isset($data['format']) ? $data['format'] : null;
+
         $html = $this->callItemAction($act);
         if (null == $html) {
             $html = $this->callContainerAction($act);
@@ -1572,23 +1708,62 @@ abstract class XotBasePanel {
         }
         $bread = [];
         $tmp = (object) [];
-        $tmp->url = asset(\App::getLocale());
+        $tmp->url = asset(app()->getLocale());
         $tmp->title = 'Home';
+        $tmp->obj = \Theme::xotModel('home');
+        $tmp->method = 'index';
         $bread[] = $tmp;
         foreach ($parents as $parent) {
             $tmp = (object) [];
             $tmp->url = $parent->indexUrl();
             $tmp->title = $parent->postType();
+            $tmp->obj = \Theme::xotModel($tmp->title);
+            $tmp->method = 'index';
             $bread[] = $tmp;
             try {
                 $tmp = (object) [];
                 $tmp->url = $parent->showUrl();
                 $tmp->title = $parent->row->title;
+                $tmp->obj = \Theme::xotModel($parent->postType());
+                $tmp->method = 'show';
                 $bread[] = $tmp;
             } catch (\exception $e) {
             }
         }
+        //dddx($bread);
 
         return $bread;
+    }
+
+    public function getExcerpt($length = 225) {
+        $row = $this->row;
+        //$content = $row->subtitle ?? $row->txt;
+
+        if ($row->subtitle) {
+            $content = $row->subtitle;
+        } else {
+            $content = $row->txt;
+        }
+
+        $cleaned = strip_tags(
+            preg_replace(['/<pre>[\w\W]*?<\/pre>/', '/<h\d>[\w\W]*?<\/h\d>/'], '', $content), '<code>'
+        );
+        $truncated = substr($cleaned, 0, $length);
+
+        if (substr_count($truncated, '<code>') > substr_count($truncated, '</code>')) {
+            $truncated .= '</code>';
+        }
+
+        return strlen($cleaned) > $length
+            ? preg_replace('/\s+?(\S+)?$/', '', $truncated).'...'
+            : $cleaned;
+    }
+
+    public function indexEditSubs() {
+        return [];
+    }
+
+    public function swiperItem() {
+        return 'pub_theme::layouts.swiper.item';
     }
 }

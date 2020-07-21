@@ -155,14 +155,30 @@ class UpdateJob implements ShouldQueue {
      **/
     public function updateRelationshipsMorphToMany($params) {
         extract($params);
-        //ddd(\Request::all());
+        //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
         if (! Arr::isAssoc($data)) {
-            $model->$name()->sync($data);
-            //$model->$name()->attach($data);
+            $data = collect($data)->map(
+                function ($item) use ($model,$name) {
+                    if (is_numeric($item)) {
+                        return $item;
+                    }
+                    $related = $model->$name()->getRelated();
+                    $related_panel = Panel::get($related);
+                    $res = $related_panel->setLabel($item);
+
+                    return $res->getKey().'';
+                }
+            )->all();
             //dddx($data);
+            $model->$name()->sync($data);
         }
+        //dddx($data);
+        //
+        //$model->$name()->attach($data);
+        //}
+
         foreach ($data as $k => $v) {
             if (is_array($v)) {
                 if (! isset($v['pivot'])) {

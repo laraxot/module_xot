@@ -210,7 +210,7 @@ trait CrudContainerItemRepositoryTrait {
         $data = $request->all();
 
         if (! isset($data['lang'])) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
@@ -267,7 +267,7 @@ trait CrudContainerItemRepositoryTrait {
     public function storeRelationshipsMorphOne($params) {
         extract($params);
         if (! isset($data['lang'])) {
-            $data['lang'] = \App::getLocale();
+            $data['lang'] = app()->getLocale();
         }
         if ($model->$name()->exists()) {
             $model->$name()->update($data);

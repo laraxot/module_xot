@@ -340,7 +340,7 @@ class RouteService {
                         ->first();
                     if (is_object($other_lang)) {
                         $up = $other_lang->replicate();
-                        $up->lang = \App::getLocale();
+                        $up->lang = app()->getLocale();
                         $up->save();
                         $item_prev = $container_prev::firstOrCreate(['post_id' => $up->post_id]);
                     }
@@ -521,7 +521,7 @@ class RouteService {
     }
 
     public static function urlPanel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $parents = collect([]);
         $panel_curr = $panel;
@@ -534,16 +534,19 @@ class RouteService {
         if ($parents->count() > 0) {
             $container_root = $parents->first()->row;
         }
+        /*
         $containers_class = self::getContainersClass();
         $n = collect($containers_class)->search(get_class($container_root));
         if (null === $n) {
             $n = 0;
         }
+        */
+        $n = 0;
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         if (! isset($route_params['lang'])) {
-            $route_params['lang'] = \App::getLocale();
+            $route_params['lang'] = app()->getLocale();
         }
 
         $i = 0;
@@ -567,8 +570,9 @@ class RouteService {
         }
         */
 
-        $route_params['container'.($n + $i)] = $post_type;
-        $route_params['item'.($n + $i)] = $panel->row;
+        $route_params['container'.($n + $i)] = $panel->postType();
+
+        $route_params['item'.($n + $i)] = $panel->guid();
 
         if (inAdmin() && ! isset($route_params['module'])) {
             $container0 = $route_params['container0'];
@@ -581,28 +585,30 @@ class RouteService {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
             return '#['.__LINE__.']['.__FILE__.']';
+            /*
             dddx(
                 ['e' => $e->getMessage(),
-                    'params' => $params,
-                    'route_name' => $route_name,
-                    'route_params' => $route_params,
-                    'last row' => $panel->row,
-                    'panel post type' => $panel->postType(),
-                    'panel guid' => $panel->guid(),
-                    'last route key ' => $panel->row->getRouteKey(),
-                    'last route key name' => $panel->row->getRouteKeyName(),
+                'params' => $params,
+                'route_name' => $route_name,
+                'route_params' => $route_params,
+                'last row' => $panel->row,
+                'panel post type' => $panel->postType(),
+                'panel guid' => $panel->guid(),
+                'last route key ' => $panel->row->getRouteKey(),
+                'last route key name' => $panel->row->getRouteKeyName(),
                 ]
             );
+            */
         }
 
         //--- aggiungo le query string all'url corrente
-        $queries = collect(request()->query())->except(['_act'])->all();
+        $queries = collect(request()->query())->except(['_act', 'item0', 'item1'])->all();
 
         return url_queries($queries, $route);
     }
 
     public static function urlRelatedPanel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $parents = collect([]);
         $panel_curr = $panel;
@@ -672,7 +678,7 @@ class RouteService {
     }
 
     public static function urlModel($params) {
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         extract($params);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
@@ -782,7 +788,7 @@ class RouteService {
 
         //$related_name=collect(config('xra.model'))->search(get_class($related));
         if (! isset($params['lang'])) {
-            $params['lang'] = \App::getLocale();
+            $params['lang'] = app()->getLocale();
         }
 
         $params['container'.$cont_i] = $row_name;

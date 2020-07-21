@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\File;
+//use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\TenantService as Tenant;
 
@@ -79,77 +81,6 @@ if (! \function_exists('getFilename')) {
         return $filename;
     }
 }
-/*
-if (! \function_exists('setConfig')) {
-    function setConfig($params) {
-        $data = getConfig($params);
-        $data = \array_merge($data, $params['data']);
-
-        $config_files = getConfigFiles($params);
-        if (\count($config_files) > 1) {
-            foreach ($config_files as $k => $file) {
-                arraySave(['filename' => $config_files[$k], 'data' => $data[$k]]);
-            }
-        } else {
-            arraySave(['filename' => $config_files[0], 'data' => $data]);
-        }
-    }
-}
-
-if (! \function_exists('getConfig')) {
-    function getConfig($params) {
-        $config_files = getConfigFiles($params);
-        if (\count($config_files) > 1) {
-            $data = [];
-            foreach ($config_files as $k => $config_file) {
-                $tmp = include $config_file;
-                $data[$k] = $tmp;
-            }
-        } else {
-            $data = include $config_files[0];
-        }
-
-        return $data;
-    }
-}
-
-if (! \function_exists('getConfigFile')) {
-    function getConfigFiles($params) {
-        //if(count($params)>1){
-        if (\is_dir(base_path('config/'.$params['file']))) {
-            $tmps = (\array_keys(config($params['file'])));
-            $files = [];
-            foreach ($tmps as $tmp) {
-                $files[$tmp] = base_path('config'.DIRECTORY_SEPARATOR.$params['file'].DIRECTORY_SEPARATOR.$tmp.'.php');
-            }
-
-            return $files;
-        }
-        //ddd($params);
-        //}
-        if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
-            $_SERVER['SERVER_NAME'] = 'localhost';
-        }
-        $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
-        $config_file = base_path('config'.DIRECTORY_SEPARATOR.$server_name.DIRECTORY_SEPARATOR.$params['file']);
-        if (! \file_exists($config_file)) {
-            //ddd($config_file);
-            if (\file_exists(base_path('config/'.$params['file']))) {
-                //ddd(base_path('config/'.$params['file']));
-                return [base_path('config/'.$params['file'])];
-            }
-            if (\file_exists(base_path('config/'.$params['file'].'.php'))) {
-                //ddd('b');
-                return [base_path('config/'.$params['file'].'.php')];
-            }
-            echo '<h3>'.$config_file.'</h3>';
-            dd('<br/>LINE:['.__LINE__.']['.__FILE__.']');
-        }
-
-        return [$config_file];
-    }
-}
-*/
 if (! \function_exists('req_uri')) {
     function req_uri() {
         $req_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
@@ -157,24 +88,6 @@ if (! \function_exists('req_uri')) {
         return $req_uri;
     }
 }
-
-/*
-if (! \function_exists('arraySave')) {
-    function arraySave($params) {
-        \XRA\Extend\Services\ArrayService::save($params);
-
-        // \extract($params);
-        // $writer = new Zend\Config\Writer\PhpArray();
-        // $content = $writer->toString($data);
-        // $content = \str_replace('\\\\', '\\', $content);
-        // $content = \str_replace('\\\\', '\\', $content);
-        //$content=str_replace("\\'","\'", $content);
-        //$content = \str_replace("'".storage_path(), 'storage_path()'.".'", $content);
-        //\File::put($filename, $content);
-
-    }
-}
-*/
 
 if (! \function_exists('in_admin')) {
     function in_admin() {
@@ -184,6 +97,43 @@ if (! \function_exists('in_admin')) {
 if (! \function_exists('inAdmin')) {
     function inAdmin() {
         return 'admin' == \Request::segment(1);
+    }
+}
+
+
+/**
+     * Return true if current page is home.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isHome')) {
+    function isHome()
+    {
+        return Route::is('home');
+    }
+}
+    /**
+     * Return true if current page is an admin home page.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isAdminHome')) {
+    function isAdminHome()
+    {
+        return URL::current() == route('admin.index');
+    }
+}
+
+    /**
+     * https://gist.github.com/atorscho/5bcf63d077c11ed0e8ce
+     * Return true if current page is an admin page.
+     *
+     * @return bool
+     */
+    if (! \function_exists('isAdmin')) {
+    function isAdmin()
+    {
+        return Route::is('*admin*');
     }
 }
 
@@ -274,6 +224,19 @@ if (! \function_exists('getTransformerFromModel')) {
     }
 }
 
+if (! \function_exists('getAllModulesModels')) {
+    function getAllModulesModels() {
+        $res = [];
+        $modules = Module::all();
+        foreach ($modules as $module) {
+            $tmp = getModuleModels($module->getName());
+            $res = array_merge($res, $tmp);
+        }
+
+        return $res;
+    }
+}
+
 if (! \function_exists('getModuleModels')) {
     function getModuleModels($module) {
         if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
@@ -310,59 +273,10 @@ if (! \function_exists('getModuleModels')) {
         return $data;
     }
 }
-/*
-if (! \function_exists('tenantName')) {
-    function tenantName($params = []) {
-        if (! isset($_SERVER['SERVER_NAME']) || '127.0.0.1' == $_SERVER['SERVER_NAME']) {
-            $_SERVER['SERVER_NAME'] = 'localhost';
-        }
-        $server_name = Str::slug(\str_replace('www.', '', $_SERVER['SERVER_NAME']));
-        if (! \File::exists(base_path('config/'.$server_name))) {
-            $server_name = 'localhost';
-        }
-
-        return $server_name;
-    }//end function
-}
-
-if (! \function_exists('tenantConfig')) {
-    function tenantConfig($key) {
-        $group = implode('.', array_slice(explode('.', $key), 0, 2));
-        if (in_admin() && Str::startsWith($key, 'xra.model')) {
-            $module_name = \Request::segment(2);
-            $models = getModuleModels($module_name);
-            $original_conf = config('xra.model');
-            if (! is_array($original_conf)) {
-                $original_conf = [];
-            }
-            $merge_conf = array_merge($original_conf, $models);
-            \Config::set('xra.model', $merge_conf);
-        }
-        $tenant_name = tenantName();
-        $extra_conf = config($tenant_name.'.'.$group);
-        $original_conf = config($group);
-        //ddd($extra_conf);
-        if (! is_array($original_conf)) {
-            $original_conf = [];
-        }
-        if (! is_array($extra_conf)) {
-            $extra_conf = [];
-        }
-        $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
-        \Config::set($group, $merge_conf);  // non so se metterlo ..
-        return config($key);
-    }
-}
-*/
 
 if (! \function_exists('xotModel')) {
     function xotModel($name) {
-        $model = Tenant::config('xra.model.'.$name);
-        if ('' == $model) {
-            abort(403, 'Unauthorized path '.$name);
-        }
-
-        return new $model();
+        return Tenant::model($name);
     }
 }
 
@@ -370,7 +284,8 @@ if (! \function_exists('transFields')) {
     function transFields($params) {
         $model = Form::getModel();
         $module_name = getModuleNameFromModel($model);
-        $trans_root = Str::lower($module_name).'::'.Str::snake(class_basename($model));
+        $ns = Str::lower($module_name);
+        $trans_root = $ns.'::'.Str::snake(class_basename($model));
         //ddd() );
         //debug_getter_obj(['obj'=>$module]);
         //ddd($module_name->getNamespace());
@@ -571,98 +486,6 @@ if (! \function_exists('dottedToBrackets')) {
         return $str;
     }
 }
-/*
-if (! \function_exists('money_format')) {
-    // funzione copiata da https://php.net/manual/en/function.money-format.php
-    // Improvement to Rafael M. Salvioni's solution for money_format on Windows: when no currency symbol is selected, in the formatting, the minus sign was also lost when the locale puts it in position 3 or 4. Changed $currency = '';  to: $currency = $cprefix .$csuffix;
-
-    function money_format($format, $number) {
-        $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'.
-                    '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
-        if ('C' == setlocale(LC_MONETARY, 0)) {
-            setlocale(LC_MONETARY, '');
-        }
-        $locale = localeconv();
-        preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
-        foreach ($matches as $fmatch) {
-            $value = floatval($number);
-            $flags = [
-                'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
-                        $match[1] : ' ',
-                'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
-                'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
-                        $match[0] : '+',
-                'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
-                'isleft' => preg_match('/\-/', $fmatch[1]) > 0,
-            ];
-            $width = trim($fmatch[2]) ? (int) $fmatch[2] : 0;
-            $left = trim($fmatch[3]) ? (int) $fmatch[3] : 0;
-            $right = trim($fmatch[4]) ? (int) $fmatch[4] : $locale['int_frac_digits'];
-            $conversion = $fmatch[5];
-
-            $positive = true;
-            if ($value < 0) {
-                $positive = false;
-                $value *= -1;
-            }
-            $letter = $positive ? 'p' : 'n';
-
-            $prefix = $suffix = $cprefix = $csuffix = $signal = '';
-
-            $signal = $positive ? $locale['positive_sign'] : $locale['negative_sign'];
-            switch (true) {
-                    case 1 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
-                        $prefix = $signal;
-                        break;
-                    case 2 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
-                        $suffix = $signal;
-                        break;
-                    case 3 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
-                        $cprefix = $signal;
-                        break;
-                    case 4 == $locale["{$letter}_sign_posn"] && '+' == $flags['usesignal']:
-                        $csuffix = $signal;
-                        break;
-                    case '(' == $flags['usesignal']:
-                    case 0 == $locale["{$letter}_sign_posn"]:
-                        $prefix = '(';
-                        $suffix = ')';
-                        break;
-                }
-            if (! $flags['nosimbol']) {
-                $currency = $cprefix.
-                            ('i' == $conversion ? $locale['int_curr_symbol'] : $locale['currency_symbol']).
-                            $csuffix;
-            } else {
-                $currency = $cprefix.$csuffix;
-            }
-            $space = $locale["{$letter}_sep_by_space"] ? ' ' : '';
-
-            $value = number_format($value, $right, $locale['mon_decimal_point'], $flags['nogroup'] ? '' : $locale['mon_thousands_sep']);
-            $value = @explode($locale['mon_decimal_point'], $value);
-
-            $n = strlen($prefix) + strlen($currency) + strlen($value[0]);
-            if ($left > 0 && $left > $n) {
-                $value[0] = str_repeat($flags['fillchar'], $left - $n).$value[0];
-            }
-            $value = implode($locale['mon_decimal_point'], $value);
-            if ($locale["{$letter}_cs_precedes"]) {
-                $value = $prefix.$currency.$space.$value.$suffix;
-            } else {
-                $value = $prefix.$value.$space.$currency.$suffix;
-            }
-            if ($width > 0) {
-                $value = str_pad($value, $width, $flags['fillchar'], $flags['isleft'] ?
-                                    STR_PAD_RIGHT : STR_PAD_LEFT);
-            }
-
-            $format = str_replace($fmatch[0], $value, $format);
-        }
-
-        return $format;
-    }
-}
-*/
 
 /*
 |--------------------------------------------------------------------------

@@ -170,12 +170,12 @@ trait CrudContainerItemTrait {
         switch ($request->act) {
             case 'xstack': xdebug_print_function_stack('Your own message'); break;
         }
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         $params = \Route::current()->parameters();
         if (isset($params['lang'])) {
             \App::setLocale($params['lang']);
         } else {
-            //$params['lang']=\App::getLocale();
+            //$params['lang']=app()->getLocale();
         }
         \extract($params);
         $row = last($params); // si fa edit sempre sull'ultimo parametro prima appunto della parola edit
@@ -199,7 +199,7 @@ trait CrudContainerItemTrait {
 
     public function update(Request $request) {
         $params = \Route::current()->parameters();
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         $data = $request->all();
         $row = last($params); // si fa edit sempre sull'ultimo parametro prima appunto della parola edit
@@ -285,7 +285,7 @@ trait CrudContainerItemTrait {
         if (isset($params['lang'])) {
             \App::setLocale($params['lang']);
         } else {
-            $lang = \App::getLocale();
+            $lang = app()->getLocale();
         }
 
         \extract($params);
@@ -529,7 +529,7 @@ trait CrudContainerItemTrait {
             //return abort(404);
             $parz = $roots;
             $parz['msg'] = 'not found';
-            $parz['lang'] = \App::getLocale();
+            $parz['lang'] = app()->getLocale();
             $parz['params'] = $params;
 
             if (\View::exists('pub_theme::errors.404')) {
@@ -563,7 +563,7 @@ trait CrudContainerItemTrait {
     public function detach(Request $request) {
         $params = \Route::current()->parameters();
         $data = $request->all();
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         $last = last($params);
         $last->pivot->delete();
@@ -572,7 +572,7 @@ trait CrudContainerItemTrait {
     public function attach(Request $request) {
         $params = \Route::current()->parameters();
         $data = $request->all();
-        $lang = \App::getLocale();
+        $lang = app()->getLocale();
         \extract($params);
         $last = last($params);
         $second_last = collect(\array_slice($params, -2))->first(); //penultimo
