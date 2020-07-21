@@ -9,9 +9,9 @@ $namespace .= '\Http\Controllers';
 //$middleware = ['web', 'guest']; //guest ti riindirizza se non sei loggato
 $middleware = ['web'];
 
-$areas_prgs = include __DIR__.'/web_common.php';
+$areas_prgs = include __DIR__ . '/web_common.php';
 //$prefix = App::getLocale();
-if (! config('xra.disable_frontend_dynamic_route')) {
+if (!config('xra.disable_frontend_dynamic_route')) {
     $prefix = '{lang}';
     Route::group(
         [
@@ -19,7 +19,7 @@ if (! config('xra.disable_frontend_dynamic_route')) {
             'middleware' => $middleware,
             'namespace' => $namespace,
         ],
-        function () use ($areas_prgs,$namespace) {
+        function () use ($areas_prgs, $namespace) {
             RouteService::dynamic_route($areas_prgs, null, $namespace);
             Route::get('/', 'HomeController@show')->name('home');
             Route::get('/home', 'HomeController@show')->name('home');
@@ -52,10 +52,10 @@ Route::group(
     [
         'prefix' => $prefix,
         'middleware' => $middleware,
-        'namespace' => $namespace.'\Admin',
+        'namespace' => $namespace . '\Admin',
     ],
     function () use ($areas_prgs) {
-        Route::get('/', 'BackendController@dashboard');
+        Route::get('/', 'BackendController@dashboard')->name('admin');
         //RouteTrait::dynamic_route($areas_prgs);
     }
 );
@@ -82,7 +82,7 @@ if (in_admin()) {
             'middleware' => $middleware,
             'namespace' => $namespace,
         ],
-        function () use ($areas_adm,$namespace) {
+        function () use ($areas_adm, $namespace) {
             RouteService::dynamic_route($areas_adm, null, $namespace);
         }
     );
