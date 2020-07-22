@@ -618,13 +618,14 @@ abstract class XotBasePanel {
             return $out;
         }
         if ('datatables' == $format) {
-            return 'preso';
             $model = $data->getModel();
-            $transformer = StubService::fromModel(['model' => $model, 'stub' => 'transformer_collection']);
+            //$transformer = StubService::fromModel(['model' => $model, 'stub' => 'transformer_collection']);
 
             $this->force_exit = 1;
             $ris = $model->get();
-            $out = new $transformer($ris);
+            //$out = new $transformer($ris);
+            $out = $model::all();
+            //dddx($out);
 
             $this->out = Datatables::collection($out)->make(true);
 
