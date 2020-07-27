@@ -12,6 +12,7 @@ class CreateMetatagsTable extends XotBaseMigration {
         if (! $this->tableExists()) {
             $this->getConn()->create($this->getTable(), function (Blueprint $table) {
                 $table->increments('id');
+                $table->string('sitename')->nullable();
                 $table->string('title')->nullable();
                 $table->string('subtitle')->nullable();
                 $table->string('charset')->nullable();
@@ -32,10 +33,6 @@ class CreateMetatagsTable extends XotBaseMigration {
             if (! $this->hasColumn('updated_by')) {
                 $table->string('updated_by')->nullable()->after('updated_at');
                 $table->string('created_by')->nullable()->after('created_at');
-            }
-
-            if (! $this->hasColumn('sitename')) {
-                $table->string('sitename')->nullable();
             }
         }); //end update
     }
