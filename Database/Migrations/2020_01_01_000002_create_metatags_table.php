@@ -13,13 +13,13 @@ class CreateMetatagsTable extends XotBaseMigration {
             $this->getConn()->create($this->getTable(), function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('title')->nullable();
-                $table->text('subtitle')->nullable();
+                $table->string('subtitle')->nullable();
                 $table->string('charset')->nullable();
                 $table->string('author')->nullable();
                 $table->text('meta_description')->nullable();
                 $table->text('meta_keywords')->nullable();
-                $table->text('logo_src')->nullable();
-                $table->text('logo_footer_src')->nullable();
+                $table->string('logo_src')->nullable();
+                $table->string('logo_footer_src')->nullable();
                 $table->string('tennant_name')->nullable();
             });
         }//end create
