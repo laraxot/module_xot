@@ -127,6 +127,9 @@ class UpdateJob implements ShouldQueue {
         if ($rows->exists()) {
             $rows->update($data);
         } else {
+            if (! isset($data['lang'])) {
+                $data['lang'] = \App::locale();
+            }
             $rows->create($data);
         }
     }
