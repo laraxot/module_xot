@@ -100,42 +100,38 @@ if (! \function_exists('inAdmin')) {
     }
 }
 
-
-/**
+/*
      * Return true if current page is home.
      *
      * @return bool
      */
     if (! \function_exists('isHome')) {
-    function isHome()
-    {
-        return Route::is('home');
+        function isHome() {
+            return Route::is('home');
+        }
     }
-}
-    /**
+    /*
      * Return true if current page is an admin home page.
      *
      * @return bool
      */
     if (! \function_exists('isAdminHome')) {
-    function isAdminHome()
-    {
-        return URL::current() == route('admin.index');
+        function isAdminHome() {
+            return URL::current() == route('admin.index');
+        }
     }
-}
 
-    /**
+    /*
      * https://gist.github.com/atorscho/5bcf63d077c11ed0e8ce
      * Return true if current page is an admin page.
      *
      * @return bool
      */
     if (! \function_exists('isAdmin')) {
-    function isAdmin()
-    {
-        return Route::is('*admin*');
+        function isAdmin() {
+            return Route::is('*admin*');
+        }
     }
-}
 
     /*
      * Replaces spaces with full text search wildcards
@@ -484,6 +480,22 @@ if (! \function_exists('dottedToBrackets')) {
         })->implode('');
 
         return $str;
+    }
+}
+
+if (! \function_exists('array_merge_recursive_distinct')) {
+    function array_merge_recursive_distinct(array &$array1, array &$array2) {
+        $merged = $array1;
+
+        foreach ($array2 as $key => &$value) {
+            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = array_merge_recursive_distinct($merged[$key], $value);
+            } else {
+                $merged[$key] = $value;
+            }
+        }
+
+        return $merged;
     }
 }
 

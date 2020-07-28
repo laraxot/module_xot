@@ -108,9 +108,10 @@ class TenantService {
         extract($params);
         $tennant_name = self::getName();
         $config_data = config($tennant_name.'.'.$name);
-        $config_data = array_merge_recursive($config_data, $data);
-        $config_data = Arr::sortRecursive($config_data);
+        //$config_data = array_merge_recursive($config_data, $data);
+        $config_data = array_merge_recursive_distinct($config_data, $data); //funzione in helper
 
+        $config_data = Arr::sortRecursive($config_data);
         $path = config_path($tennant_name.'/'.$name.'.php');
         $path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
         $content = '<'.'?'.'php'.chr(13).chr(13).' return '.var_export($config_data, true).';';
