@@ -22,11 +22,11 @@ trait HasPriceTrait {
 
     public function getSubtotalCurrencyAttribute($value) {
         if ($this->qty > 0) {
-            $parz = $this->qty * $this->price;
+            $value = $this->qty * $this->price;
         } else {
-            $parz = $this->price;
+            $value = $this->price;
         }
 
-        return @money($parz * 100, $this->currency);
+        return @money($value * 100, $this->currency);
     }
 }
