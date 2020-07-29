@@ -29,4 +29,8 @@ trait HasPriceTrait {
 
         return @money($value * 100, $this->currency);
     }
+
+    public function getCurrency($number){
+        return @money($number * 100, $this->currency);
+    }
 }
