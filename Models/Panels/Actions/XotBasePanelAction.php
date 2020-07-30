@@ -117,6 +117,8 @@ abstract class XotBasePanelAction {
         $name = $this->getName();
         //$url = $request->fullUrlWithQuery(['_act' => $name]);
         //if (isset($panel)) {
+        //dddx([request()->all(),$this->data]);
+        $this->data=array_merge(request()->all(),$this->data);
         $url = $panel->indexUrl();
         $url = url_queries(['_act' => $name], $url);
         $url = url_queries($this->data, $url);
@@ -136,6 +138,7 @@ abstract class XotBasePanelAction {
     }
 
     public function btnHtml($params = []) {
+
         $params['panel'] = $this->panel;
         $params['url'] = $this->getUrl($params);
 
