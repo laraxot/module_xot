@@ -10,8 +10,7 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
-class RouteServiceProvider extends XotBaseRouteServiceProvider
-{
+class RouteServiceProvider extends XotBaseRouteServiceProvider {
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -21,8 +20,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 
-    public function bootCallback()
-    {
+    public function bootCallback() {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -44,8 +42,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
         //ddd('preso');
     }
 
-    public function registerRoutePattern(Router $router)
-    {
+    public function registerRoutePattern(Router $router) {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');
@@ -75,8 +72,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
 
     //end registerRoutePattern
 
-    public function registerRouteBind(Router $router)
-    {
+    public function registerRouteBind(Router $router) {
         //--------- ROUTE BIND
 
         //*
@@ -107,6 +103,9 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
                     }
                     $types = Str::camel(Str::plural($container_curr));
+                    if (! is_object($types)) {
+                        abort(404);
+                    }
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
                 }
