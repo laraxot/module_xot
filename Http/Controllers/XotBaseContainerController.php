@@ -61,7 +61,7 @@ abstract class XotBaseContainerController extends Controller {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
             //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
-            $request =request();
+            $request = request();
             if ($request->ajax()) {
                 $html = '<h3>Before Login </h3>
             <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
@@ -105,6 +105,9 @@ abstract class XotBaseContainerController extends Controller {
             $method = Str::plural($method);
         }
         if (! method_exists($item_last, $method)) {
+            if (! is_object($item_last)) {
+                abort(404);
+            }
             exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
         }
         $related = $item_last->$method()->getRelated();
@@ -143,7 +146,8 @@ abstract class XotBaseContainerController extends Controller {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $model = $this->getModel();
         if (! is_object($model)) {
-            dddx($model);
+            //dddx($model);
+            abort(404);
         }
         $authorized = Gate::allows($method, $model);
 
@@ -180,16 +184,16 @@ abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         $params = \Route::current()->parameters();
         //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        
+
         //$url=url()->full();
-        
+
         //if($url!='http://food.local/it/restaurant/ristorante-1'){
         //    dddx([$url,$request->all(),request()->all(),$_GET]);
         //}
-        
+
         $a = $this->init($params);
 
-        if ('' != request()->input('_act','') ) {
+        if ('' != request()->input('_act', '')) {
             return $this->__callPanelAct($method, $args);
         }
 
