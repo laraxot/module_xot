@@ -103,11 +103,16 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
                     }
                     $types = Str::camel(Str::plural($container_curr));
+                    /*
                     if (! is_object($types)) {
                         abort(404);
                     }
+                    */
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
+                    if (! is_object($model)) {
+                        abort(404);
+                    }
                 }
 
                 if (method_exists($model, 'scopeWithPost')) {
