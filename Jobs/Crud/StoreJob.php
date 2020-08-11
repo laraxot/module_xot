@@ -7,9 +7,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
-
+use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
@@ -116,7 +115,7 @@ class StoreJob implements ShouldQueue {
 
         return $panel;
     }
-    
+
     public function saveParentHasManyDeep() {
     }
 
