@@ -995,12 +995,14 @@ abstract class XotBasePanel {
     public function btnDelete($params = []) {
         $class = 'btn-primary mb-2';
         extract($params);
+        //dddx($params);
         $act = 'destroy';
         $parz = [
             'id' => $this->row->getKey(),
             'btn_class' => 'btn '.$class,
             'route' => $this->destroyUrl(),
             'act' => $act,
+            'title' => $title,
         ];
 
         return view('formx::includes.components.btn.'.$act)->with($parz);
