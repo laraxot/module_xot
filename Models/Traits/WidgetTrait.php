@@ -15,7 +15,7 @@ use Modules\Xot\Models\Widget;
 trait WidgetTrait {
     public function widgets() {  //questo sarebbe itemWidgets, ma teniamo questo nome
         return $this->morphMany(Widget::class, 'post')
-            ->where('layout_position', '')
+            ->whereNull('layout_position')
             ->orderBy('pos');
     }
 
