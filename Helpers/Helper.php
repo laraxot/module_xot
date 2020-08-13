@@ -206,6 +206,14 @@ if (! \function_exists('getModuleNameFromModel')) {
     }
 }
 
+if (! \function_exists('getModuleNameFromModelName')) {
+    function getModuleNameFromModelName($model_name) {
+        $model = Tenant::model($model_name);
+
+        return getModuleNameFromModel($model);
+    }
+}
+
 if (! \function_exists('getTransformerFromModel')) {
     function getTransformerFromModel($model, $type = 'Resource') {
         $class = get_class($model);
