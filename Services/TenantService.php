@@ -125,8 +125,9 @@ class TenantService {
         if ('' == $class) {
             $models = getAllModulesModels();
             if (! isset($models[$name])) {
-                abort(403, 'Unauthorized path '.$name);
-            }
+                //abort(403, 'Unauthorized path '.$name);
+                return false;
+            } 
             $class = $models[$name];
             $data = [];
             $data['model'][$name] = $class;
