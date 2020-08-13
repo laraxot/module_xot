@@ -15,11 +15,15 @@ use Modules\Xot\Models\Widget;
 trait WidgetTrait {
     public function widgets() {  //questo sarebbe itemWidgets, ma teniamo questo nome
         return $this->morphMany(Widget::class, 'post')
-            ->whereNull('layout_position')
+            //->whereNull('layout_position')
+            ->where(function($query){
+                $query->where('layout_position','')
+                    ->orWhereNull('layout_position');
+            })
             ->orderBy('pos');
     }
 
-    public function containerWidgets() {
+    public function containerWidgets() { 
         return $this->hasMany(Widget::class, 'post_type', 'post_type')
         ->orderBy('pos');
         //->whereNull('post_id');
