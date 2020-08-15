@@ -13,16 +13,14 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
-abstract class XotBaseContainerController extends Controller
-{
+abstract class XotBaseContainerController extends Controller {
     protected $controller;
     protected $row;
     protected $module;
     protected $controller_exist;
 
     //public function __construct() { //o lo chiamavo "init".. etc etc
-    public function init($params)
-    { //o lo chiamavo "init".. etc etc
+    public function init($params) { //o lo chiamavo "init".. etc etc
         //$params = \Route::current()->parameters();
         //ddd($params);
         list($containers, $items) = params2ContainerItem($params);
@@ -74,8 +72,7 @@ abstract class XotBaseContainerController extends Controller
         }
     }
 
-    public function getModel()
-    {
+    public function getModel() {
         $params = \Route::current()->parameters();
         [$containers, $items] = params2ContainerItem($params);
         if (0 == count($containers)) {
@@ -105,8 +102,7 @@ abstract class XotBaseContainerController extends Controller
         return $related;
     }
 
-    public function __callPanelAct($act, $method, $args)
-    {
+    public function __callPanelAct($act, $method, $args) {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $act = $request->_act;
         $method_act = Str::camel($act);
@@ -134,8 +130,7 @@ abstract class XotBaseContainerController extends Controller
 
     //end call panel act
 
-    public function __callRouteAct($method, $args)
-    {
+    public function __callRouteAct($method, $args) {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $model = $this->getModel();
         if (! is_object($model)) {
@@ -172,8 +167,7 @@ abstract class XotBaseContainerController extends Controller
         );
     }
 
-    public function __callUFF($method, $args)
-    {
+    public function __callUFF($method, $args) {
         $params = \Route::current()->parameters();
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $a = $this->init($params);
@@ -185,8 +179,7 @@ abstract class XotBaseContainerController extends Controller
         return $this->__callRouteAct($method, $args);
     }
 
-    public function __call($method, $args)
-    {
+    public function __call($method, $args) {
         $params = \Route::current()->parameters();
 
         $this->init($params);
@@ -227,11 +220,12 @@ abstract class XotBaseContainerController extends Controller
         if (method_exists($panel, 'out')) {
             return $panel->out(
                 [
-                'is_ajax' => $request->ajax(),
-                'method' => $request->getMethod(),
-            ]
+                    'is_ajax' => $request->ajax(),
+                    'method' => $request->getMethod(),
+                ]
             );
         }
+
         return $panel;
         /*
         if ($panel instanceof \Illuminate\View\View) {
@@ -241,8 +235,7 @@ abstract class XotBaseContainerController extends Controller
         //ddx(['panel' => $panel]);
     }
 
-    public function ContainerItem2Panel($container, $item)
-    {
+    public function ContainerItem2Panel($container, $item) {
         list($containers, $items) = params2ContainerItem();
         if (count($containers) > count($items)) {
             $types = Str::camel(Str::plural($container));
