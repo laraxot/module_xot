@@ -26,6 +26,17 @@ class ArtisanService {
             case 'viewclear': return ArtisanService::exe('view:clear');
             case 'configcache': return ArtisanService::exe('config:cache');
 
+            //-------------------------------------------------------------------
+            case 'debugbar:clear':
+                $files=File::files(storage_path('debugbar'));
+                foreach($files as $file){
+                    if($file->getExtension()=='json'){
+                        File::delete($file);
+                    }
+                }
+               return 'Debugbar Storage cleared! ('.count($files).' Files )';
+            break;
+
             //------------------------------------------------------------------
 
             case 'module-list': return ArtisanService::exe('module:list');
