@@ -313,6 +313,55 @@ class RouteService {
 
     //end prefixedResourceNames
 
+    //--------------------------------------------------
+    public static function getContainerActs(){
+        $cont_acts = [
+            [
+                'name' => 'Edit',
+                'act' => 'indexEdit',
+            ], //end act_n
+            [
+                'name' => 'Order',
+                'act' => 'indexOrder',
+            ], //end act_n
+            [
+                'name' => 'Attach',
+                //'act' => 'indexAttach',
+                'act' => 'attach',
+            ], //end act_n
+        ];
+        return $cont_acts;
+
+    }
+    public static function getItemActs(){
+        $acts = [
+            //['name' => 'attach'], //end act_n
+            ['name' => 'detach', 'method' => ['DELETE', 'GET']], //end act_n
+            //['name' => 'moveUp', 'method' => ['PUT', 'GET']],   // se uso "order" questi non mi servono
+            //['name' => 'moveDown', 'method' => ['PUT', 'GET']],
+        ]; //end acts
+        return $acts;
+    }
+    public static function generate($n=0){
+        if($n>4) return [];
+        return [
+            [
+                'name' => '{container'.$n.'}',
+                'param_name' => '',
+                'as' => 'container'.$n.'.index_',
+                'acts' => self::getContainerActs(), 
+                //'only'=>[],
+            ], 
+            [
+                'name' => '{container'.$n.'}',
+                'param_name' => 'item'.$n.'',
+                'acts' => self::getItemActs(),
+                'subs' => self::generate($n+1),
+            ],
+        ];
+    }
+    //--------------------------------------------------
+
     public static function containerN($params) {
         extract($params);
         if (! isset($model)) {

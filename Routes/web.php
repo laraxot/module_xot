@@ -9,7 +9,8 @@ $namespace .= '\Http\Controllers';
 //$middleware = ['web', 'guest']; //guest ti riindirizza se non sei loggato
 $middleware = ['web'];
 
-$areas_prgs = include __DIR__ . '/web_common.php';
+//$areas_prgs = include __DIR__ . '/web_common.php';
+$areas_prgs = RouteService::generate();
 //$prefix = App::getLocale();
 if (!config('xra.disable_frontend_dynamic_route')) {
     $prefix = '{lang}';
