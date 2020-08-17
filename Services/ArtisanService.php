@@ -5,6 +5,10 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
+if(!defined('STDIN')){
+    define('STDIN',fopen("php://stdin","r")); 
+}
+
 //----- TODO
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
 
