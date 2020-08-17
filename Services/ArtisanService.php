@@ -20,7 +20,7 @@ class ArtisanService {
                 \DB::purge('mysql');
                 \DB::reconnect('mysql');
 
-                return ArtisanService::exe('migrate');
+                return ArtisanService::exe('migrate --force');
             case 'routelist': return ArtisanService::exe('route:list');
             case 'optimize': return ArtisanService::exe('optimize');
 
