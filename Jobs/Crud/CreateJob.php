@@ -31,8 +31,18 @@ class CreateJob implements ShouldQueue {
      * @return void
      */
     public function __construct($containers, $items, $data = null) {
-        $container = last($containers);
-        $item = last($items);
+        if (is_array($containers)) {
+            $container = last($containers);
+        } else {
+            $container = $containers;
+            $containers = [$container];
+        }
+        if (is_array($items)) {
+            $item = last($items);
+        } else {
+            $item = $items;
+            $items = [$item];
+        }
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();

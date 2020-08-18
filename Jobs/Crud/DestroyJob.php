@@ -30,8 +30,18 @@ class DestroyJob implements ShouldQueue {
      * @return void
      */
     public function __construct($containers, $items, $data = null) {
-        $container = last($containers);
-        $item = last($items);
+        if (is_array($containers)) {
+            $container = last($containers);
+        } else {
+            $container = $containers;
+            $containers = [$container];
+        }
+        if (is_array($items)) {
+            $item = last($items);
+        } else {
+            $item = $items;
+            $items = [$item];
+        }
         $this->container = $container;
         $this->item = $item;
         $this->row = $item;
