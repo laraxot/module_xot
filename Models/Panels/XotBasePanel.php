@@ -728,19 +728,6 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    public function indexFields() {
-        $fields = collect($this->fields())->filter(function ($item) {
-            if (! isset($item->except)) {
-                $item->except = [];
-            }
-
-            return ! in_array($item->type, ['Password']) &&
-                ! in_array('index', $item->except);
-        })->all();
-
-        return $fields;
-    }
-
     public function formCreate($params = []) {
         $fields = $this->createFields();
         $row = $this->row;
@@ -783,80 +770,89 @@ abstract class XotBasePanel {
         return $res;
     }
 
-    public function createFields() {
-        $excepts = [];
+    public function exceptFields($params = []) {
+        extract($params);
+        $excepts = collect([]);
         if (is_object($this->rows)) {
-            if (method_exists($this->rows, 'getForeignKeyName')) {
-                $excepts[] = $this->rows->getForeignKeyName();
-            }
-        }
-        //ddd($excepts);
-        $fields = collect($this->fields())->filter(function ($item) use ($excepts) {
-            if (! isset($item->except)) {
-                $item->except = [];
+            $methods = [
+                'getForeignKeyName',
+                'getMorphType',
+                //'getLocalKeyName',
+                'getForeignPivotKeyName',
+                'getRelatedPivotKeyName',
+                'getRelatedKeyName',
+            ];
+            if ('index' != $act) {//nella lista voglio visualizzare l'id
+                $methods[] = 'getLocalKeyName';
             }
 
-            //!in_array($item->type,['Password']) &&
-            return ! in_array('create', $item->except) &&
-                ! in_array($item->name, $excepts);
-        })->all();
+            foreach ($methods as $method) {
+                if (method_exists($this->rows, $method)) {
+                    $excepts = $excepts->merge($this->rows->$method());
+                }
+            }
+        }
+        $excepts = $excepts->unique()->all();
+
+        $fields = collect($this->fields())
+            ->filter(
+                function ($item) use ($excepts,$act) {
+                    if (! isset($item->except)) {
+                        $item->except = [];
+                    }
+
+                    //!in_array($item->type,['Password']) &&
+                    return ! in_array($act, $item->except) &&
+                        ! in_array($item->name, $excepts);
+                }
+            )->all();
+
+        return $fields;
+    }
+
+    public function indexFields() {
+        $fields = $this->exceptFields(['act' => 'index']);
+
+        return $fields;
+    }
+
+    public function createFields() {
+        $excepts = collect([]);
+        /*
+        $methods = collect(get_class_methods($this->rows))->filter(
+            function ($item) {
+                return Str::startsWith($item, 'get') && ! in_array($item,
+                    [
+                        'getRelationExistenceQuery',
+                        'getRelationExistenceQueryForSelfRelation',
+                        'getRelationExistenceCountQuery',
+                        'getMorphedModel',
+                    ]
+                );
+            }
+        )->map(
+            function ($item) {
+                return (object) [
+                    'name' => $item,
+                    'res' => $this->rows->$item(),
+                ];
+            }
+        )->all();
+        */
+        $fields = $this->exceptFields(['act' => 'create']);
 
         return $fields;
     }
 
     public function editFields() {
-        $excepts = [];
-        $excepts[] = 'id'; //??
-        // $excepts[] = request()->input('_act');
+        $fields = $this->exceptFields(['act' => 'edit']);
 
-        if (is_object($this->rows)) {
-            $getters = ['getForeignKeyName', 'getMorphType', 'getForeignPivotKeyName', 'getRelatedPivotKeyName', 'getRelatedKeyName'];
-            foreach ($getters as $k => $v) {
-                if (method_exists($this->rows, $v)) {
-                    $excepts[] = $this->rows->$v();
-                }
-            }
-        }
-        //ddd($excepts);
-        $fields = collect($this->fields())->filter(function ($item) use ($excepts) {
-            if (! isset($item->except)) {
-                $item->except = [];
-            }
-
-            return
-                //!in_array($item->type,['Password']) &&
-                ! in_array('edit', $item->except) &&
-                ! in_array($item->name, $excepts);
-        })->all();
-        //ddd($fields);
         return $fields;
     }
 
     public function indexEditFields() {
-        $excepts = [];
-        $excepts[] = 'id'; //??
-        // $excepts[] = request()->input('_act');
+        $fields = $this->exceptFields(['act' => 'index_edit']);
 
-        if (is_object($this->rows)) {
-            $getters = ['getForeignKeyName', 'getMorphType', 'getForeignPivotKeyName', 'getRelatedPivotKeyName', 'getRelatedKeyName'];
-            foreach ($getters as $k => $v) {
-                if (method_exists($this->rows, $v)) {
-                    $excepts[] = $this->rows->$v();
-                }
-            }
-        }
-        //ddd($excepts);
-        $fields = collect($this->fields())->filter(function ($item) use ($excepts) {
-            if (! isset($item->except)) {
-                $item->except = [];
-            }
-
-            return
-                //!in_array($item->type,['Password']) &&
-                ! in_array('index_edit', $item->except) &&
-                ! in_array($item->name, $excepts);
-        })->all();
-        //ddd($fields);
         return $fields;
     }
 
@@ -892,6 +888,7 @@ abstract class XotBasePanel {
                 $this->force_exit = true;
                 $this->out = redirect($t);
                 die($this->out); //forzatura
+
                 return;
             }
             $request->year = date('Y');

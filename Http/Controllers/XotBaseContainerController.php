@@ -47,7 +47,7 @@ abstract class XotBaseContainerController extends Controller {
             $controller = '\Modules\Xot\Http\Controllers\XotController';
             $this->controller = $controller;
         }
-        $this->item = $items;
+        $this->items = $items;
         $this->containers = $containers;
 
         $this->item_last = last($items);
@@ -171,7 +171,7 @@ abstract class XotBaseContainerController extends Controller {
         }
         //dd('['.__LINE__.']['.__FILE__.']['.$this->controller.']['.$method.']');
         $panel = app($this->controller)
-            ->$method($request, $this->container_last, $this->item_last);
+            ->$method($request, $this->containers, $this->items);
 
         return $panel->out(
             [

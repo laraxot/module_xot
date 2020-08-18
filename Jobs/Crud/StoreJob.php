@@ -31,7 +31,9 @@ class StoreJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null) {
+    public function __construct($containers, $items, $data = null) {
+        $container = last($containers);
+        $item = last($items);
         $this->container = $container;
         $this->item = $item;
         //dd('['.__LINE__.']['.__FILE__.'][__construct]');

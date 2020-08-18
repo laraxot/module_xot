@@ -54,6 +54,8 @@ abstract class XotBaseContainerController extends Controller {
             $controller = '\Modules\Xot\Http\Controllers\Admin\XotController';
             $this->controller = $controller;
         }
+        $this->items = $items;
+        $this->containers = $containers;
         $this->item_last = last($items);
         $this->container_last = last($containers);
         $this->last = last($params);
@@ -156,8 +158,9 @@ abstract class XotBaseContainerController extends Controller {
 
             return $this->notAuthorized($method, $model);
         }
+
         $panel = app($this->controller)
-            ->$method($request, $this->container_last, $this->item_last);
+            ->$method($request, $this->containers, $this->items);
 
         return $panel->out(
             [
@@ -214,7 +217,7 @@ abstract class XotBaseContainerController extends Controller {
         if ('' != $request->_act) {
             $panel = $this->ContainerItem2Panel($this->container_last, $this->item_last);
         } else {
-            $panel = app($controller)->$method($request, $this->container_last, $this->item_last);
+            $panel = app($controller)->$method($request, $this->containers, $this->items);
         }
 
         if (method_exists($panel, 'out')) {

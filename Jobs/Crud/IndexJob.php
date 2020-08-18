@@ -30,7 +30,9 @@ class IndexJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null) {
+    public function __construct($containers, $items, $data = null) {
+        $container = last($containers);
+        $item = last($items);
         $this->container = $container;
         $this->item = $item;
 
@@ -44,7 +46,17 @@ class IndexJob implements ShouldQueue {
         }
         $this->row = $row;
         $this->rows = $rows;
+        $panel = null;
+        foreach ($items as $k => $v) {
+            $panel = Panel::get($v);
+            $panel->setParent($panel_parent);
+            $panel_parent = $panel;
+        }
         $this->panel = Panel::get($row);
+        if (null != $panel) {
+            $this->panel->setParent($panel);
+        }
+
         $this->panel->setRows($rows);
         //ddd($this->panel);
         /*

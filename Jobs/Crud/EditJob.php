@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 //----------- Requests ----------
 //------------ services ----------
+use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
 class EditJob implements ShouldQueue {
@@ -29,12 +30,30 @@ class EditJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null) {
+    public function __construct($containers, $items, $data = null) {
+        $container = last($containers);
+        $item = last($items);
         $this->container = $container;
         $this->item = $item;
         $this->row = $item;
+        //$this->panel = Panel::get($this->row);
+        $panel_parent = null;
+        foreach ($items as $k => $v) {
+            $panel = Panel::get($v);
+            $panel->setParent($panel_parent);
+            $panel_parent = $panel;
+        }
 
-        $this->panel = Panel::get($this->row);
+        $types = Str::camel(Str::plural($container));
+        $rows = null;
+        if (is_object($item)) {
+            try {
+                $rows = $item->$types();
+            } catch (\Exception $e) {
+            }
+        }
+        $panel->setRows($rows);
+        $this->panel = $panel;
     }
 
     /**

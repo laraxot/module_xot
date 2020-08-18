@@ -34,7 +34,9 @@ class AttachJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($container, $item, $data = null) {
+    public function __construct($containers, $items, $data = null) {
+        $container = last($containers);
+        $item = last($items);
         $types = Str::camel(Str::plural($container));
         if (is_object($item)) { //l'oggetto figlio potrebbe avere un modello diverso
             $rows = $item->$types();
