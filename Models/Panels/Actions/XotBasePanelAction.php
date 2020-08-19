@@ -61,8 +61,12 @@ abstract class XotBasePanelAction {
     }
 
     public function getTitle() {
-        $title = $this->getName();
-        $title = str_replace('_', ' ', $title);
+        $name = $this->getName();
+        //$title = str_replace('_', ' ', $title);
+        $row = $this->panel->row;
+
+        $module_name = getModuleNameFromModel($row);
+        $title = trans($module_name.'::'.strtolower(class_basename($row)).'.act.'.$name);
 
         return $title;
     }
@@ -151,6 +155,9 @@ abstract class XotBasePanelAction {
         }
         if (! isset($params['title'])) {
             $params['title'] = ''; // $this->getTitle();
+        }
+        if (true === $params['title']) {
+            $params['title'] = $this->getTitle();
         }
 
         if (! isset($params['tooltip'])) {

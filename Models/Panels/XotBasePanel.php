@@ -1023,6 +1023,11 @@ abstract class XotBasePanel {
         $params['panel'] = $this;
         $params['url'] = RouteService::urlPanel($params);
         $params['method'] = Str::camel($params['act']);
+        if (! isset($params['title'])) {
+            $row = $this->row;
+            $module_name = getModuleNameFromModel($row);
+            $params['title'] = trans($module_name.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
+        }
 
         return FormXService::btnHtml($params);
     }
