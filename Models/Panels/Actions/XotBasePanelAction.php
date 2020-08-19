@@ -142,19 +142,29 @@ abstract class XotBasePanelAction {
         $params['url'] = $this->getUrl($params);
 
         $params['method'] = Str::camel($this->getName());
-        $params['act'] = 'show';
-        $params['data_title'] = $this->getTitle();
+        if (! isset($params['act'])) {
+            if ($this->onContainer) {
+                $params['act'] = 'index';
+            } else {
+                $params['act'] = 'show';
+            }
+        }
+        if (! isset($params['title'])) {
+            $params['title'] = ''; // $this->getTitle();
+        }
+
+        if (! isset($params['tooltip'])) {
+            $params['tooltip'] = $this->getTitle();
+        }
+
         if (! isset($params['data_title'])) {
-            $params['icon'] = $this->icon;
+            $params['data_title'] = $this->getTitle();
         }
         if (! isset($params['icon'])) {
             $params['icon'] = $this->icon;
         }
         if (! isset($params['class'])) {
             $params['class'] = 'btn btn-secondary mb-2';
-        }
-        if ($this->onContainer) {
-            $params['act'] = 'index';
         }
 
         return FormXService::btnHtml($params);
