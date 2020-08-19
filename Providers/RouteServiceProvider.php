@@ -108,6 +108,10 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         abort(404);
                     }
                     */
+                    if($item_prev==null){
+                        //die(response()->view('pub_theme::errors.404', [], 404));
+                        abort(404,'aaa');
+                    }
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
                     if (! is_object($model)) {
