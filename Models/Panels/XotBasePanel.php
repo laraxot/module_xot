@@ -1025,8 +1025,8 @@ abstract class XotBasePanel {
         $params['method'] = Str::camel($params['act']);
         if (! isset($params['title'])) {
             $row = $this->row;
-            $module_name = getModuleNameFromModel($row);
-            $params['title'] = trans($module_name.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
+            $module_name_low = strtolower(getModuleNameFromModel($row));
+            $params['title'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
         }
 
         return FormXService::btnHtml($params);
