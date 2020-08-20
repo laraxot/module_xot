@@ -1029,6 +1029,25 @@ abstract class XotBasePanel {
             $params['title'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
         }
 
+        if (true === $params['title']) {
+            $row = $this->row;
+            $module_name_low = strtolower(getModuleNameFromModel($row));
+            $parent = $this->getParent();
+            if (null != $parent) {
+                $tmp = [];
+                $tmp[] = class_basename($parent->row);
+                $tmp[] = class_basename($row);
+                $tmp[] = 'act';
+                $tmp[] = $params['method'];
+                $tmp = collect($tmp)->map(function ($item) {
+                    return Str::snake($item);
+                })->implode('.');
+                $params['title'] = trans($module_name_low.'::'.$tmp);
+            } else {
+                $params['title'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
+            }
+        }
+
         return FormXService::btnHtml($params);
     }
 
@@ -1378,6 +1397,19 @@ abstract class XotBasePanel {
 
         return $guid;
     }
+
+    /*
+    public function getTitle() {
+       $name = $this->getName();
+       //$title = str_replace('_', ' ', $title);
+       $row = $this->panel->row;
+
+       $module_name_low = strtolower(getModuleNameFromModel($row));
+       $title = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$name);
+
+       return $title;
+    }
+    */
 
     public function getItemTabs() {
         $item = $this->row;

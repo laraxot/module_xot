@@ -58,6 +58,15 @@ class IndexEditJob implements ShouldQueue {
         $this->rows = $rows;
         $this->panel = Panel::get($row);
         $this->panel->setRows($rows);
+        $panel = null;
+        $panel_parent = null;
+        foreach ($items as $k => $v) {
+            $panel = Panel::get($v);
+            $panel->setParent($panel_parent);
+            $panel_parent = $panel;
+        }
+        $this->panel->setParent($panel);
+
         //ddd($this->panel);
         /*
     if($data==null){
