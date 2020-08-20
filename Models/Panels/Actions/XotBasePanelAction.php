@@ -31,6 +31,7 @@ abstract class XotBasePanelAction {
     public $name = null;
     public $icon = '<i class="far fa-question-circle"></i>';
     protected $data = [];
+    public $related = null; //post_type per filtrare le azioni nei vari index_edit
 
     abstract public function handle();
 
