@@ -8,7 +8,9 @@ use Modules\Xot\Models\Traits\WidgetTrait;
 class Widget extends BaseModel {
     use WidgetTrait;
     protected $fillable = [
-        'id', 'post_type', 'title', 'subtitle',
+        'id', 
+        'post_type', 'post_id', //nullablemorph
+        'title', 'subtitle',
         'blade', 'pos', 'model', 'limit',
         'order_by', 'image_src', 'layout_position',
     ];
