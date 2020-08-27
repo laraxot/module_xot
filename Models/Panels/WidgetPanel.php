@@ -111,6 +111,11 @@ class WidgetPanel extends XotBasePanel {
             ],
             (object) [
                 'type' => 'String',
+                'name' => 'post_id',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'String',
                 'name' => 'title',
                 'comment' => null,
             ],

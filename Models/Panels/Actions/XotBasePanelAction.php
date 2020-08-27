@@ -146,6 +146,10 @@ abstract class XotBasePanelAction {
         $params['panel'] = $this->panel;
         $params['url'] = $this->getUrl($params);
 
+        if (isset($params['debug']) && true === $params['debug']) {
+            dddx($params);
+        }
+
         $params['method'] = Str::camel($this->getName());
         if (! isset($params['act'])) {
             if ($this->onContainer) {
@@ -204,6 +208,13 @@ abstract class XotBasePanelAction {
         $name = $this->getName();
         $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
         $query_params['_act'] = $name;
+        /*
+        if (isset($modal)) {
+            $this->data['modal'] = $modal;
+        }
+        $this->data = array_merge(request()->all(), $this->data);
+        */
+
         $url = url_queries($query_params, $url);
         $url = url_queries($this->data, $url);
 
