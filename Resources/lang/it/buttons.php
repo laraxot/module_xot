@@ -50,4 +50,5 @@ return [
 
     'save' => 'Salva',
     'close' => 'Chiudi',
+    'back' => 'Indietro',
 ];
