@@ -101,8 +101,9 @@ abstract class XotBasePanel {
 
     public function optionsSelect() {
         $opts = [];
-
-        foreach ($this->rows as $row) {
+        //$rows = $this->rows;
+        $rows = $this->options();
+        foreach ($rows as $row) {
             $id = $this->optionId($row);
             $label = $this->optionLabel($row);
 
@@ -1521,7 +1522,10 @@ abstract class XotBasePanel {
         //$act = isset($data['_act']) ? $data['_act'] : null;
         $query = $this->rows;
         if (! is_object($query)) {
-            return $query;
+            if (! is_object($this->row)) {
+                return $query;
+            }
+            $query = $this->row;
         }
         //ddd(get_class($this));
         $with = $this->with();
