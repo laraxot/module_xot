@@ -55,5 +55,36 @@ https://www.nicesnippets.com/blog/laravel-livewire-crud-with-bootstrap-modal-exa
 
 
 
+//---- tutorial grafico
+https://www.georgebuckingham.com/laravel-livewire-chart-js-realtime/#the-code
+
+
+//---- datatables carino
+https://livewire-datatables.com/
+https://github.com/MedicOneSystems/livewire-datatables
+
+https://forum.laravel-livewire.com/t/yet-another-livewire-table-component/1397
+
+
+https://reposhub.com/php/web-frameworks/kdion4891-laravel-livewire-tables.html
+
+https://github.com/rappasoft/laravel-livewire-tables
+
+
+
+https://laracasts.com/series/guest-spotlight/episodes/3
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
