@@ -101,8 +101,8 @@ abstract class XotBasePanel {
 
     public function optionsSelect() {
         $opts = [];
-        //$rows = $this->rows;
-        $rows = $this->options();
+        $rows = $this->rows;
+        //$rows = $this->options();
         foreach ($rows as $row) {
             $id = $this->optionId($row);
             $label = $this->optionLabel($row);
