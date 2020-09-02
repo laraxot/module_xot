@@ -188,7 +188,7 @@ if (! \function_exists('getModelFields')) {
     function getModelFields($model) {
         $fields = $model->getConnection()
             ->getSchemaBuilder()
-            ->getColumnListing($model->getTable()); //helper getModelFields($model) ?
+            ->getColumnListing($model->getTable());
 
         return $fields;
     }
