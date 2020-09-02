@@ -169,7 +169,10 @@ abstract class XotBaseContainerController extends Controller {
 
             return $this->notAuthorized($method, $model);
         }
-        //dd('['.__LINE__.']['.__FILE__.']['.$this->controller.']['.$method.']');
+        /**  se esiste il controller deve eseguire quello
+         *   se non esiste il controller da valutare se lasciare controller "generico" o eseguire "panel".
+         *
+         **/
         $panel = app($this->controller)
             ->$method($request, $this->containers, $this->items);
 
