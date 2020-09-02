@@ -184,6 +184,16 @@ if (! \function_exists('params2ContainerItem')) {
     }
 }
 
+if (! \function_exists('getModelFields')) {
+    function getModelFields($model) {
+        $fields = $model->getConnection()
+            ->getSchemaBuilder()
+            ->getColumnListing($model->getTable()); //helper getModelFields($model) ?
+
+        return $fields;
+    }
+}
+
 if (! \function_exists('getModuleFromModel')) {
     function getModuleFromModel($model) {
         $class = get_class($model);
