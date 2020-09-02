@@ -20,8 +20,10 @@ return [
         'actions' => 'Azioni',
         'active' => 'Active',
         'buttons' => [
+            'add' => 'Aggiungi',
             'save' => 'Salva',
             'update' => 'Aggiorna',
+            'edit' => 'Cambia',
         ],
         'hide' => 'Nascondi',
         'inactive' => 'Inactive',
