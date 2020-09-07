@@ -1024,6 +1024,15 @@ abstract class XotBasePanel {
         $params['panel'] = $this;
         $params['url'] = RouteService::urlPanel($params);
         $params['method'] = Str::camel($params['act']);
+
+
+
+        if (! isset($params['tooltip'])) {
+            $row = $this->row;
+            $module_name_low = strtolower(getModuleNameFromModel($row));
+            $params['tooltip'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
+        }
+
         if (! isset($params['title'])) {
             $row = $this->row;
             $module_name_low = strtolower(getModuleNameFromModel($row));
