@@ -98,21 +98,11 @@ class StoreJob implements ShouldQueue {
             if (! isset($pivot_data['auth_user_id'])) {
                 $pivot_data['auth_user_id'] = \Auth::id();
             }
-            //ddd($types);
-            //$item->$types()->
-            //$tmp = $item->$types()->save($row, $pivot_data);
             try {
                 $tmp = $item->$types()->save($row, $pivot_data);
             } catch (\Exception $e) {
-                //$tmp = $item->$types()->sync($row, $pivot_data);
-                //$tmp=$item->$types()->sync([$row->getKey()=>$pivot_data]);
-                //$tmp=$item->$types()->associate($row, $pivot_data);
-                //$tmp=$item->$types()->attach($row, $pivot_data);
-                //dddx(class_basename($item->$types()));
-                //dddx(get_class_methods($item->$types()));
                 $this->row = $row;
                 $func = 'saveParent'.Str::studly(class_basename($item->$types()));
-                //dddx($func);
                 $tmp = $this->$func();
             }
 
