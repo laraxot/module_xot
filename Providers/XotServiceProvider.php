@@ -80,7 +80,10 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     public function registerLivewireComponents(){
 
-        Livewire::component('food::places',\Modules\Food\Http\Livewire\Places::class);
+        if(class_exists("Livewire\Livewire")){
+            Livewire::component('food::places',\Modules\Food\Http\Livewire\Places::class);
+        }
+
 
     }
 
