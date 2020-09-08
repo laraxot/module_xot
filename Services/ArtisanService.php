@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 if(!defined('STDIN')){
-    define('STDIN',fopen("php://stdin","r")); 
+    define('STDIN',fopen("php://stdin","r"));
 }
 
 //----- TODO
@@ -48,11 +48,32 @@ class ArtisanService {
             case 'module-enable': return ArtisanService::exe('module:enable '.$module_name);
             //----------------------------------------------------------------------
             case 'error-show':
-                $contents = File::get(storage_path('logs/laravel.log'));
+                $contents = '';
+                $files = File::files(storage_path('logs'));
+                echo '<h3>'.count($files).' Error Logs </h3>';
+                echo '<ol>';
+                foreach ($files as $file) {
+                    //dddx(get_class_methods($file));
+                    echo '<li><a href="?_act=artisan&cmd=error-show&log='.$file->getFilename().'">'.$file->getFilename().'</a></li>';
+                }
+                echo '</ol>';
+                $log = \Request::input('log');
+                if ('' != $log) {
+                    if (File::exists(storage_path('logs/'.$log))) {
+                        $contents = File::get(storage_path('logs/'.$log));
+                    }
+                }
 
                 return '<pre>'.$contents.'</pre>';
             case 'error-clear':
-                $contents = File::put(storage_path('logs/laravel.log'), '');
+                 $files = File::files(storage_path('logs'));
+
+                foreach ($files as $file) {
+                    if ('log' == $file->getExtension()) {
+                        File::delete($file);
+                    }
+                }
+
 
                 return '<pre>laravel.log cleared !</pre>';
 
