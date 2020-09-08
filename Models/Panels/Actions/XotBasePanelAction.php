@@ -63,11 +63,18 @@ abstract class XotBasePanelAction {
 
     public function getTitle() {
         $name = $this->getName();
-        //$title = str_replace('_', ' ', $title);
+
         $row = $this->panel->row;
 
         $module_name_low = strtolower(getModuleNameFromModel($row));
-        $title = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$name);
+        $trans_path = $module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$name;
+        $trans = trans($trans_path);
+
+        if ($trans_path == $trans && ! config('xra.show_trans_key')) {
+            $title = str_replace('_', ' ', $name);
+        }else{
+            $title = $trans;
+        }
 
         return $title;
     }
