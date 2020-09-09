@@ -93,6 +93,10 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
                 if (0 == $i) {
                     $model = xotModel($container_curr);
+                    //dddx($model);
+                    if (false == $model) {
+                        abort(404);
+                    }
                     $rows = $model;
                 } else {
                     $item_prev = request()->route()->parameter('item'.($i - 1));
@@ -108,9 +112,9 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         abort(404);
                     }
                     */
-                    if($item_prev==null){
+                    if (null == $item_prev) {
                         //die(response()->view('pub_theme::errors.404', [], 404));
-                        abort(404,'aaa');
+                        abort(404, 'aaa');
                     }
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
