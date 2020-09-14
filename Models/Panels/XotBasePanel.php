@@ -11,8 +11,9 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
 //----------  SERVICES --------------------------
+use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ChainService;
@@ -102,7 +103,7 @@ abstract class XotBasePanel {
     public function optionsSelect() {
         $opts = [];
         $rows = $this->rows;
-        if($rows==null){
+        if (null == $rows) {
             $rows = $this->options();
         }
 
@@ -1886,5 +1887,18 @@ abstract class XotBasePanel {
         $html = $datatables->getHtmlBuilder();
 
         return $html;
+    }
+
+    public function view($params = null) {
+        $view = ThemeService::getView();
+        if (! View::exists($view)) {
+            $msg = [
+                'err' => 'view not exists',
+                'view' => $view,
+            ];
+            dddx($msg);
+        }
+
+        return view($view)->with('_panel', $this);
     }
 }
