@@ -78,7 +78,6 @@ abstract class XotBasePolicy {
         return false;
     }
 
-
     public function delete(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
@@ -87,7 +86,6 @@ abstract class XotBasePolicy {
         return false;
     }
 
-
     public function restore(User $user, $post) {
         if ($post->created_by == $user->handle) {
             return true;
@@ -95,7 +93,6 @@ abstract class XotBasePolicy {
 
         return false;
     }
-
 
     public function forceDelete(User $user, $post) {
     }
@@ -121,7 +118,6 @@ abstract class XotBasePolicy {
      */
     public function viewAny(User $user) {
     }
-
 
     public function view(User $user, $post) {
     }
