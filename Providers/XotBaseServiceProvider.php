@@ -3,6 +3,7 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Modules;
@@ -97,6 +98,43 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     public function registerFactories() {
         if (! app()->environment('production')) {
             app(Factory::class)->load($this->module_dir.'/../Database/factories');
+        }
+    }
+
+    public function registerLivewireComponents() {
+        $components_json = $this->module_dir.'/../Http/Livewire/_components.json';
+
+        $exists = File::exists($components_json);
+        if ($exists) {
+            $content = File::get($components_json);
+            $comps = json_decode($content);
+        } else {
+            $files = File::files(dirname($components_json));
+
+            $comps = [];
+            foreach ($files as $k => $v) {
+                //dddx(get_class_methods($v));
+                if ('php' == $v->getExtension()) {
+                    $tmp = (object) [];
+                    $class_name = Str::before($v->getBasename(), '.php');
+
+                    $tmp->class_name = $class_name;
+                    $tmp->comp_name = $this->module_name.'::'.Str::snake($class_name);
+                    $tmp->comp_ns = Str::before($this->module_ns, '\Providers').'\Http\Livewire\\'.$class_name;
+                    $comps[] = $tmp;
+                }
+            }
+            //dddx([$comps, $components_json]);
+            $content = json_encode($comps);
+            File::put($components_json, $content);
+        }
+        //dddx($comps);
+        if (class_exists("Livewire\Livewire")) {
+            foreach ($comps as $comp) {
+                \Livewire\Livewire::component($comp->comp_name, $comp->comp_ns);
+            }
+            //Livewire::component($this->module_name.'::calendar', Calendar::class);
+            //Livewire::component($this->module_name.'::numberer', Numberer::class);
         }
     }
 
