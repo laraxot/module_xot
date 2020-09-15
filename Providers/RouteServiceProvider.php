@@ -10,7 +10,8 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
-class RouteServiceProvider extends XotBaseRouteServiceProvider {
+class RouteServiceProvider extends XotBaseRouteServiceProvider
+{
     /**
      * The module namespace to assume when generating URLs to actions.
      *
@@ -20,7 +21,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
 
-    public function bootCallback() {
+    public function bootCallback()
+    {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -44,16 +46,17 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         //ddd('preso');
     }
 
-    public function registerRoutePattern(Router $router) {
+    public function registerRoutePattern(Router $router)
+    {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');
-        $pattern = '/|'.$pattern.'|/i';
+        $pattern = '/|' . $pattern . '|/i';
         $router->pattern('lang', $pattern);
         //---------- Container ROUTE PATTERN
         $models = Tenant::config('xra.model');
         $pattern = collect(\array_keys($models))->implode('|');
-        $pattern = '/|'.$pattern.'|/i';
+        $pattern = '/|' . $pattern . '|/i';
 
         $pattern_test = [
             0 => $pattern, // working
@@ -67,14 +70,15 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         ];
 
         for ($i = 0; $i < 5; ++$i) {
-            $container_name = 'container'.$i;
+            $container_name = 'container' . $i;
             //$router->pattern($container_name,$pattern_test[0]);
         }
     }
 
     //end registerRoutePattern
 
-    public function registerRouteBind(Router $router) {
+    public function registerRouteBind(Router $router)
+    {
         //--------- ROUTE BIND
 
         //*
@@ -85,8 +89,8 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         });
         $lang = app()->getLocale();
         for ($i = 0; $i < 5; ++$i) {
-            $item_name = 'item'.$i;
-            $container_name = 'container'.$i;
+            $item_name = 'item' . $i;
+            $container_name = 'container' . $i;
             $router->bind($item_name, function ($value) use ($container_name, $lang, $i) {
                 //request()->route()->parameter($container_name);
                 //dddx([request()->route()->parameter($container_name), request()->$container_name]);
@@ -101,10 +105,10 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                     }
                     $rows = $model;
                 } else {
-                    $item_prev = request()->route()->parameter('item'.($i - 1));
+                    $item_prev = request()->route()->parameter('item' . ($i - 1));
                     if (is_string($item_prev)) {
                         //dddx($item_prev);
-                        $container_prev = request()->route()->parameter('container'.($i - 1));
+                        $container_prev = request()->route()->parameter('container' . ($i - 1));
                         $container_prev_obj = xotModel($container_prev);
                         $item_prev = $container_prev_obj->fixItemLang($item_prev);
                     }
@@ -120,7 +124,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                     }
                     $rows = $item_prev->$types();
                     $model = $rows->getRelated();
-                    if (! is_object($model)) {
+                    if (!is_object($model)) {
                         abort(404);
                     }
                 }
@@ -137,7 +141,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
                         ]
                     );
                 }
-                $pk_full = $model->getTable().'.'.$pk;
+                $pk_full = $model->getTable() . '.' . $pk;
                 if ('guid' == $pk) {
                     $pk_full = 'guid';
                 } // pezza momentanea

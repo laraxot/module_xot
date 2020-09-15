@@ -5,6 +5,7 @@ namespace Modules\Xot\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Modules\Xot\Services\PanelService;
+use Illuminate\Support\Str;
 
 //use Illuminate\Http\Response;
 
@@ -26,7 +27,7 @@ class PanelMiddleware
         * dddx($parameters);
         *
         */
-        [$containers,$items] = params2ContainerItem($parameters);
+        [$containers, $items] = params2ContainerItem($parameters);
         //$obj_containers = [];
         //$obj_items = [];
 
@@ -34,10 +35,19 @@ class PanelMiddleware
         //}
         //dddx($parameters);
         /*
-        $tmp = xotModel($containers[0]);
-        $panel = PanelService::get($tmp);
-        $panel->setRows($tmp);
+        $row = xotModel($containers[0]);
+        $panel = PanelService::get($row);
+        $panel->setRows($row)->initRows();
         $panel->setItem($items[0]);
+        $panel_parent = $panel;
+        $row = $panel->row;
+        $types = Str::camel(Str::plural($containers[1]));
+        $rows = $row->{$types}();
+        $row =  $rows->getRelated();
+        $panel = PanelService::get($row);
+        $panel->setRows($rows)->initRows();
+        $panel->setParent($panel_parent);
+
         $request['panel'] = $panel;
 
         //*/

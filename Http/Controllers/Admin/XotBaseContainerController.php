@@ -29,7 +29,7 @@ abstract class XotBaseContainerController extends Controller
         $tmp = collect($containers)->map(function ($item) {
             return Str::studly($item);
         })->implode('\\');
-        if (! isset($params['module'])) {
+        if (!isset($params['module'])) {
             return;
         }
         $mod = \Module::find($params['module']);
@@ -43,7 +43,7 @@ abstract class XotBaseContainerController extends Controller
                 $mod_name = 'Trasferte';
             }
         }
-        $controller = '\Modules\\'.$mod_name.'\Http\Controllers\Admin\\'.$tmp.'Controller';
+        $controller = '\Modules\\' . $mod_name . '\Http\Controllers\Admin\\' . $tmp . 'Controller';
         //ddd($controller);
         try {
             if (class_exists($controller)) {
@@ -99,8 +99,8 @@ abstract class XotBaseContainerController extends Controller
         if ($plural = 1) { //mi serve per capirmi, equivalenza sempre vera
             $method = Str::plural($method);
         }
-        if (! method_exists($item_last, $method)) {
-            exit(''.get_class($item_last).'->'.$method.'() NOT EXISTS');
+        if (!method_exists($item_last, $method)) {
+            exit('' . get_class($item_last) . '->' . $method . '() NOT EXISTS');
         }
         $related = $item_last->$method()->getRelated();
 
@@ -116,7 +116,7 @@ abstract class XotBaseContainerController extends Controller
         //dddx($model);
 
         $authorized = Gate::allows($method_act, $model);
-        if (! $authorized) {
+        if (!$authorized) {
             return $this->notAuthorized($method_act, $model);
         }
 
@@ -140,12 +140,12 @@ abstract class XotBaseContainerController extends Controller
     {
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
         $model = $this->getModel();
-        if (! is_object($model)) {
+        if (!is_object($model)) {
             dddx($model);
         }
 
         $authorized = Gate::allows($method, $model);
-        if (! $authorized) {
+        if (!$authorized) {
             $policy_class = StubService::fromModel(
                 [
                     'model' => $model,
@@ -188,18 +188,25 @@ abstract class XotBaseContainerController extends Controller
         return $this->__callRouteAct($method, $args);
     }
 
+    public function __call($method, $args)
+    {
+        return $this->__call_old_but_working($method, $args);
+
+        return $this->__call_new_not_working_now($method, $args);
+    }
+
     public function __call_new_not_working_now($method, $args)
     {
         $params = \Route::current()->parameters();
-        $panel=request()->panel;
+        $panel = request()->panel;
         //dddx(['params'=>$params,'method'=>$method,'args'=>$args,'panel'=>$panel]);
-        $row=$panel->row;
+        $row = $panel->row;
         if (is_object($row) && \Auth::user()->cannot($method, $row)) {
-            $msg = 'user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
+            $msg = 'user [' . \Auth::user()->handle . '] not authorized to [' . $method . '] on class [' . get_class($row) . ']';
             abort(403, $msg);
         }
         $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $controller='\Modules\Xot\Http\Controllers\Admin\XotPanelController';
+        $controller = '\Modules\Xot\Http\Controllers\Admin\XotPanelController';
         $panel =  app($controller)->$method($request, $panel);
 
         if (method_exists($panel, 'out')) {
@@ -214,7 +221,7 @@ abstract class XotBaseContainerController extends Controller
         return $panel;
     }
 
-    public function __call($method, $args)
+    public function __call_old_but_working($method, $args)
     {
         $params = \Route::current()->parameters();
 
@@ -224,7 +231,7 @@ abstract class XotBaseContainerController extends Controller
         if (is_object($row) && \Auth::user()->cannot($method, $row)) {
             //ddd('non autorizzato ['.$method.']['.get_class($row).']');
             //return response()->deny('testxxx');
-            $msg = 'user ['.\Auth::user()->handle.'] not authorized to ['.$method.'] on class ['.get_class($row).']';
+            $msg = 'user [' . \Auth::user()->handle . '] not authorized to [' . $method . '] on class [' . get_class($row) . ']';
             abort(403, $msg);
             //return response()->view('adm_theme::errors.403', [], 403);
         }
