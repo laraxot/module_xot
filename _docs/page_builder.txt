@@ -16,3 +16,9 @@ https://codecanyon.net/item/novi-visual-page-builder/20530305
 
 
 https://codecanyon.net/item/drag-drop-email-builder/19423355
+
+
+
+
+https://github.com/HansSchouten/Laravel-Pagebuilder
+
