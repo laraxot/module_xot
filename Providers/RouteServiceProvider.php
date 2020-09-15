@@ -31,9 +31,11 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         }
 
         $this->registerRoutePattern($router);
-        /*-- e' commentato perche' devo controllare se funziona --*/
-        if ('migrate' != \Request::input('act') /*&& ! $this->app->runningInConsole() */) {
-            $this->registerRouteBind($router);
+        if ($notUsePanelMiddleware = 1) {
+            /*-- e' commentato perche' devo controllare se funziona --*/
+            if ('migrate' != \Request::input('act')) { //&& ! $this->app->runningInConsole()
+                $this->registerRouteBind($router);
+            }
         }
 
         //$route_params = \Route::current()->parameters();

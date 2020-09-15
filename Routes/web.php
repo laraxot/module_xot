@@ -12,7 +12,7 @@ $middleware = ['web'];
 //$areas_prgs = include __DIR__ . '/web_common.php';
 $areas_prgs = RouteService::generate();
 //$prefix = App::getLocale();
-if (!config('xra.disable_frontend_dynamic_route')) {
+if (! config('xra.disable_frontend_dynamic_route')) {
     $prefix = '{lang}';
     Route::group(
         [
@@ -53,7 +53,7 @@ Route::group(
     [
         'prefix' => $prefix,
         'middleware' => $middleware,
-        'namespace' => $namespace . '\Admin',
+        'namespace' => $namespace.'\Admin',
     ],
     function () use ($areas_prgs) {
         Route::get('/', 'BackendController@dashboard')->name('admin');
@@ -75,7 +75,7 @@ if (in_admin()) {
         //$item0,
     ];
     $prefix = 'admin';
-    $middleware = ['web', 'auth'];
+    $middleware = ['web', 'auth', \Modules\Xot\Http\Middleware\PanelMiddleware::class];
     $namespace .= '\Admin';
     Route::group(
         [

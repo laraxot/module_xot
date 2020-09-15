@@ -60,6 +60,27 @@ abstract class XotBasePanel {
         return $row->getKey();
     }
 
+    public function setItem($guid) {
+        $model = $this->row;
+        $rows = $this->rows;
+        $pk = $model->getRouteKeyName();
+        $pk_full = $model->getTable().'.'.$pk;
+
+        if ('guid' == $pk) {
+            $pk_full = 'guid';
+        } // pezza momentanea
+
+        $value = Str::slug($guid); //retrocompatibilita'
+        if ('guid' == $pk_full) {
+            $rows = $rows->whereHas('post', function (Builder $query) use ($value) {
+                $query->where('guid', $value);
+            });
+        } else {
+            $rows = $rows->where([$pk_full => $value]);
+        }
+        $this->row = $rows->first();
+    }
+
     //funzione/flag da settare a true ad ogni pannello/modello che abbia le traduzioni
     public function hasLang() {
         return false;
