@@ -4,62 +4,59 @@ namespace Modules\Xot\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Modules\Xot\Services\PanelService;
 use Illuminate\Support\Str;
+use Modules\Xot\Services\PanelService;
 
 //use Illuminate\Http\Response;
 
-class PanelMiddleware
-{
+class PanelMiddleware {
     /*
     public function __construct($params) {
         dddx($params);
     }
     */
 
-    public function handle(Request $request, Closure $next)
-    {
+    public function handle(Request $request, Closure $next) {
         $parameters = request()->route()->parameters();
+        //dddx($parameters);
         /*
         * "module" => "lu"
         * "lang" => "it"
         * "container0" => "user"
-        * dddx($parameters);
+        *
         *
         */
         [$containers, $items] = params2ContainerItem($parameters);
-        //$obj_containers = [];
-        //$obj_items = [];
 
-        //if (count($containers) > count($items)) { //rows
-        //}
-        //dddx($parameters);
-        /*
-        $row = xotModel($containers[0]);
-        $panel = PanelService::get($row);
-        $panel->setRows($row)->initRows();
-        $panel->setItem($items[0]);
-        $panel_parent = $panel;
-        $row = $panel->row;
-        $types = Str::camel(Str::plural($containers[1]));
-        $rows = $row->{$types}();
-        $row =  $rows->getRelated();
-        $panel = PanelService::get($row);
-        $panel->setRows($rows)->initRows();
-        $panel->setParent($panel_parent);
-
-        $request['panel'] = $panel;
-
-        //*/
-        /*
-        //$obj_containers[] = xotModel($containers[0]);
-        for ($i = 1; $i < count($containers); ++$i) {
-            //$obj_items[$i-1]=
-            dddx('non dovrei essere qui');
+        if (0 == count($containers)) {
+            return $next($request);
         }
 
-        dddx($panel);
-        */
+        $row = xotModel($containers[0]);
+        $panel = PanelService::get($row);
+        $panel->setRows($row);
+        if (isset($items[0])) {
+            $panel->setItem($items[0]);
+        }
+        $panel_parent = $panel;
+
+        for ($i = 1; $i < count($containers); ++$i) {
+            $row_prev = $panel_parent->row;
+            $types = Str::camel(Str::plural($containers[$i]));
+            $rows = $row_prev->{$types}();
+            $row = $rows->getRelated();
+
+            $panel = PanelService::get($row);
+            $panel->setRows($rows);
+            $panel->setParent($panel_parent);
+
+            if (isset($items[$i])) {
+                $panel->setItem($items[$i]);
+            }
+            $panel_parent = $panel;
+        }
+        //$request['panel'] = $panel;
+        PanelService::setRequestPanel($panel);
 
         return $next($request);
     }

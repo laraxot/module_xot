@@ -314,7 +314,7 @@ class RouteService {
     //end prefixedResourceNames
 
     //--------------------------------------------------
-    public static function getContainerActs(){
+    public static function getContainerActs() {
         $cont_acts = [
             [
                 'name' => 'Edit',
@@ -330,10 +330,11 @@ class RouteService {
                 'act' => 'attach',
             ], //end act_n
         ];
-        return $cont_acts;
 
+        return $cont_acts;
     }
-    public static function getItemActs(){
+
+    public static function getItemActs() {
         $acts = [
             //['name' => 'attach'], //end act_n
             ['name' => 'detach', 'method' => ['DELETE', 'GET']], //end act_n
@@ -342,24 +343,29 @@ class RouteService {
         ]; //end acts
         return $acts;
     }
-    public static function generate($n=0){
-        if($n>4) return [];
+
+    public static function generate($n = 0) {
+        if ($n > 4) {
+            return [];
+        }
+
         return [
             [
                 'name' => '{container'.$n.'}',
                 'param_name' => '',
                 'as' => 'container'.$n.'.index_',
-                'acts' => self::getContainerActs(), 
+                'acts' => self::getContainerActs(),
                 //'only'=>[],
-            ], 
+            ],
             [
                 'name' => '{container'.$n.'}',
                 'param_name' => 'item'.$n.'',
                 'acts' => self::getItemActs(),
-                'subs' => self::generate($n+1),
+                'subs' => self::generate($n + 1),
             ],
         ];
     }
+
     //--------------------------------------------------
 
     public static function containerN($params) {
@@ -585,10 +591,12 @@ class RouteService {
         }
         $n = 0;
         //* finche' non passiamo il panel corretto
-        $containers_class = self::getContainersClass();
-        $n = collect($containers_class)->search(get_class($container_root));
-        if (null === $n) {
-            $n = 0;
+        if (config('xra.notUsePanelMiddleware')) {
+            $containers_class = self::getContainersClass();
+            $n = collect($containers_class)->search(get_class($container_root));
+            if (null === $n) {
+                $n = 0;
+            }
         }
         //*/
 
@@ -602,7 +610,7 @@ class RouteService {
         $i = 0;
         foreach ($parents as $parent) {
             $route_params['container'.($n + $i)] = $parent->postType(); //$parent->row->post_type;
-            $route_params['item'.($n + $i)] = $parent->row;
+            $route_params['item'.($n + $i)] = $parent->guid();
             ++$i;
         }
 
@@ -635,20 +643,20 @@ class RouteService {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
             return '#['.__LINE__.']['.__FILE__.']';
-            /*
+            ///*
             dddx(
                 ['e' => $e->getMessage(),
-                'params' => $params,
-                'route_name' => $route_name,
-                'route_params' => $route_params,
-                'last row' => $panel->row,
-                'panel post type' => $panel->postType(),
-                'panel guid' => $panel->guid(),
-                'last route key ' => $panel->row->getRouteKey(),
-                'last route key name' => $panel->row->getRouteKeyName(),
+                    'params' => $params,
+                    'route_name' => $route_name,
+                    'route_params' => $route_params,
+                    'last row' => $panel->row,
+                    'panel post type' => $panel->postType(),
+                    'panel guid' => $panel->guid(),
+                    'last route key ' => $panel->row->getRouteKey(),
+                    'last route key name' => $panel->row->getRouteKeyName(),
                 ]
             );
-            */
+            //*/
         }
 
         //--- aggiungo le query string all'url corrente

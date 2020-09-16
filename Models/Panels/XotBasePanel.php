@@ -1056,6 +1056,19 @@ abstract class XotBasePanel {
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
 
+    public function btnCrud($params = []) {
+        extract($params);
+        $acts = ['edit', 'destroy', 'show'];
+        $html = '';
+        $params['title'] = '';
+        foreach ($acts as $act) {
+            $params['act'] = $act;
+            $html .= $this->btnHtml($params);
+        }
+
+        return $html;
+    }
+
     public function btnHtml($params) {
         $params['panel'] = $this;
         $params['url'] = RouteService::urlPanel($params);
@@ -1070,7 +1083,36 @@ abstract class XotBasePanel {
         if (! isset($params['title'])) {
             $row = $this->row;
             $module_name_low = strtolower(getModuleNameFromModel($row));
-            $params['title'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
+
+            $trans_key = $module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method'];
+            $trans = trans($trans_key);
+            $title = $trans;
+            if ($trans == $trans_key && ! config('xra.show_trans_key')) {
+                $title = class_basename($row); //.' '.$params['method'];
+            }
+
+            $params['title'] = $title;
+        }
+
+        if (! isset($params['icon'])) {
+            switch ($params['method']) {
+                case 'create':
+                    $params['icon'] = '<i class="far fa-plus-square"></i>';
+                    break;
+                case 'edit':
+                    $params['icon'] = '<i class="far fa-edit"></i>';
+                    break;
+                case 'destroy':
+                    $params['icon'] = '<i class="far fa-trash-alt"></i>';
+                    break;
+                case 'show':
+                    $params['icon'] = '<i class="far fa-eye"></i>';
+                    break;
+
+                default:
+                    $params['icon'] = $params['method'];
+                    break;
+            }
         }
 
         if (true === $params['title']) {
@@ -1509,7 +1551,10 @@ abstract class XotBasePanel {
 
         foreach ($items as $k => $item) {
             $panel = Panel::get($item);
-            $tabs = $panel->tabs();
+            $tabs = [];
+            if (! is_object($panel)) {
+                return $tabs;
+            }
             $row = [];
             if (0 == $k) {
                 //*

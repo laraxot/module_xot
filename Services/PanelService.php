@@ -23,6 +23,14 @@ class PanelService {
         return self::$_instance;
     }
 
+    public static function setRequestPanel($panel) {
+        self::$panel = $panel;
+    }
+
+    public static function getRequestPanel() {
+        return self::$panel;
+    }
+
     public static function get($model) {
         return self::setModel($model)->panel();
     }
