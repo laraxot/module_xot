@@ -1959,6 +1959,8 @@ abstract class XotBasePanel {
             'params' => \Route::current()->parameters(),
             'routename' => \Route::current()->getName(),
             'modal' => $modal,
+            'containers' => $containers,
+            'items' => $items,
         ];
 
         return view($view_work)->with($view_params);
