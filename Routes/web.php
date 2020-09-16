@@ -7,7 +7,7 @@ $pack = class_basename($namespace);
 
 $namespace .= '\Http\Controllers';
 //$middleware = ['web', 'guest']; //guest ti riindirizza se non sei loggato
-$middleware = ['web'];
+$middleware = ['web', \Modules\Xot\Http\Middleware\PanelMiddleware::class];
 
 //$areas_prgs = include __DIR__ . '/web_common.php';
 $areas_prgs = RouteService::generate();
