@@ -15,14 +15,7 @@ use Modules\Xot\Jobs\Crud\UpdateJob;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\RouteService;
 
-//---- Traits ----
-//use Modules\Xot\Traits\Updater;
-
 abstract class XotBasePanelAction {
-    /*
-    abstract public function setRows($rows);
-    public function btn($params=[]);
-    */
     public $onContainer = false;
     public $onItem = false;
     public $row = null;
@@ -72,7 +65,7 @@ abstract class XotBasePanelAction {
 
         if ($trans_path == $trans && ! config('xra.show_trans_key')) {
             $title = str_replace('_', ' ', $name);
-        }else{
+        } else {
             $title = $trans;
         }
 
