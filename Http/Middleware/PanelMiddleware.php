@@ -43,7 +43,12 @@ class PanelMiddleware {
         $row = xotModel($containers[0]);
         $panel = PanelService::get($row);
         if (! isset($panel)) {
-            abort(404);
+            $data = [
+                'lang' => \App::getLocale(),
+                'params' => $parameters,
+            ];
+
+            return response()->view('pub_theme::errors.404', $data, 404);
         }
         $panel->setRows($row);
         if (isset($items[0])) {
@@ -57,7 +62,13 @@ class PanelMiddleware {
             try {
                 $rows = $row_prev->{$types}();
             } catch (\Exception $e) {
-                abort(404, $e->getMessage());
+                //abort(404, $e->getMessage());
+                $data = [
+                    'lang' => \App::getLocale(),
+                    'params' => $parameters,
+                ];
+
+                return response()->view('pub_theme::errors.404', $data, 404);
             } catch (\Error $e) {
                 //return response("User can't perform this action.", 404);
                 $data = [
