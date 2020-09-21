@@ -1096,6 +1096,7 @@ abstract class XotBasePanel {
             $params['act'] = $act;
             $html .= $this->btnHtml($params);
         }
+        $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.chr(13).$html.chr(13).'</div>';
 
         return $html;
     }
