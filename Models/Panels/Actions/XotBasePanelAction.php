@@ -227,7 +227,7 @@ abstract class XotBasePanelAction {
         $method = Str::camel($this->getName());
 
         extract($params);
-        if (Gate::allows($method, $this->row)) {
+        if (Gate::allows($method, $this->panel)) {
             if (isset($modal)) {
                 switch ($modal) {
                     case 'iframe':

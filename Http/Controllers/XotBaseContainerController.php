@@ -42,12 +42,11 @@ abstract class XotBaseContainerController extends Controller {
 
     public function __callRouteAct($method, $args) {
         $panel = $this->panel;
-        $model = $panel->row;
         //$authorized = Gate::allows($method, $model);
         $authorized = Gate::allows($method, $panel);
 
         if (! $authorized) {
-            return $this->notAuthorized($method, $model);
+            return $this->notAuthorized($method, $panel);
         }
 
         $request = XotRequest::capture();
@@ -69,17 +68,16 @@ abstract class XotBaseContainerController extends Controller {
         $method_act = Str::camel($act);
 
         $panel = $this->panel;
-        $model = $panel->row;
 
         $authorized = Gate::allows($method_act, $panel);
         if (! $authorized) {
-            return $this->notAuthorized($method_act, $model);
+            return $this->notAuthorized($method_act, $panel);
         }
 
         return $panel->callAction($act);
     }
 
-    public function notAuthorized($method, $model) {
+    public function notAuthorized($method, $panel) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
             //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -99,7 +97,7 @@ abstract class XotBaseContainerController extends Controller {
             return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
             ->withErrors(['active' => 'login before']);
         }
-        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($model).']';
+        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($panel).']';
 
         return abort(403, $msg);
     }
