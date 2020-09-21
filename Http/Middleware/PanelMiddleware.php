@@ -30,9 +30,12 @@ class PanelMiddleware {
         [$containers, $items] = params2ContainerItem($parameters);
 
         if (0 == count($containers)) {
+            /*
             $row = TenantService::model('home');
             $panel = PanelService::get($row);
             PanelService::setRequestPanel($panel);
+            */
+            PanelService::setRequestPanel(null);
 
             return $next($request);
         }

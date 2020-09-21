@@ -14,6 +14,13 @@ use Modules\Xot\Services\PanelService as Panel;
 abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         //dddx(['method' => $method, 'args' => $args]);
+        $panel = Panel::getRequestPanel();
+        $this->panel = $panel;
+        /*
+        if (null == $panel) {
+            dddx('preso');
+        }
+        */
 
         if ('' != request()->input('_act', '')) {
             return $this->__callPanelAct($method, $args);
@@ -24,7 +31,7 @@ abstract class XotBaseContainerController extends Controller {
 
     public function getController() {
         list($containers, $items) = params2ContainerItem();
-        $mod_name = $this->panel->getModuleName();
+        $mod_name = $this->panel->getModuleName(); //forse da mettere container0
 
         $tmp = collect($containers)->map(
             function ($item) {
@@ -40,8 +47,7 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     public function __callRouteAct($method, $args) {
-        $panel = Panel::getRequestPanel();
-        $this->panel = $panel;
+        $panel = $this->panel;
         $model = $panel->row;
         //$authorized = Gate::allows($method, $model);
         $authorized = Gate::allows($method, $panel);
@@ -68,8 +74,7 @@ abstract class XotBaseContainerController extends Controller {
         $act = $request->_act;
         $method_act = Str::camel($act);
 
-        $panel = Panel::getRequestPanel();
-        $this->panel = $panel;
+        $panel = $this->panel;
         $model = $panel->row;
 
         $authorized = Gate::allows($method_act, $panel);

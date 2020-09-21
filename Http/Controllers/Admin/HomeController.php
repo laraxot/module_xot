@@ -6,14 +6,24 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 //---- services ---
 use Modules\Theme\Services\ThemeService;
-use Modules\Xot\Services\ArtisanService;
+use Modules\Xot\Services\PanelService;
+use Modules\Xot\Services\TenantService;
+
+//use Modules\Xot\Services\ArtisanService;
 
 class HomeController extends Controller {
     public function index(Request $request) {
-        $out = ArtisanService::act($request->act);
-        if ('' != $out) {
-            return $out;
-        }
+        //$out = ArtisanService::act($request->act);
+        //if ('' != $out) {
+        //    return $out;
+        //}
+        //
+        /*
+        $home = TenantService::model('home');
+        $panel = PanelService::get($home);
+
+        return $panel->view(); //mi restituisce la index delle "homes"
+        */
         $params = \Route::current()->parameters();
         $home_view = $params['module'].'::admin.index';
         if (\View::exists($home_view)) {
