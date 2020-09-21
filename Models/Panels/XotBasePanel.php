@@ -67,8 +67,6 @@ abstract class XotBasePanel {
         return $this->parent;
     }
 
-<<<<<<< HEAD
-=======
     public function getParents() {
         /*
         $curr = $this;
@@ -100,7 +98,6 @@ abstract class XotBasePanel {
         )->first();
     }
 
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
     public function optionId($row) {
         return $row->getKey();
     }
@@ -1068,11 +1065,7 @@ abstract class XotBasePanel {
         $parz = [
             'id' => $this->row->getKey(),
             'btn_class' => 'btn '.$class,
-<<<<<<< HEAD
-            'route' => $this->destroyUrl(),
-=======
             'route' => $this->url(['act' => 'destroy']),
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             'act' => $act,
             'title' => $title,
         ];
@@ -1148,11 +1141,7 @@ abstract class XotBasePanel {
                     break;
 
                 default:
-<<<<<<< HEAD
-                    $params['icon'] = $params['method'];
-=======
                     //$params['icon'] = $params['method']; //per vedere quale
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
                     break;
             }
         }
@@ -1269,10 +1258,7 @@ abstract class XotBasePanel {
     }
 
     public function langUrl($lang) {
-<<<<<<< HEAD
-=======
         return '?'.$lang; //da fixare dopo
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         //$row=$this->row;
         //$row->lang=$lang;
         //return '/wip'.$this->url();
@@ -1594,11 +1580,6 @@ abstract class XotBasePanel {
             return [];
         }
         //array_unique($items);
-<<<<<<< HEAD
-
-        foreach ($items as $k => $item) {
-            $panel = Panel::get($item);
-=======
         $parents = [];
         $curr = $this;
         while (null != $curr) {
@@ -1611,15 +1592,11 @@ abstract class XotBasePanel {
         foreach ($parents as $k => $panel) {
             //$panel = Panel::get($item);
             $item = $panel->row;
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             $tabs = [];
             if (! is_object($panel)) {
                 return $tabs;
             }
-<<<<<<< HEAD
-=======
             $tabs = $panel->tabs();
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             $row = [];
             if (0 == $k) {
                 //*
@@ -1657,12 +1634,8 @@ abstract class XotBasePanel {
                 } else {
                     $tab_act = 'index';
                 }
-<<<<<<< HEAD
-                $tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
-=======
                 //$tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
                 $tmp->url = $panel->relatedUrl(['related_name' => $tab, 'act' => $tab_act]);
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
                 $tmp->active = in_array($tab, $containers);
                 $row[] = $tmp;
             }
@@ -1783,13 +1756,10 @@ abstract class XotBasePanel {
     }
 
     public function out($params = []) {
-<<<<<<< HEAD
-=======
         return $this->view();
     }
 
     public function out_old($params = []) {
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         //--- default vars ---//
         $is_ajax = false;
         $method = 'GET';
@@ -1918,24 +1888,16 @@ abstract class XotBasePanel {
 
     public function getModuleName() {
         $model = $this::$model;
-<<<<<<< HEAD
-        $module = Str::before(Str::after($model, 'Modules\\'), '\\Models\\');
-        $module_name = Str::lower($module);
-=======
         $module_name = Str::before(Str::after($model, 'Modules\\'), '\\Models\\');
         //$module_name = Str::lower($module_name);
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 
         return $module_name;
     }
 
-<<<<<<< HEAD
-=======
     public function getModuleNameLow() {
         return Str::lower($this->getModuleName());
     }
 
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
     public function breadcrumbs() {
         $curr = $this;
         $parents = [];
@@ -2061,34 +2023,20 @@ abstract class XotBasePanel {
     public function view($params = null) {
         //$route_params = \Route::current()->parameters();
 
-<<<<<<< HEAD
-        [$containers,$items] = params2ContainerItem();
-=======
         [$containers, $items] = params2ContainerItem();
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $view = ThemeService::getView(); //vew che dovrebbe essere
         $view_work = ThemeService::getViewWork(); //view effettiva
         $views = ThemeService::getDefaultViewArray(); //views possibili
 
-<<<<<<< HEAD
-        $mod_trad = $this->getModuleName().'::'.last($containers);
-
-        //--- per passare la view all'interno dei componenti
-        \View::composer('*', function ($view_params) use ($view) {
-=======
         $mod_trad = $this->getModuleNameLow().'::'.last($containers);
 
         //--- per passare la view all'interno dei componenti
         \View::composer('*', function ($view_params) use ($view,$mod_trad) {
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             \View::share('view', $view);
             $trad = implode('.', array_slice(explode('.', $view), 0, -1));
             \View::share('trad', $trad);
             \View::share('lang', \App::getLocale());
-<<<<<<< HEAD
-=======
             //\View::share('mod_trad', $mod_trad);
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         });
 
         $modal = null;
@@ -2098,24 +2046,17 @@ abstract class XotBasePanel {
             $modal = 'iframe';
         }
 
-<<<<<<< HEAD
-=======
         $rows = $this->rows()->paginate(10);
 
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $view_params = [
             'view' => $view,
             'view_work' => $view_work,
             'views' => $views,
             '_panel' => $this,
             'row' => $this->row,
-<<<<<<< HEAD
-            'mod_trad' => $mod_trad,
-=======
             'rows' => $rows,
             'mod_trad' => $mod_trad,
             'trad_mod' => $mod_trad, /// da sostiutire ed uccidere
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             'params' => \Route::current()->parameters(),
             'routename' => \Route::current()->getName(),
             'modal' => $modal,
