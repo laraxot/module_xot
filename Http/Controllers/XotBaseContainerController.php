@@ -13,14 +13,8 @@ use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
-        //dddx(['method' => $method, 'args' => $args]);
         $panel = Panel::getRequestPanel();
         $this->panel = $panel;
-        /*
-        if (null == $panel) {
-            dddx('preso');
-        }
-        */
 
         if ('' != request()->input('_act', '')) {
             return $this->__callPanelAct($method, $args);
