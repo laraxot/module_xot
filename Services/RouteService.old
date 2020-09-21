@@ -2,7 +2,6 @@
 
 namespace Modules\Xot\Services;
 
-<<<<<<< HEAD
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
@@ -134,6 +133,7 @@ class RouteService {
             $where[$pn] = '[0-9]+';
         }
         $opts['where'] = $where; //se c'e' "id_" di sicuro e' un numero
+
         return $opts;
     }
 
@@ -342,6 +342,7 @@ class RouteService {
             //['name' => 'moveUp', 'method' => ['PUT', 'GET']],   // se uso "order" questi non mi servono
             //['name' => 'moveDown', 'method' => ['PUT', 'GET']],
         ]; //end acts
+
         return $acts;
     }
 
@@ -564,6 +565,9 @@ class RouteService {
                 $tmp = config('xra.model.'.$v);
             } else {
                 $types = Str::camel(Str::plural($v));
+                if (is_string($items[$i - 1])) {
+                    return $classes;
+                }
                 $tmp = get_class($items[$i - 1]->$types()->getRelated());
             }
             $classes[] = $tmp;
@@ -579,13 +583,6 @@ class RouteService {
     public static function urlPanel($params) {
         $lang = app()->getLocale();
         extract($params);
-=======
-class RouteService {
-    public static function urlPanel($params) {
-        $lang = app()->getLocale();
-        extract($params);
-        /*
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $parents = collect([]);
         $panel_curr = $panel;
 
@@ -593,22 +590,12 @@ class RouteService {
             $parents->prepend($panel_curr->getParent());
             $panel_curr = $panel_curr->getParent();
         }
-<<<<<<< HEAD
-=======
-        */
-        $parents = $panel->getParents();
-
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $container_root = $panel->row;
         if ($parents->count() > 0) {
             $container_root = $parents->first()->row;
         }
         $n = 0;
-<<<<<<< HEAD
         //* finche' non passiamo il panel corretto
-=======
-        /* finche' non passiamo il panel corretto
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         if (config('xra.notUsePanelMiddleware')) {
             $containers_class = self::getContainersClass();
             $n = collect($containers_class)->search(get_class($container_root));
@@ -683,27 +670,6 @@ class RouteService {
         return url_queries($queries, $route);
     }
 
-<<<<<<< HEAD
-=======
-    //se n=0 => 'container0'
-    // se n=1 => 'container0.container1'
-
-    public static function getRoutenameN($params) {
-        extract($params);
-        $tmp = [];
-        if (in_admin()) {
-            $tmp[] = 'admin';
-        }
-        for ($i = 0; $i <= $n; ++$i) {
-            $tmp[] = 'container'.$i;
-        }
-        $tmp[] = $act;
-        $routename = implode('.', $tmp);
-
-        return $routename;
-    }
-
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
     public static function urlRelatedPanel($params) {
         $lang = app()->getLocale();
         extract($params);
@@ -725,21 +691,11 @@ class RouteService {
             */
             $container_root = $parents->first()->row;
         }
-<<<<<<< HEAD
-=======
-        /*
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $containers_class = self::getContainersClass();
         $n = collect($containers_class)->search(get_class($container_root));
         if (null === $n) {
             $n = 0;
         }
-<<<<<<< HEAD
-=======
-        */
-        $n = 0;
-
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $route_name = self::getRoutenameN(['n' => $n + 1 + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
@@ -769,7 +725,6 @@ class RouteService {
             ]);
         }
     }
-<<<<<<< HEAD
 
     public static function getRoutenameN($params) {
         extract($params);
@@ -942,6 +897,4 @@ class RouteService {
 
         return $route;
     }
-=======
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 }

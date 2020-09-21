@@ -3,7 +3,6 @@
 namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-<<<<<<< HEAD
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -11,18 +10,10 @@ use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\StubService;
 use Modules\Xot\Services\TenantService as Tenant;
-=======
-//--- services ---
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Str;
-use Modules\Xot\Http\Requests\XotRequest;
-use Modules\Xot\Services\PanelService as Panel;
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
 abstract class XotBaseContainerController extends Controller {
-<<<<<<< HEAD
     protected $controller;
     protected $row;
     protected $module;
@@ -140,58 +131,12 @@ abstract class XotBaseContainerController extends Controller {
 
         return $panel->callAction($act);
         /*
-=======
-    public function __call($method, $args) {
-        //dddx(['method' => $method, 'args' => $args]);
-
-        if ('' != request()->input('_act', '')) {
-            return $this->__callPanelAct($method, $args);
-        }
-
-        return $this->__callRouteAct($method, $args);
-    }
-
-    public function getController() {
-        list($containers, $items) = params2ContainerItem();
-        $mod_name = $this->panel->getModuleName();
-
-        $tmp = collect($containers)->map(
-            function ($item) {
-                return Str::studly($item);
-            }
-        )->implode('\\');
-        $controller = '\Modules\\'.$mod_name.'\Http\Controllers\\'.$tmp.'Controller';
-        if (class_exists($controller)) {
-            return $controller;
-        }
-
-        return '\Modules\Xot\Http\Controllers\XotPanelController';
-    }
-
-    public function __callRouteAct($method, $args) {
-        $panel = Panel::getRequestPanel();
-        $this->panel = $panel;
-        $model = $panel->row;
-        //$authorized = Gate::allows($method, $model);
-        $authorized = Gate::allows($method, $panel);
-
-        if (! $authorized) {
-            return $this->notAuthorized($method, $model);
-        }
-
-        $request = XotRequest::capture();
-        $controller = $this->getController();
-
-        $panel = app($controller)->$method($request, $panel);
-
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         return $panel->out(
             [
                 'is_ajax' => $request->ajax(),
                 'method' => $request->getMethod(),
             ]
         );
-<<<<<<< HEAD
         */
     }
 
@@ -256,49 +201,5 @@ abstract class XotBaseContainerController extends Controller {
         }
 
         return $this->__callRouteAct($method, $args);
-=======
-    }
-
-    public function __callPanelAct($method, $args) {
-        $request = request();
-        $act = $request->_act;
-        $method_act = Str::camel($act);
-
-        $panel = Panel::getRequestPanel();
-        $this->panel = $panel;
-        $model = $panel->row;
-
-        $authorized = Gate::allows($method_act, $panel);
-        if (! $authorized) {
-            return $this->notAuthorized($method_act, $model);
-        }
-
-        return $panel->callAction($act);
-    }
-
-    public function notAuthorized($method, $model) {
-        $lang = app()->getLocale();
-        if (! \Auth::check()) {
-            //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
-            $request = request();
-            if ($request->ajax()) {
-                $html = '<h3>Before Login </h3>
-            <button class="btn btn-social btn-facebook" onclick="location.href=\''.url($lang.'/login/facebook').'\'">
-                <i class="fab fa-facebook-square fa-3x  "></i>
-            </button>';
-                $msg = ['msg' => 'ok', 'html' => $html];
-
-                return response()->json($msg, 200);
-            }
-
-            $referer = \Request::path();
-
-            return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
-            ->withErrors(['active' => 'login before']);
-        }
-        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($model).']';
-
-        return abort(403, $msg);
->>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
     }
 }

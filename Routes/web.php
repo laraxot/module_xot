@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 use Modules\Xot\Services\RouteService;
+=======
+use Modules\Xot\Services\RouteDynService;
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 
 $namespace = '\Modules\Xot';
 $pack = class_basename($namespace);
@@ -10,7 +14,11 @@ $namespace .= '\Http\Controllers';
 $middleware = ['web', \Modules\Xot\Http\Middleware\PanelMiddleware::class];
 
 //$areas_prgs = include __DIR__ . '/web_common.php';
+<<<<<<< HEAD
 $areas_prgs = RouteService::generate();
+=======
+$areas_prgs = RouteDynService::generate();
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 //$prefix = App::getLocale();
 if (! config('xra.disable_frontend_dynamic_route')) {
     $prefix = '{lang}';
@@ -21,7 +29,11 @@ if (! config('xra.disable_frontend_dynamic_route')) {
             'namespace' => $namespace,
         ],
         function () use ($areas_prgs, $namespace) {
+<<<<<<< HEAD
             RouteService::dynamic_route($areas_prgs, null, $namespace);
+=======
+            RouteDynService::dynamic_route($areas_prgs, null, $namespace);
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             Route::get('/', 'HomeController@show')->name('home');
             Route::get('/home', 'HomeController@show')->name('home');
         }
@@ -84,7 +96,11 @@ if (in_admin()) {
             'namespace' => $namespace,
         ],
         function () use ($areas_adm, $namespace) {
+<<<<<<< HEAD
             RouteService::dynamic_route($areas_adm, null, $namespace);
+=======
+            RouteDynService::dynamic_route($areas_adm, null, $namespace);
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         }
     );
 }

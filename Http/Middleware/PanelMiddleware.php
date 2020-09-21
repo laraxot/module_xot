@@ -6,6 +6,10 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService;
+<<<<<<< HEAD
+=======
+use Modules\Xot\Services\TenantService;
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
 
 //use Illuminate\Http\Response;
 
@@ -29,11 +33,24 @@ class PanelMiddleware {
         [$containers, $items] = params2ContainerItem($parameters);
 
         if (0 == count($containers)) {
+<<<<<<< HEAD
+=======
+            $row = TenantService::model('home');
+            $panel = PanelService::get($row);
+            PanelService::setRequestPanel($panel);
+
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             return $next($request);
         }
 
         $row = xotModel($containers[0]);
         $panel = PanelService::get($row);
+<<<<<<< HEAD
+=======
+        if (! isset($panel)) {
+            abort(404);
+        }
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
         $panel->setRows($row);
         if (isset($items[0])) {
             $panel->setItem($items[0]);
@@ -43,7 +60,23 @@ class PanelMiddleware {
         for ($i = 1; $i < count($containers); ++$i) {
             $row_prev = $panel_parent->row;
             $types = Str::camel(Str::plural($containers[$i]));
+<<<<<<< HEAD
             $rows = $row_prev->{$types}();
+=======
+            try {
+                $rows = $row_prev->{$types}();
+            } catch (\Exception $e) {
+                abort(404, $e->getMessage());
+            } catch (\Error $e) {
+                //return response("User can't perform this action.", 404);
+                $data = [
+                    'lang' => \App::getLocale(),
+                    'params' => $parameters,
+                ];
+
+                return response()->view('pub_theme::errors.404', $data, 404);
+            }
+>>>>>>> 122170464b215d3a6aae3b1c54e2bf9672128e45
             $row = $rows->getRelated();
 
             $panel = PanelService::get($row);
