@@ -15,6 +15,10 @@ class HtmlService {
         $pdforientation = 'L'; //default;
         $out = 'show';
         extract($params);
+        if(request('debug', false)){
+
+            return $html;
+        }
         try {
             $html2pdf = new Html2Pdf($pdforientation, 'A4', 'it');
             $html2pdf->setTestTdInOnePage(false);
