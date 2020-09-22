@@ -1581,14 +1581,9 @@ abstract class XotBasePanel {
             return [];
         }
         //array_unique($items);
-        $parents = [];
-        $curr = $this;
-        while (null != $curr) {
-            $parents[] = $curr;
-            $curr = $curr->getParent();
-        }
+        $parents = $this->getParents();
+        $parents->push($this);
 
-        //ddd($this);
 
         foreach ($parents as $k => $panel) {
             //$panel = Panel::get($item);
@@ -1622,7 +1617,9 @@ abstract class XotBasePanel {
                 } else {
                     $tmp->active = request()->routeIs('admin.container0.'.$act);
                 }
-                $row[] = $tmp;
+                if (null != $panel->guid()) {
+                    $row[] = $tmp;
+                }
                 //----------------------
                 //*/
             }
@@ -1699,9 +1696,18 @@ abstract class XotBasePanel {
     }
 
     public function callAction($act) {
-        $action = $this->getActions()->firstWhere('name', $act);
+        $action = $this->getActions()
+            ->firstWhere('name', $act);
+
+        if (! is_object($action)) {
+            abort(403, 'action '.$act.' not recognized');
+        }
+
 
         $action->setRow($this->row);
+        $rows = $this->rows();
+        $action->setRows($rows);
+
         $action->setPanel($this);
 
         $method = request()->getMethod();
@@ -1742,6 +1748,7 @@ abstract class XotBasePanel {
         if (! is_object($action)) {
             abort(403, 'action '.$act.' not recognized');
         }
+
         $data = request()->all();
         $rows = $this->rows($data);
         $action->setRows($rows);
