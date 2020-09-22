@@ -2,11 +2,9 @@
 
 namespace Modules\Xot\Providers;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Str;
+
 //--- services ---
-use Modules\Xot\Services\TenantService as Tenant;
 
 //--- bases ---
 
@@ -31,19 +29,6 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         }
 
         $this->registerRoutePattern($router);
-        /*
-        if (config('xra.notUsePanelMiddleware')) {
-            //-- e' commentato perche' devo controllare se funziona --
-            if ('migrate' != \Request::input('act')) { //&& ! $this->app->runningInConsole()
-                $this->registerRouteBind($router);
-            }
-        } else {
-        }
-        */
-        //$route_params = \Route::current()->parameters();
-        //ddd($route_params);
-
-        //ddd('preso');
     }
 
     public function registerRoutePattern(Router $router) {
