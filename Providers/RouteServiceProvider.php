@@ -3,6 +3,9 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Modules\Xot\Providers\XotBaseRouteServiceProvider;
 
 //--- services ---
 
@@ -25,7 +28,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
 
         if (in_array(\Request::segment(1), $langs)) {
             $lang = \Request::segment(1);
-            \App::setLocale($lang);
+            App::setLocale($lang);
         }
 
         $this->registerRoutePattern($router);
