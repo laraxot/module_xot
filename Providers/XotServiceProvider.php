@@ -19,8 +19,6 @@ use Modules\Xot\Engines\FullTextSearchEngine;
 use Modules\Xot\Services\TenantService as Tenant;
 use Modules\Xot\Services\TranslatorService;
 
-use Livewire\Livewire;
-
 class XotServiceProvider extends XotBaseServiceProvider {
     protected $module_dir = __DIR__;
     protected $module_ns = __NAMESPACE__;
@@ -75,19 +73,8 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
         $this->registerLivewireComponents();
     }
-   //end bootCallback
 
-
-    public function registerLivewireComponents(){
-
-        if(class_exists("Livewire\Livewire")){
-            Livewire::component('food::places',\Modules\Food\Http\Livewire\Places::class);
-        }
-
-
-    }
-
-
+    //end bootCallback
 
     public function mergeConfigs() {
         $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra', 'social'];
