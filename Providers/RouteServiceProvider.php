@@ -4,12 +4,10 @@ namespace Modules\Xot\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Request;
-use Modules\Xot\Providers\XotBaseRouteServiceProvider;
 
 //--- services ---
 
-//--- bases ---
+//--- bases -----
 
 class RouteServiceProvider extends XotBaseRouteServiceProvider {
     /**
