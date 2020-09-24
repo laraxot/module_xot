@@ -2,5 +2,5 @@
 
 namespace Modules\Xot\Models\Panels\Policies;
 
-class TranslationPanelPolicy extends XotBasePolicy {
+class TranslationPanelPolicy extends XotBasePanelPolicy {
 }
