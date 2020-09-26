@@ -14,4 +14,8 @@ class HomePanelPolicy extends XotBasePanelPolicy {
     public function artisan($user, $post) {
         return true; //da aggiungere pezzi
     }
+
+    public function test($user, $post) {
+        return true; //da aggiungere pezzi
+    }
 }

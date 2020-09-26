@@ -153,6 +153,7 @@ class HomePanel extends XotBasePanel {
     public function actions(Request $request = null) {
         return [
             new Actions\ArtisanAction(request()->input('cmd')),
+            new Actions\TestAction,
         ];
     }
 }
