@@ -23,6 +23,7 @@ abstract class XotBasePanelAction {
     public $panel = null;
     public $name = null;
     public $icon = '<i class="far fa-question-circle"></i>';
+    public $class = 'btn btn-secondary mb-2';
     protected $data = [];
     public $related = null; //post_type per filtrare le azioni nei vari index_edit
 
@@ -176,7 +177,7 @@ abstract class XotBasePanelAction {
             $params['icon'] = $this->icon;
         }
         if (! isset($params['class'])) {
-            $params['class'] = 'btn btn-secondary mb-2';
+            $params['class'] = $this->class;
         }
 
         return FormXService::btnHtml($params);
