@@ -324,8 +324,7 @@ class RouteDynService {
             ], //end act_n
             [
                 'name' => 'Attach',
-                //'act' => 'indexAttach',
-                'act' => 'attach',
+                'act' => 'indexAttach',
             ], //end act_n
         ];
 
