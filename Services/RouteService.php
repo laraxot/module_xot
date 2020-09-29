@@ -6,15 +6,6 @@ class RouteService {
     public static function urlPanel($params) {
         $lang = app()->getLocale();
         extract($params);
-        /*
-        $parents = collect([]);
-        $panel_curr = $panel;
-
-        while (null != $panel_curr->getParent()) {
-            $parents->prepend($panel_curr->getParent());
-            $panel_curr = $panel_curr->getParent();
-        }
-        */
         $parents = $panel->getParents();
 
         $container_root = $panel->row;
@@ -22,21 +13,12 @@ class RouteService {
             $container_root = $parents->first()->row;
         }
         $n = 0;
-        /* finche' non passiamo il panel corretto
-        if (config('xra.notUsePanelMiddleware')) {
-            $containers_class = self::getContainersClass();
-            $n = collect($containers_class)->search(get_class($container_root));
-            if (null === $n) {
-                $n = 0;
-            }
-        }
-        //*/
 
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         if (! isset($route_params['lang'])) {
-            $route_params['lang'] = app()->getLocale();
+            $route_params['lang'] = $lang;
         }
 
         $i = 0;

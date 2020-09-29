@@ -1587,7 +1587,9 @@ abstract class XotBasePanel {
         }
         //array_unique($items);
         $parents = $this->getParents();
-        //$parents->push($this);
+        if ('' != $this->guid()) {
+            $parents->push($this);
+        }
         //dddx($parents);
 
         foreach ($parents as $k => $panel) {
