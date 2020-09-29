@@ -1090,13 +1090,18 @@ abstract class XotBasePanel {
     public function btnCrud($params = []) {
         extract($params);
         $acts = ['edit', 'destroy', 'show'];
+        if (is_object($this->row->panel)) {
+            $acts = ['edit', 'destroy', 'detach', 'show'];
+        }
+
         $html = '';
         $params['title'] = '';
         foreach ($acts as $act) {
             $params['act'] = $act;
             $html .= $this->btnHtml($params);
         }
-        $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.chr(13).$html.chr(13).'</div>';
+        $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.
+            chr(13).$html.chr(13).'</div>';
 
         return $html;
     }
@@ -1582,21 +1587,20 @@ abstract class XotBasePanel {
         }
         //array_unique($items);
         $parents = $this->getParents();
-        $parents->push($this);
-
+        //$parents->push($this);
+        //dddx($parents);
 
         foreach ($parents as $k => $panel) {
-            //$panel = Panel::get($item);
-            $item = $panel->row;
+            //$item = $panel->row;
             $tabs = [];
             if (! is_object($panel)) {
                 return $tabs;
             }
             $tabs = $panel->tabs();
             $row = [];
+            //*
             if (0 == $k) {
-                //*
-                if (Gate::allows('index', $item)) {
+                if (Gate::allows('index', $panel)) {
                     $tmp = new \stdClass();
                     $tmp->title = '<< Back '; //.'['.get_class($item).']';
                     $tmp->url = $panel->indexUrl();
@@ -1621,18 +1625,18 @@ abstract class XotBasePanel {
                     $row[] = $tmp;
                 }
                 //----------------------
-                //*/
             }
+            //*/
             foreach ($tabs as $tab) {
                 $tmp = new \stdClass();
                 $tmp->title = $tab;
+                $tmp->panel = $panel;
 
                 if (in_array($act, ['index_edit', 'edit', 'update'])) {
                     $tab_act = 'index_edit';
                 } else {
                     $tab_act = 'index';
                 }
-                //$tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
                 $tmp->url = $panel->relatedUrl(['related_name' => $tab, 'act' => $tab_act]);
                 $tmp->active = in_array($tab, $containers);
                 $row[] = $tmp;
@@ -1702,7 +1706,6 @@ abstract class XotBasePanel {
         if (! is_object($action)) {
             abort(403, 'action '.$act.' not recognized');
         }
-
 
         $action->setRow($this->row);
         $rows = $this->rows();
@@ -2039,13 +2042,15 @@ abstract class XotBasePanel {
         $mod_trad = $this->getModuleNameLow().'::'.last($containers);
 
         //--- per passare la view all'interno dei componenti
-        \View::composer('*', function ($view_params) use ($view,$mod_trad) {
-            \View::share('view', $view);
-            $trad = implode('.', array_slice(explode('.', $view), 0, -1));
-            \View::share('trad', $trad);
-            \View::share('lang', \App::getLocale());
-            //\View::share('mod_trad', $mod_trad);
-        });
+        \View::composer('*',
+            function ($view_params) use ($view,$mod_trad) {
+                \View::share('view', $view);
+                $trad = implode('.', array_slice(explode('.', $view), 0, -1));
+                \View::share('trad', $trad);
+                \View::share('lang', \App::getLocale());
+                //\View::share('mod_trad', $mod_trad);
+            }
+        );
 
         $modal = null;
         if (\Request::ajax()) {
