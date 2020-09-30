@@ -1658,7 +1658,6 @@ abstract class XotBasePanel {
         $out_format = isset($data['format']) ? $data['format'] : null;
         $sort = isset($data['sort']) ? $data['sort'] : null;
         //$act = isset($data['_act']) ? $data['_act'] : null;
-
         $query = $this->rows;
         if (! is_object($query)) {
             if (! is_object($this->row)) {
@@ -1771,6 +1770,71 @@ abstract class XotBasePanel {
 
     public function out($params = []) {
         return $this->view();
+    }
+
+    public function out_old($params = []) {
+        //--- default vars ---//
+        $is_ajax = false;
+        $method = 'GET';
+        $act = null;
+        $out_format = null;
+        extract($params);
+        $data = request()->all();
+        $rows = $this->rows($data);
+        if (isset($data['_act'])) {
+            $act = $data['_act'];
+        }
+        if (isset($data['format'])) {
+            $out_format = $data['format'];
+        }
+        //$act = isset($data['_act']) ? $data['_act'] : null;
+        //$out_format = isset($data['format']) ? $data['format'] : null;
+
+        $html = $this->callItemAction($act);
+        if (null == $html) {
+            $html = $this->callContainerAction($act);
+        }
+        if (null == $html) {
+            $html = $this->formatData($rows, $data); //formatContainerData
+        }
+        if (null == $html) {
+            $html = $this->formatItemData($this->row, $data);
+        }
+        $view = ThemeService::getView();
+        $view_work = ThemeService::getViewWork();
+        if (null == $html) {
+            $with = [
+                'row' => $this->row,
+                '_panel' => $this,
+            ];
+            if (is_object($rows)) {
+                //$related=$rows->getRelated();
+                $related = $rows->getModel(); //builder
+                $morph_map = [$related->post_type => get_class($related)];
+                //dddx($morph_map);
+                \Illuminate\Database\Eloquent\Relations\Relation::morphMap($morph_map);
+                $with['rows'] = $rows->paginate(20);
+            }
+            $html = ThemeService::view()
+                ->with($with);
+        }
+
+        if ($is_ajax && null == $out_format) {
+            \Debugbar::disable();
+
+            return response()->json(
+                [
+                    'msg' => 'ok',
+                    'html' => (string) $html,
+                    'view' => $view,
+                    'view_work' => $view_work,
+                ]
+            );
+        }
+
+        //dddx($html);
+
+        return $html;
     }
 
     public function pdfFilename($params = []) {
@@ -1997,7 +2061,7 @@ abstract class XotBasePanel {
             $modal = 'iframe';
         }
 
-        $rows = $this->rows()->paginate(20);
+        $rows = $this->rows()->paginate(10);
 
         $view_params = [
             'view' => $view,
