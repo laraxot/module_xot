@@ -103,17 +103,31 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
 
     public function registerLivewireComponents() {
         $components_json = $this->module_dir.'/../Http/Livewire/_components.json';
-
+        $force_recreate = true;
         $exists = File::exists($components_json);
-        if ($exists) {
+        if ($exists && ! $force_recreate) {
             $content = File::get($components_json);
             $comps = json_decode($content);
         } else {
-            $files = File::files(dirname($components_json));
+            $files = File::allFiles(dirname($components_json));
 
             $comps = [];
             foreach ($files as $k => $v) {
                 //dddx(get_class_methods($v));
+                /* //4 debug
+                dddx(collect(get_class_methods($v))
+                    ->filter(
+                        function ($item) {
+                            return Str::startsWith($item, 'get');
+                        }
+                    )->map(
+                        function ($item) use ($v) {
+                            return ['name' => $item, 'value' => $v->{$item}()];
+                        }
+                    )->all()
+                );
+                */
+
                 if ('php' == $v->getExtension()) {
                     $tmp = (object) [];
                     $class_name = Str::before($v->getBasename(), '.php');
@@ -121,9 +135,15 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
                     $tmp->class_name = $class_name;
                     $tmp->comp_name = $this->module_name.'::'.Str::snake($class_name);
                     $tmp->comp_ns = Str::before($this->module_ns, '\Providers').'\Http\Livewire\\'.$class_name;
+                    if ('' != $v->getRelativePath()) {
+                        $tmp->comp_name = $this->module_name.'::'.Str::snake($v->getRelativePath()).'.'.Str::snake($class_name);
+                        $tmp->comp_ns = Str::before($this->module_ns, '\Providers').'\Http\Livewire\\'.$v->getRelativePath().'\\'.$class_name;
+                    }
+
                     $comps[] = $tmp;
                 }
             }
+
             //dddx([$comps, $components_json]);
             $content = json_encode($comps);
             File::put($components_json, $content);
