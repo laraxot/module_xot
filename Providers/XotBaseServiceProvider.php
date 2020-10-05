@@ -2,11 +2,12 @@
 
 namespace Modules\Xot\Providers;
 
-use Illuminate\Database\Eloquent\Factory;
+//use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Modules;
+
+//use Modules;
 
 abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
@@ -23,6 +24,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
         if (method_exists($this, 'bootCallback')) {
             $this->bootCallback();
         }
+        $this->registerLivewireComponents();
         //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 
@@ -97,7 +99,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
      */
     public function registerFactories() {
         if (! app()->environment('production')) {
-            app(Factory::class)->load($this->module_dir.'/../Database/factories');
+            //app(Factory::class)->load($this->module_dir.'/../Database/factories');
         }
     }
 

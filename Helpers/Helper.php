@@ -303,6 +303,7 @@ if (! \function_exists('transFields')) {
         //ddd() );
         //debug_getter_obj(['obj'=>$module]);
         //ddd($module_name->getNamespace());
+        $view = 'unknown';
         extract($params);
         //ddd($params);
         if (isset($attributes)) {

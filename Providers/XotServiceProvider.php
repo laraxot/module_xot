@@ -71,7 +71,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
             return new FullTextSearchEngine();
         });
 
-        $this->registerLivewireComponents();
+        //$this->registerLivewireComponents();
     }
 
     //end bootCallback
