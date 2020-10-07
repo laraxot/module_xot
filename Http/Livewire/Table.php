@@ -34,7 +34,7 @@ class Table extends XotBaseTableComponent {
             if (is_array($field)) {
                 $field = (object) $field;
             }
-            $col = ColumnService::make($field->name);
+            $col = ColumnService::make($field->name)->type($field->type);
             if (in_array($field->type, ['Id', 'String', 'Text', 'Integer'])) {
                 $col->sortable()->searchable();
             }
