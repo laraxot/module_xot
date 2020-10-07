@@ -73,6 +73,73 @@ class PanelService {
         return self::panel()->tabs();
     }
 
+    public static function getByParams($route_params) {
+        [$containers, $items] = params2ContainerItem($route_params);
+
+        if (0 == count($containers)) {
+            /*
+            $row = TenantService::model('home');
+            $panel = PanelService::get($row);
+            PanelService::setRequestPanel($panel);
+            */
+            PanelService::setRequestPanel(null);
+
+            return $next($request);
+        }
+
+        $row = xotModel($containers[0]);
+        $panel = PanelService::get($row);
+        if (! isset($panel)) {
+            $data = [
+                'lang' => \App::getLocale(),
+                'params' => $route_params,
+            ];
+
+            return response()->view('pub_theme::errors.404', $data, 404);
+        }
+        $panel->setRows($row);
+        if (isset($items[0])) {
+            $panel->setItem($items[0]);
+        }
+        $panel_parent = $panel;
+
+        for ($i = 1; $i < count($containers); ++$i) {
+            $row_prev = $panel_parent->row;
+            $types = Str::camel(Str::plural($containers[$i]));
+            try {
+                $rows = $row_prev->{$types}();
+            } catch (\Exception $e) {
+                //abort(404, $e->getMessage());
+                $data = [
+                    'lang' => \App::getLocale(),
+                    'params' => $route_params,
+                ];
+
+                return response()->view('pub_theme::errors.404', $data, 404);
+            } catch (\Error $e) {
+                //return response("User can't perform this action.", 404);
+                $data = [
+                    'lang' => \App::getLocale(),
+                    'params' => $route_params,
+                ];
+
+                return response()->view('pub_theme::errors.404', $data, 404);
+            }
+            $row = $rows->getRelated();
+
+            $panel = PanelService::get($row);
+            $panel->setRows($rows);
+            $panel->setParent($panel_parent);
+
+            if (isset($items[$i])) {
+                $panel->setItem($items[$i]);
+            }
+            $panel_parent = $panel;
+        }
+
+        return $panel;
+    }
+
     public static function getByModel($model) {
         $class_full = get_class($model);
         $class_name = class_basename($model);

@@ -1,0 +1,170 @@
+<?php
+
+namespace Modules\Xot\Http\Livewire;
+
+//use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+//*
+use Illuminate\Support\Str;
+use Livewire\Component;
+//use Kdion4891\LaravelLivewireTables\Traits\ThanksYajra;
+
+use Livewire\WithPagination;
+use Modules\LU\Models\User;
+use Modules\Xot\Services\ColumnService;
+
+//*/
+
+abstract class XotBaseTableComponent extends Component {
+    use WithPagination;
+    //use ThanksYajra;
+
+    public $table_class;
+    public $thead_class;
+    public $header_view;
+    public $footer_view;
+    public $search;
+    public $checkbox;
+    public $checkbox_side;
+    public $checkbox_attribute = 'id';
+    public $checkbox_all = false;
+    public $checkbox_values = [];
+    public $sort_attribute = 'id';
+    public $sort_direction = 'desc';
+    public $per_page;
+
+    /*
+    public function mount() {
+        $this->setTableProperties();
+    }
+    */
+
+    public function setTableProperties() {
+        foreach (['table_class', 'thead_class', 'checkbox', 'checkbox_side', 'per_page'] as $property) {
+            $this->$property = $this->$property ?? config('laravel-livewire-tables.'.$property);
+        }
+    }
+
+    public function render() {
+        return $this->tableView();
+    }
+
+    public function tableView() {
+        $view = 'xot::livewire.xot_base_table_component';
+        $view_params = [
+            'view' => $view,
+            'columns' => $this->columns(),
+            'models' => $this->models()->paginate($this->per_page),
+        ];
+
+        return view($view, $view_params);
+    }
+
+    /**
+     * @return \Kdion4891\LaravelLivewireTables\Column[]
+     */
+    public function columns() {
+        return [
+            ColumnService::make('auth_user_id')->searchable()->sortable(),
+            ColumnService::make('first_name')->searchable()->sortable(),
+            ColumnService::make('Email')->searchable()->sortable(),
+            ColumnService::make('last_login_at')->searchable()->sortable(),
+            ColumnService::make('Updated At')->searchable()->sortable(),
+        ];
+    }
+
+    public function thClass($attribute) {
+        return null;
+    }
+
+    public function trClass($model) {
+        return null;
+    }
+
+    public function tdClass($attribute, $value) {
+        return null;
+    }
+
+    public function query() {
+        return User::query();
+    }
+
+    public function models() {
+        $models = $this->query();
+
+        if ($this->search) {
+            $models->where(function (Builder $query) {
+                foreach ($this->columns() as $column) {
+                    if ($column->searchable) {
+                        if (Str::contains($column->attribute, '.')) {
+                            $relationship = $this->relationship($column->attribute);
+
+                            $query->orWhereHas($relationship->name, function (Builder $query) use ($relationship) {
+                                $query->where($relationship->attribute, 'like', '%'.$this->search.'%');
+                            });
+                        } elseif (Str::endsWith($column->attribute, '_count')) {
+                            // No clean way of using having() with pagination aggregation, do not search counts for now.
+                            // If you read this and have a good solution, feel free to submit a PR :P
+                        } else {
+                            $query->orWhere($query->getModel()->getTable().'.'.$column->attribute, 'like', '%'.$this->search.'%');
+                        }
+                    }
+                }
+            });
+        }
+
+        if (Str::contains($this->sort_attribute, '.')) {
+            $relationship = $this->relationship($this->sort_attribute);
+            $sort_attribute = $this->attribute($models, $relationship->name, $relationship->attribute);
+        } else {
+            $sort_attribute = $this->sort_attribute;
+        }
+
+        if (null !== ($column = $this->getColumnByAttribute($this->sort_attribute)) && is_callable($column->sortCallback)) {
+            return app()->call($column->sortCallback, ['models' => $models, 'sort_attribute' => $sort_attribute, 'sort_direction' => $this->sort_direction]);
+        }
+
+        return $models->orderBy($sort_attribute, $this->sort_direction);
+    }
+
+    public function updatedSearch() {
+        $this->gotoPage(1);
+    }
+
+    public function updatedCheckboxAll() {
+        $this->checkbox_values = [];
+
+        if ($this->checkbox_all) {
+            $this->models()->each(function ($model) {
+                $this->checkbox_values[] = (string) $model->{$this->checkbox_attribute};
+            });
+        }
+    }
+
+    public function updatedCheckboxValues() {
+        $this->checkbox_all = false;
+    }
+
+    public function sort($attribute) {
+        if ($this->sort_attribute != $attribute) {
+            $this->sort_direction = 'asc';
+        } else {
+            $this->sort_direction = 'asc' == $this->sort_direction ? 'desc' : 'asc';
+        }
+
+        $this->sort_attribute = $attribute;
+    }
+
+    /**
+     * @return \Kdion4891\LaravelLivewireTables\Column|null
+     */
+    protected function getColumnByAttribute($attribute) {
+        foreach ($this->columns() as $col) {
+            if ($col->attribute === $attribute) {
+                return $col;
+            }
+        }
+
+        return null;
+    }
+}
