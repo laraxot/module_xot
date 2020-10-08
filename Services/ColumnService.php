@@ -7,6 +7,7 @@ namespace Modules\Xot\Services;
 *
 **/
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -20,6 +21,7 @@ use Illuminate\Support\Str;
 class ColumnService {
     protected $heading;
     protected $attribute;
+    protected $type;
     protected $searchable = false;
     protected $sortable = false;
     protected $sortCallback;
@@ -36,6 +38,12 @@ class ColumnService {
 
     public static function make($heading = null, $attribute = null) {
         return new static($heading, $attribute);
+    }
+
+    public function type($type) {
+        $this->type = $type;
+
+        return $this;
     }
 
     public function searchable() {
@@ -60,5 +68,20 @@ class ColumnService {
         $this->view = $view;
 
         return $this;
+    }
+
+    public function freeze($model) {
+        $value = Arr::get($model->toArray(), $this->attribute);
+        $view = 'formx::livewire.fields.'.Str::snake($this->type).'.freeze';
+        $view_params = [
+            'view' => $view,
+            'row' => $model,
+            'value' => $value,
+            //'field' => $this,
+        ];
+
+        return view($view, $view_params);
+
+        return $value;
     }
 }

@@ -8,7 +8,7 @@
                 <input type="search" class="form-control" placeholder="{{ __('Search') }}" wire:model="search">
             </div>
         </div>
-        @if($header_view)
+        @if ($header_view)
             <div class="col-md-auto mb-3">
                 @include($header_view)
             </div>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="card mb-3">
-        @if($models->isEmpty())
+        @if ($models->isEmpty())
             <div class="card-body">
                 {{ __('No results to display.') }}
             </div>
@@ -25,62 +25,72 @@
                 <div class="table-responsive">
                     <table class="table {{ $table_class }} mb-0">
                         <thead class="{{ $thead_class }}">
-                        <tr>
-                            @if($checkbox && $checkbox_side == 'left')
-                                @include($view.'.checkbox-all')
-                            @endif
-
-                            @foreach($columns as $column)
-                                <th class="align-middle text-nowrap border-top-0 {{ $this->thClass($column->attribute) }}">
-                                    @if($column->sortable)
-                                        <span style="cursor: pointer;" wire:click="sort('{{ $column->attribute }}')">
-                                            {{ $column->heading }}
-
-                                            @if($sort_attribute == $column->attribute)
-                                                <i class="fa fa-sort-amount-{{ $sort_direction }}"></i>
-                                            @else
-                                                <i class="fa fa-sort-amount-up-alt" style="opacity: .35;"></i>
-                                            @endif
-                                        </span>
-                                    @else
-                                        {{ $column->heading }}
-                                    @endif
-                                </th>
-                            @endforeach
-                            <th class="align-middle text-nowrap border-top-0">
-                            </th>
-
-                            @if($checkbox && $checkbox_side == 'right')
-                                @include($view.'.checkbox-all')
-                            @endif
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($models as $model)
-                            <tr class="{{ $this->trClass($model) }}">
-                                @if($checkbox && $checkbox_side == 'left')
-                                    @include($view.'.checkbox-row')
+                            <tr>
+                                @if ($checkbox && $checkbox_side == 'left')
+                                    @include($view.'.checkbox-all')
                                 @endif
 
-                                @foreach($columns as $column)
-                                    <td class="align-middle {{ $this->tdClass($column->attribute, $value = Arr::get($model->toArray(), $column->attribute)) }}">
-                                        @if($column->view)
-                                            @include($column->view)
+                                @foreach ($columns as $column)
+                                    <th
+                                        class="align-middle text-nowrap border-top-0 {{ $this->thClass($column->attribute) }}">
+                                        @if ($column->sortable)
+                                            <span style="cursor: pointer;"
+                                                wire:click="sort('{{ $column->attribute }}')">
+                                                {{ $column->heading }}
+
+                                                @if ($sort_attribute == $column->attribute)
+                                                    <i class="fa fa-sort-amount-{{ $sort_direction }}"></i>
+                                                @else
+                                                    <i class="fa fa-sort-amount-up-alt" style="opacity: .35;"></i>
+                                                @endif
+                                            </span>
                                         @else
-                                            {{ $value }}
+                                            {{ $column->heading }}
                                         @endif
-
-                                    </td>
+                                    </th>
                                 @endforeach
-                                <td>
-                                    {!! Panel::get($model)->setParent($this->panel->getParent())->btnCrud() !!}
-                                </td>
+                                <th class="align-middle text-nowrap border-top-0">
+                                </th>
 
-                                @if($checkbox && $checkbox_side == 'right')
-                                    @include($view.'.checkbox-row')
+                                @if ($checkbox && $checkbox_side == 'right')
+                                    @include($view.'.checkbox-all')
                                 @endif
                             </tr>
-                        @endforeach
+                        </thead>
+                        <tbody>
+                            @foreach ($models as $model)
+                                <tr class="{{ $this->trClass($model) }}">
+                                    @if ($checkbox && $checkbox_side == 'left')
+                                        @include($view.'.checkbox-row')
+                                    @endif
+
+                                    @foreach ($columns as $column)
+                                        <td
+                                            class="align-middle {{ $this->tdClass($column->attribute, $value = Arr::get($model->toArray(), $column->attribute)) }}">
+                                            @if ($column->view)
+                                                @include($column->view)
+                                            @else
+                                                {{--
+                                                {{ $value }}
+                                                {{ dddx($column) }}
+                                                --}}
+
+                                                {!! $column->freeze($model) !!}
+                                            @endif
+
+                                        </td>
+                                    @endforeach
+                                    <td>
+                                        {!! Panel::get($model)
+                                        ->setParent($this->panel->getParent())
+                                        ->btnCrud() !!}
+                                    </td>
+
+                                    @if ($checkbox && $checkbox_side == 'right')
+                                        @include($view.'.checkbox-row')
+                                    @endif
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -92,7 +102,7 @@
         <div class="col-auto">
             {{ $models->links() }}
         </div>
-        @if($footer_view)
+        @if ($footer_view)
             <div class="col-md-auto">
                 @include($footer_view)
             </div>

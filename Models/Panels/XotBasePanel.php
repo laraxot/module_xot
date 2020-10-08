@@ -2013,6 +2013,7 @@ abstract class XotBasePanel {
             'modal' => $modal,
             'containers' => $containers,
             'items' => $items,
+            'page' => new \Modules\Theme\Services\Objects\PageObject(),
         ];
 
         return view($view_work)->with($view_params);
