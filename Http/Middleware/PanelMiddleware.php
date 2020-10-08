@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Http\Middleware;
 
+use App;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,6 +20,12 @@ class PanelMiddleware {
 
     public function handle(Request $request, Closure $next) {
         $parameters = request()->route()->parameters();
+        //if (! isset($parameters['lang'])) {
+        //$lang = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
+        //$lang = config('xra.lang', 'it');
+        //App::setLocale($lang);
+        //}
+
         //dddx($parameters);
         /*
         * "module" => "lu"
