@@ -5,8 +5,8 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
-if(!defined('STDIN')){
-    define('STDIN',fopen("php://stdin","r"));
+if (! defined('STDIN')) {
+    define('STDIN', fopen('php://stdin', 'r'));
 }
 
 //----- TODO
@@ -23,7 +23,19 @@ class ArtisanService {
                 return ArtisanService::exe('migrate --force');
             case 'routelist': return ArtisanService::exe('route:list');
             case 'optimize': return ArtisanService::exe('optimize');
+            case 'clear':
+                echo self::debugbarClear();
+                echo self::errorClear();
+                echo ArtisanService::exe('cache:clear');
+                echo ArtisanService::exe('config:clear');
+                echo ArtisanService::exe('event:clear');
+                echo ArtisanService::exe('route:clear');
+                echo ArtisanService::exe('view:clear');
+                echo ArtisanService::exe('debugbar:clear');
+                echo ArtisanService::exe('opcache:clear');
+                echo ArtisanService::exe('optimize:clear');
 
+            break;
             case 'clearcache': return ArtisanService::exe('cache:clear');
             case 'routecache': return ArtisanService::exe('route:cache');
             case 'routeclear': return ArtisanService::exe('route:clear');
@@ -32,13 +44,7 @@ class ArtisanService {
 
             //-------------------------------------------------------------------
             case 'debugbar:clear':
-                $files=File::files(storage_path('debugbar'));
-                foreach($files as $file){
-                    if($file->getExtension()=='json'){
-                        File::delete($file);
-                    }
-                }
-               return 'Debugbar Storage cleared! ('.count($files).' Files )';
+                self::debugbarClear();
             break;
 
             //------------------------------------------------------------------
@@ -66,16 +72,7 @@ class ArtisanService {
 
                 return '<pre>'.$contents.'</pre>';
             case 'error-clear':
-                 $files = File::files(storage_path('logs'));
-
-                foreach ($files as $file) {
-                    if ('log' == $file->getExtension()) {
-                        File::delete($file);
-                    }
-                }
-
-
-                return '<pre>laravel.log cleared !</pre>';
+                 return self::errorClear();
 
             //-------------------------------------------------------------------------
             case 'spatiecache-clear': return \Spatie\ResponseCache\Facades\ResponseCache::clear();
@@ -87,6 +84,29 @@ class ArtisanService {
         return '';
     }
 
+    public static function errorClear() {
+        $files = File::files(storage_path('logs'));
+
+        foreach ($files as $file) {
+            if ('log' == $file->getExtension()) {
+                File::delete($file);
+            }
+        }
+
+        return '<pre>laravel.log cleared !</pre> ('.count($files).' Files )';
+    }
+
+    public static function debugbarClear() {
+        $files = File::files(storage_path('debugbar'));
+        foreach ($files as $file) {
+            if ('json' == $file->getExtension()) {
+                File::delete($file);
+            }
+        }
+
+        return 'Debugbar Storage cleared! ('.count($files).' Files )';
+    }
+
     public static function exe($command, array $arguments = []) {
         try {
             $output = '';
@@ -96,6 +116,8 @@ class ArtisanService {
 
             return $output;  // dato che mi carico solo le route minime menufull.delete non esiste.. impostare delle route comuni.
         } catch (Exception $e) {
+            return '<br/>'.$command.' non effettuato';
+        } catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
             return '<br/>'.$command.' non effettuato';
         }
     }
