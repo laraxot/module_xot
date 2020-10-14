@@ -320,6 +320,10 @@ if (! \function_exists('transFields')) {
         if (in_admin()) {
             $start = 1;
         }
+        if(!isset($ris->name)){
+            $ris->name = $name;
+
+        }
 
         $ris->name_dot = bracketsToDotted($name);
 
