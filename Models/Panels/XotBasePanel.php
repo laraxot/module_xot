@@ -1095,13 +1095,18 @@ abstract class XotBasePanel {
         }
 
         $html = '';
-        $params['title'] = '';
+        if (! in_array('title', array_keys($params))) {
+            $params['title'] = '';
+        }
         foreach ($acts as $act) {
             $params['act'] = $act;
             $html .= $this->btnHtml($params);
         }
-        $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.
+        if (in_array('group', array_keys($params)) && false == $params['group']) {
+        } else {
+            $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.
             chr(13).$html.chr(13).'</div>';
+        }
 
         return $html;
     }
