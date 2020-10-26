@@ -3,21 +3,23 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Cache\TagSet;
-use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Translation\Translator;
 //use Illuminate\Http\Request;
-use Laravel\Scout\EngineManager; // per slegarmi da tntsearch
+use Laravel\Scout\EngineManager;
 use Modules\Xot\Engines\FullTextSearchEngine;
 //use Modules\Xot\Engines\Opcache;
 //--- services ---
-use Modules\Xot\Services\TenantService as Tenant;
-use Modules\Xot\Services\TranslatorService;
+use Modules\Xot\Http\View\Composers\XotComposer;
+use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
+use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
 class XotServiceProvider extends XotBaseServiceProvider {
     protected $module_dir = __DIR__;
@@ -72,9 +74,17 @@ class XotServiceProvider extends XotBaseServiceProvider {
         });
 
         //$this->registerLivewireComponents();
+        $this->registerViewComposers();
     }
 
     //end bootCallback
+
+    private function registerViewComposers() {
+        //Factory $view
+        //$view->composer('bootstrap-italia::page', BootstrapItaliaComposer::class);
+        View::composer('*', XotComposer::class);
+        //dddx($res);
+    }
 
     public function mergeConfigs() {
         $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra', 'social'];
