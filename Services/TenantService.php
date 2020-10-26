@@ -76,20 +76,9 @@ class TenantService {
         }
         $tenant_name = self::getName();
         $extra_conf = config(str_replace('/', '.', $tenant_name).'.'.$group); // ...
-        /*
-        dd(
-            [
-                'key' => $key,
-                'group' => $group,
-                'tenant_name' => $tenant_name,
-                'extra_conf' => $extra_conf,
-                'line' => __LINE__,
-                'file' => __FILE__,
-            ]
-        );
-        //*/
+
         $original_conf = config($group);
-        //ddd($extra_conf);
+
         if (! is_array($original_conf)) {
             $original_conf = [];
         }
@@ -99,6 +88,7 @@ class TenantService {
         $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
 
         \Config::set($group, $merge_conf);  // non so se metterlo ..
+
         return config($key);
     }
 
@@ -127,7 +117,7 @@ class TenantService {
             if (! isset($models[$name])) {
                 //abort(403, 'Unauthorized path '.$name);
                 return false;
-            } 
+            }
             $class = $models[$name];
             $data = [];
             $data['model'][$name] = $class;
