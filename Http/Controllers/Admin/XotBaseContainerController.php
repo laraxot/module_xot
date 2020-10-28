@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
+use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\TenantService as Tenant;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
@@ -113,6 +114,8 @@ abstract class XotBaseContainerController extends Controller {
             return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
             ->withErrors(['active' => 'login before']);
         }
+        PolicyService::get($panel)->createIfNotExists();
+
         $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($panel).']';
 
         return abort(403, $msg);
