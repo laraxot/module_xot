@@ -51,7 +51,7 @@ class RouteService {
             $container0 = $route_params['container0'];
             $model = xotModel($container0);
             $module_name = getModuleNameFromModel($model);
-            $route_params['module'] = $module_name;
+            $route_params['module'] = strtolower($module_name);
         }
 
         try {
