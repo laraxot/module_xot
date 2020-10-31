@@ -15,6 +15,7 @@ class RouteService {
         $n = 0;
 
         $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
+
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
         if (! isset($route_params['lang'])) {
@@ -56,7 +57,7 @@ class RouteService {
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
-            return '#['.__LINE__.']['.__FILE__.']';
+            //return '#['.__LINE__.']['.__FILE__.']';
             ///*
             dddx(
                 ['e' => $e->getMessage(),
@@ -68,6 +69,7 @@ class RouteService {
                     'panel guid' => $panel->guid(),
                     'last route key ' => $panel->row->getRouteKey(),
                     'last route key name' => $panel->row->getRouteKeyName(),
+                    'routes' => \Route::getRoutes(),
                 ]
             );
             //*/
@@ -85,7 +87,8 @@ class RouteService {
     public static function getRoutenameN($params) {
         extract($params);
         $tmp = [];
-        if (in_admin()) {
+        //dddx(inAdmin());
+        if (inAdmin()) {
             $tmp[] = 'admin';
         }
         for ($i = 0; $i <= $n; ++$i) {
