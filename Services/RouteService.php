@@ -57,7 +57,7 @@ class RouteService {
         try {
             $route = route($route_name, $route_params);
         } catch (\Exception $e) {
-            //return '#['.__LINE__.']['.__FILE__.']';
+            return '#['.__LINE__.']['.__FILE__.']';
             ///*
             dddx(
                 ['e' => $e->getMessage(),
@@ -69,7 +69,7 @@ class RouteService {
                     'panel guid' => $panel->guid(),
                     'last route key ' => $panel->row->getRouteKey(),
                     'last route key name' => $panel->row->getRouteKeyName(),
-                    'routes' => \Route::getRoutes(),
+                    //'routes' => \Route::getRoutes(),
                 ]
             );
             //*/
