@@ -1384,6 +1384,7 @@ abstract class XotBasePanel {
     public function url($params = []) {
         $act = 'show';
         extract($params);
+        $act = Str::snake($act);
 
         return RouteService::urlPanel(['panel' => $this, 'act' => $act]);
     }
