@@ -2,6 +2,8 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Str;
+
 class RouteService {
     public static function urlPanel($params) {
         $lang = app()->getLocale();
@@ -55,7 +57,7 @@ class RouteService {
         }
 
         try {
-            $route = route($route_name, $route_params);
+            $route = route($route_name, $route_params, false);
         } catch (\Exception $e) {
             return '#['.__LINE__.']['.__FILE__.']';
             ///*
@@ -78,7 +80,13 @@ class RouteService {
         //--- aggiungo le query string all'url corrente
         $queries = collect(request()->query())->except(['_act', 'item0', 'item1'])->all();
 
-        return url_queries($queries, $route);
+        $url = url_queries($queries, $route);
+
+        if (Str::endsWith($url, '?')) {
+            $url = Str::before($url, '?');
+        }
+
+        return $url;
     }
 
     //se n=0 => 'container0'
