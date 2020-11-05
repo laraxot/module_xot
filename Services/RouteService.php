@@ -26,7 +26,7 @@ class RouteService {
 
         $i = 0;
         foreach ($parents as $parent) {
-            $route_params['container'.($n + $i)] = $parent->postType(); //$parent->row->post_type;
+            $route_params['container'.($n + $i)] = $parent->postType();
             $route_params['item'.($n + $i)] = $parent->guid();
             ++$i;
         }
@@ -60,6 +60,7 @@ class RouteService {
             $route = route($route_name, $route_params, false);
         } catch (\Exception $e) {
             return '#['.__LINE__.']['.__FILE__.']';
+
             ///*
             dddx(
                 ['e' => $e->getMessage(),
@@ -74,7 +75,6 @@ class RouteService {
                     //'routes' => \Route::getRoutes(),
                 ]
             );
-            //*/
         }
 
         //--- aggiungo le query string all'url corrente

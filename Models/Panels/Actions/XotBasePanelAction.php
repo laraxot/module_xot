@@ -43,6 +43,9 @@ abstract class XotBasePanelAction {
     }
 
     public function getName() {
+        if (Str::contains($this->name, '::')) {
+            $this->name = null;
+        }
         if (null != $this->name) {
             return $this->name;
         }
