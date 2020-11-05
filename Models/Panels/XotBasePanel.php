@@ -1246,18 +1246,23 @@ abstract class XotBasePanel {
             return $img->src_out;
         }
         $params['dirname'] = '/photos/'.$this->postType().'/'.$this->guid();
-        //dddx($params);
-        $img = new ImageService($params);
-        $src_out = $img->fit()->save()->src();
-
-        $row->images()->create([
+        
+        try {
+            $img = new ImageService($params);
+            $src_out = $img->fit()->save()->src();
+        
+            $row->images()->create([
             'src' => $src,
             'src_out' => $src_out,
             'width' => $width,
             'height' => $height,
         ]);
-        //ddd($src_out);
-        return $src_out;
+            //ddd($src_out);
+            return $src_out;
+        }catch(\Exception $e){
+            //dddx('isolated');
+            return '#['.__LINE__.']['.__FILE__.']';
+        }
     }
 
     public function microdataSchemaOrg() {
