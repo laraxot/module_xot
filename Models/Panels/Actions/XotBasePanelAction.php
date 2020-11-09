@@ -127,7 +127,12 @@ abstract class XotBasePanelAction {
         //$url = $request->fullUrlWithQuery(['_act' => $name]);
         //if (isset($panel)) {
         //dddx([request()->all(),$this->data]);
-        $this->data = array_merge(request()->all(), $this->data);
+        //dddx(request()->all());
+        //dddx(get_class_methods(request()));
+
+        $this->data = array_merge(request()->query(), $this->data);
+        //$this->data = collect($this->data)->except(['fingerprint', 'serverMemo', 'updates'])->all();
+
         $url = $panel->indexUrl();
         $url = url_queries(['_act' => $name], $url);
         $url = url_queries($this->data, $url);
