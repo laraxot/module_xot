@@ -105,7 +105,7 @@ class TenantService {
                 'config_data' => $config_data,
                 'config_name' => $config_name,
             ];
-            dddx($name);
+            dddx($msg);
         }
 
         $config_data = array_merge_recursive_distinct($config_data, $data); //funzione in helper
