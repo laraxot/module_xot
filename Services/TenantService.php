@@ -101,11 +101,15 @@ class TenantService {
         $config_data = config($config_name);
         //$config_data = array_merge_recursive($config_data, $data);
         if (! is_array($config_data)) {
+            /*
             $msg = [
                 'config_data' => $config_data,
                 'config_name' => $config_name,
             ];
             dddx($msg);
+            */
+            $config_name = str_replace('/', '.', $config_name);
+            $config_data = config($config_name);
         }
 
         $config_data = array_merge_recursive_distinct($config_data, $data); //funzione in helper
