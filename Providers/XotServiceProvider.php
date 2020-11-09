@@ -27,7 +27,6 @@ class XotServiceProvider extends XotBaseServiceProvider {
     public $module_name = 'xot';
 
     public function bootCallback() {
-        Schema::defaultStringLength(191);
         $this->mergeConfigs();
 
         if (\Request::has('act') && 'migrate' == \Request::input('act')) {
@@ -35,11 +34,13 @@ class XotServiceProvider extends XotBaseServiceProvider {
             DB::reconnect('mysql');
         }
         //DB::purge(); //Call to a member function prepare() on null
+        //* //Database connection [mysql] not configured.
         DB::reconnect();
+        Schema::defaultStringLength(191);
+        //*/
         $map = config('xra.model');
-        //$route_params = Route::current()->parameters();
-        //ddd($route_params);
         Relation::morphMap($map);
+
         /*
         $morph_map=Relation::morphMap();
         ddd($morph_map);
