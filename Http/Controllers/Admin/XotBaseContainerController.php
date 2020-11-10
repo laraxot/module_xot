@@ -10,6 +10,7 @@ use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\TenantService as Tenant;
+use Nwidart\Modules\Facades\Module;
 
 //use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 
@@ -82,8 +83,15 @@ abstract class XotBaseContainerController extends Controller {
 
         $panel = $this->panel;
         if (null == $panel) {
-            $home = Tenant::model('home');
-            $panel = Panel::get($home);
+            $route_params = $request->route()->parameters();
+            if (isset($route_params['module'])) {
+                $module = Module::find($route_params['module']);
+                $module_name = $module->getName();
+                $panel = app('\Modules\\'.$module_name.'\Models\Panels\HomePanel');
+            } else {
+                $home = Tenant::model('home');
+                $panel = Panel::get($home);
+            }
         }
 
         $authorized = Gate::allows($method_act, $panel);

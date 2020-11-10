@@ -2008,8 +2008,13 @@ abstract class XotBasePanel {
         } elseif ('iframe' == \Request::input('format')) {
             $modal = 'iframe';
         }
-
-        $rows = $this->rows()->paginate(20);
+        try {
+            $rows = $this->rows()->paginate(20);
+        } catch (\Exception $e) {
+            $rows = null;
+        } catch (\Error $e) {
+            $rows = null;
+        }
 
         $view_params = [
             'view' => $view,
