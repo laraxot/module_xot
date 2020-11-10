@@ -114,9 +114,8 @@ abstract class XotBaseContainerController extends Controller {
             return redirect()->route('login.notice', ['lang' => $lang, 'referer' => $referer])
             ->withErrors(['active' => 'login before']);
         }
-        PolicyService::get($panel)->createIfNotExists();
-
-        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($panel).']';
+        $policy_class = PolicyService::get($panel)->createIfNotExists()->getClass();
+        $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.$policy_class.']';
 
         return abort(403, $msg);
     }

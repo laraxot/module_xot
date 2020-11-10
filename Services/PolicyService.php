@@ -74,7 +74,7 @@ class PolicyService {
 
     public function createIfNotExists() {
         if ($this->exists()) {
-            return; //se esiste esce;
+            return self::getInstance(); //se esiste esce;
         }
         $stub_name = 'policy';
         if ('' != self::$in_vars['class_type']) {
@@ -95,5 +95,7 @@ class PolicyService {
             echo '<h3>['.self::$out_vars['filename'].'] Just exists</h3>';
             dddx(debug_backtrace());
         }
+
+        return self::getInstance();
     }
 }
