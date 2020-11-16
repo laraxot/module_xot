@@ -1115,6 +1115,9 @@ abstract class XotBasePanel {
         $params['panel'] = $this;
         $params['url'] = RouteService::urlPanel($params);
         $params['method'] = Str::camel($params['act']);
+        if ('index_order' == $params['act']) {
+            //  dddx($params);
+        }
 
         if (! isset($params['tooltip'])) {
             $row = $this->row;
@@ -1150,7 +1153,9 @@ abstract class XotBasePanel {
                 case 'show':
                     $params['icon'] = '<i class="far fa-eye"></i>';
                     break;
-
+                 case 'indexOrder':
+                    $params['icon'] = '<i class="fas fa-sort"></i>';
+                    break;
                 default:
                     //$params['icon'] = $params['method']; //per vedere quale
                     break;
