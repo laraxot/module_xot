@@ -15,8 +15,11 @@ class RouteService {
             $container_root = $parents->first()->row;
         }
         $n = 0;
-
-        $route_name = self::getRoutenameN(['n' => $n + $parents->count(), 'act' => $act]);
+        $parz = ['n' => $n + $parents->count(), 'act' => $act];
+        if (isset($in_admin)) {
+            $parz['in_admin'] = $in_admin;
+        }
+        $route_name = self::getRoutenameN($parz);
 
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
@@ -49,7 +52,7 @@ class RouteService {
 
         $route_params['item'.($n + $i)] = $panel->guid();
 
-        if (inAdmin() && ! isset($route_params['module'])) {
+        if (inAdmin($params) && ! isset($route_params['module'])) {
             $container0 = $route_params['container0'];
             $model = xotModel($container0);
             $module_name = getModuleNameFromModel($model);
@@ -59,7 +62,7 @@ class RouteService {
         try {
             $route = route($route_name, $route_params, false);
         } catch (\Exception $e) {
-            return '#['.__LINE__.']['.__FILE__.']';
+            //return '#['.__LINE__.']['.__FILE__.']';
 
             ///*
             dddx(
@@ -72,6 +75,8 @@ class RouteService {
                     'panel guid' => $panel->guid(),
                     'last route key ' => $panel->row->getRouteKey(),
                     'last route key name' => $panel->row->getRouteKeyName(),
+                    'in_admin' => config()->get('in_admin'),
+                    'in_admin_session' => session()->get('in_admin'),
                     //'routes' => \Route::getRoutes(),
                 ]
             );
@@ -96,7 +101,7 @@ class RouteService {
         extract($params);
         $tmp = [];
         //dddx(inAdmin());
-        if (inAdmin()) {
+        if (inAdmin($params)) {
             $tmp[] = 'admin';
         }
         for ($i = 0; $i <= $n; ++$i) {
