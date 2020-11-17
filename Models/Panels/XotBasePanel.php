@@ -2040,4 +2040,15 @@ abstract class XotBasePanel {
 
         return view($view_work)->with($view_params);
     }
+
+    public function id() {
+        $curr = $this;
+        $data = collect([]);
+        while (null != $curr) {
+            $data->prepend($curr->postType().'-'.$curr->guid());
+            $curr = $curr->getParent();
+        }
+
+        return $data->implode('-');
+    }
 }
