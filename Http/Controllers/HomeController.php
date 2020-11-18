@@ -15,7 +15,8 @@ use Modules\Xot\Services\TenantService as Tenant;
 class HomeController extends Controller {
     public function index(Request $request) {
         try {
-            $home = Tenant::modelEager('home')->firstOrCreate(['id' => 1]);
+            $model = Tenant::modelEager('home');
+            $home = $model->firstOrCreate(['id' => 1]);
         } catch (\Exception $e) {
             dddx('run migrations');
         }
@@ -51,10 +52,10 @@ class HomeController extends Controller {
             return $panel->callItemActionWithGate($request->_act);
         }
         try {
-            $home = Tenant::modelEager('home')
-        ->firstOrCreate(['id' => 1]);
+            $home = Tenant::modelEager('home');
+            $home = $home->firstOrCreate(['id' => 1]);
         } catch (\Exception $e) {
-            dddx($e);
+            dddx([$e, 'model' => $home]);
         }
         $panel = Panel::get($home);
 

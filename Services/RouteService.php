@@ -62,7 +62,7 @@ class RouteService {
         try {
             $route = route($route_name, $route_params, false);
         } catch (\Exception $e) {
-            //return '#['.__LINE__.']['.__FILE__.']';
+            return '#['.__LINE__.']['.__FILE__.']';
 
             ///*
             dddx(
