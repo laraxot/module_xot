@@ -108,11 +108,12 @@ if (! \function_exists('inAdmin')) {
         if ('admin' == \Request::segment(1)) {
             return true;
         }
-        /*
-        if (true == session()->get('in_admin')) {
-            return true;
+        $segments = (\Request::segments());
+        if (count($segments) > 0 && 'livewire' == $segments[0]) {
+            if (true == session()->get('in_admin')) {
+                return true;
+            }
         }
-        */
 
         return false;
         //dddx(session('in_admin'));
