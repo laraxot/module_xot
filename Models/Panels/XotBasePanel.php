@@ -1504,14 +1504,18 @@ abstract class XotBasePanel {
             '$row->getKey()' => $row->getKey(),
             '$row->getKeyName()' => $row->getKeyName(),
             '$row->primary_key' => $row->primaryKey,
-            '$row->$key' => $row->$key,
+            //'$row->$key' => $row->{$key},
             '$row->post' => $row->post,
             '$row' => $row,
         ];
         if (null == $row->getKey()) {
             return null;
         }
-        $guid = $row->$key;
+        try {
+            $guid = $row->$key;
+        } catch (\Exception $e) {
+            $guid = '';
+        }
         if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
             if ('' == $row->id && '' != $row->post_id) {
                 $row->id = $row->post_id; //finche netson non riabilita migrazioni
