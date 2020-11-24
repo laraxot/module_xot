@@ -1728,7 +1728,7 @@ abstract class XotBasePanel {
         $action = $this->getActions()
             ->firstWhere('name', $act);
         if (! is_object($action)) {
-            abort(403, 'action '.$act.' not recognized');
+            abort(403, 'action '.$act.' not recognized for ['.get_class($this).']');
         }
 
         $action->setRow($this->row);

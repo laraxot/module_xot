@@ -46,8 +46,12 @@ abstract class XotBaseMigration extends Migration {
     }
 
     public function getTable() {
-        //return with(new MyModel())->getTable();
-        return $this->model->getTable();
+        $table = $this->model->getTable();
+        if (Str::endsWith($table, '_pivot')) {
+            $table = Str::before($table, '_pivot');
+        }
+
+        return $table;
     }
 
     public function getConn() {
