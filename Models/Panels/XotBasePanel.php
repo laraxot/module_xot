@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
@@ -25,7 +26,7 @@ use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 use Yajra\DataTables\Facades\DataTables;
 
-abstract class XotBasePanel {
+abstract class XotBasePanel implements PanelContract {
     public $out = null;
     public $force_exit = false;
     public $msg = 'msg from panel';
@@ -609,6 +610,7 @@ abstract class XotBasePanel {
         return $query;
     }
 
+    /*
     //-- da studiare --
     protected static function applySearchNova($query, $search) {
         return $query->where(function ($query) use ($search) {
@@ -631,6 +633,7 @@ abstract class XotBasePanel {
             }
         });
     }
+    */
 
     public function formatItemData($item, $params) {
         if (null == $item) {
