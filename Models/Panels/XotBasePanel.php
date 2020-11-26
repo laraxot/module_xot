@@ -26,7 +26,8 @@ use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 use Yajra\DataTables\Facades\DataTables;
 
-abstract class XotBasePanel implements PanelContract {
+abstract class XotBasePanel /*implements PanelContract*/
+{
     public $out = null;
     public $force_exit = false;
     public $msg = 'msg from panel';

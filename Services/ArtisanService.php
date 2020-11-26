@@ -19,11 +19,14 @@ class ArtisanService {
             case 'migrate':
                 \DB::purge('mysql');
                 \DB::reconnect('mysql');
-                if($module_name != ''){
+                if ('' != $module_name) {
+                    echo '<h3>Module '.$module_name.'</h3>';
+
                     return ArtisanService::exe('module:migrate '.$module_name.' --force');
-                }else{
+                } else {
                     return ArtisanService::exe('migrate --force');
                 }
+                // no break
             case 'routelist': return ArtisanService::exe('route:list');
             case 'optimize': return ArtisanService::exe('optimize');
             case 'clear':
