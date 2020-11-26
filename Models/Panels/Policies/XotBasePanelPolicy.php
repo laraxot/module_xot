@@ -2,11 +2,12 @@
 
 namespace Modules\Xot\Models\Panels\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
 //use Modules\Food\Models\Restaurant as Post;
 //use Illuminate\Database\Eloquent\Model as Post;
 //use Modules\LU\Models\User;
-use Modules\Xot\Contracts\UserContract as User;
+//use Modules\Xot\Contracts\UserContract as User;
+use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Contracts\Auth\UserProvider as User;
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBasePanelPolicy {
