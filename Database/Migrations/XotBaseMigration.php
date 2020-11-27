@@ -67,12 +67,51 @@ abstract class XotBaseMigration extends Migration {
         return $conn;
     }
 
+    public function getSchemaManager() {
+        $schema_manager = $this->getConn()
+            ->getConnection()
+            ->getDoctrineSchemaManager();
+
+        return $schema_manager;
+    }
+
+    public function getTableDetails() {
+        $table_details = $this->getSchemaManager()
+            ->listTableDetails($this->getTable());
+
+        return $table_details;
+    }
+
+    public function getTableIndexes() {
+        $table_indexes = $this->getSchemaManager()
+            ->listTableIndexes($this->getTable());
+
+        return $table_indexes;
+    }
+
     public function tableExists() {
         return $this->getConn()->hasTable($this->getTable());
     }
 
     public function hasColumn($col) {
         return $this->getConn()->hasColumn($this->getTable(), $col);
+    }
+
+    public function query($sql) {
+        $this->getConn()->getConnection()->statement($sql);
+    }
+
+    public function hasPrimaryKey() {
+        $table_details = $this->getTableDetails();
+
+        return $table_details->hasPrimaryKey();
+    }
+
+    public function dropPrimaryKey() {
+        $table_details = $this->getTableDetails();
+        $table_details->dropPrimaryKey();
+        $sql = 'ALTER TABLE '.$this->getTable().' DROP PRIMARY KEY;';
+        $this->query($sql);
     }
 
     /**
