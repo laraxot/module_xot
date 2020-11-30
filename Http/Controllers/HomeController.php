@@ -55,7 +55,7 @@ class HomeController extends Controller {
             $home = Tenant::modelEager('home');
             $home = $home->firstOrCreate(['id' => 1]);
         } catch (\Exception $e) {
-            dddx([$e, 'model' => $home]);
+            dddx(['exception' => $e, 'model' => $home]);
         }
         $panel = Panel::get($home);
 

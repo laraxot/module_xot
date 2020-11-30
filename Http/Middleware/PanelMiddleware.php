@@ -53,6 +53,9 @@ class PanelMiddleware {
             $data = [
                 'lang' => \App::getLocale(),
                 'params' => $parameters,
+                'testtest' => 'testtest',
+                'line' => __LINE__,
+                'file' => __FILE__,
             ];
 
             return response()->view('pub_theme::errors.404', $data, 404);
@@ -71,8 +74,12 @@ class PanelMiddleware {
             } catch (\Exception $e) {
                 //abort(404, $e->getMessage());
                 $data = [
+                    'message' => $e->getMessage(),
                     'lang' => \App::getLocale(),
                     'params' => $parameters,
+                    'testtest' => 'testtest',
+                    'line' => __LINE__,
+                    'file' => __FILE__,
                 ];
 
                 return response()->view('pub_theme::errors.404', $data, 404);
@@ -81,6 +88,9 @@ class PanelMiddleware {
                 $data = [
                     'lang' => \App::getLocale(),
                     'params' => $parameters,
+                    'testtest' => 'testtest',
+                    'line' => __LINE__,
+                    'file' => __FILE__,
                 ];
 
                 return response()->view('pub_theme::errors.404', $data, 404);

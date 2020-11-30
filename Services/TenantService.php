@@ -64,6 +64,7 @@ class TenantService {
 
     public static function config($key) {
         $group = implode('.', array_slice(explode('.', $key), 0, 2));
+        /*
         if (in_admin() && Str::startsWith($key, 'xra.model')) {
             $module_name = \Request::segment(2);
             $models = getModuleModels($module_name);
@@ -74,6 +75,7 @@ class TenantService {
             $merge_conf = array_merge($original_conf, $models);
             \Config::set('xra.model', $merge_conf);
         }
+        //*/
         $tenant_name = self::getName();
         $extra_conf = config(str_replace('/', '.', $tenant_name).'.'.$group); // ...
 
@@ -115,10 +117,14 @@ class TenantService {
         $config_data = array_merge_recursive_distinct($config_data, $data); //funzione in helper
 
         $config_data = Arr::sortRecursive($config_data);
+        /*
         $path = config_path($tennant_name.'/'.$name.'.php');
         $path = str_replace(['\\', '/'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
+        */
+        $path = self::filePath($name.'.php');
         $content = '<'.'?'.'php'.chr(13).chr(13).' return '.var_export($config_data, true).';';
         $content = str_replace('\\\\', '\\', $content);
+
         File::put($path.'', $content);
     }
 
