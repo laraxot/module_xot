@@ -114,8 +114,10 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
         $responseType=request()->input('responseType');
         $responses=[
-            //'html'=> HtmlPanelPresenter::class,
+            //'html'=> HtmlPanelPresenter::class,//default
             'json'=>JsonPanelPresenter::class,
+            //'pdf'=>PdfPanelPresenter::class,
+            //'xls'=>XlsPanelPresenter::class,
         ];
         $response=HtmlPanelPresenter::class;
         if(isset($responses[$responseType])){
