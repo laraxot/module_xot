@@ -7,7 +7,8 @@ namespace Modules\Xot\Models\Panels\Policies;
 //use Modules\LU\Models\User;
 //use Modules\Xot\Contracts\UserContract as User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Contracts\Auth\UserProvider as User;
+//use Illuminate\Contracts\Auth\UserProvider as User;
+use Modules\Xot\Contracts\UserContract as User;
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBasePanelPolicy {
