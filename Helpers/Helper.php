@@ -190,6 +190,21 @@ if (! \function_exists('fullTextWildcards')) {
     }
 }
 
+if (! \function_exists('isContainer')) {
+    function isContainer() {
+        [$containers, $items] = params2ContainerItem();
+
+        return count($containers) > count($items);
+    }
+}
+if (! \function_exists('isItem')) {
+    function isItem() {
+        [$containers, $items] = params2ContainerItem();
+
+        return count($containers) == count($items);
+    }
+}
+
 if (! \function_exists('params2ContainerItem')) {
     function params2ContainerItem($params = null) {
         if (null == $params) {

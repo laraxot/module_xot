@@ -3,26 +3,27 @@
 namespace Modules\Xot\Providers;
 
 use Illuminate\Cache\TagSet;
-use Laravel\Scout\EngineManager;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Translation\Translator;
 //use Illuminate\Http\Request;
-use Modules\Xot\Engines\FullTextSearchEngine;
-use Modules\Xot\Presenters\HtmlPanelPresenter;
+use Laravel\Scout\EngineManager;
+use Modules\Xot\Contracts\PanelPresenterContract;
 //use Modules\Xot\Engines\Opcache;
 //--- services ---
-use Modules\Xot\Presenters\JsonPanelPresenter;
+use Modules\Xot\Engines\FullTextSearchEngine;
 use Modules\Xot\Http\View\Composers\XotComposer;
-use Modules\Xot\Contracts\PanelPresenterContract;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Modules\Xot\Services\TranslatorService; // per dizionario morph
+use Modules\Xot\Presenters\GeoJsonPanelPresenter;
+use Modules\Xot\Presenters\HtmlPanelPresenter;
+use Modules\Xot\Presenters\JsonPanelPresenter;
 use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
+use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
 class XotServiceProvider extends XotBaseServiceProvider {
     protected $module_dir = __DIR__;
@@ -80,8 +81,6 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
         //$this->registerLivewireComponents();
         $this->registerViewComposers();
-
-
     }
 
     //end bootCallback
@@ -111,17 +110,17 @@ class XotServiceProvider extends XotBaseServiceProvider {
         $loader = AliasLoader::getInstance();
         $loader->alias('Panel', 'Modules\Xot\Services\PanelService');
 
-
-        $responseType=request()->input('responseType');
-        $responses=[
+        $responseType = request()->input('responseType');
+        $responses = [
             //'html'=> HtmlPanelPresenter::class,//default
-            'json'=>JsonPanelPresenter::class,
+            'json' => JsonPanelPresenter::class,
+            'geoJson' => GeoJsonPanelPresenter::class,
             //'pdf'=>PdfPanelPresenter::class,
             //'xls'=>XlsPanelPresenter::class,
         ];
-        $response=HtmlPanelPresenter::class;
-        if(isset($responses[$responseType])){
-            $response=$responses[$responseType];
+        $response = HtmlPanelPresenter::class;
+        if (isset($responses[$responseType])) {
+            $response = $responses[$responseType];
         }
 
         $this->app->bind(
@@ -129,7 +128,6 @@ class XotServiceProvider extends XotBaseServiceProvider {
             //HtmlPanelPresenter::class,
             $response,
         );
-
     }
 
     public function loadHelpersFrom($path) {
