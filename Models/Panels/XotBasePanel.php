@@ -3,30 +3,31 @@
 namespace Modules\Xot\Models\Panels;
 
 use Carbon\Carbon;
-use Collective\Html\FormFacade as Form;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
-//----------  SERVICES --------------------------
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
+use Modules\Xot\Services\NavService;
+use Illuminate\Support\Facades\Cache;
+use Modules\Xot\Services\HtmlService;
+use Modules\Xot\Services\StubService;
+use Illuminate\Support\Facades\Cookie;
+//----------  SERVICES --------------------------
+use Modules\Xot\Services\ChainService;
+use Modules\Xot\Services\ImageService;
+use Modules\Xot\Services\RouteService;
+use Collective\Html\FormFacade as Form;
+use Illuminate\Support\Facades\Storage;
+use Modules\Xot\Services\ImportService;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelContract;
-use Modules\Xot\Contracts\PanelPresenterContract;
-use Modules\Xot\Services\ChainService;
-use Modules\Xot\Services\HtmlService;
-use Modules\Xot\Services\ImageService;
-use Modules\Xot\Services\ImportService;
-use Modules\Xot\Services\NavService;
-use Modules\Xot\Services\PanelService as Panel;
-use Modules\Xot\Services\RouteService;
-use Modules\Xot\Services\StubService;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Validator;
+use Modules\Xot\Services\PanelFormService;
+use Modules\Xot\Services\PanelService as Panel;
+use Modules\Xot\Contracts\PanelPresenterContract;
 
 abstract class XotBasePanel /*implements PanelContract*/
 {
@@ -780,45 +781,12 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function formCreate($params = []) {
-        $fields = $this->createFields();
-        $row = $this->row;
-        $res = '';
-        //$res.='<h3>'.$this->storeUrl().'</h3>'; //4 debug
-        $res .= Form::bsOpenPanel($this, 'store');
-        $res .= '<div class="clearfix">';
-        foreach ($fields as $field) {
-            $res .= ThemeService::inputHtml(['row' => $row, 'field' => $field]);
-        }
-        $res .= '</div>';
-        //$res.=Form::bsSubmit('save');
-        $res .= '<p class="form-submit">
-            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
-        </p>';
-        $res .= Form::close();
+        return (new PanelFormService($this))->formCreate($params);
 
-        return $res;
     }
 
     public function formEdit($params = []) {
-        $submit_btn = '<p class="form-submit">
-            <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
-        </p>';
-        extract($params);
-        $fields = $this->editFields();
-        $row = $this->row;
-        $res = '';
-        //$res.='<h3>'.$this->storeUrl().'</h3>'; //4 debug
-        $res .= Form::bsOpenPanel($this, 'update');
-        $res .= '<div class="clearfix">';
-        foreach ($fields as $field) {
-            $res .= ThemeService::inputHtml(['row' => $row, 'field' => $field]);
-        }
-        $res .= '</div>';
-        //$res.=Form::bsSubmit('save');
-        $res .= $submit_btn;
-        $res .= Form::close();
-
-        return $res;
+        return (new PanelFormService($this))->formEdit($params);
     }
 
     public function exceptFields($params = []) {
@@ -863,35 +831,11 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function indexFields() {
         $fields = $this->exceptFields(['act' => 'index']);
-
         return $fields;
     }
 
     public function createFields() {
-        $excepts = collect([]);
-        /*
-        $methods = collect(get_class_methods($this->rows))->filter(
-            function ($item) {
-                return Str::startsWith($item, 'get') && ! in_array($item,
-                    [
-                        'getRelationExistenceQuery',
-                        'getRelationExistenceQueryForSelfRelation',
-                        'getRelationExistenceCountQuery',
-                        'getMorphedModel',
-                    ]
-                );
-            }
-        )->map(
-            function ($item) {
-                return (object) [
-                    'name' => $item,
-                    'res' => $this->rows->$item(),
-                ];
-            }
-        )->all();
-        */
         $fields = $this->exceptFields(['act' => 'create']);
-
         return $fields;
     }
 
@@ -903,7 +847,6 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function indexEditFields() {
         $fields = $this->exceptFields(['act' => 'index_edit']);
-
         return $fields;
     }
 
@@ -928,43 +871,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     //------- navigazioni ---
 
     public function yearNavRedirect() {
-        $request = \Request::capture();
-        $routename = \Route::currentRouteName();
-        $params = \Route::current()->parameters();
-
-        $redirect = 1;
-        if ('' == $request->year) {
-            if ($redirect) {
-                $t = $this->addQuerystringsUrl(['request' => $request, 'qs' => ['year' => date('Y')]]);
-                $this->force_exit = true;
-                $this->out = redirect($t);
-                die($this->out); //forzatura
-
-                return;
-            }
-            $request->year = date('Y');
-        }
-
-        $year = $request->year - 1;
-        $nav = [];
-        for ($i = 0; $i < 3; ++$i) {
-            $tmp = [];
-            $params['year'] = $year;
-            $tmp['title'] = $year;
-            if (date('Y') == $params['year']) {
-                $tmp['title'] = '['.$tmp['title'].']';
-            }
-            if ($request->year == $params['year']) {
-                $tmp['active'] = 1;
-            } else {
-                $tmp['active'] = 0;
-            }
-            $tmp['url'] = route($routename, $params);
-            $nav[] = (object) $tmp;
-            ++$year;
-        }
-
-        return $nav;
+        return NavService::yearNavRedirect();
     }
 
     public function yearNav() {
@@ -972,43 +879,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function monthYearNav() { //possiamo trasformarlo in una macro
-        $request = \Request::capture();
-        $routename = \Route::currentRouteName();
-        $params = \Route::current()->parameters();
-        /*
-        if ('' == $request->year) {
-            $request->year = date('Y');
-        }
-        if ('' == $request->month) {
-            $request->month = date('m');
-        }
-        */
-        $q = 2;
-        $d = Carbon::create($request->year, $request->month, 1)->subMonth($q);
-        $nav = [];
-        for ($i = 0; $i < ($q * 2) + 1; ++$i) {
-            $tmp = [];
-            $params['month'] = $d->format('m') * 1;
-            $params['year'] = $d->format('Y') * 1;
-            $tmp['title'] = $d->isoFormat('MMMM YYYY');
-            if (date('Y') == $params['year'] && date('m') == $params['month']) {
-                $tmp['title'] = '['.$tmp['title'].']';
-            }
-            if ($request->year == $params['year'] && $request->month == $params['month']) {
-                $tmp['active'] = 1;
-            } else {
-                $tmp['active'] = 0;
-            }
-            $tmp['url'] = route($routename, $params);
-            $nav[] = (object) $tmp;
-            $d->addMonth();
-        }
-
-        return $nav;
-        //$d->locale() //it !!
-        /*
-        return '';
-        */
+        return NavService::monthYearNav();
     }
 
     //-- nella registrazione 1 tasto, nelle modifiche 3
@@ -1017,158 +888,30 @@ abstract class XotBasePanel /*implements PanelContract*/
         return Form::bsSubmit(trans('xot::buttons.save'));
     }
 
-    public function btnDelete($params = []) {
-        $class = 'btn-primary mb-2';
-        extract($params);
-        //dddx($params);
-        $act = 'destroy';
-        $parz = [
-            'id' => $this->row->getKey(),
-            'btn_class' => 'btn '.$class,
-            'route' => $this->url(['act' => 'destroy']),
-            'act' => $act,
-            'title' => $title,
-        ];
 
-        return view('formx::includes.components.btn.'.$act)->with($parz);
+    /*
+     return (new PanelFormService($this))->formCreate($params);
+    */
+    public function btnDelete($params = []) {
+        return (new PanelFormService($this))->btnDelete($params);
+
     }
 
     public function btnDetach($params = []) {
-        $class = 'btn-primary mb-2';
-        extract($params);
-        $act = 'detach';
-        $parz = [
-            'id' => $this->row->getKey(),
-            'btn_class' => 'btn '.$class,
-            'route' => $this->detachUrl(),
-            'act' => $act,
-        ];
-
-        return view('formx::includes.components.btn.'.$act)->with($parz);
+        return (new PanelFormService($this))->btnDetach($params);
     }
 
     public function btnCrud($params = []) {
-        extract($params);
-        $acts = ['edit', 'destroy', 'show'];
-        if (is_object($this->row->panel)) {
-            $acts = ['edit', 'destroy', 'detach', 'show'];
-        }
-
-        $html = '';
-        if (! in_array('title', array_keys($params))) {
-            $params['title'] = '';
-        }
-        foreach ($acts as $act) {
-            $params['act'] = $act;
-            $html .= $this->btnHtml($params);
-        }
-        if (in_array('group', array_keys($params)) && false == $params['group']) {
-        } else {
-            $html = '<div role="group" aria-label="Actions" class="btn-group btn-group-sm">'.
-            chr(13).$html.chr(13).'</div>';
-        }
-
-        return $html;
+        return (new PanelFormService($this))->btnCrud($params);
     }
 
     public function btnHtml($params) {
-        $params['panel'] = $this;
-        $params['url'] = RouteService::urlPanel($params);
-        $params['method'] = Str::camel($params['act']);
-        if ('index_order' == $params['act']) {
-            //  dddx($params);
-        }
+        return (new PanelFormService($this))->btnHtml($params);
 
-        if (! isset($params['tooltip'])) {
-            $row = $this->row;
-            $module_name_low = strtolower(getModuleNameFromModel($row));
-            $params['tooltip'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
-        }
-
-        if (! isset($params['title'])) {
-            $row = $this->row;
-            $module_name_low = strtolower(getModuleNameFromModel($row));
-
-            $trans_key = $module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method'];
-            $trans = trans($trans_key);
-            $title = $trans;
-            if ($trans == $trans_key && ! config('xra.show_trans_key')) {
-                $title = class_basename($row); //.' '.$params['method'];
-            }
-
-            $params['title'] = $title;
-        }
-
-        if (! isset($params['icon'])) {
-            switch ($params['method']) {
-                case 'create':
-                    $params['icon'] = '<i class="far fa-plus-square"></i>';
-                    break;
-                case 'edit':
-                    $params['icon'] = '<i class="far fa-edit"></i>';
-                    break;
-                case 'destroy':
-                    $params['icon'] = '<i class="far fa-trash-alt"></i>';
-                    break;
-                case 'show':
-                    $params['icon'] = '<i class="far fa-eye"></i>';
-                    break;
-                 case 'indexOrder':
-                    $params['icon'] = '<i class="fas fa-sort"></i>';
-                    break;
-                default:
-                    //$params['icon'] = $params['method']; //per vedere quale
-                    break;
-            }
-        }
-
-        if (true === $params['title']) {
-            $row = $this->row;
-            $module_name_low = strtolower(getModuleNameFromModel($row));
-            $parent = $this->getParent();
-            if (null != $parent) {
-                $tmp = [];
-                $tmp[] = class_basename($parent->row);
-                $tmp[] = class_basename($row);
-                $tmp[] = 'act';
-                $tmp[] = $params['method'];
-                $tmp = collect($tmp)->map(function ($item) {
-                    return Str::snake($item);
-                })->implode('.');
-                $params['title'] = trans($module_name_low.'::'.$tmp);
-            } else {
-                $params['title'] = trans($module_name_low.'::'.strtolower(class_basename($row)).'.act.'.$params['method']);
-            }
-        }
-
-        return FormXService::btnHtml($params);
     }
 
     public function btn($act, $params = []) {
-        extract($params);
-        $parents = [];
-        $parent = $this->parent;
-        $route_params = \Route::current()->parameters();
-        $cont_i = RouteService::containerN(['model' => get_class($parent->row)]);
-        $routename = RouteService::routenameN(['n' => $cont_i + 1, 'act' => $act]);
-
-        $route_params['item'.($cont_i + 0)] = $this->parent->row;
-        $route_params['container'.($cont_i + 1)] = $this->postType();
-        $route_params['item'.($cont_i + 1)] = $this->row;
-        $route = route($routename, $route_params);
-        //http://multi.local:8080/it/profile/profile%20279656/restaurant/pizza%20gino/cuisine/antipasti/recipe/gigi]
-        //return '['.$routename.']<br>['.$route.'][['.$cont_i.']';
-        $parz = [
-            'id' => $this->row->id,
-            'btn_class' => 'btn',
-            'route' => $route,
-            'act' => $act,
-        ];
-        if (isset($modal) && $modal) {
-            return view('formx::includes.components.btn.modal')->with($parz);
-        }
-
-        return view('formx::includes.components.btn.'.$act)->with($parz);
+        return (new PanelFormService($this))->btn($act,$params);
     }
 
     public function imageHtml($params) {
@@ -1752,7 +1495,6 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function out($params = []) {
         //return $this->view();
-
         return $this->presenter->out();
     }
 
@@ -1821,8 +1563,6 @@ abstract class XotBasePanel /*implements PanelContract*/
     public function getModuleName() {
         $model = $this::$model;
         $module_name = Str::before(Str::after($model, 'Modules\\'), '\\Models\\');
-        //$module_name = Str::lower($module_name);
-
         return $module_name;
     }
 
@@ -1953,6 +1693,11 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function view($params = null) {
+
+        return $this->presenter->out($params);
+    }
+    /*
+    public function view($params = null) {
         //$route_params = \Route::current()->parameters();
 
         [$containers, $items] = params2ContainerItem();
@@ -2006,6 +1751,7 @@ abstract class XotBasePanel /*implements PanelContract*/
 
         return view($view_work)->with($view_params);
     }
+    */
 
     public function id() {
         $curr = $this;
