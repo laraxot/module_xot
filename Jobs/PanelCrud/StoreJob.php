@@ -13,7 +13,8 @@ use Illuminate\Support\Str;
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class StoreJob implements ShouldQueue {
+class StoreJob implements ShouldQueue
+{
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
@@ -31,17 +32,23 @@ class StoreJob implements ShouldQueue {
      *
      * @return void
      */
-    public function __construct($request, $panel) {
+    public function __construct($request, $panel)
+    {
         $this->panel = $panel;
-        $this->data = $request->all();
+        $this->data = $this->prepareForValidation($request->all(), $panel);
+        //dddx($this->data);
     }
+
+
+    
 
     /**
      * Execute the job.
      *
      * @return void
      */
-    public function handle() {
+    public function handle()
+    {
         //dd('['.__LINE__.']['.__FILE__.']');
         $row = $this->panel->row;
         $data = $this->data;
@@ -88,10 +95,12 @@ class StoreJob implements ShouldQueue {
         return $this->panel;
     }
 
-    public function saveParentHasManyDeep() {
+    public function saveParentHasManyDeep()
+    {
     }
 
-    public function saveParentHasManyDeep_OLD() {
+    public function saveParentHasManyDeep_OLD()
+    {
         $row = $this->row;
         $data = $this->data;
         $types = $this->types;
@@ -165,7 +174,8 @@ class StoreJob implements ShouldQueue {
 
     //end handle
 
-    public function storeRelationshipsPivot($params) {
+    public function storeRelationshipsPivot($params)
+    {
         /*
         extract($params);
         $types=Str::plural($container);
@@ -177,7 +187,8 @@ class StoreJob implements ShouldQueue {
         */
     }
 
-    public function storeRelationshipsHasOne($params) {
+    public function storeRelationshipsHasOne($params)
+    {
         extract($params);
         $rows = $model->$name();
         /*
@@ -202,12 +213,14 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsHasMany($params) {
+    public function storeRelationshipsHasMany($params)
+    {
         extract($params);
         //$rows = $model->$name();
     }
 
-    public function storeRelationshipsBelongsTo($params) {
+    public function storeRelationshipsBelongsTo($params)
+    {
         extract($params);
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
@@ -221,7 +234,8 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsMorphOne($params) {
+    public function storeRelationshipsMorphOne($params)
+    {
         extract($params);
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = app()->getLocale();
@@ -233,7 +247,8 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsMorphToMany($params) {
+    public function storeRelationshipsMorphToMany($params)
+    {
         extract($params);
 
         //ddd(\Request::all());
@@ -286,14 +301,16 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsHasManyThrough($params) {
+    public function storeRelationshipsHasManyThrough($params)
+    {
         /*
         Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
         */
         //$this->storeRelationshipsMorphToMany($params); //
     }
 
-    public function storeRelationshipsBelongsToMany($params) {
+    public function storeRelationshipsBelongsToMany($params)
+    {
         extract($params);
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($params);
@@ -303,7 +320,8 @@ class StoreJob implements ShouldQueue {
         $model->$name()->syncWithoutDetaching($data);
     }
 
-    public function saveMultiselectTwoSides($params) {
+    public function saveMultiselectTwoSides($params)
+    {
         //passo request o direttamente data ?
         extract($params);
         $items = $model->$name();

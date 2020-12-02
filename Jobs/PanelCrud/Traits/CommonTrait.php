@@ -5,11 +5,18 @@ namespace Modules\Xot\Jobs\PanelCrud\Traits;
 use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
 //----------- Requests ----------
 use Modules\Xot\Http\Requests\XotRequest;
+
+use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
+
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-trait CommonTrait {
-    public function getData() {
+trait CommonTrait
+{
+    public function getData()
+    {
         $panel = Panel::get($this->row);
         if (! is_object($panel)) {
             //dddx($this->row);
@@ -30,7 +37,8 @@ trait CommonTrait {
      * https://hackernoon.com/eloquent-relationships-cheat-sheet-5155498c209
      * https://laracasts.com/discuss/channels/eloquent/cleanest-way-to-save-model-and-relationships.
      */
-    public function manageRelationships($params) {
+    public function manageRelationships($params)
+    {
         extract($params);
         if (! is_object($model)) {
             return;
@@ -100,5 +108,58 @@ trait CommonTrait {
             $params['data'] = $data['pivot'];
             self::$func($params);
         }
+    }
+
+
+    public function prepareForValidation($data, $panel)
+    {
+        $date_fields = collect($panel->fields())->filter(
+            function ($item) use ($data) {
+                return Str::startsWith($item->type, 'Date') && isset($data[$item->name]);
+            }
+        )->all();
+        foreach ($date_fields as $field) {
+            $value = $data[$field->name]; // metterlo nel filtro sopra ?
+            /*
+            *  Se e' un oggetto e' già convertito
+            **/
+            if (! is_object($value)) {
+                $func = 'Conv'.$field->type;
+                $value_new = $this->$func($field, $value);
+                //$this->request->add([$field->name => $value_new]);
+                $data[$field->name]= $value_new;
+            }
+        }
+        return $data;
+    }
+
+    public function ConvDate($field, $value)
+    {
+        if (null == $value) {
+            return $value;
+        }
+        $value_new = Carbon::createFromFormat('d/m/Y', $value);
+
+        return $value_new;
+    }
+
+    public function ConvDateTime($field, $value)
+    {
+        if (null == $value) {
+            return $value;
+        }
+        $value_new = Carbon::createFromFormat('d/m/Y H:i', $value);
+
+        return $value_new;
+    }
+
+    public function ConvDateTime2Fields($field, $value)
+    {
+        if (null == $value) {
+            return $value;
+        }
+        $value_new = Carbon::createFromFormat('d/m/Y H:i', $value);
+
+        return $value_new;
     }
 }
