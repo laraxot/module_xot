@@ -5,7 +5,8 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class PanelService {
+class PanelService
+{
     private static $_instance = null;
     private static $model;
     private static $panel;
@@ -15,7 +16,8 @@ class PanelService {
     $this->model=$model;
     }
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
@@ -23,25 +25,30 @@ class PanelService {
         return self::$_instance;
     }
 
-    public static function setRequestPanel($panel) {
+    public static function setRequestPanel($panel)
+    {
         self::$panel = $panel;
     }
 
-    public static function getRequestPanel() {
+    public static function getRequestPanel()
+    {
         return self::$panel;
     }
 
-    public static function get($model) {
+    public static function get($model)
+    {
         return self::setModel($model)->panel();
     }
 
-    public static function setModel($model) {
+    public static function setModel($model)
+    {
         self::$model = $model;
 
         return self::getInstance();
     }
 
-    public static function panel() {
+    public static function panel()
+    {
         if (! is_object(self::$model)) {
             //dddx(['model'=>self::$model,'message'=>'is not an object']);
             return null;
@@ -57,23 +64,29 @@ class PanelService {
         }
         //*/
         try {
-            self::$panel = new $panel_class(self::$model);
+            //self::$panel = new $panel_class(self::$model);
+            self::$panel =app($panel_class);
+            self::$panel->setRow(self::$model);
         } catch (\Exception $e) {
+            echo '<h1 style="color:darkred">'.($e->getMessage()).'</h1>';
             $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
         }
 
         return self::$panel;
     }
 
-    public function imageHtml($params) {
+    public function imageHtml($params)
+    {
         return self::$model->image_src;
     }
 
-    public function tabs() {
+    public function tabs()
+    {
         return self::panel()->tabs();
     }
 
-    public static function getByParams($route_params) {
+    public static function getByParams($route_params)
+    {
         [$containers, $items] = params2ContainerItem($route_params);
 
         if (0 == count($containers)) {
@@ -140,7 +153,8 @@ class PanelService {
         return $panel;
     }
 
-    public static function getByModel($model) {
+    public static function getByModel($model)
+    {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         $class = Str::before($class_full, $class_name);
@@ -158,7 +172,8 @@ class PanelService {
         return redirect()->back();
     }
 
-    public static function createPanel($model) {
+    public static function createPanel($model)
+    {
         if (! is_object($model)) {
             ddd('da fare');
         }
@@ -208,7 +223,8 @@ class PanelService {
         File::put($panel_file, $stub);
     }
 
-    public static function updatePanel($params) {
+    public static function updatePanel($params)
+    {
         extract($params);
         $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
         $func_stub = File::get($func_file);

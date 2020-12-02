@@ -14,10 +14,12 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Translation\Translator;
 //use Illuminate\Http\Request;
 use Laravel\Scout\EngineManager;
-use Modules\Xot\Engines\FullTextSearchEngine;
+use Modules\Xot\Contracts\PanelPresenterContract;
 //use Modules\Xot\Engines\Opcache;
 //--- services ---
+use Modules\Xot\Engines\FullTextSearchEngine;
 use Modules\Xot\Http\View\Composers\XotComposer;
+use Modules\Xot\Presenters\HtmlPanelPresenter;
 use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
 use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
@@ -77,6 +79,11 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
         //$this->registerLivewireComponents();
         $this->registerViewComposers();
+
+        $this->app->bind(
+            PanelPresenterContract::class,
+            HtmlPanelPresenter::class,
+        );
     }
 
     //end bootCallback

@@ -12,7 +12,7 @@ class StubService {
 
     public static function fromModel($params) {
         extract($params);
-        if(!is_object($model)){
+        if (! is_object($model)) {
             //dddx($model);
             return false;
         }
@@ -137,13 +137,12 @@ class StubService {
         //$class=Str::before($class_full,$class_name);
         $class = substr($class_full, 0, -strlen($class_name));
         $panel = $class.Str::plural(Str::studly($name)).'\\'.$class_name.Str::studly($name);
-        if(!class_exists($panel)){
+        if (! class_exists($panel)) {
             self::create($model, $name);
         }
 
-
         try {
-            return new $panel();
+            return app($panel);
         } catch (\Exception $e) {
             /*
             dd(['e' => $e,
@@ -240,6 +239,7 @@ class StubService {
         $panel_dir = $model_dir.'/'.Str::plural(Str::studly($name));
         File::makeDirectory($panel_dir, $mode = 0777, true, true);
         $panel_file = $panel_dir.'/'.$class_name.Str::studly($name).'.php';
+        $panel_file = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $panel_file);
         if (! File::exists($panel_file)) {
             File::put($panel_file, $stub);
         } else {
@@ -273,10 +273,23 @@ class StubService {
             $tmp = new \stdClass();
             try {
                 $col = $model->getConnection()->getDoctrineColumn($model->getTable(), $input_name); //->getType();//->getName();
+                //dddx(get_class_methods($col->getType()));
+                $type = $col->getType();
+                /*
+                dddx([
+                    //$type->getSQLDeclaration(),
+                    //$type->getType(),
+                    $type->getTypesMap(),
+                    $type->getName(),
+                    $type->getTypeRegistry(),
+                    $type->getBindingType(),
+                    //$type->getMappedDatabaseTypes(),
+                ]);
+                */
                 if ($col->getAutoincrement()) {
                     $tmp->type = 'Id';
                 } else {
-                    $tmp->type = (string) $col->getType();
+                    $tmp->type = Str::studly($col->getType()->getName());
                     $tmp->type = str_replace('\\', '', $tmp->type);
                 }
                 $tmp->name = $input_name;

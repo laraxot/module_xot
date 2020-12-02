@@ -17,10 +17,12 @@ use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelContract;
+use Modules\Xot\Contracts\PanelPresenterContract;
 use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\ImportService;
+use Modules\Xot\Services\NavService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
@@ -36,8 +38,10 @@ abstract class XotBasePanel /*implements PanelContract*/
     public $parent = null;
     //protected static $model;
 
-    public function __construct($model = null) {
-        $this->row = $model;
+    public function __construct(PanelPresenterContract $presenter) {
+        //$this->row = $model;
+        $this->presenter = $presenter;
+        $this->presenter->setPanel($this);
     }
 
     public function setRow($row) {
@@ -611,31 +615,6 @@ abstract class XotBasePanel /*implements PanelContract*/
         return $query;
     }
 
-    /*
-    //-- da studiare --
-    protected static function applySearchNova($query, $search) {
-        return $query->where(function ($query) use ($search) {
-            if (is_numeric($search) && in_array($query->getModel()->getKeyType(), ['int', 'integer'])) {
-                $query->orWhere($query->getModel()->getQualifiedKeyName(), $search);
-            }
-
-            $model = $query->getModel();
-
-            foreach (static::searchableColumns() as $column) {
-                if (is_array($column)) {
-                    foreach ($column as $key => $col) {
-                        $column[$key] = $model->qualifyColumn($col);
-                    }
-                    $concat = implode(", ' ', ", $column);
-                    $query->orWhereRaw('CONCAT('.$concat.") LIKE '%".$search."%'");
-                } else {
-                    $query->orWhere($model->qualifyColumn($column), 'like', '%'.$search.'%');
-                }
-            }
-        });
-    }
-    */
-
     public function formatItemData($item, $params) {
         if (null == $item) {
             return null;
@@ -989,30 +968,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function yearNav() {
-        $request = \Request::capture();
-        $routename = \Route::currentRouteName();
-        $params = \Route::current()->parameters();
-        $year = $request->input('year', date('Y'));
-        $year = $year - 1;
-        $nav = [];
-        for ($i = 0; $i < 3; ++$i) {
-            $tmp = [];
-            $params['year'] = $year;
-            $tmp['title'] = $year;
-            if (date('Y') == $params['year']) {
-                $tmp['title'] = '['.$tmp['title'].']';
-            }
-            if ($request->year == $params['year']) {
-                $tmp['active'] = 1;
-            } else {
-                $tmp['active'] = 0;
-            }
-            $tmp['url'] = route($routename, $params);
-            $nav[] = (object) $tmp;
-            ++$year;
-        }
-
-        return $nav;
+        return NavService::yearNav();
     }
 
     public function monthYearNav() { //possiamo trasformarlo in una macro
@@ -1795,7 +1751,9 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function out($params = []) {
-        return $this->view();
+        //return $this->view();
+
+        return $this->presenter->out();
     }
 
     public function pdfFilename($params = []) {
