@@ -3,7 +3,6 @@
 namespace Modules\Xot\Presenters;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelPresenterContract;
 
@@ -58,14 +57,19 @@ class HtmlPanelPresenter implements PanelPresenterContract {
         } elseif ('iframe' == \Request::input('format')) {
             $modal = 'iframe';
         }
+
+        $rows = $this->panel->rows()->paginate(20);
+
+        /*
         try {
+            //dddx($this->panel->rows());
             $rows = $this->panel->rows()->paginate(20);
         } catch (\Exception $e) {
             $rows = null;
         } catch (\Error $e) {
             $rows = null;
         }
-
+        */
         $view_params = [
             'view' => $view,
             'view_work' => $view_work,
