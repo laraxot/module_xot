@@ -2,32 +2,26 @@
 
 namespace Modules\Xot\Models\Panels;
 
-use Carbon\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\View;
-use Modules\Xot\Services\NavService;
 use Illuminate\Support\Facades\Cache;
-use Modules\Xot\Services\HtmlService;
-use Modules\Xot\Services\StubService;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 //----------  SERVICES --------------------------
-use Modules\Xot\Services\ChainService;
-use Modules\Xot\Services\ImageService;
-use Modules\Xot\Services\RouteService;
-use Collective\Html\FormFacade as Form;
-use Illuminate\Support\Facades\Storage;
-use Modules\Xot\Services\ImportService;
-use Modules\FormX\Services\FormXService;
+use Illuminate\Support\Str;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelContract;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
+use Modules\Xot\Contracts\PanelPresenterContract;
+use Modules\Xot\Services\ChainService;
+use Modules\Xot\Services\HtmlService;
+use Modules\Xot\Services\ImageService;
+use Modules\Xot\Services\NavService;
 use Modules\Xot\Services\PanelFormService;
 use Modules\Xot\Services\PanelService as Panel;
-use Modules\Xot\Contracts\PanelPresenterContract;
+use Modules\Xot\Services\PanelTabService;
+use Modules\Xot\Services\RouteService;
+use Modules\Xot\Services\StubService;
 
 abstract class XotBasePanel /*implements PanelContract*/
 {
@@ -616,142 +610,6 @@ abstract class XotBasePanel /*implements PanelContract*/
         return $query;
     }
 
-    public function formatItemData($item, $params) {
-        if (null == $item) {
-            return null;
-        }
-        extract($params);
-        if (! isset($format)) {
-            return null;
-        }
-        if ('json' == $format) {
-            $transformer = StubService::fromModel(['model' => $item, 'stub' => 'transformer_resource']);
-
-            return $item->toJson();
-            //\Modules\Xot\Transformers\JsonResource::withoutWrapping();
-            //return new \Modules\Xot\Transformers\JsonResource($item);
-        }
-        if ('geoJson' == $format) {
-            $out = new \Modules\Geo\Transformers\GeoJsonResource($item);
-
-            return $out;
-        }
-
-        return null;
-    }
-
-    public function formatData($data, $params) {
-        if (null == $data) {
-            return null;
-        }
-        extract($params);
-        if (! isset($format)) {
-            return null;
-        }
-        if ('json' == $format) { //potrei ficcare anche xls
-            //ddd($this->option_id());
-            //$res=$data->pluck('dest1','repar')->all();
-            //ddd(get_class($data)); //Illuminate\Database\Eloquent\Builder
-            //debug_getter_obj(['obj'=>$data]);
-            $model = $data->getModel();
-            //$transformer=getTransformerFromModel($model,'Collection');
-            $transformer = StubService::fromModel(['model' => $model, 'stub' => 'transformer_collection']);
-            //ddd($transformer); // Modules\Food\Transformers\LocationCollection
-            //die(json_encode($res));
-            $ris = $data->paginate(20);
-            $this->force_exit = 1;
-            //$this->out=json_encode($res);
-            //$this->out=new \Modules\Progressioni\Transformers\ProgressioniCollection($ris);
-            //$out = $ris->toJson();
-
-            $out = new $transformer($ris);
-            $this->out = $out;
-            //$this->out=\Modules\Progressioni\Transformers\ProgressioniResource::collection($ris);
-            return $out;
-        }
-        if ('datatables' == $format) {
-            $model = $data->getModel();
-            //$transformer = StubService::fromModel(['model' => $model, 'stub' => 'transformer_collection']);
-
-            $this->force_exit = 1;
-            $ris = $model->get();
-            //$out = new $transformer($ris);
-            $out = $model::all();
-            //dddx($out);
-
-            $this->out = Datatables::collection($out)->make(true);
-
-            return $out;
-        }
-        if ('typeahead' == $format) {
-            /*
-            $ris=$data->select('area_id as id','area_define_name as label')
-                        ->paginate(10);
-            */
-            $ris = $data->paginate(20);
-            $this->force_exit = 1;
-            $model_class = $this::$model;
-            //ddd($model_class);//Modules\LU\Models\Area
-            $model_class_name = class_basename($model_class);
-            $module_ns = Str::before($model_class, '\\Models\\');
-            $transformers_coll = $module_ns.'\\Transformers\\'.$model_class_name.'Collection';
-            $transformers_res = $module_ns.'\\Transformers\\'.$model_class_name.'Resource';
-            //Typeahead
-            //ddd($transformers_coll);
-            //$this->out=new $transformers_coll($ris);
-            $this->out = $transformers_res::collection($ris);
-
-            return $this->out;
-        }
-        if ('geoJson' == $format) {
-            $this->force_exit = 1;
-            /**
-             * https://github.com/renelikestacos/Web-Mapping-Leaflet-NodeJS-Tutorials
-             * https://github.com/shramov/leaflet-plugins/blob/master/examples/permalink.html.
-             *
-             **/
-            //ddd('aaa');
-            $cache_key = 'geoJson_6_'.Str::slug(url()->full());
-            if ($cache_custom = 0) {
-                if (! Storage::disk('cache')->exists($cache_key.'.json')) {
-                    $lang = app()->getLocale();
-                    $ris = $data
-                        ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
-                        ->where('latitude', '!=', '')
-                        //->where('lang', $lang)
-                        ->paginate(200)
-                        //->get()
-                    ;
-                    $out = new \Modules\Geo\Transformers\GeoJsonCollection($ris);
-                    Storage::disk('cache')->put($cache_key.'.json', $out->toJson());
-                } else {
-                    $out = Storage::disk('cache')->get($cache_key.'.json');
-                }
-            }
-            //*
-            $minutes = 60 * 60 * 24;
-            $out = Cache::store('file')->remember($cache_key, $minutes, function () use ($data) {
-                $lang = app()->getLocale();
-                $ris = $data
-                    ->select('post.post_id', 'post_type', 'guid', 'latitude', 'longitude')
-                    ->where('latitude', '!=', '')
-                    ->where('lang', $lang)
-                    ->paginate(500)
-                    ->appends(\Request::input());
-                $out = new \Modules\Geo\Transformers\GeoJsonCollection($ris);
-                //$out=$out->toJson();
-
-                return $out;
-            });
-            //*/
-            $this->out = $out;
-
-            return $out;
-        }
-
-        return null;
-    }
-
     public function indexRows(Request $request, $query) {
         $data = $request->all();
 
@@ -782,7 +640,6 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function formCreate($params = []) {
         return (new PanelFormService($this))->formCreate($params);
-
     }
 
     public function formEdit($params = []) {
@@ -831,11 +688,13 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function indexFields() {
         $fields = $this->exceptFields(['act' => 'index']);
+
         return $fields;
     }
 
     public function createFields() {
         $fields = $this->exceptFields(['act' => 'create']);
+
         return $fields;
     }
 
@@ -847,6 +706,7 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function indexEditFields() {
         $fields = $this->exceptFields(['act' => 'index_edit']);
+
         return $fields;
     }
 
@@ -883,18 +743,15 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     //-- nella registrazione 1 tasto, nelle modifiche 3
-    public function btnSubmit() {
-        //return Form::bsSubmit('save');
-        return Form::bsSubmit(trans('xot::buttons.save'));
+    public function btnSubmit($params = []) {
+        return (new PanelFormService($this))->btnSubmit($params);
     }
-
 
     /*
      return (new PanelFormService($this))->formCreate($params);
     */
     public function btnDelete($params = []) {
         return (new PanelFormService($this))->btnDelete($params);
-
     }
 
     public function btnDetach($params = []) {
@@ -907,14 +764,13 @@ abstract class XotBasePanel /*implements PanelContract*/
 
     public function btnHtml($params) {
         return (new PanelFormService($this))->btnHtml($params);
-
     }
 
     public function btn($act, $params = []) {
-        return (new PanelFormService($this))->btn($act,$params);
+        return (new PanelFormService($this))->btn($act, $params);
     }
 
-    public function imageHtml($params) {
+    public function imageHtml($params) { //usare PanelImageService
         /*
         * mettere imageservice, o quello di spatie ?
         *
@@ -926,7 +782,7 @@ abstract class XotBasePanel /*implements PanelContract*/
         return '<img src="'.asset($src).'" >';
     }
 
-    public function imgSrc($params) {
+    public function imgSrc($params) { //usare PanelImageService
         $row = $this->row;
         $src = $row->image_src;
 
@@ -982,66 +838,14 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function langUrl($lang) {
-        return '?'.$lang; //da fixare dopo
-        //$row=$this->row;
-        //$row->lang=$lang;
-        //return '/wip'.$this->url();
-        $route_name = \Route::currentRouteName();
-        $route_params = \Route::current()->parameters();
-        $route_params['lang'] = $lang;
-        [$containers, $items] = params2ContainerItem($route_params);
-        $n_items = count($items);
-        //ddd($n_items);//1
-        //ddd($route_name); container0.show
-        for ($i = 0; $i < $n_items; ++$i) {
-            $v = $items[$i];
-            if (method_exists($v, 'postLang')) {
-                $tmp = $v->postLang($lang)->first();
-                if (is_object($tmp)) {
-                    $guid = $tmp->guid;
-                } else {
-                    $guid = '#';
-                    //dddx(app()->getLocale());
-                    $v_post = $v->post;
-                    if (null == $v_post) {
-                        break;
-                    }
-                    $new_post = $v_post->replicate();
-                    $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
-                    foreach ($fields as $field) {
-                        $trans = ImportService::trans(['q' => $new_post->$field, 'from' => app()->getLocale(), 'to' => $lang]);
-                        /*
-                        dddx([
-                            'from'=>app()->getLocale(),
-                            'to'=>$lang,
-                            'trans'=>$trans,
+        $params = [];
+        $params['lang'] = $lang;
+        $params['panel'] = $this;
 
-                        ]);
-                        */
-                        $new_post->$field = $trans;
-                    }
-                    $new_post->lang = $lang;
-                    $new_post->save();
-                    $guid = $new_post->guid;
-                }
-            } else {
-                $route_key_name = $v->getRouteKeyName();
-                $guid = $v->$route_key_name;
-            }
-
-            $route_params['item'.$i] = $guid;
-            //ddd($route_params['item'.$i]->guidLang);
-        }
-        //dddx($route_params);
-        //return '/wip['.__LINE__.']['.__FILE__.']';
-        try {
-            return route($route_name, $route_params);
-        } catch (\Exception $e) {
-            return url($lang);
-        }
+        return RouteService::urlLang($params);
     }
 
-    public function relatedUrlRecursive($params) {
+    public function relatedUrlRecursive($params) { //vedere chi lo usa
         $obj = $this;
         $items = [];
         $items[] = $this;
@@ -1105,7 +909,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     public function indexUrl() {
         //$url = RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index']);
         $url = RouteService::urlPanel(['panel' => $this, 'act' => 'index']);
-
+        //--- da spostare in routeservice
         $data = [];
         $filters = $this->filters();
 
@@ -1259,117 +1063,15 @@ abstract class XotBasePanel /*implements PanelContract*/
     */
 
     public function getItemTabs() {
-        $item = $this->row;
-        $tabs = $this->tabs();
-        $routename = \Route::currentRouteName();
-        $act = last(explode('.', $routename));
-        $row = [];
-        foreach ($tabs as $tab) {
-            $tmp = new \stdClass();
-            $tmp->title = $tab;
-
-            if (in_array($act, ['index_edit', 'edit', 'update'])) {
-                $tab_act = 'index_edit';
-            } else {
-                $tab_act = 'index';
-            }
-            $tmp->url = RouteService::urlRelated(['row' => $item, 'related_name' => $tab, 'act' => $tab_act]);
-            $tmp->active = false; //in_array($tab,$containers);
-            $row[] = $tmp;
-        }
-
-        return [$row];
+        return (new PanelTabService($this))->getItemTabs();
     }
 
     public function getRowTabs() {
-        $data = [];
-        foreach ($this->tabs() as $tab) {
-            $tmp = (object) [];
-            $tmp->title = $tab;
-            $tmp->url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index']);
-            $tmp->index_edit_url = $this->relatedUrl(['related_name' => $tab, 'act' => 'index_edit']);
-            $tmp->create_url = $this->relatedUrl(['related_name' => $tab, 'act' => 'create']);
-            $tmp->active = false;
-            $data[] = $tmp;
-        }
-
-        return $data;
+        return (new PanelTabService($this))->getRowTabs();
     }
 
     public function getTabs() {
-        $request = \Request::capture();
-        $routename = \Route::currentRouteName();
-        $act = last(explode('.', $routename));
-        //$routename = \Route::current()->getName();
-        $route_params = \Route::current()->parameters();
-        [$containers, $items] = params2ContainerItem($route_params);
-        $data = [];
-        //$items[]=$this->row;
-        if (! is_array($items)) {
-            return [];
-        }
-        //array_unique($items);
-        $parents = $this->getParents();
-        if ('' != $this->guid()) {
-            $parents->push($this);
-        }
-        //dddx($parents);
-
-        foreach ($parents as $k => $panel) {
-            //$item = $panel->row;
-            $tabs = [];
-            if (! is_object($panel)) {
-                return $tabs;
-            }
-            $tabs = $panel->tabs();
-            $row = [];
-            //*
-            if (0 == $k) {
-                if (Gate::allows('index', $panel)) {
-                    $tmp = new \stdClass();
-                    $tmp->title = '<< Back '; //.'['.get_class($item).']';
-                    $tmp->url = $panel->indexUrl();
-                    $tmp->active = false;
-                    $row[] = $tmp;
-                }
-                //-----------------------
-                $tmp = new \stdClass();
-                if (in_array($act, ['index_edit', 'edit', 'update'])) {
-                    $url = $panel->editUrl();
-                } else {
-                    $url = $panel->showUrl();
-                }
-                $tmp->url = $url;
-                $tmp->title = 'Content '; //.'['.request()->url().']['.$url.']';
-                if ($url_test = 1) {
-                    $tmp->active = request()->url() == $url;
-                } else {
-                    $tmp->active = request()->routeIs('admin.container0.'.$act);
-                }
-                if (null != $panel->guid()) {
-                    $row[] = $tmp;
-                }
-                //----------------------
-            }
-            //*/
-            foreach ($tabs as $tab) {
-                $tmp = new \stdClass();
-                $tmp->title = $tab;
-                $tmp->panel = $panel;
-
-                if (in_array($act, ['index_edit', 'edit', 'update'])) {
-                    $tab_act = 'index_edit';
-                } else {
-                    $tab_act = 'index';
-                }
-                $tmp->url = $panel->relatedUrl(['related_name' => $tab, 'act' => $tab_act]);
-                $tmp->active = in_array($tab, $containers);
-                $row[] = $tmp;
-            }
-            $data[] = $row;
-        }
-
-        return $data;
+        return (new PanelTabService($this))->getTabs();
     }
 
     public function rows($data = null) {
@@ -1521,6 +1223,8 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function pdf($params = []) {
+        //return (new PdfPresenter($this))->out($params); //da fare
+
         if (! isset($params['view_params'])) {
             $params['view_params'] = [];
         }
@@ -1563,6 +1267,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     public function getModuleName() {
         $model = $this::$model;
         $module_name = Str::before(Str::after($model, 'Modules\\'), '\\Models\\');
+
         return $module_name;
     }
 
@@ -1639,119 +1344,9 @@ abstract class XotBasePanel /*implements PanelContract*/
         return 'pub_theme::layouts.swiper.item';
     }
 
-    public function dataTable() {
-        /*
-        if (request()->ajax()) {
-            //$users=User::query();
-            $users = \DB::table('users')->select('*');
-            return DataTables::of($users)->toJson();
-        }
-        $htmlBuilder = app(\Yajra\DataTables\Html\Builder::class);
-        //$htmlBuilder->of(\DB::table('users')->select('*'));
-        //dddx($htmlBuilder);
-        $dataTable = $htmlBuilder
-            ->addColumn(['data' => 'id', 'name' => 'id', 'title' => 'Id'])
-            ->addColumn(['data' => 'name', 'name' => 'name', 'title' => 'Name'])
-            ->addColumn(['data' => 'email', 'name' => 'email', 'title' => 'Email'])
-            ->addColumn(['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created At'])
-            ->addColumn(['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At']);
-        return $dataTable;
-        //*/
-        $builder = app('datatables.html');
-        $html = $builder->columns(
-            [
-                ['data' => 'id', 'name' => 'id', 'title' => 'Id'],
-                ['data' => 'name', 'name' => 'name', 'title' => 'Name'],
-                ['data' => 'email', 'name' => 'email', 'title' => 'Email'],
-                ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Created At'],
-                ['data' => 'updated_at', 'name' => 'updated_at', 'title' => 'Updated At'],
-            ]
-        )->ajax('datatables_url') //mettere una route che restituisca quello che vogliamo, prob la stessa con format=datatable
-            /*->parameters(
-                [
-                    'ajax' => [
-                        'url' => 'datatables_url',
-                    ],
-                ]
-            )
-            */;
-        /*
-        https://github.com/yajra/laravel-datatables/issues/1129
-        */
-
-        return $html;
-        //dddx($builder);
-
-        $users = \DB::table('users')->select('*');
-        $datatables = app(DataTables::class);
-
-        $datatables->of($users)->make(true);
-
-        $html = $datatables->getHtmlBuilder();
-
-        return $html;
-    }
-
     public function view($params = null) {
-
         return $this->presenter->out($params);
     }
-    /*
-    public function view($params = null) {
-        //$route_params = \Route::current()->parameters();
-
-        [$containers, $items] = params2ContainerItem();
-        $view = ThemeService::getView(); //vew che dovrebbe essere
-        $view_work = ThemeService::getViewWork(); //view effettiva
-        $views = ThemeService::getDefaultViewArray(); //views possibili
-
-        $mod_trad = $this->getModuleNameLow().'::'.last($containers);
-
-        //--- per passare la view all'interno dei componenti
-        \View::composer('*',
-            function ($view_params) use ($view,$mod_trad) {
-                \View::share('view', $view);
-                $trad = implode('.', array_slice(explode('.', $view), 0, -1));
-                \View::share('trad', $trad);
-                \View::share('lang', \App::getLocale());
-                //\View::share('mod_trad', $mod_trad);
-            }
-        );
-
-        $modal = null;
-        if (\Request::ajax()) {
-            $modal = 'ajax';
-        } elseif ('iframe' == \Request::input('format')) {
-            $modal = 'iframe';
-        }
-        try {
-            $rows = $this->rows()->paginate(20);
-        } catch (\Exception $e) {
-            $rows = null;
-        } catch (\Error $e) {
-            $rows = null;
-        }
-
-        $view_params = [
-            'view' => $view,
-            'view_work' => $view_work,
-            'views' => $views,
-            '_panel' => $this,
-            'row' => $this->row,
-            'rows' => $rows,
-            'mod_trad' => $mod_trad,
-            'trad_mod' => $mod_trad, /// da sostiutire ed uccidere
-            'params' => \Route::current()->parameters(),
-            'routename' => \Route::current()->getName(),
-            'modal' => $modal,
-            'containers' => $containers,
-            'items' => $items,
-            'page' => new \Modules\Theme\Services\Objects\PageObject(),
-        ];
-
-        return view($view_work)->with($view_params);
-    }
-    */
 
     public function id() {
         $curr = $this;

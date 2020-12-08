@@ -2,24 +2,20 @@
 
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Route;
-use Modules\Xot\Services\RouteService;
 use Collective\Html\FormFacade as Form;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 
 class PanelFormService {
     protected $panel;
 
-    public function __construct($panel)
-    {
-        $this->panel=$panel;
+    public function __construct($panel) {
+        $this->panel = $panel;
     }
 
-
     public function formCreate($params = []) {
-
         $fields = $this->createFields();
         $row = $this->panel->row;
         $res = '';
@@ -39,10 +35,7 @@ class PanelFormService {
         return $res;
     }
 
-
     public function formEdit($params = []) {
-
-
         $submit_btn = '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
         </p>';
@@ -63,7 +56,6 @@ class PanelFormService {
 
         return $res;
     }
-
 
     public function btnDelete($params = []) {
         $class = 'btn-primary mb-2';
@@ -220,4 +212,7 @@ class PanelFormService {
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
 
+    public function btnSubmit($params = []) {
+        return Form::bsSubmit(trans('xot::buttons.save'));
+    }
 }
