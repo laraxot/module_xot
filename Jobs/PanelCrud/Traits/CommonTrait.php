@@ -2,21 +2,17 @@
 
 namespace Modules\Xot\Jobs\PanelCrud\Traits;
 
-use Illuminate\Database\Eloquent\Relations\Relation; // per dizionario morph
-//----------- Requests ----------
-use Modules\Xot\Http\Requests\XotRequest;
-
 use Carbon\Carbon;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Str;
-
+//----------- Requests ----------
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str; // per dizionario morph
 //------------ services ----------
+use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
-trait CommonTrait
-{
-    public function getData()
-    {
+trait CommonTrait {
+    public function getData() {
         $panel = Panel::get($this->row);
         if (! is_object($panel)) {
             //dddx($this->row);
@@ -37,8 +33,7 @@ trait CommonTrait
      * https://hackernoon.com/eloquent-relationships-cheat-sheet-5155498c209
      * https://laracasts.com/discuss/channels/eloquent/cleanest-way-to-save-model-and-relationships.
      */
-    public function manageRelationships($params)
-    {
+    public function manageRelationships($params) {
         extract($params);
         if (! is_object($model)) {
             return;
@@ -110,9 +105,7 @@ trait CommonTrait
         }
     }
 
-
-    public function prepareForValidation($data, $panel)
-    {
+    public function prepareForValidation($data, $panel) {
         $date_fields = collect($panel->fields())->filter(
             function ($item) use ($data) {
                 return Str::startsWith($item->type, 'Date') && isset($data[$item->name]);
@@ -127,14 +120,24 @@ trait CommonTrait
                 $func = 'Conv'.$field->type;
                 $value_new = $this->$func($field, $value);
                 //$this->request->add([$field->name => $value_new]);
-                $data[$field->name]= $value_new;
+                $data[$field->name] = $value_new;
             }
         }
+
         return $data;
     }
 
-    public function ConvDate($field, $value)
-    {
+    public function prepareAndValidate($data, $panel) {
+        $data = $this->prepareForValidation($data, $panel);
+        $act = '';
+        $rules = $panel->rules(['act' => $act]);
+
+        $validator = Validator::make($data, $rules);
+
+        return $validator->validate(); //fa tutto da solo
+    }
+
+    public function ConvDate($field, $value) {
         if (null == $value) {
             return $value;
         }
@@ -143,8 +146,7 @@ trait CommonTrait
         return $value_new;
     }
 
-    public function ConvDateTime($field, $value)
-    {
+    public function ConvDateTime($field, $value) {
         if (null == $value) {
             return $value;
         }
@@ -153,8 +155,7 @@ trait CommonTrait
         return $value_new;
     }
 
-    public function ConvDateTime2Fields($field, $value)
-    {
+    public function ConvDateTime2Fields($field, $value) {
         if (null == $value) {
             return $value;
         }
