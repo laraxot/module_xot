@@ -1,14 +1,20 @@
 <div>
     @component('theme::components.modal.simple',['guid'=>$modal_guid,'title'=>$modal_title])
     @slot('content')
-    AAAAAAAAAAAAAA
-        @livewire('xot::rate.single',['model'=>$model ])
+        @if (session()->has('message'))
+            <div class="alert alert-success" style="margin-top:30px;">x
+                {{ session('message') }}
+            </div>
+        @endif
+        @foreach($goals as $goal)
+            @livewire('xot::rate.single',['model'=>$model,'goal'=>$goal ])
+        @endforeach
 
 
 
     @endslot
     @slot('btns')
-
+        <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Close</button>
     @endslot
     @endcomponent
 

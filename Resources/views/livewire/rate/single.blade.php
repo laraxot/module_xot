@@ -3,14 +3,19 @@
       Theme::add('xot::css/adorable_rating.css');
       Theme::add('xot::js/adorable_rating.js');
     @endphp
-    <h1>Adorable Star Rating Control Example</h1>
-    <nav class="rating">
+    <b>{{ $goal->title }} ({{ $val }})</b>
+    {{--
+    @if (session()->has('message'))
+    <div class="alert alert-success" style="margin-top:30px;">x
+        {{ session('message') }}
+    </div>
+    @endif
+    --}}
+    <nav class="rating" wire:ignore.self>
       <ul>
-        <li><svg><use xlink:href="#star"></use></svg></li>
-        <li><svg><use xlink:href="#star"></use></svg></li>
-        <li><svg><use xlink:href="#star"></use></svg></li>
-        <li><svg><use xlink:href="#star"></use></svg></li>
-        <li><svg><use xlink:href="#star"></use></svg></li>
+        @for($i=1;$i<=5;$i++)
+        <li wire:click="update({{ $i }})" @if($val==$i)class="current"@endif><svg><use xlink:href="#star"></use></svg></li>
+        @endfor
       </ul>
       <div>
         <span><svg><use xlink:href="#star"></use></svg></span>
