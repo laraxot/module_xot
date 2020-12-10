@@ -83,13 +83,8 @@ class PanelService {
             $in_admin = $route_params['in_admin'];
         }
         if (0 == count($containers)) {
-            /*
-            $row = TenantService::model('home');
-            $panel = PanelService::get($row);
-            PanelService::setRequestPanel($panel);
-            */
             PanelService::setRequestPanel(null);
-
+            
             return $next($request);
         }
 
