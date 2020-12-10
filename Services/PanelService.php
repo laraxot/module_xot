@@ -102,6 +102,7 @@ class PanelService {
         if (isset($items[0])) {
             $panel->in_admin = $in_admin;
             $panel->setItem($items[0]);
+            //dddx(['riga 108', $panel, $in_admin, $panel->in_admin, $route_params, params2ContainerItem($route_params)]);
         }
         $panel_parent = $panel;
 
@@ -137,6 +138,7 @@ class PanelService {
                 $panel->in_admin = $in_admin;
 
                 $panel->setItem($items[$i]);
+                //dddx(['riga 143', $panel, $in_admin, $panel->in_admin, $route_params, params2ContainerItem($route_params)]);
             }
             $panel_parent = $panel;
         }
