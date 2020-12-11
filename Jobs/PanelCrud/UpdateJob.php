@@ -33,7 +33,11 @@ class UpdateJob implements ShouldQueue {
      */
     public function __construct($request, $panel) {
         $this->panel = $panel;
-        $this->data = $request->all();
+        if (is_array($request)) {
+            $this->data = $request;
+        } else {
+            $this->data = $request->all();
+        }
     }
 
     /**
@@ -51,6 +55,12 @@ class UpdateJob implements ShouldQueue {
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
 
         return $this->panel;
+    }
+
+    public function setData($data) {
+        $this->data = $data;
+
+        return $this;
     }
 
     /**

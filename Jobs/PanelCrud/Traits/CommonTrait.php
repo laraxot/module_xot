@@ -47,9 +47,13 @@ trait CommonTrait {
             $methods=[];
         }
         */
+        //dddx($params);
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
         })->map(function ($v, $k) use ($model) {
+            if (! is_string($k)) {
+                dddx([$k, $v, $data]);
+            }
             $rows = $model->$k();
             $related = null;
             if (method_exists($rows, 'getRelated')) {

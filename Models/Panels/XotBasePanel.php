@@ -31,6 +31,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     public $row = null;
     public $rows = null;
     public $parent = null;
+    public $in_admin = null;
     //protected static $model;
 
     public function __construct(PanelPresenterContract $presenter) {
@@ -106,7 +107,7 @@ abstract class XotBasePanel /*implements PanelContract*/
     public function setItem($guid) {
         $model = $this->row;
         $rows = $this->rows;
-        $pk = $model->getRouteKeyName();
+        $pk = $model->getRouteKeyName($this->in_admin);
         $pk_full = $model->getTable().'.'.$pk;
 
         if ('guid' == $pk) {
