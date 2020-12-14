@@ -17,6 +17,7 @@ use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\NavService;
+use Modules\Xot\Services\PanelActionService;
 use Modules\Xot\Services\PanelFormService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PanelTabService;
@@ -365,104 +366,35 @@ abstract class XotBasePanel /*implements PanelContract*/
     }
 
     public function getActions($params = []) {
-        $panel = $this;
-        $filters = [];
-        extract($params);
-        $actions = collect($this->actions())->filter(
-            function ($item) use ($panel, $filters) {
-                $item->getName();
-                $res = true;
-                foreach ($filters as $k => $v) {
-                    if (! isset($item->$k)) {
-                        $item->$k = false;
-                    }
-                    if ($item->$k != $v) {
-                        return false;
-                    }
-                }
-
-                return $res;
-            }
-        )->map(
-            function ($item) use ($panel) {
-                $item->setPanel($panel);
-
-                return $item;
-            }
-        );
-
-        return $actions;
+        return (new PanelActionService($this))->getActions($params);
     }
 
     public function containerActions($params = []) {
-        $params['filters']['onContainer'] = true;
-
-        return $this->getActions($params);
+        return (new PanelActionService($this))->containerActions($params);
     }
 
     public function itemActions($params = []) {
-        $params['filters']['onItem'] = true;
-
-        return $this->getActions($params);
+        return (new PanelActionService($this))->itemActions($params);
     }
 
     public function itemAction($act) {
-        $itemActions = $this->itemActions();
-        $itemAction = $itemActions->firstWhere('name', $act);
-        if (! is_object($itemAction)) {
-            dddx([
-                'error' => 'nessuna azione con questo nome',
-                'act' => $act,
-                'this' => $this,
-                'itemActions' => $itemActions,
-            ]);
-        }
-        $itemAction->setPanel($this);
-
-        return $itemAction;
+        return (new PanelActionService($this))->itemAction($act);
     }
 
     public function containerAction($act) {
-        $actions = $this->containerActions();
-        $action = $actions->firstWhere('name', $act);
-        if (! is_object($action)) {
-            dddx([
-                'error' => 'nessuna azione con questo nome',
-                'act' => $act,
-                'this' => $this,
-                'Actions' => $actions,
-            ]);
-        }
-        $action->setPanel($this);
-
-        return $action;
+        return (new PanelActionService($this))->containerAction($act);
     }
 
     public function urlContainerAction($act) {
-        $containerActions = $this->containerActions();
-        $containerAction = $containerActions->firstWhere('name', $act);
-        if (is_object($containerAction)) {
-            return $containerAction->urlContainer(['rows' => $this->rows, 'panel' => $this]);
-        }
+        return (new PanelActionService($this))->urlContainerAction($act);
     }
 
     public function urlItemAction($act) {
-        //$itemActions = $this->itemActions();
-        //$itemAction = $itemActions->firstWhere('name', $act);
-        $itemAction = $this->itemAction($act);
-        if (is_object($itemAction)) {
-            return $itemAction->urlItem(['row' => $this->row, 'panel' => $this]);
-        }
+        return (new PanelActionService($this))->urlItemAction($act);
     }
 
     public function btnItemAction($act) {
-        //$itemActions = $this->itemActions();
-        //$itemAction = $itemActions->firstWhere('name', $act);
-        $itemAction = $this->itemAction($act);
-
-        if (is_object($itemAction)) {
-            return $itemAction->btn(['row' => $this->row]);
-        }
+        return (new PanelActionService($this))->btnItemAction($act);
     }
 
     /**

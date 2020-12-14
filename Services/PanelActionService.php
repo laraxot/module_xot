@@ -1,0 +1,108 @@
+<?php
+
+namespace Modules\Xot\Services;
+
+class PanelActionService {
+    protected $panel;
+
+    public function __construct($panel) {
+        $this->panel = $panel;
+    }
+
+    public function getActions($params = []) {
+        $panel = $this->panel;
+        $filters = [];
+        extract($params);
+        $actions = collect($panel->actions())->filter(
+            function ($item) use ($panel, $filters) {
+                $item->getName();
+                $res = true;
+                foreach ($filters as $k => $v) {
+                    if (! isset($item->$k)) {
+                        $item->$k = false;
+                    }
+                    if ($item->$k != $v) {
+                        return false;
+                    }
+                }
+
+                return $res;
+            }
+        )->map(
+            function ($item) use ($panel) {
+                $item->setPanel($panel);
+
+                return $item;
+            }
+        );
+
+        return $actions;
+    }
+
+    public function containerActions($params = []) {
+        $params['filters']['onContainer'] = true;
+
+        return $this->getActions($params);
+    }
+
+    public function itemActions($params = []) {
+        $params['filters']['onItem'] = true;
+
+        return $this->getActions($params);
+    }
+
+    public function itemAction($act) {
+        $itemActions = $this->itemActions();
+        $itemAction = $itemActions->firstWhere('name', $act);
+        if (! is_object($itemAction)) {
+            dddx([
+                'error' => 'nessuna azione con questo nome',
+                'act' => $act,
+                'this' => $this,
+                'itemActions' => $itemActions,
+            ]);
+        }
+        //$itemAction->setPanel($this); //incerto dovrebbe farlo getActions
+
+        return $itemAction;
+    }
+
+    public function containerAction($act) {
+        $actions = $this->containerActions();
+        $action = $actions->firstWhere('name', $act);
+        if (! is_object($action)) {
+            dddx([
+                'error' => 'nessuna azione con questo nome',
+                'act' => $act,
+                'this' => $this,
+                'Container Actions' => $actions,
+                'All Actions' => $this->panel->actions(),
+            ]);
+        }
+        //$action->setPanel($this);
+
+        return $action;
+    }
+
+    public function urlContainerAction($act) {
+        $containerActions = $this->containerActions();
+        $containerAction = $containerActions->firstWhere('name', $act);
+        if (is_object($containerAction)) {
+            return $containerAction->urlContainer(['rows' => $this->rows, 'panel' => $this->panel]);
+        }
+    }
+
+    public function urlItemAction($act) {
+        $itemAction = $this->itemAction($act);
+        if (is_object($itemAction)) {
+            return $itemAction->urlItem(['row' => $this->row, 'panel' => $this->panel]);
+        }
+    }
+
+    public function btnItemAction($act) {
+        $itemAction = $this->itemAction($act);
+        if (is_object($itemAction)) {
+            return $itemAction->btn(['row' => $this->row]);
+        }
+    }
+}

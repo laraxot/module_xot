@@ -127,7 +127,14 @@ class PanelTabService {
                     //  dddx($tmp);
                     //$tmp = new \stdClass();
                     $tmp->title = $tab['title'];
-                    $tmp->url = $tab['page'];
+                    $panel1 = $panel;
+                    if (isset($tab['related'])) {
+                        $panel1 = $panel1->related($tab['related']);
+                    }
+                    if (isset($tab['container_action'])) {
+                        $tmp->url = $panel1->containerAction($tab['container_action'])->url();
+                    }
+                    //$tmp->url = $tab['page'];
                     $tmp->active = false;
                 }
                 $row[] = $tmp;
