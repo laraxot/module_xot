@@ -49,7 +49,7 @@ class UpdateJob implements ShouldQueue {
         $row = $this->panel->row;
         $data = $this->data;
         //--
-
+        dddx($data);
         $ris = $row->update($data);
         $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
