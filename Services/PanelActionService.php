@@ -88,21 +88,21 @@ class PanelActionService {
         $containerActions = $this->containerActions();
         $containerAction = $containerActions->firstWhere('name', $act);
         if (is_object($containerAction)) {
-            return $containerAction->urlContainer(['rows' => $this->rows, 'panel' => $this->panel]);
+            return $containerAction->urlContainer(['rows' => $this->panel->rows, 'panel' => $this->panel]);
         }
     }
 
     public function urlItemAction($act) {
         $itemAction = $this->itemAction($act);
         if (is_object($itemAction)) {
-            return $itemAction->urlItem(['row' => $this->row, 'panel' => $this->panel]);
+            return $itemAction->urlItem(['row' => $this->panel->row, 'panel' => $this->panel]);
         }
     }
 
     public function btnItemAction($act) {
         $itemAction = $this->itemAction($act);
         if (is_object($itemAction)) {
-            return $itemAction->btn(['row' => $this->row, 'panel' => $this->panel]);
+            return $itemAction->btn(['row' => $this->panel->row, 'panel' => $this->panel]);
         }
     }
 }
