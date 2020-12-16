@@ -102,7 +102,7 @@ class PanelActionService {
     public function btnItemAction($act) {
         $itemAction = $this->itemAction($act);
         if (is_object($itemAction)) {
-            return $itemAction->btn(['row' => $this->row]);
+            return $itemAction->btn(['row' => $this->row, 'panel' => $this->panel]);
         }
     }
 }

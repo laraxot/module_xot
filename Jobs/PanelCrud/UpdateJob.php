@@ -49,7 +49,7 @@ class UpdateJob implements ShouldQueue {
         $row = $this->panel->row;
         $data = $this->data;
         //--
-        dddx($data);
+        //dddx($data);
         $ris = $row->update($data);
         $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'update']);
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
@@ -116,7 +116,8 @@ class UpdateJob implements ShouldQueue {
 
             return;
         }
-        $model->$name()->syncWithoutDetaching($data);
+        //$model->$name()->syncWithoutDetaching($data);
+        $model->$name()->sync($data);
     }
 
     //end updateRelationshipsBelongsToMany
