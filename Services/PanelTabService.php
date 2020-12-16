@@ -106,22 +106,43 @@ class PanelTabService {
                 //----------------------
             }
             //*/
-            foreach ($tabs as $tab) {
-                $tmp = new \stdClass();
-                $tmp->title = $tab;
-                $tmp->panel = $panel;
 
-                if (in_array($act, ['index_edit', 'edit', 'update'])) {
-                    $tab_act = 'index_edit';
+            foreach ($tabs as $tab) {
+                //dddx($tabs);
+                $tmp = new \stdClass();
+
+                if (! is_array($tab)) {
+                    //$tmp = new \stdClass();
+                    $tmp->title = $tab;
+                    $tmp->panel = $panel;
+
+                    if (in_array($act, ['index_edit', 'edit', 'update'])) {
+                        $tab_act = 'index_edit';
+                    } else {
+                        $tab_act = 'index';
+                    }
+                    $tmp->url = $panel->relatedUrl(['related_name' => $tab, 'act' => $tab_act]);
+                    $tmp->active = in_array($tab, $containers);
                 } else {
-                    $tab_act = 'index';
+                    //  dddx($tmp);
+                    //$tmp = new \stdClass();
+                    $tmp->title = $tab['title'];
+                    $panel1 = $panel;
+                    if (isset($tab['related'])) {
+                        $panel1 = $panel1->related($tab['related']);
+                    }
+                    if (isset($tab['container_action'])) {
+                        $tmp->url = $panel1->containerAction($tab['container_action'])->url();
+                    }
+                    //$tmp->url = $tab['page'];
+                    $tmp->active = false;
                 }
-                $tmp->url = $panel->relatedUrl(['related_name' => $tab, 'act' => $tab_act]);
-                $tmp->active = in_array($tab, $containers);
                 $row[] = $tmp;
             }
+
             $data[] = $row;
         }
+        //dddx($data);
 
         return $data;
     }
