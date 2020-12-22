@@ -76,6 +76,7 @@ class PanelActionService {
                 'act' => $act,
                 'this' => $this,
                 'Container Actions' => $actions,
+                'panel' => $this->panel,
                 'All Actions' => $this->panel->actions(),
             ]);
         }
