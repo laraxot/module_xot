@@ -25,7 +25,7 @@ class ConfPanel extends XotBasePanel {
 	 *
 	 * @var string
 	 */
-	public static $title = "title"; 
+	public static $title = "title";
 
 	/**
 	 * The columns that should be searched.
@@ -40,7 +40,7 @@ class ConfPanel extends XotBasePanel {
 	*
 	* @var array
 	*/
-	public static function with(){
+	public function with(){
 	  return [];
 	}
 
@@ -58,7 +58,7 @@ class ConfPanel extends XotBasePanel {
 	}
 
 	/**
-	 * on select the option label 
+	 * on select the option label
 	 *
 	 */
 
@@ -93,7 +93,7 @@ class ConfPanel extends XotBasePanel {
 
 	public static function indexQuery($data, $query){
 		//return $query->where('auth_user_id', $request->user()->auth_user_id);
-		return $query; 
+		return $query;
 	}
 
 	/**
@@ -114,33 +114,33 @@ class ConfPanel extends XotBasePanel {
 
 	public function fields(){
 		return array (
-  0 => 
+  0 =>
   (object) array(
      'type' => 'Id',
      'name' => 'id',
      'comment' => NULL,
   ),
-  1 => 
+  1 =>
   (object) array(
      'type' => 'String',
      'name' => 'appname',
      'rules' => 'required',
      'comment' => NULL,
   ),
-  2 => 
+  2 =>
   (object) array(
      'type' => 'String',
      'name' => 'description',
      'rules' => 'required',
      'comment' => NULL,
   ),
-  3 => 
+  3 =>
   (object) array(
      'type' => 'Text',
      'name' => 'keywords',
      'comment' => 'not in Doctrine',
   ),
-  4 => 
+  4 =>
   (object) array(
      'type' => 'Text',
      'name' => 'author',
@@ -148,11 +148,11 @@ class ConfPanel extends XotBasePanel {
   ),
 );
 	}
-	 
+
 	/**
-	 * Get the tabs available 
+	 * Get the tabs available
 	 *
-	 * @return array  
+	 * @return array
 	 */
 	public function tabs(){
 		$tabs_name = [];

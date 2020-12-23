@@ -34,7 +34,7 @@ class ImagePanel extends XotBasePanel {
      *
      * @var array
      */
-    public static function with() {
+    public function with() {
         return [];
     }
 

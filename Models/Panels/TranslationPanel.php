@@ -34,7 +34,7 @@ class TranslationPanel {
      *
      * @var array
      */
-    public static function with() {
+    public function with() {
         return [];
     }
 

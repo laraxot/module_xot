@@ -25,7 +25,7 @@ class DummyClass extends XotBasePanel {
 	 *
 	 * @var string
 	 */
-	public static $title = "dummy_title"; 
+	public static $title = "dummy_title";
 
 	/**
 	 * The columns that should be searched.
@@ -39,7 +39,7 @@ class DummyClass extends XotBasePanel {
 	*
 	* @var array
 	*/
-	public static function with(){
+	public function with(){
 	  return [];
 	}
 
@@ -57,7 +57,7 @@ class DummyClass extends XotBasePanel {
 	}
 
 	/**
-	 * on select the option label 
+	 * on select the option label
 	 *
 	 */
 
@@ -92,7 +92,7 @@ class DummyClass extends XotBasePanel {
 
 	public static function indexQuery($data, $query){
 		//return $query->where('auth_user_id', $request->user()->auth_user_id);
-		return $query; 
+		return $query;
 	}
 
 	/**
@@ -114,11 +114,11 @@ class DummyClass extends XotBasePanel {
 	public function fields(){
 		return dummy_fields;
 	}
-	 
+
 	/**
-	 * Get the tabs available 
+	 * Get the tabs available
 	 *
-	 * @return array  
+	 * @return array
 	 */
 	public function tabs(){
 		$tabs_name = [];
