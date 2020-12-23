@@ -375,16 +375,21 @@ if (! \function_exists('transFields')) {
         if (null == $module_name) {
             $trans_root = $ns.'::'.implode('.', array_slice(explode('.', $key), $start, -1));
         }
+        //*
 
         $trans_fields = ['label', 'placeholder', 'help'];
         foreach ($trans_fields as $tf) {
             $trans = $trans_root.'.field.'.Str::snake($ris->name_dot).'_'.$tf;
+            //if (! isset($ris->$tf)) {
             $ris->$tf = isset($$tf) ? $$tf : trans($trans);
+
             if ($ris->$tf == $trans && ! config('xra.show_trans_key')) {
                 $ris->$tf = $ris->name_dot;
                 //$ris->$tf = $trans;
             }
+            //}
         }
+        //*/
         if ($ris->help == $ris->name_dot) {
             $ris->help = '';
         }
