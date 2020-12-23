@@ -66,13 +66,16 @@ class HtmlPanelPresenter implements PanelPresenterContract
         //$rows = $this->panel->rows()->paginate(20);
 
         //*
+        $rows_err='';
         try {
             //dddx($this->panel->rows());
             $rows = $this->panel->rows()->paginate(20);
         } catch (\Exception $e) {
             $rows = null;
+            $rows_err=$e;
         } catch (\Error $e) {
             $rows = null;
+            $rows_err=$e;
         }
         //*/
 
@@ -83,6 +86,7 @@ class HtmlPanelPresenter implements PanelPresenterContract
             '_panel' => $this->panel,
             'row' => $this->panel->row,
             'rows' => $rows,
+            'rows_err'=>$rows_err,
             'mod_trad' => $mod_trad,
             'trad_mod' => $mod_trad, /// da sostiutire ed uccidere
             'params' => \Route::current()->parameters(),
