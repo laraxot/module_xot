@@ -6,14 +6,17 @@ use Illuminate\Support\Collection;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelPresenterContract;
 
-class HtmlPanelPresenter implements PanelPresenterContract {
+class HtmlPanelPresenter implements PanelPresenterContract
+{
     protected $panel;
 
-    public function setPanel($panel) {
+    public function setPanel($panel)
+    {
         $this->panel = $panel;
     }
 
-    public function index(?Collection $items) {
+    public function index(?Collection $items)
+    {
         $count = $items->count();
         $last_update = $items
             ->sortByDesc
@@ -30,7 +33,8 @@ class HtmlPanelPresenter implements PanelPresenterContract {
         return view('workshop::index')->with(compact('items', 'data'));
     }
 
-    public function out($params = null) {
+    public function out($params = null)
+    {
         //$route_params = \Route::current()->parameters();
 
         [$containers, $items] = params2ContainerItem();
@@ -41,7 +45,8 @@ class HtmlPanelPresenter implements PanelPresenterContract {
         $mod_trad = $this->panel->getModuleNameLow().'::'.last($containers);
 
         //--- per passare la view all'interno dei componenti
-        \View::composer('*',
+        \View::composer(
+            '*',
             function ($view_params) use ($view,$mod_trad) {
                 \View::share('view', $view);
                 $trad = implode('.', array_slice(explode('.', $view), 0, -1));
@@ -58,9 +63,9 @@ class HtmlPanelPresenter implements PanelPresenterContract {
             $modal = 'iframe';
         }
 
-        $rows = $this->panel->rows()->paginate(20);
+        //$rows = $this->panel->rows()->paginate(20);
 
-        /*
+        //*
         try {
             //dddx($this->panel->rows());
             $rows = $this->panel->rows()->paginate(20);
@@ -69,7 +74,8 @@ class HtmlPanelPresenter implements PanelPresenterContract {
         } catch (\Error $e) {
             $rows = null;
         }
-        */
+        //*/
+
         $view_params = [
             'view' => $view,
             'view_work' => $view_work,

@@ -39,6 +39,16 @@ abstract class XotBasePanel /*implements PanelContract*/
         //$this->row = $model;
         $this->presenter = $presenter;
         $this->presenter->setPanel($this);
+        $this->row = app($this::$model);
+    }
+
+    /**
+     * The relationships that should be eager loaded on index queries.
+     *
+     * @var array
+     */
+    public function with() {
+        return [];
     }
 
     public function setRow($row) {
@@ -1290,5 +1300,9 @@ abstract class XotBasePanel /*implements PanelContract*/
         }
 
         return $data->implode('-');
+    }
+
+    public function actions() {
+        return [];
     }
 }
