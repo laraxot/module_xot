@@ -142,7 +142,7 @@ class PanelTabService {
 
             $data[] = $row;
         }
-        //dddx($data);
+        //dddx([$data, $tabs]);
 
         return $data;
     }

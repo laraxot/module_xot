@@ -159,8 +159,11 @@ class RouteService {
         ++$i;
         $route_params['container'.($n + $i)] = $related_name;
 
+        $route_params['page'] = 1;
+        $route_params['_act'] = '';
+        unset($route_params['_act']);
         try {
-            return str_replace(url(''), '', route($route_name, $route_params));
+            $url = str_replace(url(''), '', route($route_name, $route_params));
         } catch (\Exception $e) {
             return '#['.__LINE__.']['.__FILE__.']';
             dd([
@@ -171,6 +174,8 @@ class RouteService {
                 'e' => $e->getMessage(),
             ]);
         }
+
+        return $url;
     }
 
     public static function urlLang($params = []) {

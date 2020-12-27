@@ -135,6 +135,8 @@ abstract class XotBasePanelAction {
 
         $url = $panel->indexUrl();
         $url = url_queries(['_act' => $name], $url);
+        $this->data['page'] = 1;
+        $this->data['_act'] = $name;
         $url = url_queries($this->data, $url);
         //}
 
