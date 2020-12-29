@@ -4,6 +4,7 @@ namespace Modules\Xot\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
+use Modules\Xot\Http\Middleware\SetDefaultLocaleForUrlsMiddleware;
 
 //--- services ---
 
@@ -30,6 +31,11 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         }
 
         $this->registerRoutePattern($router);
+
+        //-----------------
+
+        //$router->pushMiddlewareToGroup('web', SetDefaultLocaleForUrlsMiddleware::class);
+        $router->prependMiddlewareToGroup('web', SetDefaultLocaleForUrlsMiddleware::class);
     }
 
     public function registerRoutePattern(Router $router) {

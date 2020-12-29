@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 
 class RouteService {
     public static function urlPanel($params) {
-        $lang = app()->getLocale();
         extract($params);
         $parents = $panel->getParents();
 
@@ -23,9 +22,6 @@ class RouteService {
 
         $route_current = \Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
-        if (! isset($route_params['lang'])) {
-            $route_params['lang'] = $lang;
-        }
 
         $i = 0;
         foreach ($parents as $parent) {
@@ -114,7 +110,6 @@ class RouteService {
     }
 
     public static function urlRelatedPanel($params) {
-        $lang = app()->getLocale();
         extract($params);
         $parents = collect([]);
         $panel_curr = $panel;
@@ -153,7 +148,6 @@ class RouteService {
             $route_params['item'.($n + $i)] = $parent->guid();
             ++$i;
         }
-        $route_params['lang'] = $lang;
         $route_params['container'.($n + $i)] = $panel->postType();
         $route_params['item'.($n + $i)] = $panel->guid();
         ++$i;
