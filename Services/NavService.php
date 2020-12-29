@@ -30,7 +30,6 @@ class NavService {
         return $nav;
     }
 
-
     public static function monthYearNav() { //possiamo trasformarlo in una macro
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
@@ -70,9 +69,6 @@ class NavService {
         return '';
         */
     }
-
-
-
 
     public static function yearNavRedirect() {
         $request = \Request::capture();
