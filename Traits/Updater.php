@@ -5,6 +5,7 @@ namespace Modules\Xot\Traits;
 use Carbon\Carbon;
 
 trait Updater {
+    /*
     public function myLog() {
         $mylog_path = \mb_substr(\get_class($this), 0, -\mb_strlen(class_basename($this))).'Mylog';
 
@@ -30,6 +31,7 @@ trait Updater {
         $this->handle = \Auth::user()->handle;
         $this->save();
     }
+    */
 
     public function getTableColumns() {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());

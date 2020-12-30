@@ -5,6 +5,52 @@ namespace Modules\Xot\Models;
 //------ ext models---
 use Modules\Xot\Models\Traits\WidgetTrait;
 
+/**
+ * Modules\Xot\Models\Widget
+ *
+ * @property int $id
+ * @property string|null $post_type
+ * @property string|null $layout_position
+ * @property string|null $title
+ * @property int|null $post_id
+ * @property string|null $blade
+ * @property string|null $image_src
+ * @property int|null $pos
+ * @property string|null $model
+ * @property int|null $limit
+ * @property string|null $order_by
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property string|null $created_by
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $updated_by
+ * @property-read \Illuminate\Database\Eloquent\Collection|Widget[] $containerWidgets
+ * @property-read int|null $container_widgets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\Xot\Models\Image[] $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $linked
+ * @property-read \Illuminate\Database\Eloquent\Collection|Widget[] $widgets
+ * @property-read int|null $widgets_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget ofLayoutPosition($layout_position)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereBlade($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereImageSrc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereLayoutPosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereLimit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereModel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereOrderBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget wherePos($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget wherePostId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget wherePostType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Widget whereUpdatedBy($value)
+ * @mixin \Eloquent
+ */
 class Widget extends BaseModel {
     use WidgetTrait;
     protected $fillable = [
