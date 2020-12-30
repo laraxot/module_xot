@@ -5,9 +5,10 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Arr;
 //use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 //---- services ----
+use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
 class TenantService {
@@ -89,7 +90,7 @@ class TenantService {
         }
         $merge_conf = array_merge($original_conf, $extra_conf); //_recursive
 
-        \Config::set($group, $merge_conf);  // non so se metterlo ..
+        Config::set($group, $merge_conf);  // non so se metterlo ..
 
         return config($key);
     }

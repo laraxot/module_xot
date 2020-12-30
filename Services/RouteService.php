@@ -2,9 +2,39 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class RouteService {
+    public static function inAdmin($params = []) {
+        if (isset($params['in_admin'])) {
+            return $params['in_admin'];
+        }
+        //dddx(ThemeService::__getStatic('in_admin'));
+        if (null !== config()->get('in_admin')) {
+            return config()->get('in_admin');
+        }
+        if ('admin' == \Request::segment(1)) {
+            return true;
+        }
+        $segments = (\Request::segments());
+        if (count($segments) > 0 && 'livewire' == $segments[0]) {
+            if (true == session()->get('in_admin')) {
+                return true;
+            }
+        }
+
+        return false;
+        //dddx(session('in_admin'));
+        /*
+        $segments = request()->segments();
+        dddx($_SERVER);
+
+        return 'admin' == 'aa';
+        */
+        //return in_admin();
+    }
+
     public static function urlPanel($params) {
         extract($params);
         $parents = $panel->getParents();
@@ -20,7 +50,7 @@ class RouteService {
         }
         $route_name = self::getRoutenameN($parz);
 
-        $route_current = \Route::current();
+        $route_current = Route::current();
         $route_params = is_object($route_current) ? $route_current->parameters() : [];
 
         $i = 0;

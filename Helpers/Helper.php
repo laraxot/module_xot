@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\File;
 //use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\TenantService as Tenant;
 
 //------------------------------------------------
@@ -92,38 +92,12 @@ if (! \function_exists('req_uri')) {
 
 if (! \function_exists('in_admin')) {
     function in_admin($params = []) {
-        //return 'admin' == \Request::segment(1);
         return inAdmin($params);
     }
 }
 if (! \function_exists('inAdmin')) {
     function inAdmin($params = []) {
-        if (isset($params['in_admin'])) {
-            return $params['in_admin'];
-        }
-        //dddx(ThemeService::__getStatic('in_admin'));
-        if (null !== config()->get('in_admin')) {
-            return config()->get('in_admin');
-        }
-        if ('admin' == \Request::segment(1)) {
-            return true;
-        }
-        $segments = (\Request::segments());
-        if (count($segments) > 0 && 'livewire' == $segments[0]) {
-            if (true == session()->get('in_admin')) {
-                return true;
-            }
-        }
-
-        return false;
-        //dddx(session('in_admin'));
-        /*
-        $segments = request()->segments();
-        dddx($_SERVER);
-
-        return 'admin' == 'aa';
-        */
-        //return in_admin();
+        return RouteService::inAdmin($params);
     }
 }
 

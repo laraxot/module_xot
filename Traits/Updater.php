@@ -3,6 +3,7 @@
 namespace Modules\Xot\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 trait Updater {
     /*
@@ -44,15 +45,15 @@ trait Updater {
          * need to have the updated_by field here as well.
          **/
         static::creating(function ($model) {
-            if (null != \Auth::user()) {
-                $model->created_by = \Auth::user()->handle;
-                $model->updated_by = \Auth::user()->handle.'';
+            if (null != Auth::user()) {
+                $model->created_by = Auth::user()->handle;
+                $model->updated_by = Auth::user()->handle.'';
             }
         });
 
         static::updating(function ($model) {
-            if (\Auth::check()) {
-                $model->updated_by = \Auth::user()->handle.'';
+            if (Auth::check()) {
+                $model->updated_by = Auth::user()->handle.'';
             }
         });
         //-------------------------------------------------------------------------------------

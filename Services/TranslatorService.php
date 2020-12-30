@@ -6,9 +6,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Illuminate\Translation\Translator as BaseTranslator;
 //---- services ---
+use Illuminate\Translation\Translator as BaseTranslator;
 use Modules\Theme\Services\ThemeService;
 
 //ddd('leggo');
@@ -19,7 +20,7 @@ class TranslatorService extends BaseTranslator {
      * @param null   $locale
      * @param bool   $fallback
      *
-     * @return array|null|string|void
+     * @return array|string|void|null
      */
     public function get($key, array $replace = [], $locale = null, $fallback = true) {
         $translation = parent::get($key, $replace, $locale, $fallback);
@@ -133,7 +134,7 @@ class TranslatorService extends BaseTranslator {
         }
         ArrayService::save(['data' => $rows, 'filename' => $filename]);
 
-        \Session::flash('status', 'Modifica Eseguita! ['.$filename.']');
+        Session::flash('status', 'Modifica Eseguita! ['.$filename.']');
 
         /*
 

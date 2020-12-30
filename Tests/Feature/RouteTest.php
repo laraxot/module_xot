@@ -7,6 +7,7 @@ namespace Modules\Xot\Tests\Feature;
 *
 **/
 
+use Illuminate\Support\Facades\App;
 use Modules\Blog\Models\Post;
 use Modules\Xot\Services\PanelService as Panel;
 use Tests\TestCase;
@@ -39,7 +40,7 @@ class RouteTest extends TestCase {
         $this->myTestUrl($url);
 
         foreach ($langs as $lang => $lang_arr) {
-            \App::getLocale($lang);
+            App::getLocale($lang);
             $url = '/'.$lang;
             $this->myTestUrl($url);
 

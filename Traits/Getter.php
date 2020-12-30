@@ -89,6 +89,14 @@ trait Getter {
         $this->vars[$index] = $value;
     }
 
+    public function __get($index) {
+        if (isset($this->vars[$index])) {
+            return $this->vars[$index];
+        }
+
+        return null;
+    }
+
     public function __concatBefore($index, $value) {
         $tmp = $this->__get($index);
         $tmp = $value.$tmp;
@@ -124,7 +132,7 @@ trait Getter {
 
                 return $obj;
             }
-            Enteweb::print_x('<h3>'.\get_class($this).'->'.$func.'</h3>');
+            dddx('<h3>'.\get_class($this).'->'.$func.'</h3>');
         }
 
         $ris = $this->$func($params);
