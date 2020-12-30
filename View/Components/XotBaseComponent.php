@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Xot\Views\Components;
+namespace Modules\Xot\View\Components;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
@@ -23,7 +23,7 @@ abstract class XotBaseComponent extends IlluminateComponent {
         $module_name = Str::between($class, 'Modules\\', '\Views\\');
         $module_name_low = Str::lower($module_name);
 
-        $comp_name = Str::after($class, '\Views\Components\\');
+        $comp_name = Str::after($class, '\View\Components\\');
         $comp_name = str_replace('\\', '.', $comp_name);
         $comp_name = Str::snake($comp_name);
         $view = $module_name_low.'::components.'.$comp_name;
