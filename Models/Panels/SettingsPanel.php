@@ -66,81 +66,35 @@ class SettingsPanel extends XotBasePanel {
 		return $row->area_define_name;
 	}
 
-	/**
-	 * Get the fields displayed by the resource.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return array
 
-		'col_bs_size' => 6,
-		'sortable' => 1,
-		'rules' => 'required',
-		'rules_messages' => ['it'=>['required'=>'Nome Obbligatorio']],
-		'value'=>'..',
-
-	 */
-	public function indexNav(){
-		return null;
-	}
-
-	/**
-	 * Build an "index" query for the given resource.
-	 *
-	 * @param  Request  $request
-	 * @param  \Illuminate\Database\Eloquent\Builder  $query
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-
-	public static function indexQuery($data, $query){
-		//return $query->where('auth_user_id', $request->user()->auth_user_id);
-		return $query;
-	}
-
-	/**
-	 * Build a "relatable" query for the given resource.
-	 *
-	 * This query determines which instances of the model may be attached to other resources.
-	 *
-	 * @param  Request  $request
-	 * @param  \Illuminate\Database\Eloquent\Builder  $query
-	 * @return \Illuminate\Database\Eloquent\Builder
-	 */
-	public static function relatableQuery(Request $request, $query){
-		//return $query->where('auth_user_id', $request->user()->auth_user_id);
-		 //return $query->where('user_id', $request->user()->id);
-	}
 
 
 
 	public function fields(){
 		return array (
-  0 =>
+
   (object) array(
      'type' => 'Id',
      'name' => 'id',
      'comment' => NULL,
   ),
-  1 =>
   (object) array(
      'type' => 'String',
      'name' => 'appname',
      'rules' => 'required',
      'comment' => NULL,
   ),
-  2 =>
   (object) array(
      'type' => 'String',
      'name' => 'description',
      'rules' => 'required',
      'comment' => NULL,
   ),
-  3 =>
   (object) array(
      'type' => 'Text',
      'name' => 'keywords',
      'comment' => 'not in Doctrine',
   ),
-  4 =>
   (object) array(
      'type' => 'Text',
      'name' => 'author',

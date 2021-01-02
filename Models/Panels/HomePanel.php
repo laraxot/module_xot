@@ -58,7 +58,7 @@ class HomePanel extends XotBasePanel {
     /**
      * Get the fields displayed by the resource.
      *
-     * @param \Illuminate\Http\Request $request
+
      *
      * @return array
         'col_bs_size' => 6,
@@ -67,90 +67,20 @@ class HomePanel extends XotBasePanel {
         'rules_messages' => ['it'=>['required'=>'Nome Obbligatorio']],
         'value'=>'..',
      */
-    public function indexNav() {
-        return null;
-    }
-
-    /**
-     * Build an "index" query for the given resource.
-     *
-     * @param Request                               $request
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public static function indexQuery($data, $query) {
-        //return $query->where('auth_user_id', $request->user()->auth_user_id);
-        return $query;
-    }
-
-    /**
-     * Build a "relatable" query for the given resource.
-     *
-     * This query determines which instances of the model may be attached to other resources.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public static function relatableQuery(Request $request, $query) {
-        //return $query->where('auth_user_id', $request->user()->auth_user_id);
-         //return $query->where('user_id', $request->user()->id);
-    }
 
     public function fields() {
         return [
         ];
     }
 
-    /**
-     * Get the tabs available.
-     *
-     * @return array
-     */
-    public function tabs() {
-        $tabs_name = ['widget'];
-
-        return $tabs_name;
-    }
-
-    /**
-     * Get the cards available for the request.
-     *
-     * @return array
-     */
-    public function cards(Request $request) {
-        return [];
-    }
-
-    /**
-     * Get the filters available for the resource.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return array
-     */
-    public function filters(Request $request = null) {
-        return [];
-    }
-
-    /**
-     * Get the lenses available for the resource.
-     *
-     * @return array
-     */
-    public function lenses(Request $request) {
-        return [];
-    }
 
     /**
      * Get the actions available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
-    public function actions(Request $request = null) {
+    public function actions() {
         return [
             new Actions\ArtisanAction(request()->input('cmd')),
             new Actions\TestAction,
