@@ -1,13 +1,11 @@
-<?php
-
-return [
-    'all'       => 'همه',
-    'emergency' => 'اورژانسی',
-    'alert'     => 'اخطار',
-    'critical'  => 'بحرانی',
-    'error'     => 'خطا',
-    'warning'   => 'هشدار',
-    'notice'    => 'اعلان',
-    'info'      => 'اطلاعات',
-    'debug'     => 'دیباگ',
-];
+<?php return array (
+  'all' => 'همه',
+  'emergency' => 'اورژانسی',
+  'alert' => 'اخطار',
+  'critical' => 'بحرانی',
+  'error' => 'خطا',
+  'warning' => 'هشدار',
+  'notice' => 'اعلان',
+  'info' => 'اطلاعات',
+  'debug' => 'دیباگ',
+);

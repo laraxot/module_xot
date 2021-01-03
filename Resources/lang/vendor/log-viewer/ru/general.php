@@ -1,6 +1,4 @@
-<?php
-
-return [
-    'all'  => 'Все',
-    'date' => 'Дата',
-];
+<?php return array (
+  'all' => 'Все',
+  'date' => 'Дата',
+);

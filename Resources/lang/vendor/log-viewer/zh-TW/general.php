@@ -1,6 +1,4 @@
-<?php
-
-return [
-    'all'  => '全部',
-    'date' => '日期',
-];
+<?php return array (
+  'all' => '全部',
+  'date' => '日期',
+);

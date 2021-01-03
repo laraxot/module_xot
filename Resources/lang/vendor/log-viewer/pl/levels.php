@@ -1,13 +1,11 @@
-<?php
-
-return [
-    'all'       => 'Wszystkie',
-    'emergency' => 'Awaryjne',
-    'alert'     => 'Alerty',
-    'critical'  => 'Krytyczne',
-    'error'     => 'Błędy',
-    'warning'   => 'Ostrzeżenia',
-    'notice'    => 'Warte uwagi',
-    'info'      => 'Informacje',
-    'debug'     => 'Debug',
-];
+<?php return array (
+  'all' => 'Wszystkie',
+  'emergency' => 'Awaryjne',
+  'alert' => 'Alerty',
+  'critical' => 'Krytyczne',
+  'error' => 'Błędy',
+  'warning' => 'Ostrzeżenia',
+  'notice' => 'Warte uwagi',
+  'info' => 'Informacje',
+  'debug' => 'Debug',
+);
