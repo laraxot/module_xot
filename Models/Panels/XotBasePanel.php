@@ -240,6 +240,10 @@ abstract class XotBasePanel /*implements PanelContract*/
         return [];
     }
 
+    public function getOrderField() {
+        return $this->row->getKeyName();
+    }
+
     /*
     public function fields(){
         return [];
