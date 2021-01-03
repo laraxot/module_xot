@@ -2,13 +2,10 @@
 
 namespace Modules\Xot\Models\Panels\Policies;
 
-//use Modules\Food\Models\Restaurant as Post;
-//use Illuminate\Database\Eloquent\Model as Post;
-//use Modules\LU\Models\User;
-//use Modules\Xot\Contracts\UserContract as User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 //use Illuminate\Contracts\Auth\UserProvider as User;
-use Modules\Xot\Contracts\UserContract as User;
+use Modules\Xot\Contracts\PanelContract;
+use Modules\Xot\Contracts\UserContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBasePanelPolicy {
@@ -20,19 +17,19 @@ abstract class XotBasePanelPolicy {
         }
     }
 
-    public function index(?User $user, $panel) {
+    public function index(?UserContract $user, PanelContract $panel) {
         return true;
     }
 
-    public function show(?User $user, $panel) {
+    public function show(?UserContract $user, PanelContract $panel) {
         return true;
     }
 
-    public function create(User $user, $panel) {
+    public function create(UserContract $user, PanelContract $panel) {
         return true;
     }
 
-    public function edit(User $user, $panel) {
+    public function edit(UserContract $user, PanelContract $panel) {
         //return true;
         $post = $panel->row;
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
@@ -42,7 +39,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function update(User $user, $panel) {
+    public function update(UserContract $user, PanelContract $panel) {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
@@ -52,7 +49,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function store(User $user, $panel) {
+    public function store(UserContract $user, PanelContract $panel) {
         /*
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
@@ -63,19 +60,19 @@ abstract class XotBasePanelPolicy {
         return true;
     }
 
-    public function indexAttach(User $user, $panel) {
+    public function indexAttach(UserContract $user, PanelContract $panel) {
         return true;
     }
 
-    public function indexEdit(User $user, $panel) {
+    public function indexEdit(UserContract $user, PanelContract $panel) {
         return true;
     }
 
-    public function updateTranslate(User $user, $panel) {
+    public function updateTranslate(UserContract $user, PanelContract $panel) {
         return false; //update-translate di @can()
     }
 
-    public function destroy(User $user, $panel) {
+    public function destroy(UserContract $user, PanelContract $panel) {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
@@ -85,7 +82,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function delete(User $user, $panel) {
+    public function delete(UserContract $user, PanelContract $panel) {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle) {
@@ -95,7 +92,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function restore(User $user, $panel) {
+    public function restore(UserContract $user, PanelContract $panel) {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle) {
@@ -105,10 +102,10 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function forceDelete(User $user, $panel) {
+    public function forceDelete(UserContract $user, PanelContract $panel) {
     }
 
-    public function detach(User $user, $panel) {
+    public function detach(UserContract $user, PanelContract $panel) {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
@@ -118,20 +115,20 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function clone(User $user, $panel) {
+    public function clone(UserContract $user, PanelContract $panel) {
         return true;
     }
 
     /**
      * Determine whether the user can view any DocDummyPluralModel.
      *
-     * @param \Modules\LU\Models\User $user
+     * @param \Modules\LU\Models\UserContract $user
      *
      * @return mixed
      */
-    public function viewAny(User $user) {
+    public function viewAny(UserContract $user) {
     }
 
-    public function view(User $user, $panel) {
+    public function view(UserContract $user, PanelContract $panel) {
     }
 }

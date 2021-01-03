@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Request;
 
 //use Illuminate\Contracts\Auth\UserProvider;
 
+/**
+ * Modules\Xot\Contracts\PanelContract.
+ *
+ *  @property Illuminate\Database\Eloquent\Model|null                               $row
+ */
 interface PanelContract {
     public function __construct($model = null);
 
