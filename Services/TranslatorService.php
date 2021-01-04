@@ -16,11 +16,13 @@ use Modules\Theme\Services\ThemeService;
 
 class TranslatorService extends BaseTranslator {
     /**
+     * get.
+     *
      * @param string $key
-     * @param null   $locale
+     * @param string $locale
      * @param bool   $fallback
      *
-     * @return array|string|void|null
+     * @return array|string
      */
     public function get($key, array $replace = [], $locale = null, $fallback = true) {
         $translation = parent::get($key, $replace, $locale, $fallback);
@@ -42,6 +44,12 @@ class TranslatorService extends BaseTranslator {
         return $translation;
     }
 
+    /**
+     * getFromJson.
+     *
+     * @param mixed       $key
+     * @param string|null $locale
+     */
     public function getFromJson($key, array $replace = [], $locale = null) {
         return $this->get($key, $replace, $locale);
     }
@@ -49,6 +57,11 @@ class TranslatorService extends BaseTranslator {
     public static function parse($params) {
         $lang = app()->getLocale();
         extract($params);
+        if (! isset($key)) {
+            dddx(['err' => 'key is missing']);
+
+            return;
+        }
         $translator = app('translator');
         $tmp = ($translator->parseKey($key));
         $namespace = $tmp[0];
@@ -101,6 +114,11 @@ class TranslatorService extends BaseTranslator {
             }
 
             $data = $rows;
+            if (! isset($v)) {
+                dddx(['err' => 'v is missing']);
+
+                return;
+            }
             $filename = $v['filename'];
             //echo '<h3>['.$filename.']</h3>';
             ArrayService::save(['filename' => $filename, 'data' => $data]);

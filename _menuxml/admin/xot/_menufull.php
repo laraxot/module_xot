@@ -1,5 +1,9 @@
 <?php
 
+if (! isset($route_params)) {
+    $route_params = [];
+}
+
 $ris = [
     0 => [
         (object) [
@@ -22,9 +26,7 @@ $ris = [
                 array_merge($route_params, ['container0' => 'metatag', 'lang' => 'it'])
             ),
         ],
-
     ],
-
 ];
 
 return $ris;

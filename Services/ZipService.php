@@ -11,9 +11,26 @@ use ZipArchive;
 
 class ZipService {
     public static function fromRowsPdf($params) {
-        ini_set('max_execution_time',3600);
-        ini_set('memory_limit',-1);
+        ini_set('max_execution_time', '3600');
+        ini_set('memory_limit', '-1');
+        $pdforientation = 'P';
+        $out = '';
         extract($params);
+        if (! isset($pdf_view)) {
+            dddx(['err' => 'pdf_view is missing']);
+
+            return;
+        }
+        if (! isset($filename_zip)) {
+            dddx(['err' => 'filename_zip is missing']);
+
+            return;
+        }
+        if (! isset($rows)) {
+            dddx(['err' => 'rows is missing']);
+
+            return;
+        }
         $pdf_parz = [
             'pdforientation' => $pdforientation,
             'view' => $pdf_view,
@@ -35,10 +52,10 @@ class ZipService {
 
             $path = Storage::disk('cache')->path($filename);
             if (! File::exists($path)) {
-            	$pdf_parz['filename'] = $filename;
-            	$pdf_content = $panel->pdf($pdf_parz);
+                $pdf_parz['filename'] = $filename;
+                $pdf_content = $panel->pdf($pdf_parz);
 
-            	$res = Storage::disk('cache')->put($filename, $pdf_content);
+                $res = Storage::disk('cache')->put($filename, $pdf_content);
             }
             $zip->addFile($path, $filename);
         }
