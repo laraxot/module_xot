@@ -2,15 +2,11 @@
 
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
-
-
+use Illuminate\Support\Str;
 
 class FileService {
-
-
     public static function asset($path) {
         if ('/' == $path[0]) {
             $path = \mb_substr($path, 1);
@@ -52,9 +48,6 @@ class FileService {
 
         return asset(self::viewNamespaceToAsset($path));
     }
-
-
-
 
     public static function viewNamespaceToDir($view) {
         $pos = \mb_strpos($view, '::');
@@ -352,29 +345,59 @@ class FileService {
         return $asset;
     }
 
-     /*
+    /*
     public static function url($path)
     {
-        if($path=='') return $path;
-        if ('/' == $path[0]) {
+       if($path=='') return $path;
+       if ('/' == $path[0]) {
+           $path = \mb_substr($path, 1);
+       }
+       $str = 'theme/bc/';
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+       $str = 'theme/pub/';
+       $theme = config('xra.pub_theme');
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+       $str = 'theme/';
+       $theme = config('xra.adm_theme');
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+
+       return ''.$path;
+    }
+    */
+    //*
+    public static function getFileUrl($path) {
+        if (Str::startsWith($path, '//')) {
+        } elseif (Str::startsWith($path, '/')) {
             $path = \mb_substr($path, 1);
         }
         $str = 'theme/bc/';
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
         }
         $str = 'theme/pub/';
         $theme = config('xra.pub_theme');
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
         }
         $str = 'theme/';
         $theme = config('xra.adm_theme');
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
@@ -382,42 +405,10 @@ class FileService {
 
         return ''.$path;
     }
-    */
-    /*
-    public static function getFileUrl($path)
-    {
-        if(Str::startsWith($path, '//')) {
 
-        }elseif(Str::startsWith($path, '/')) {
-            $path = \mb_substr($path, 1);
-        }
-        $str = 'theme/bc/';
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
-
-            return $filename;
-        }
-        $str = 'theme/pub/';
-        $theme = config('xra.pub_theme');
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
-
-            return $filename;
-        }
-        $str = 'theme/';
-        $theme = config('xra.adm_theme');
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
-
-            return $filename;
-        }
-
-        return ''.$path;
-    }
-    */
-    /*
-    public static function viewNamespaceToUrl($files)
-    {
+    //*/
+    //*
+    public static function viewNamespaceToUrl($files) {
         foreach ($files as $k => $filePath) {
             //TODO testare con ARTISAN vendor:publish
             $pos = \mb_strpos($filePath, '::');
@@ -446,7 +437,7 @@ class FileService {
                     $old_path = \str_replace('/', \DIRECTORY_SEPARATOR, $old_path);
                     $new_path = public_path('assets_packs'.\DIRECTORY_SEPARATOR.$hints.\DIRECTORY_SEPARATOR.$filename);
                     $new_path = \str_replace('/', \DIRECTORY_SEPARATOR, $new_path);
-                    if (!\File::exists(\dirname($new_path))) {
+                    if (! \File::exists(\dirname($new_path))) {
                         try {
                             \File::makeDirectory(\dirname($new_path), 0755, true, true);
                         } catch (Exception $e) {
@@ -470,6 +461,6 @@ class FileService {
 
         return $files;
     }
-    */
 
+    //*/
 }
