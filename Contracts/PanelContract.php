@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Request;
  *  @property Illuminate\Database\Eloquent\Model|null                               $row
  */
 interface PanelContract {
+    /*
     public function __construct($model = null);
 
     public function setRow($row);
@@ -215,4 +216,5 @@ interface PanelContract {
     public function view($params = null);
 
     public function id();
+    */
 }

@@ -24,8 +24,7 @@ use Modules\Xot\Services\PanelTabService;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 
-abstract class XotBasePanel /*implements PanelContract*/
-{
+abstract class XotBasePanel implements PanelContract {
     public $out = null;
     public $force_exit = false;
     public $msg = 'msg from panel';
@@ -1304,6 +1303,15 @@ abstract class XotBasePanel /*implements PanelContract*/
         }
 
         return $data->implode('-');
+    }
+
+    /**
+     * Get the tabs available.
+     *
+     * @return array
+     */
+    public function tabs() {
+        return [];
     }
 
     public function actions() {
