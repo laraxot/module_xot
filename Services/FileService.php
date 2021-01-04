@@ -463,4 +463,55 @@ class FileService {
     }
 
     //*/
+    public static function getRealFile($path) {
+        if (Str::startsWith($path, asset(''))) {
+            return public_path(substr($path, strlen(asset(''))));
+        }
+        if ('/' == $path[0]) {
+            $path = \mb_substr($path, 1);
+        }
+        $str = 'theme/bc/';
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('bc/'.\mb_substr($path, \mb_strlen($str)));
+            //$filename=str_replace('\\/','/',$filename);
+            //$filename=realpath($filename);
+            return $filename;
+        }
+        $str = 'theme/pub/';
+        $theme = config('xra.pub_theme');
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+            //$filename=str_replace('\\/','/',$filename);
+            //$filename=realpath($filename);
+            return $filename;
+        }
+        $str = 'theme/';
+        $theme = config('xra.adm_theme');
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+            return $filename;
+        }
+        $str = 'https://';
+        if (Str::startsWith($path, $str)) {
+            $info = pathinfo($path);
+            switch ($info['extension']) {
+                case 'css': $filename = public_path('/css/'.$info['basename']); break;
+                case 'js':  $filename = public_path('/js/'.$info['basename']); break;
+                default:
+                    echo '<h3>Unknown Extension</h3>';
+                    echo '<h3>['.$path.']</h3>';
+                    ddd($info);
+                break;
+            }
+            ImportService::download(['url' => $path, 'filename' => $filename]);
+
+            return $filename;
+        }
+
+        return ''.$path;
+    }
 }
