@@ -9,8 +9,6 @@ use Illuminate\Support\Str;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
-
 abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         $panel = Panel::getRequestPanel();

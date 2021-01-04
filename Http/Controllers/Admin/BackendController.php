@@ -8,21 +8,17 @@ use Illuminate\Http\Request;
 use Modules\Theme\Services\ThemeService;
 //--- traits
 use Modules\Xot\Services\ArtisanService;
-use Modules\Xot\Traits\ArtisanTrait;
 
-class BackendController extends Controller
-{
-    public function index(Request $request)
-    {
+class BackendController extends Controller {
+    public function index(Request $request) {
         if ('routelist' == $request->act) {
-            return ArtisanTrait::exe('route:list');
+            return ArtisanService::exe('route:list');
         }
 
         return ThemeService::view();
     }
 
-    public function dashboard(Request $request)
-    {
+    public function dashboard(Request $request) {
         /*
         $out = ArtisanService::act($request->act);
         if ('' != $out) {

@@ -12,8 +12,6 @@ use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\TenantService as Tenant;
 use Nwidart\Modules\Facades\Module;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
-
 abstract class XotBaseContainerController extends Controller {
     public function __call($method, $args) {
         //dddx(['method' => $method, 'args' => $args]);

@@ -7,7 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 
 //use Modules\Food\Models\Profile;
-//use Modules\Xot\Traits\FormRequestTrait;
 //--- Rules ---
 
 abstract class XotBaseRequest extends FormRequest {

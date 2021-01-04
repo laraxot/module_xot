@@ -22,7 +22,8 @@
         "spipu/html2pdf": "^5.2",
         "symfony/dom-crawler": "^4.2",
         "twig/twig": "^2.7",
-        "wrklst/docxmustache": "^0.0.33"
+        "wrklst/docxmustache": "^0.0.33",
+        "zendframework/zend-config": "^3.2"
     },
     "config": {
         "preferred-install": "dist",

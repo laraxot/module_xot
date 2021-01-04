@@ -3,7 +3,6 @@
 namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 use Modules\Xot\Traits\CrudContainerItemJobTrait as CrudTrait;
 
 //-- jobs --

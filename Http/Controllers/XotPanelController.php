@@ -2,7 +2,6 @@
 
 namespace Modules\Xot\Http\Controllers;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
