@@ -126,6 +126,7 @@ abstract class XotBaseContainerController extends Controller {
         $policy_class = PolicyService::get($panel)->createIfNotExists()->getClass();
         $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.$policy_class.']';
 
-        return abort(403, $msg);
+        //abort(403, $msg);
+        return response()->view('pub_theme::errors.403', ['msg' => $msg], 403);
     }
 }

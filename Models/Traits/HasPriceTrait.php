@@ -11,13 +11,21 @@ namespace Modules\Xot\Models\Traits;
 
 //------ traits ---
 
+/**
+ * Modules\Food\Models\Traits\HasPriceTrait.
+ *
+ * @property string $currency
+ * @property float  $price
+ * @property string $price_complete
+ * @property int    $qty
+ */
 trait HasPriceTrait {
     public function getPriceCurrencyAttribute($value) {
-        return @money($this->price * 100, $this->currency);
+        return @money((int) $this->price * 100, $this->currency);
     }
 
     public function getPriceCompleteCurrencyAttribute($value) {
-        return @money($this->price_complete * 100, $this->currency);
+        return @money((int) $this->price_complete * 100, $this->currency);
     }
 
     public function getSubtotalCurrencyAttribute($value) {
@@ -27,10 +35,10 @@ trait HasPriceTrait {
             $value = $this->price;
         }
 
-        return @money($value * 100, $this->currency);
+        return @money((int) $value * 100, $this->currency);
     }
 
     public function getCurrency($number) {
-        return @money($number * 100, $this->currency);
+        return @money((int) $number * 100, $this->currency);
     }
 }

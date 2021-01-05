@@ -48,7 +48,7 @@ trait Getter {
         self::__setStatic($index, $tmp);
     }
 
-    //*
+    /* //deprecated ??
     public static function __callStatic($method, $args) {
         if (\preg_match('/^([gs]et)([A-Z])(.*)$/', $method, $match)) {
             $reflector = new \ReflectionClass(__CLASS__);
