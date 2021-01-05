@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Contracts\PanelContract;
 
 class PanelFormService {
     protected $panel;
