@@ -48,7 +48,7 @@ trait Getter {
         self::__setStatic($index, $tmp);
     }
 
-    /* //deprecated ??
+    //* //se lo togli non funziona piu' le funzioni del themeservice
     public static function __callStatic($method, $args) {
         if (\preg_match('/^([gs]et)([A-Z])(.*)$/', $method, $match)) {
             $reflector = new \ReflectionClass(__CLASS__);
@@ -59,7 +59,9 @@ trait Getter {
                     case 'get':
                         return $property->getValue();
                     case 'set':
-                        return $property->setValue($args[0]);
+                        $property->setValue($args[0]);
+
+                        return;
                 }
             } else {
                 throw new \InvalidArgumentException("Property {$property} doesn't exist");
