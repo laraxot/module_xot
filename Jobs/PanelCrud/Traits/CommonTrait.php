@@ -34,10 +34,21 @@ trait CommonTrait {
      * https://laracasts.com/discuss/channels/eloquent/cleanest-way-to-save-model-and-relationships.
      */
     public function manageRelationships($params) {
+        $act = 'show';
         extract($params);
+        if (! isset($model)) {
+            dddx(['err' => 'model is missing']);
+
+            return;
+        }
+        if (! isset($data)) {
+            dddx(['err' => 'data is missing']);
+
+            return;
+        }
         if (! is_object($model)) {
             return;
-            dddx(['model' => $model]);
+            //dddx(['model' => $model]);
         }
         $methods = get_class_methods($model);
         //dddx($model->post_type);
@@ -50,7 +61,7 @@ trait CommonTrait {
         //dddx($params);
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
-        })->map(function ($v, $k) use ($model) {
+        })->map(function ($v, $k) use ($model,$data) {
             if (! is_string($k)) {
                 dddx([$k, $v, $data]);
             }

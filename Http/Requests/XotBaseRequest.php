@@ -33,7 +33,7 @@ abstract class XotBaseRequest extends FormRequest {
      * @return array
      */
     public function rules() {
-        //return $rules;
+        return [];
     }
 
     public function setPanel($panel) {
@@ -71,7 +71,7 @@ abstract class XotBaseRequest extends FormRequest {
      *
      **/
     public function modifyInput(array $data) {
-        ddd($data);
+        dddx($data);
     }
 
     public function prepareForValidation() {
@@ -97,7 +97,9 @@ abstract class XotBaseRequest extends FormRequest {
      *
      **/
     public function validationData() {
-        ddd('aaa');
+        dddx('aaa');
+
+        return [];
     }
 
     public function ConvDate($field, $value) {

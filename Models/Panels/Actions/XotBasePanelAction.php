@@ -2,15 +2,17 @@
 
 namespace Modules\Xot\Models\Panels\Actions;
 
+use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Str;
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
 
 //----------  SERVICES --------------------------
-use Modules\FormX\Services\FormXService;
+use Illuminate\Support\Facades\Gate;
 //------------ jobs ----------------------------
+use Illuminate\Support\Str;
+use Modules\FormX\Services\FormXService;
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBasePanelAction {
@@ -206,6 +208,7 @@ abstract class XotBasePanelAction {
     //end btnContainer
     public function urlItem($params = []) {
         //dddx($params);
+        $url = '';
         $query_params = [];
         extract($params);
         if (isset($row)) {
@@ -215,7 +218,13 @@ abstract class XotBasePanelAction {
             $this->panel = Panel::get($this->row);
         }
         $name = $this->getName();
-        $url = $this->panel->route->urlPanel(['act' => 'show']);
+        try {
+            $url = $this->panel->route->urlPanel(['act' => 'show']);
+        } catch (Exception $e) {
+            dddx($e->getMessage());
+        }/* catch (ErrorException $e) {
+            dddx($e->getMessage());
+        }*/
         $query_params['_act'] = $name;
         /*
         if (isset($modal)) {

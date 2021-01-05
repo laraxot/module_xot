@@ -13,6 +13,8 @@ use Modules\Xot\Services\TenantService as Tenant;
 use Nwidart\Modules\Facades\Module;
 
 abstract class XotBaseContainerController extends Controller {
+    protected $panel;
+
     public function __call($method, $args) {
         //dddx(['method' => $method, 'args' => $args]);
         $panel = Panel::getRequestPanel();
@@ -59,8 +61,9 @@ abstract class XotBaseContainerController extends Controller {
 
         $request = XotRequest::capture();
         $controller = $this->getController();
+        $data = $request->all();
 
-        $panel = app($controller)->$method($request, $panel);
+        $panel = app($controller)->$method($data, $panel);
 
         if (! method_exists($panel, 'out')) {
             return $panel;

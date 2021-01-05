@@ -2,45 +2,15 @@
 
 namespace Modules\Xot\Jobs\PanelCrud;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Services\PanelService as Panel;
 
-class StoreJob implements ShouldQueue {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Traits\CommonTrait;
-
-    protected $container;
-    protected $item;
-    protected $row;
-    protected $rows;
-    protected $data;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct($request, $panel) {
-        $this->panel = $panel;
-        $this->data = $this->prepareAndValidate($request->all(), $panel);
-        //dddx($this->data);
-    }
-
+class StoreJob extends XotBaseJob {
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle() {
         //dd('['.__LINE__.']['.__FILE__.']');
@@ -71,16 +41,19 @@ class StoreJob implements ShouldQueue {
                 //$tmp = $parent_row->$types()->save($row, $pivot_data);
                 $tmp = $this->panel->rows->save($row, $pivot_data);
             } catch (\Exception $e) {
+                dddx(['e' => $e]);
+                /*
                 $this->row = $row;
                 $func = 'saveParent'.Str::studly(class_basename($parent_row->$types()));
                 $tmp = $this->$func();
+                */
             }
 
             //$tmp=$item->$types()->attach($row->getKey(),$pivot_data);
             //$tmp = $item->$types()->save($row, $pivot_data);
         }
 
-        $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'store']);
+        $this->manageRelationships($row, $data, 'store');
         if (method_exists($this->panel, 'storeCallback')) {
             $row = $this->panel->storeCallback(['row' => $row, 'data' => $data]);
         }
@@ -92,8 +65,9 @@ class StoreJob implements ShouldQueue {
     public function saveParentHasManyDeep() {
     }
 
+    /*
     public function saveParentHasManyDeep_OLD() {
-        $row = $this->row;
+        $row = $this->panel->row;
         $data = $this->data;
         $types = $this->types;
         $item = $this->item;
@@ -140,16 +114,16 @@ class StoreJob implements ShouldQueue {
             //$item->profiles()->syncWithoutDetaching($row->profile);
             $item->profiles()->save($row->profile);
         }
-        /*
-        "getQualifiedFarKeyName" => "bell_boys.post_id"
-        "getFirstKeyName" => "post_id"
-        "getQualifiedFirstKeyName" => "restaurant_morph.post_id"
-        "getForeignKeyName" => "post_id"
-        "getQualifiedForeignKeyName" => "bell_boys.post_id"
-        "getLocalKeyName" => "post_id"
-        "getQualifiedLocalKeyName" => "restaurants.post_id"
-        "getSecondLocalKeyName" => "post_id"
-    */
+
+        //"getQualifiedFarKeyName" => "bell_boys.post_id"
+        //"getFirstKeyName" => "post_id"
+        //"getQualifiedFirstKeyName" => "restaurant_morph.post_id"
+        //"getForeignKeyName" => "post_id"
+        //"getQualifiedForeignKeyName" => "bell_boys.post_id"
+        //"getLocalKeyName" => "post_id"
+        //"getQualifiedLocalKeyName" => "restaurants.post_id"
+        //"getSecondLocalKeyName" => "post_id"
+
 
         //dddx($rows->getParent()); //restaurantMorph
         //dddx($rows->getRelated());//bellboy
@@ -165,8 +139,8 @@ class StoreJob implements ShouldQueue {
     }
 
     //end handle
-
-    public function storeRelationshipsPivot($params) {
+    */
+    public function storeRelationshipsPivot($model, $name, $data) {
         /*
         extract($params);
         $types=Str::plural($container);
@@ -178,8 +152,7 @@ class StoreJob implements ShouldQueue {
         */
     }
 
-    public function storeRelationshipsHasOne($params) {
-        extract($params);
+    public function storeRelationshipsHasOne($model, $name, $data) {
         $rows = $model->$name();
         $related = $rows->getRelated();
 
@@ -210,13 +183,11 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsHasMany($params) {
-        extract($params);
+    public function storeRelationshipsHasMany($model, $name, $data) {
         //$rows = $model->$name();
     }
 
-    public function storeRelationshipsBelongsTo($params) {
-        extract($params);
+    public function storeRelationshipsBelongsTo($model, $name, $data) {
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
         $related = $rows->create($data);
@@ -229,8 +200,7 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsMorphOne($params) {
-        extract($params);
+    public function storeRelationshipsMorphOne($model, $name, $data) {
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = app()->getLocale();
         }
@@ -241,9 +211,7 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsMorphToMany($params) {
-        extract($params);
-
+    public function storeRelationshipsMorphToMany($model, $name, $data) {
         //ddd(\Request::all());
         //return ;
 
@@ -273,7 +241,7 @@ class StoreJob implements ShouldQueue {
                     $v['pivot']['auth_user_id'] = $model->auth_user_id;
                 }
                 if (! isset($v['pivot']['auth_user_id']) && \Auth::check()) {
-                    $v['pivot']['auth_user_id'] = \Auth::user()->auth_user_id;
+                    $v['pivot']['auth_user_id'] = \Auth::id();
                 }
                 /*
                 * syncWithoutDetaching fa una select a vuoto ma funziona
@@ -294,30 +262,30 @@ class StoreJob implements ShouldQueue {
         }
     }
 
-    public function storeRelationshipsHasManyThrough($params) {
+    public function storeRelationshipsHasManyThrough($model, $name, $data) {
         /*
         Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
         */
         //$this->storeRelationshipsMorphToMany($params); //
     }
 
-    public function storeRelationshipsBelongsToMany($params) {
-        extract($params);
+    public function storeRelationshipsBelongsToMany($model, $name, $data) {
         if (isset($data['from']) || isset($data['to'])) {
-            $this->saveMultiselectTwoSides($params);
+            $this->saveMultiselectTwoSides($model, $name, $data);
 
             return;
         }
         $model->$name()->syncWithoutDetaching($data);
     }
 
-    public function saveMultiselectTwoSides($params) {
+    public function saveMultiselectTwoSides($model, $name, $data) {
         //passo request o direttamente data ?
-        extract($params);
+
         $items = $model->$name();
         $related = $items->getRelated();
         //ddd($related);
         $container_obj = $model;
+        $container = $container_obj->post_type;
         //$items_key = $container_obj->getKeyName();
         $items_key = $related->getKeyName();
         //ddd($items_key);//auth_user_id

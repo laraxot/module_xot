@@ -63,7 +63,7 @@ class CreateAllRepositoriesCommand extends Command {
             $all = array_merge($all, $models);
         }
         foreach ($all as $k => $v) {
-            StubService::missingClass(['class' => $v, 'stub' => 'repository']);
+            //  StubService::missingClass(['class' => $v, 'stub' => 'repository']);
         }
     }
 

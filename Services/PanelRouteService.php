@@ -48,13 +48,16 @@ class PanelRouteService {
         //return in_admin();
     }
 
-    public static function urlPanel($params) {
+    public function urlPanel($params) {
+        $panel = $this->panel;
         extract($params);
+        /*
         if (! isset($panel)) {
             dddx(['err' => 'panel is missing']);
 
             return;
         }
+        */
         if (! isset($act)) {
             dddx(['err' => 'act is missing']);
 
@@ -166,14 +169,11 @@ class PanelRouteService {
         return $routename;
     }
 
-    public static function urlRelatedPanel($params) {
+    public function urlRelatedPanel($params) {
+        $panel = $this->panel;
         $act = 'show';
         extract($params);
-        if (! isset($panel)) {
-            dddx(['err' => 'panel is missing']);
 
-            return;
-        }
         if (! isset($related_name)) {
             dddx(['err' => 'related_name is missing']);
 

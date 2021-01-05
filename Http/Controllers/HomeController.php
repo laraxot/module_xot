@@ -14,6 +14,7 @@ use Modules\Xot\Services\TenantService as Tenant;
 
 class HomeController extends Controller {
     public function index(Request $request) {
+        $home = null;
         try {
             $model = Tenant::modelEager('home');
             $home = $model->firstOrCreate(['id' => 1]);
@@ -45,6 +46,7 @@ class HomeController extends Controller {
     }
 
     public function show(Request $request) {
+        $home = null;
         if ('' != $request->_act) {
             $home = Tenant::model('home');
             $panel = Panel::get($home);

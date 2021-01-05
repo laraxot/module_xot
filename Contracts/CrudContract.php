@@ -25,8 +25,6 @@ interface CrudContract {
 
     /**
      * Returns the first row of the selected resource.
-     *
-     * @return Model
      */
     public function first();
 

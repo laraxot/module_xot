@@ -34,6 +34,11 @@ class ConfController extends Controller {
     public function edit(Request $request) {
         $route_params = \Route::current()->parameters();
         extract($route_params);
+        if (! isset($item0)) {
+            dddx(['err' => 'item0 is missing']);
+
+            return;
+        }
         $row = config($item0);
 
         return ThemeService::view()->with('row', $row);
@@ -46,6 +51,11 @@ class ConfController extends Controller {
         $data = collect($data)->except(['_token', '_method'])->all();
 
         extract($route_params);
+        if (! isset($item0)) {
+            dddx(['err' => 'item0 is missing']);
+
+            return;
+        }
         TenantService::saveConfig(['name' => $item0, 'data' => $data]);
         /*
         $data['_token'] = '';

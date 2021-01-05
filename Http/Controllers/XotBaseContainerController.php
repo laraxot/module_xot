@@ -10,6 +10,8 @@ use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
 abstract class XotBaseContainerController extends Controller {
+    protected $panel;
+
     public function __call($method, $args) {
         $panel = Panel::getRequestPanel();
         $this->panel = $panel;
@@ -49,8 +51,9 @@ abstract class XotBaseContainerController extends Controller {
 
         $request = XotRequest::capture();
         $controller = $this->getController();
+        $data = $request->all();
 
-        $panel = app($controller)->$method($request, $panel);
+        $panel = app($controller)->$method($data, $panel);
 
         return $panel->out(
             [

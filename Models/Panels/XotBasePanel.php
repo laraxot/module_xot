@@ -38,13 +38,13 @@ abstract class XotBasePanel implements PanelContract {
     public $route = null;
     protected static $model;
 
-    public function __construct(PanelPresenterContract $presenter) {
+    public function __construct(PanelPresenterContract $presenter, PanelRouteService $route) {
         //$this->row = $model;
         $this->presenter = $presenter;
         $this->presenter->setPanel($this);
         $this->row = app($this::$model);
         $this->form = app(PanelFormService::class)->setPanel($this);
-        $this->route = app(PanelRouteService::class)->setPanel($this);
+        $this->route = $route->setPanel($this);
     }
 
     /*

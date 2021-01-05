@@ -245,9 +245,9 @@ if (! \function_exists('getTransformerFromModel')) {
         $class = get_class($model);
         $module_name = getModuleNameFromModel($model);
         $transformer = '\\Modules\\'.$module_name.'\Transformers\\'.class_basename($model).''.$type;
-        //ddd($transformer.' '.class_exists($transformer));
+        //dddx($transformer.' '.class_exists($transformer));
         if (! class_exists($transformer)) {
-            ddd('preso');
+            dddx('preso');
         }
 
         return $transformer;
@@ -312,16 +312,17 @@ if (! \function_exists('xotModel')) {
 
 if (! \function_exists('transFields')) {
     function transFields($params) {
+        $name = 'not-set';
         $model = Form::getModel();
         $module_name = getModuleNameFromModel($model);
         $ns = Str::lower($module_name);
         $trans_root = $ns.'::'.Str::snake(class_basename($model));
-        //ddd() );
+        //dddx() );
         //debug_getter_obj(['obj'=>$module]);
-        //ddd($module_name->getNamespace());
+        //dddx($module_name->getNamespace());
         $view = 'unknown';
         extract($params);
-        //ddd($params);
+        //dddx($params);
         if (isset($attributes)) {
             extract($attributes);
         }
@@ -392,13 +393,18 @@ if (! \function_exists('transFields')) {
 
 if (! \function_exists('deltaTime')) {
     function deltaTime() {
-        echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
+        echo '<h3>Time : '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 }
 
 if (! \function_exists('debug_getter_obj')) {
     function debug_getter_objOLD($params) {
         extract($params);
+        if (! isset($obj)) {
+            dddx(['err' => 'obj is missing']);
+
+            return;
+        }
         $methods = collect(get_class_methods($obj))->filter(function ($item) {
             $exclude = [
                 //--Too few arguments to function
@@ -461,11 +467,16 @@ if (! \function_exists('debug_getter_obj')) {
         }
         $html .= '</table>';
         echo $html;
-        ddd($methods);
+        dddx($methods);
     }//end function
 
     function debug_getter_obj($params) {
         extract($params);
+        if (! isset($obj)) {
+            dddx(['err' => 'obj is missing']);
+
+            return;
+        }
         $methods = get_class_methods($obj);
         $data = [];
         if (! is_array($methods)) {
@@ -482,7 +493,7 @@ if (! \function_exists('debug_getter_obj')) {
 
             return false;
         })->all();
-        //ddd($methods);
+        //dddx($methods);
         foreach ($methods as $method) {
             $reflection = new \ReflectionMethod($obj, $method);
             $args = $reflection->getParameters();
@@ -506,7 +517,7 @@ if (! \function_exists('debug_getter_obj')) {
                 }
             }
         }
-        ddd($data);
+        dddx($data);
 
         return $data;
     }
@@ -577,7 +588,7 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
             $url_parsed = parse_url($url);
             // Turn the query string into an array
             $url_params = [];
-            if (isset($url_parsed) && isset($url_parsed['query'])) {
+            if (isset($url_parsed['query'])) {
                 parse_str($url_parsed['query'], $url_params);
             }
             // Merge the existing URL's query parameters with our new ones

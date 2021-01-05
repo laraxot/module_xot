@@ -7,6 +7,7 @@ use Illuminate\Cache\TaggableStore;
 use Illuminate\Cache\TagSet;
 use Illuminate\Contracts\Cache\Store as StoreContract;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class Store extends TaggableStore implements StoreContract {
     use RetrievesMultipleKeys;
@@ -31,7 +32,7 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Is OPcache enabled or not.
      *
-     * @var boolean
+     * @var bool
      */
     protected $enabled = false;
 
@@ -45,7 +46,7 @@ class Store extends TaggableStore implements StoreContract {
         } elseif (config('app.debug')) {
             Log::warning('You do not have the Zend OPcache extension loaded!');
         }
-        $this->prefix = str_slug($prefix ?: config('app.name', 'opcache'), '-');
+        $this->prefix = Str::slug($prefix ?: config('app.name', 'opcache'), '-');
         /*
          * In case if `OpCache` file path not being set we will use `file` driver path
          */
@@ -93,28 +94,25 @@ class Store extends TaggableStore implements StoreContract {
         return file_exists($this->filePath($key));
     }
 
-    /**
-     * Retrieve an item from the cache by key.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
     public function get($key) {
+        /* phpstan dice
         if ($this->exists($key)) {
             @include $this->filePath($key);
         }
-        if (isset($exp) && $exp < time()) {
-            /*
-             * In order to free disc space and memory we need to
-             * delete expired file from our disc and invalidate it from OpCache
-             */
-            $this->forget($key);
+        if (isset($exp)) {
+            if ($exp < time()) {
+                //
+                // In order to free disc space and memory we need to
+                // delete expired file from our disc and invalidate it from OpCache
+                //
+                $this->forget($key);
 
-            return null;
+                return null;
+            }
         }
 
         return isset($val) ? $val : null;
+        */
     }
 
     /**
@@ -220,12 +218,6 @@ class Store extends TaggableStore implements StoreContract {
         return $this->clearCacheInDirectory($this->getFullDirectory(), true);
     }
 
-    /**
-     * @param $dir
-     * @param bool $removeDirectory
-     *
-     * @return bool
-     */
     public function clearCacheInDirectory($dir, $removeDirectory = false) {
         /*
          * Since we now able to set sub directory to keep files
@@ -299,11 +291,6 @@ class Store extends TaggableStore implements StoreContract {
         return $this->directory;
     }
 
-    /**
-     * @param $subDirectory
-     *
-     * @return $this
-     */
     public function setSubDirectory($subDirectory) {
         $this->subDirectory = $subDirectory;
 
@@ -311,7 +298,7 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getSubDirectory() {
         return $this->subDirectory;
@@ -334,9 +321,6 @@ class Store extends TaggableStore implements StoreContract {
         return rename($tmp, $this->filePath($key));
     }
 
-    /**
-     * @param $dir
-     */
     protected function checkDirectory($dir) {
         if (! is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -356,12 +340,8 @@ class Store extends TaggableStore implements StoreContract {
         return 0 === $minutes ? 9999999999 : strtotime('+'.$seconds.' seconds');
     }
 
-    /**
-     * Extend expiration time with given minutes.
-     *
-     * @return bool
-     */
     public function extendExpiration(string $key, int $minutes = 1) {
+        /*
         @include $this->filePath($key);
         if (isset($exp)) {
             $extended = strtotime('+'.$minutes.' minutes', $exp);
@@ -370,5 +350,6 @@ class Store extends TaggableStore implements StoreContract {
         }
 
         return false;
+        */
     }
 }

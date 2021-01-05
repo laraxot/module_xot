@@ -5,8 +5,10 @@ namespace Modules\Xot\Jobs\PanelCrud;
 //----------- Requests ----------
 //------------ services ----------
 
-class CreateJob extends XotBaseJob {
+class IndexUpdateJob extends XotBaseJob {
     public function handle() {
+        dddx('WIP');
+
         return $this->panel;
     }
 }

@@ -2,56 +2,23 @@
 
 namespace Modules\Xot\Jobs\PanelCrud;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 //----------- Requests ----------
 //------------ services ----------
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
-class UpdateJob implements ShouldQueue {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Traits\CommonTrait;
-
-    protected $container;
-    protected $item;
-    protected $row;
-    protected $data;
-
-    protected $panel;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct($request, $panel) {
-        $this->panel = $panel;
-        if (is_array($request)) {
-            $this->data = $request;
-        } else {
-            $this->data = $request->all();
-        }
-    }
-
+class UpdateJob extends XotBaseJob {
     /**
      * Execute the job.
      *
-     * @return void
+     * @return PanelContract
      */
     public function handle() {
         $row = $this->panel->row;
         $data = $this->data;
-        //--
-        //dddx($data);
         $ris = $row->update($data);
-        $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'update']);
+        $this->manageRelationships($row, $data, 'update');
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
 
         return $this->panel;
@@ -66,8 +33,7 @@ class UpdateJob implements ShouldQueue {
     /**
      *--- hasOne ----.
      **/
-    public function updateRelationshipsHasOne($params) {
-        extract($params);
+    public function updateRelationshipsHasOne($model, $name, $data) {
         $rows = $model->$name();
         if ($rows->exists()) {
             if (! is_array($data)) {
@@ -76,29 +42,29 @@ class UpdateJob implements ShouldQueue {
                 $model->$name()->update($data);
             }
         } else {
-            $this->storeRelationshipsHasOne($params);
+            dddx(['err' => 'wip']);
+            //$this->storeRelationshipsHasOne($params);
         }
     }
 
     /**
      *  belongsTo.
      **/
-    public function updateRelationshipsBelongsTo($params) {
-        extract($params);
+    public function updateRelationshipsBelongsTo($model, $name, $data) {
         $rows = $model->$name();
         if ($rows->exists()) {
             $model->$name()->update($data);
         //$model->$name->update($data);
         } else {
-            $this->storeRelationshipsBelongsTo($params);
+            //$this->storeRelationshipsBelongsTo($params);
+            dddx(['err' => 'wip']);
         }
     }
 
     /**
      * --- hasMany ---.
      **/
-    public function updateRelationshipsHasMany($params) {
-        extract($params);
+    public function updateRelationshipsHasMany($model, $name, $data) {
         $rows = $model->$name();
         debug_getter_obj(['obj' => $rows]);
         //---------- TO DO ------------//
@@ -109,13 +75,7 @@ class UpdateJob implements ShouldQueue {
     /**
      * --- belongsToMany.
      **/
-    public function updateRelationshipsBelongsToMany($params) {
-        extract($params);
-        if (isset($data['from']) || isset($data['to'])) {
-            $this->saveMultiselectTwoSides($params);
-
-            return;
-        }
+    public function updateRelationshipsBelongsToMany($model, $name, $data) {
         //$model->$name()->syncWithoutDetaching($data);
         $model->$name()->sync($data);
     }
@@ -129,8 +89,7 @@ class UpdateJob implements ShouldQueue {
     /**
      * morphOne.
      **/
-    public function updateRelationshipsMorphOne($params) {
-        extract($params);
+    public function updateRelationshipsMorphOne($model, $name, $data) {
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -146,8 +105,7 @@ class UpdateJob implements ShouldQueue {
     /**
      * morphMany.
      **/
-    public function updateRelationshipsMorphMany($params) {
-        extract($params);
+    public function updateRelationshipsMorphMany($model, $name, $data) {
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
             if (! is_array($v)) {
@@ -165,8 +123,7 @@ class UpdateJob implements ShouldQueue {
     /**
      * morphToMany.
      **/
-    public function updateRelationshipsMorphToMany($params) {
-        extract($params);
+    public function updateRelationshipsMorphToMany($model, $name, $data) {
         //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
@@ -225,17 +182,15 @@ class UpdateJob implements ShouldQueue {
     /**
      * pivot.
      **/
-    public function updateRelationshipsPivot($params) {
-        extract($params);
+    public function updateRelationshipsPivot($model, $name, $data) {
         $model->$name->update($data);
     }
 
-    public function saveMultiselectTwoSides($params) {
-        //passo request o direttamente data ?
-        extract($params);
+    public function saveMultiselectTwoSides($model, $name, $data) {
         $items = $model->$name();
         $related = $items->getRelated();
         $container_obj = $model;
+        $container = $container_obj->post_type;
         //$items_key = $container_obj->getKeyName();
         $items_key = $related->getKeyName();
         $items_0 = $items->get()->pluck($items_key);

@@ -2,9 +2,10 @@
 
 namespace Modules\Xot\Console;
 
-use Illuminate\Console\Command;
+use Exception;
 //use Illuminate\Console\GeneratorCommand;
 //use Nwidart\Modules\Commands\GeneratorCommand;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;

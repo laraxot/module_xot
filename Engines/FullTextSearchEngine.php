@@ -42,7 +42,10 @@ class FullTextSearchEngine extends Engine {
         //DB::statement('ALTER TABLE users ADD FULLTEXT fulltext_index (first_name, last_name, email)');
         $model = $builder->model;
         //$columns = implode(',',$model->toSearchableArray());
-        $columns = \implode(', ', \array_keys($model->toSearchableArray())); // da scout
+        $columns = '';
+        if (method_exists($model, 'toSearchableArray')) {
+            $columns = \implode(', ', \array_keys($model->toSearchableArray())); // da scout
+        }
         //if($columns==''){
         //	$columns = \implode(', ',$model->getFillable());
             // ricerco sui campi che posso inserire prob fare "intersezione con campi reali"
@@ -117,7 +120,9 @@ class FullTextSearchEngine extends Engine {
      */
     public function paginate(Builder $builder, $perPage, $page) {
         $builder->limit = $perPage;
-        $builder->offset = ($perPage * $page) - $perPage;
+        if (property_exists($builder, 'offset')) {
+            $builder->offset = ($perPage * $page) - $perPage;
+        }
 
         return $this->search($builder);
     }
