@@ -25,18 +25,12 @@ class RouteService {
         }
 
         return false;
-        //dddx(session('in_admin'));
-        /*
-        $segments = request()->segments();
-        dddx($_SERVER);
-
-        return 'admin' == 'aa';
-        */
-        //return in_admin();
     }
 
+    /*
     public static function urlPanel($params) {
         extract($params);
+
         if (! isset($panel)) {
             dddx(['err' => 'panel is missing']);
 
@@ -47,6 +41,7 @@ class RouteService {
 
             return;
         }
+
         $parents = $panel->getParents();
 
         $container_root = $panel->row;
@@ -71,18 +66,18 @@ class RouteService {
         }
 
         $post_type = $panel->postType();
-        /*
-        if( $post_type==null) {
-            $post_type=Str::snake(class_basename($panel->row));
+        //
+        //if( $post_type==null) {
+        //    $post_type=Str::snake(class_basename($panel->row));
+        //
+        //    if($panel->getParent()!=null){
+        //        $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
+        //        if(Str::startsWith($post_type,$parent_post_type.'_')){
+        //            $post_type=Str::after($post_type,$parent_post_type.'_');
+        //        }
+        //    }
+        //}
 
-            if($panel->getParent()!=null){
-                $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
-                if(Str::startsWith($post_type,$parent_post_type.'_')){
-                    $post_type=Str::after($post_type,$parent_post_type.'_');
-                }
-            }
-        }
-        */
 
         $route_params['container'.($n + $i)] = $panel->postType();
 
@@ -130,7 +125,7 @@ class RouteService {
 
         return $url;
     }
-
+    */
     //se n=0 => 'container0'
     // se n=1 => 'container0.container1'
 
@@ -153,6 +148,7 @@ class RouteService {
         return $routename;
     }
 
+    /*
     public static function urlRelatedPanel($params) {
         $act = 'show';
         extract($params);
@@ -175,22 +171,22 @@ class RouteService {
         }
         $container_root = $panel->row;
         if ($parents->count() > 0) {
-            /*
-            $tmp='['.$parents->count().']';
-            foreach($parents as $parent){
-                $tmp.=$parent->row->post_type.'-';
-            }
-            return $tmp;
-            */
+
+            //$tmp='['.$parents->count().']';
+            //foreach($parents as $parent){
+            //    $tmp.=$parent->row->post_type.'-';
+            //}
+            //return $tmp;
+
             $container_root = $parents->first()->row;
         }
-        /*
-        $containers_class = self::getContainersClass();
-        $n = collect($containers_class)->search(get_class($container_root));
-        if (null === $n) {
-            $n = 0;
-        }
-        */
+
+        //$containers_class = self::getContainersClass();
+        //$n = collect($containers_class)->search(get_class($container_root));
+        //if (null === $n) {
+        //    $n = 0;
+        //}
+
         $n = 0;
 
         $route_name = self::getRoutenameN(['n' => $n + 1 + $parents->count(), 'act' => $act]);
@@ -229,6 +225,7 @@ class RouteService {
 
         return $url;
     }
+    */
 
     public static function urlLang($params = []) {
         extract($params);

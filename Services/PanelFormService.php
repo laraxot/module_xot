@@ -10,9 +10,16 @@ use Modules\Theme\Services\ThemeService;
 
 class PanelFormService {
     protected $panel;
-
+    /*
     public function __construct(&$panel) {
         $this->panel = $panel;
+    }
+    */
+
+    public function setPanel(&$panel) {
+        $this->panel = $panel;
+
+        return $this;
     }
 
     public function formCreate($params = []) {
@@ -92,7 +99,7 @@ class PanelFormService {
     public function btnCrud($params = []) {
         extract($params);
         $acts = ['edit', 'destroy', 'show'];
-        if (is_object($this->panel->row->panel)) {
+        if (is_object($this->panel->row->pivot)) {
             $acts = ['edit', 'destroy', 'detach', 'show'];
         }
 
@@ -115,7 +122,8 @@ class PanelFormService {
 
     public function btnHtml($params) {
         $params['panel'] = $this->panel;
-        $params['url'] = RouteService::urlPanel($params);
+        //$params['url'] = RouteService::urlPanel($params);
+        $params['url'] = $this->panel->route->urlPanel($params);
         $params['method'] = Str::camel($params['act']);
         if ('index_order' == $params['act']) {
             //  dddx($params);

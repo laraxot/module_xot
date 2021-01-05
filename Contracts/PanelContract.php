@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Request;
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- *  @property Illuminate\Database\Eloquent\Model|null                               $row
+ *  @property ModelContract|null                               $row
  */
 interface PanelContract {
     /*

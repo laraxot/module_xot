@@ -149,9 +149,9 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     public function registerCacheOPCache() {
         Cache::extend('opcache', function () {
-            $store = new Opcache\Store();
+            $store = new \Modules\Xot\Engines\Opcache\Store();
 
-            return new Opcache\Repository($store, new TagSet($store));
+            return new \Modules\Xot\Engines\Opcache\Repository($store, new TagSet($store));
         });
         // Extend Collection to implement __set_state magic method
         if (! Collection::hasMacro('__set_state')) {

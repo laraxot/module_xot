@@ -32,7 +32,7 @@ class ExceptionSlack extends Notification implements ShouldQueue {
 
         $this->msg .= \chr(13).'url prev:    '.\URL::previous();
         if (\Auth::check()) {
-            $this->msg .= \chr(13).'user     :    '.\Auth::user()->handle;
+            $this->msg .= \chr(13).'auth id     :    '.\Auth::id();
         }
         $data = \json_encode(\Request::all(), JSON_PRETTY_PRINT);
         $this->msg .= \chr(13).'request : '.$data;
@@ -53,6 +53,7 @@ class ExceptionSlack extends Notification implements ShouldQueue {
 
     public function toSlack($notifiable) {
         $content = $this->msg; //$e->getMessage();
+
         return (new SlackMessage())
             ->content($content);
     }

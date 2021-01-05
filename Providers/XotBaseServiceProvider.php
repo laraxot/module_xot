@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 //use Modules;
 
 abstract class XotBaseServiceProvider extends ServiceProvider {
+    protected $module_dir = __DIR__;
+    protected $module_ns = __NAMESPACE__;
+    protected $module_base_ns;
+    public $module_name;
+
     /**
      * Boot the application events.
      */
@@ -105,7 +110,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
 
     public function registerLivewireComponents() {
         $components_json = $this->module_dir.'/../Http/Livewire/_components.json';
-        $force_recreate = true;
+        $force_recreate = request()->input('force_recreate', true);
         $exists = File::exists($components_json);
         if ($exists && ! $force_recreate) {
             $content = File::get($components_json);
@@ -175,8 +180,8 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
             \File::makeDirectory($path, 0777, true, true);
         }
         $events_file = $path.'/_events.json';
-        $force = 1;
-        if (! \File::exists($events_file) || $force) {
+        $force_recreate = request()->input('force_recreate', true);
+        if (! \File::exists($events_file) || $force_recreate) {
             foreach (\glob($path.'/*.php') as $filename) {
                 $info = pathinfo($filename);
 

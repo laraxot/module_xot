@@ -19,6 +19,7 @@ use Modules\Xot\Services\ImageService;
 use Modules\Xot\Services\NavService;
 use Modules\Xot\Services\PanelActionService;
 use Modules\Xot\Services\PanelFormService;
+use Modules\Xot\Services\PanelRouteService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PanelTabService;
 use Modules\Xot\Services\RouteService;
@@ -32,14 +33,29 @@ abstract class XotBasePanel implements PanelContract {
     public $rows = null;
     public $parent = null;
     public $in_admin = null;
-    //protected static $model;
+    public $presenter = null;
+    public $form = null;
+    public $route = null;
+    protected static $model;
 
     public function __construct(PanelPresenterContract $presenter) {
         //$this->row = $model;
         $this->presenter = $presenter;
         $this->presenter->setPanel($this);
         $this->row = app($this::$model);
+        $this->form = app(PanelFormService::class)->setPanel($this);
+        $this->route = app(PanelRouteService::class)->setPanel($this);
     }
+
+    /*
+    public static function getInstance() {
+        if (null === self::$instance) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+    */
 
     /**
      * The relationships that should be eager loaded on index queries.
@@ -243,11 +259,14 @@ abstract class XotBasePanel implements PanelContract {
         return $this->row->getKeyName();
     }
 
-    /*
-    public function fields(){
+    /**
+     * Get the actions available for the resource.
+     *
+     * @return array
+     */
+    public function fields() {
         return [];
     }
-    //*/
 
     public function rules($params = []) {
         $act = '';
@@ -280,7 +299,7 @@ abstract class XotBasePanel implements PanelContract {
             )->all();
         }
 
-        //ddd($fields);
+        //dddx($fields);
 
         $rules = collect($fields)->map(
             function ($item) {
@@ -294,7 +313,7 @@ abstract class XotBasePanel implements PanelContract {
                         ->getPivotClass();
                     $pivot = new $pivot_class();
                     $pivot_panel = StubService::getByModel($pivot, 'panel', true);
-                    //ddd('preso ['.$pivot_class.']['.get_class($pivot_panel).']');
+                    //dddx('preso ['.$pivot_class.']['.get_class($pivot_panel).']');
                     $pivot_rules = collect($pivot_panel->rules())
                         ->map(
                             function ($pivot_rule_val, $pivot_rule_key) use ($item) {
@@ -342,7 +361,7 @@ abstract class XotBasePanel implements PanelContract {
         $mod = strtolower($mod);
         $name = Str::snake(class_basename(static::$model));
         $trans_ns = $mod.'::'.$name.'__rules_messages';
-        //ddd($trans_ns);//food::restaurant_owner__rules_messages
+        //dddx($trans_ns);//food::restaurant_owner__rules_messages
         $rules_msg = trans($trans_ns);
         if (! \is_array($rules_msg)) {
             $rules_msg = [];
@@ -413,7 +432,6 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * Build an "index" query for the given resource.
      *
-     * @param Request                               $request
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -435,6 +453,7 @@ abstract class XotBasePanel implements PanelContract {
     public static function relatableQuery(Request $request, $query) {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         //return $query->where('user_id', $request->user()->id);
+        return $query;
     }
 
     public function applyJoin($query) {
@@ -478,6 +497,11 @@ abstract class XotBasePanel implements PanelContract {
                     $v->op = '=';
                 }
                 if (isset($v->where_method)) {
+                    if (! isset($v->field_name)) {
+                        dddx(['err' => 'field_name is missing']);
+
+                        return;
+                    }
                     $query = $query->{$v->where_method}($v->field_name, $filter_val);
                 } else {
                     $query = $query->where($v->field_name, $v->op, $filter_val);
@@ -499,7 +523,7 @@ abstract class XotBasePanel implements PanelContract {
                 }
                 $table = with(new $this::$model())->getTable();
                 if (strlen($q) > 1) {
-                    $query->where(function ($subquery) use ($search_fields, $q, $table) {
+                    $query->where(function ($subquery) use ($search_fields, $q/*, $table*/) {
                         foreach ($search_fields as $k => $v) {
                             /*
                             if (! Str::contains($v, '.')) {
@@ -520,11 +544,11 @@ abstract class XotBasePanel implements PanelContract {
                 }
 
                 return $query;
-                break;
+               // break;
             case 1:
-                $repo = with(new \Modules\Food\Repositories\RestaurantRepository())->search('grom');
-                //ddd($repo->paginate());
-                return $repo;
+                //$repo = with(new \Modules\Food\Repositories\RestaurantRepository())->search('grom');
+                //dddx($repo->paginate());
+                //return $repo;
                 break;
             case 2:
 
@@ -574,22 +598,22 @@ abstract class XotBasePanel implements PanelContract {
 
         //$this->callAction($query, $act);
 
-        $formatted = $this->formatData($query, $data);
+        //$formatted = $this->formatData($query, $data); // to presenter
         $page = isset($data['page']) ? $data['page'] : 1;
         Cache::forever('page', $page);
-        //ddd(Cache::get('page'));
+        //dddx(Cache::get('page'));
         //session('page',$page);
         //Cookie::make('page', $page, 20);
-        //ddd(Cookie::get('page'));
+        //dddx(Cookie::get('page'));
         return $query;
     }
 
     public function formCreate($params = []) {
-        return (new PanelFormService($this))->formCreate($params);
+        return $this->form->formCreate($params);
     }
 
     public function formEdit($params = []) {
-        return (new PanelFormService($this))->formEdit($params);
+        return $this->form->formEdit($params);
     }
 
     /* -- to panelformservice
@@ -632,51 +656,53 @@ abstract class XotBasePanel implements PanelContract {
 
         return $fields;
     }
+    */
 
     public function indexFields() {
-        $fields = $this->exceptFields(['act' => 'index']);
-
-        return $fields;
+        //return $this->exceptFields(['act' => 'index']);
+        return $this->form->{__FUNCTION__}();
     }
 
     public function createFields() {
-        $fields = $this->exceptFields(['act' => 'create']);
+        //return  $this->exceptFields(['act' => 'create']);
 
-        return $fields;
+        return $this->form->{__FUNCTION__}();
     }
 
     public function editFields() {
-        $fields = $this->exceptFields(['act' => 'edit']);
+        //return  $this->exceptFields(['act' => 'edit']);
 
-        return $fields;
+        return $this->form->{__FUNCTION__}();
     }
 
     public function indexEditFields() {
-        $fields = $this->exceptFields(['act' => 'index_edit']);
+        //return  $this->exceptFields(['act' => 'index_edit']);
 
-        return $fields;
+        return $this->form->{__FUNCTION__}();
     }
-    */
+
     /*
         -- in ingresso "qs" che e' array con le cose da aggiungere
     */
+    /* --- da mettere in routeService
     public function addQuerystringsUrl($params) {
         extract($params);
 
         return $request->fullUrlWithQuery($qs); // fa il merge in automatico
-        /*
-        $currentQueries = $request->query();
+
+        //$currentQueries = $request->query();
         //Declare new queries you want to append to string:
         //$newQueries = ['year' => date('Y')];
         //Merge together current and new query strings:
-        $allQueries = array_merge($currentQueries, $qs);
+        //$allQueries = array_merge($currentQueries, $qs);
         //Generate the URL with all the queries:
-        return $request->fullUrlWithQuery($allQueries);
-        */
+        //return $request->fullUrlWithQuery($allQueries);
+
     }
+    */
 
     //------- navigazioni ---
-
+    /*
     public function yearNavRedirect() {
         return NavService::yearNavRedirect();
     }
@@ -688,33 +714,33 @@ abstract class XotBasePanel implements PanelContract {
     public function monthYearNav() { //possiamo trasformarlo in una macro
         return NavService::monthYearNav();
     }
-
+    */
     //-- nella registrazione 1 tasto, nelle modifiche 3
     public function btnSubmit($params = []) {
-        return (new PanelFormService($this))->btnSubmit($params);
+        return $this->form->btnSubmit($params);
     }
 
     /*
-     return (new PanelFormService($this))->formCreate($params);
+     return $this->form->formCreate($params);
     */
     public function btnDelete($params = []) {
-        return (new PanelFormService($this))->btnDelete($params);
+        return $this->form->btnDelete($params);
     }
 
     public function btnDetach($params = []) {
-        return (new PanelFormService($this))->btnDetach($params);
+        return $this->form->btnDetach($params);
     }
 
     public function btnCrud($params = []) {
-        return (new PanelFormService($this))->btnCrud($params);
+        return $this->form->btnCrud($params);
     }
 
     public function btnHtml($params) {
-        return (new PanelFormService($this))->btnHtml($params);
+        return $this->form->btnHtml($params);
     }
 
     public function btn($act, $params = []) {
-        return (new PanelFormService($this))->btn($act, $params);
+        return $this->form->btn($act, $params);
     }
 
     public function imageHtml($params) { //usare PanelImageService
@@ -738,6 +764,8 @@ abstract class XotBasePanel implements PanelContract {
             $src = '/'.Str::after($src, $str0);
         }
         $params['src'] = $src;
+        $width = 200;
+        $height = 200;
         extract($params);
         $images = $row->images;
         if (null == $images) {
@@ -768,7 +796,7 @@ abstract class XotBasePanel implements PanelContract {
                 'width' => $width,
                 'height' => $height,
             ]);
-            //ddd($src_out);
+            //dddx($src_out);
             return $src_out;
         } catch (\Exception $e) {
             //dddx('isolated');
@@ -789,7 +817,7 @@ abstract class XotBasePanel implements PanelContract {
         $params['lang'] = $lang;
         $params['panel'] = $this;
 
-        return RouteService::urlLang($params);
+        return $this->route->urlLang($params);
     }
 
     public function relatedUrlRecursive($params) { //vedere chi lo usa
@@ -820,13 +848,9 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     public function relatedUrl($params) {
-        /*
-        $params['row'] = $this->row;
-        return RouteService::urlRelated($params);
-        */
         $params['panel'] = $this;
 
-        return RouteService::urlRelatedPanel($params);
+        return $this->route->urlRelatedPanel($params);
     }
 
     public function relatedName($name, $id = null) {
@@ -850,12 +874,12 @@ abstract class XotBasePanel implements PanelContract {
         extract($params);
         $act = Str::snake($act);
 
-        return RouteService::urlPanel(['panel' => $this, 'act' => $act]);
+        return $this->route->urlPanel(['panel' => $this, 'act' => $act]);
     }
 
     public function indexUrl() {
-        //$url = RouteService::urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index']);
-        $url = RouteService::urlPanel(['panel' => $this, 'act' => 'index']);
+        //$url = $this->route->urlModel(['model' => $this->row, 'panel_parent' => $this->parent, 'act' => 'index']);
+        $url = $this->route->urlPanel(['panel' => $this, 'act' => 'index']);
         //--- da spostare in routeservice
         $data = [];
         $filters = $this->filters();
@@ -896,35 +920,35 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     public function indexEditUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'index_edit']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'index_edit']);
     }
 
     public function editUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'edit']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'edit']);
     }
 
     public function updateUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'update']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'update']);
     }
 
     public function showUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'show']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'show']);
     }
 
     public function createUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'create']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'create']);
     }
 
     public function storeUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'store']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'store']);
     }
 
     public function destroyUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'destroy']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'destroy']);
     }
 
     public function detachUrl() {
-        return RouteService::urlPanel(['panel' => $this, 'act' => 'detach']);
+        return $this->route->urlPanel(['panel' => $this, 'act' => 'detach']);
     }
 
     public function gearUrl() {
@@ -970,10 +994,10 @@ abstract class XotBasePanel implements PanelContract {
         } catch (\Exception $e) {
             $guid = '';
         }
-        if ('' == $guid && method_exists($row, 'post') && $key = 'guid') {
-            if ('' == $row->id && '' != $row->post_id) {
-                $row->id = $row->post_id; //finche netson non riabilita migrazioni
-            }
+        if ('' == $guid && method_exists($row, 'post') && 'guid' == $key && property_exists($row, 'post')) {
+            //if ('' == $row->id && '' != $row->post_id) {
+            //    $row->id = $row->post_id; //finche netson non riabilita migrazioni
+            //}
             try {
                 return $row->post->guid;
             } catch (\Exception $e) {
@@ -1038,14 +1062,14 @@ abstract class XotBasePanel implements PanelContract {
             }
             $query = $this->row;
         }
-        //ddd(get_class($this));
+        //dddx(get_class($this));
         $with = $this->with();
         if (! is_array($with)) {
             $msg = [
                 'class' => get_class($this),
                 'with' => $with,
             ];
-            ddd($with);
+            dddx($with);
         }
         $query = $query->with($with);
         $query = $this->indexQuery($data, $query);
@@ -1186,21 +1210,13 @@ abstract class XotBasePanel implements PanelContract {
             ->with('rows', $this->rows)
             ->with($params['view_params']);
 
-        //ddd($this->rows->get());
+        //dddx($this->rows->get());
         if (request()->input('debug')) {
             return $html;
         }
         $params['html'] = (string) $html;
 
         return HtmlService::toPdf($params);
-    }
-
-    public static function getInstance() {
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 
     public function related($relationship) {

@@ -9,7 +9,7 @@ use Modules\Xot\Services\StubService;
 class JsonPanelPresenter implements PanelPresenterContract {
     protected $panel;
 
-    public function setPanel($panel) {
+    public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 

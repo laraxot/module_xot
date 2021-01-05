@@ -2,9 +2,11 @@
 
 namespace Modules\Xot\Services;
 
+use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use Nwidart\Modules\Facades\Module;
 
 class FileService {
     public static function asset($path) {
@@ -70,7 +72,13 @@ class FileService {
             return null;
         }
         //dirname(\View::getFinder()->find('theme::includes.components.form.text'));
-        $viewHints = View::getFinder()->getHints();
+        //View::getFinder()
+        // View finder.
+        $finder = view()->getFinder();
+        $viewHints = [];
+        if (method_exists($finder, 'getHints')) {
+            $viewHints = $finder->getHints();
+        }
         if (isset($viewHints[$ns])) {
             return $viewHints[$ns][0];
         }
@@ -100,19 +108,19 @@ class FileService {
             ddd($msg);
         }
         //*/
-        $url = \Module::asset($ns.':'.$path1);
+        $url = Module::asset($ns.':'.$path1);
         $filename_pub = \Module::assetPath($ns).DIRECTORY_SEPARATOR.$path1;
-        if (! \File::exists(\dirname($filename_pub))) {
+        if (! File::exists(\dirname($filename_pub))) {
             try {
-                \File::makeDirectory(\dirname($filename_pub), 0755, true, true);
+                File::makeDirectory(\dirname($filename_pub), 0755, true, true);
             } catch (Exception $e) {
                 dd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
             }
         }
-        if (\File::exists($filename)) {
+        if (File::exists($filename)) {
             try {
                 //echo '<hr>'.$filename.' >>>>  '.$filename_pub; //4 debug
-                \File::copy($filename, $filename_pub);
+                File::copy($filename, $filename_pub);
             } catch (Exception $e) {
                 dd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
             }
@@ -123,7 +131,7 @@ class FileService {
                 'filename' => $filename,
                 'msg' => 'Filename not Exists',
             ];
-            ddd($msg); //4 debug
+            dddx($msg); //4 debug
         }
 
         //$url=str_replace(url('/'),'',$url);
@@ -177,7 +185,7 @@ class FileService {
                 'filename' => $filename,
                 'msg' => 'Filename not Exists',
             ];
-            ddd($msg);
+            dddx($msg);
             //ddd('non esiste '.); //4 debug
         }
 
@@ -245,7 +253,7 @@ class FileService {
             try {
                 File::makeDirectory($dir_to, 0755, true, true);
             } catch (Exception $e) {
-                ddd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
+                dddx(['Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']']);
             }
         }
 
@@ -258,7 +266,7 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                ddd('Caught exception: '.$e->getMessage());
+                dddx('Caught exception: '.$e->getMessage());
             }
         }
 
@@ -334,7 +342,7 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                ddd('Caught exception: '.$e->getMessage());
+                dddx('Caught exception: '.$e->getMessage());
             }
         } else {
             //if (! File::exists($filename_from)) {
@@ -415,12 +423,15 @@ class FileService {
             if ($pos) {
                 $hints = \mb_substr($filePath, 0, $pos);
                 $filename = \mb_substr($filePath, $pos + 2);
+                $viewNamespace = self::getViewNameSpacePath($hints);
+                /*
                 $viewHints = View::getFinder()->getHints();
                 if (isset($viewHints[$hints][0])) {
                     $viewNamespace = $viewHints[$hints][0];
                 } else {
                     $viewNamespace = '---';
                 }
+                */
                 if ('pub_theme' == $hints) {
                     $tmp = \str_replace(public_path(''), '', $viewNamespace);
                     $tmp = \str_replace(\DIRECTORY_SEPARATOR, '/', $tmp);
@@ -464,6 +475,7 @@ class FileService {
 
     //*/
     public static function getRealFile($path) {
+        $filename = '';
         if (Str::startsWith($path, asset(''))) {
             return public_path(substr($path, strlen(asset(''))));
         }
@@ -504,7 +516,7 @@ class FileService {
                 default:
                     echo '<h3>Unknown Extension</h3>';
                     echo '<h3>['.$path.']</h3>';
-                    ddd($info);
+                    dddx($info);
                 break;
             }
             ImportService::download(['url' => $path, 'filename' => $filename]);

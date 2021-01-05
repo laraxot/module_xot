@@ -6,17 +6,15 @@ use Illuminate\Support\Collection;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelPresenterContract;
 
-class HtmlPanelPresenter implements PanelPresenterContract
-{
+class HtmlPanelPresenter implements PanelPresenterContract {
     protected $panel;
 
-    public function setPanel($panel)
-    {
+    public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 
-    public function index(?Collection $items)
-    {
+    public function index(?Collection $items) {
+        /*
         $count = $items->count();
         $last_update = $items
             ->sortByDesc
@@ -31,10 +29,10 @@ class HtmlPanelPresenter implements PanelPresenterContract
         ];
 
         return view('workshop::index')->with(compact('items', 'data'));
+        */
     }
 
-    public function out($params = null)
-    {
+    public function out($params = null) {
         //$route_params = \Route::current()->parameters();
 
         [$containers, $items] = params2ContainerItem();
@@ -47,7 +45,7 @@ class HtmlPanelPresenter implements PanelPresenterContract
         //--- per passare la view all'interno dei componenti
         \View::composer(
             '*',
-            function ($view_params) use ($view,$mod_trad) {
+            function ($view_params) use ($view) {
                 \View::share('view', $view);
                 $trad = implode('.', array_slice(explode('.', $view), 0, -1));
                 \View::share('trad', $trad);
@@ -66,16 +64,16 @@ class HtmlPanelPresenter implements PanelPresenterContract
         //$rows = $this->panel->rows()->paginate(20);
 
         //*
-        $rows_err='';
+        $rows_err = '';
         try {
             //dddx($this->panel->rows());
             $rows = $this->panel->rows()->paginate(20);
         } catch (\Exception $e) {
             $rows = null;
-            $rows_err=$e;
+            $rows_err = $e;
         } catch (\Error $e) {
             $rows = null;
-            $rows_err=$e;
+            $rows_err = $e;
         }
         //*/
 
@@ -86,7 +84,7 @@ class HtmlPanelPresenter implements PanelPresenterContract
             '_panel' => $this->panel,
             'row' => $this->panel->row,
             'rows' => $rows,
-            'rows_err'=>$rows_err,
+            'rows_err' => $rows_err,
             'mod_trad' => $mod_trad,
             'trad_mod' => $mod_trad, /// da sostiutire ed uccidere
             'params' => \Route::current()->parameters(),

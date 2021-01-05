@@ -6,4 +6,6 @@ use Illuminate\Support\Collection;
 
 interface PanelPresenterContract {
     public function index(?Collection $items);
+
+    public function setPanel(PanelContract &$panel);
 }

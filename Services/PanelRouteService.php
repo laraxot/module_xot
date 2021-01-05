@@ -7,9 +7,16 @@ use Illuminate\Support\Str;
 
 class PanelRouteService {
     public $panel;
-
+    /*
     public function __construct(&$panel) {
         $this->panel = $panel;
+    }
+    */
+
+    public function setPanel(&$panel) {
+        $this->panel = $panel;
+
+        return $this;
     }
 
     public static function inAdmin($params = []) {

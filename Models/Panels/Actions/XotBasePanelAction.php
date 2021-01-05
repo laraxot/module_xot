@@ -13,7 +13,6 @@ use Modules\FormX\Services\FormXService;
 use Modules\Xot\Jobs\Crud\UpdateJob;
 //------------ jobs ----------------------------
 use Modules\Xot\Services\PanelService as Panel;
-use Modules\Xot\Services\RouteService;
 
 abstract class XotBasePanelAction {
     public $onContainer = false;
@@ -40,6 +39,10 @@ abstract class XotBasePanelAction {
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
+    }
+
+    public function setPanel(&$panel) {
+        $this->panel = $panel;
     }
 
     public function getName() {
@@ -90,10 +93,6 @@ abstract class XotBasePanelAction {
 
     public function setRow($row) {
         $this->row = $row;
-    }
-
-    public function setPanel($panel) {
-        $this->panel = $panel;
     }
 
     public function btn($params = []) {
@@ -217,7 +216,7 @@ abstract class XotBasePanelAction {
             $this->panel = Panel::get($this->row);
         }
         $name = $this->getName();
-        $url = RouteService::urlPanel(['panel' => $this->panel, 'act' => 'show']);
+        $url = $this->panel->route->urlPanel(['act' => 'show']);
         $query_params['_act'] = $name;
         /*
         if (isset($modal)) {
@@ -245,9 +244,9 @@ abstract class XotBasePanelAction {
                         return
                         '<button type="button" data-title="'.$title.'"
 						data-href="'.$url.'" data-toggle="modal" class="btn btn-secondary mb-2" data-target="#myModalIframe">
-                        '.$this->$icon.'
+                        '.$this->icon.'
                         </button>';
-                    break;
+                    //break;
                     case 'ajax':
                     break;
                 }

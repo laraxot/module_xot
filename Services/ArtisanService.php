@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
@@ -81,7 +82,14 @@ class ArtisanService {
                  return self::errorClear();
 
             //-------------------------------------------------------------------------
-            case 'spatiecache-clear': return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+            case 'spatiecache-clear':
+                /* da vedere se e' necessaria
+                try {
+                    return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+                } catch (\Exception $e) {
+                    dddx($e);
+                }
+                */
             //case 'spatiecache-clear1': return ArtisanService::exe('responsecache:clear'); //The command "responsecache:clear" does not exist.
 
             default: return '';
@@ -123,8 +131,10 @@ class ArtisanService {
             return $output;  // dato che mi carico solo le route minime menufull.delete non esiste.. impostare delle route comuni.
         } catch (Exception $e) {
             return '<br/>'.$command.' non effettuato';
-        } catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
+        } /*
+        //Dead catch - Symfony\Component\Console\Exception\CommandNotFoundException is already caught by Exception above.
+        catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
             return '<br/>'.$command.' non effettuato';
-        }
+        }*/
     }
 }

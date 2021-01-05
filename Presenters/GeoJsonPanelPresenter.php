@@ -10,7 +10,7 @@ use Modules\Xot\Services\PanelService;
 class GeoJsonPanelPresenter implements PanelPresenterContract {
     protected $panel;
 
-    public function setPanel($panel) {
+    public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 
@@ -27,7 +27,7 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
         $rows = $this->panel->rows();
         $post_table = app(Post::class)->getTable();
         $rows = $rows->join($post_table.' as post',
-            function ($join) use ($post_table,$lang,$model_table,$model_type) {
+            function ($join) use ($lang,$model_table,$model_type) {
                 $join->on('post.post_id', '=', $model_table.'.id')
                     ->select('title', 'guid', 'subtitle')
                     ->where('lang', $lang)

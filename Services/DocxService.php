@@ -23,7 +23,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class DocxService {
     public $docx_input;
-
+    public $values;
     private static $instance = null;
 
     public static function getInstance() {
@@ -64,7 +64,7 @@ class DocxService {
             $tpl->saveAs($filename_out_path);
         } catch (\Exception $e) {
             //handle exception
-            ddd($e);
+            dddx($e);
         }
 
         return response()->download($filename_out_path);

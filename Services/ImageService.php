@@ -101,7 +101,14 @@ class ImageService {
     }
 
     public static function image_resized_cropped($params) {
+        $width = self::$width;
+        $height = self::$height;
         \extract($params);
+        if (! isset($image_path)) {
+            dddx(['err' => 'image_path is missing']);
+
+            return;
+        }
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
         if (null == $image_path) {
@@ -152,11 +159,11 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
 
         \File::makeDirectory(\dirname(public_path($image_resized)), 0775, true, true);
         $canvas->save(public_path($image_resized), 75);
-        ImageOptimizer::optimize(public_path($image_resized));
+        //ImageOptimizer::optimize(public_path($image_resized));
         //app(Spatie\ImageOptimizer\OptimizerChain::class)->optimize(public_path($image_resized));
         return $image_resized;
     }
@@ -218,7 +225,7 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
         self::$img = $canvas;
 
         return self::getInstance(); /// per il fluent, o chaining
@@ -260,7 +267,14 @@ class ImageService {
     }
 
     public static function image_resized_canvas($params) {
+        $width = self::$width;
+        $height = self::$height;
         \extract($params);
+        if (! isset($image_path)) {
+            dddx(['err' => 'image_path is missing']);
+
+            return;
+        }
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
         if (null == $image_path) {
@@ -370,7 +384,7 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
 
         \File::makeDirectory(\dirname(public_path($image_resized)), 0775, true, true);
         $canvas->save(public_path($image_resized), 75);
