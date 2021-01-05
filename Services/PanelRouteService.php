@@ -4,6 +4,7 @@ namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 
 class PanelRouteService {
     public $panel;
@@ -13,6 +14,13 @@ class PanelRouteService {
     }
     */
 
+    /**
+     * setPanel.
+     *
+     * @param PanelContract $panel
+     *
+     * @return $this
+     */
     public function setPanel(&$panel) {
         $this->panel = $panel;
 
