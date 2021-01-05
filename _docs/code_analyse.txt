@@ -33,3 +33,49 @@ wget https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar
 cmd:
 php phpcs.phar ./Modules
 //----------------------------------------------------------
+https://github.com/sebastianbergmann/phpcpd
+
+$ wget https://phar.phpunit.de/phpcpd.phar
+
+$ php phpcpd.phar --version
+
+
+//---------------------
+https://scrutinizer-ci.com/docs/tools/php/php-scrutinizer/
+
+//--------------------
+https://github.com/Qafoo/QualityAnalyzer
+
+install:
+git clone https://github.com/Qafoo/QualityAnalyzer.git
+cd QualityAnalyzer
+composer install
+
+cmd:
+bin/analyze analyze /path/to/source
+//-------------------------------------------------------------
+
+https://psalm.dev/docs/running_psalm/installation/
+
+//--------------------------------------------------------------------
+https://github.com/scrutinizer-ci/php-analyzer
+https://medium.com/bumble-tech/php-code-static-analysis-based-on-the-example-of-phpstan-phan-and-psalm-a20654c4011d
+https://link.medium.com/fPm2yP1xrZ
+
+https://geekflare.com/php-security-scanner/
+
+https://hub.docker.com/r/adamculp/php-code-quality
+https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
+
+
+
+
+
+
+
+
+
+
+
+
+
