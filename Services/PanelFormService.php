@@ -16,6 +16,13 @@ class PanelFormService {
     }
     */
 
+    /**
+     * setPanel.
+     *
+     * @param PanelContract $panel
+     *
+     * @return $this
+     */
     public function setPanel(&$panel) {
         $this->panel = $panel;
 
