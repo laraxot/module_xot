@@ -5,7 +5,13 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-class RouteService {
+class PanelRouteService {
+    public $panel;
+
+    public function __construct(&$panel) {
+        $this->panel = $panel;
+    }
+
     public static function inAdmin($params = []) {
         if (isset($params['in_admin'])) {
             return $params['in_admin'];

@@ -20,7 +20,7 @@ class JsCssService {
         if (! \file_exists($path)) {
             require __DIR__.'/vendor/autoload.php';
             //$cache = new FilesystemCache($_SERVER['DOCUMENT_ROOT'] . '/tmp'); //cartella tmp non esiste piu'
-            $cache = new FilesystemCache(base_path('../cache'));
+            $cache = new \Assetic\Cache\FilesystemCache(base_path('../cache'));
             $collection = new AssetCollection();
             foreach ($scripts as $filePath) {
                 $filePath = self::getRealFile($filePath);

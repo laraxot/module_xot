@@ -84,8 +84,9 @@ class PanelService {
         }
         if (0 == count($containers)) {
             PanelService::setRequestPanel(null);
-            
-            return $next($request);
+
+            //return $next($request);
+            return null;
         }
 
         $row = xotModel($containers[0]);
@@ -166,7 +167,7 @@ class PanelService {
 
     public static function createPanel($model) {
         if (! is_object($model)) {
-            ddd('da fare');
+            dddx('da fare');
         }
         $class_full = get_class($model);
         $class_name = class_basename($model);
@@ -216,6 +217,16 @@ class PanelService {
 
     public static function updatePanel($params) {
         extract($params);
+        if (! isset($func)) {
+            dddx(['err' => 'func is missing']);
+
+            return;
+        }
+        if (! isset($panel)) {
+            dddx(['err' => 'panel is missing']);
+
+            return;
+        }
         $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
         $func_stub = File::get($func_file);
         $autoloader_reflector = new \ReflectionClass($panel);

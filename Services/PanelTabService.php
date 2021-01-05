@@ -95,11 +95,14 @@ class PanelTabService {
                 }
                 $tmp->url = $url;
                 $tmp->title = 'Content '; //.'['.request()->url().']['.$url.']';
+                /*
                 if ($url_test = 1) {
                     $tmp->active = request()->url() == $url;
                 } else {
                     $tmp->active = request()->routeIs('admin.container0.'.$act);
                 }
+                */
+                $tmp->active = request()->url() == $url;
                 if (null != $panel->guid()) {
                     $row[] = $tmp;
                 }

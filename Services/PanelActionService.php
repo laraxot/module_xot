@@ -5,16 +5,19 @@ namespace Modules\Xot\Services;
 class PanelActionService {
     protected $panel;
 
-    public function __construct($panel) {
+    public function __construct(&$panel) {
         $this->panel = $panel;
     }
 
     public function getActions($params = []) {
         $panel = $this->panel;
-        $filters = [];
+
         extract($params);
+        if (! isset($filters)) {
+            $filters = [];
+        }
         $actions = collect($panel->actions())->filter(
-            function ($item) use ($panel, $filters) {
+            function ($item) use ($filters) {
                 $item->getName();
                 $res = true;
                 foreach ($filters as $k => $v) {

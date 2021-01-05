@@ -11,7 +11,7 @@ use Modules\Theme\Services\ThemeService;
 class PanelFormService {
     protected $panel;
 
-    public function __construct($panel) {
+    public function __construct(&$panel) {
         $this->panel = $panel;
     }
 
@@ -57,6 +57,7 @@ class PanelFormService {
         return $res;
     }
 
+    /*
     public function btnDelete($params = []) {
         $class = 'btn-primary mb-2';
         extract($params);
@@ -65,7 +66,7 @@ class PanelFormService {
         $parz = [
             'id' => $this->panel->row->getKey(),
             'btn_class' => 'btn '.$class,
-            'route' => $this->url(['act' => 'destroy']),
+            'route' => $this->panel->url(['act' => 'destroy']),
             'act' => $act,
             'title' => $title,
         ];
@@ -86,6 +87,7 @@ class PanelFormService {
 
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
+    */
 
     public function btnCrud($params = []) {
         extract($params);
@@ -184,6 +186,7 @@ class PanelFormService {
         return FormXService::btnHtml($params);
     }
 
+    /*
     public function btn($act, $params = []) {
         dddx('deprecated');
         extract($params);
@@ -211,8 +214,75 @@ class PanelFormService {
 
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
-
+    */
+    /* deprecated
     public function btnSubmit($params = []) {
         return Form::bsSubmit(trans('xot::buttons.save'));
+    }
+    */
+    public function exceptFields($params = []) {
+        $act = 'show';
+        $panel = $this->panel;
+        extract($params);
+        $excepts = collect([]);
+        if (is_object($panel->rows)) {
+            $methods = [
+                'getForeignKeyName',
+                'getMorphType',
+                //'getLocalKeyName',
+                'getForeignPivotKeyName',
+                'getRelatedPivotKeyName',
+                'getRelatedKeyName',
+            ];
+            if ('index' != $act) { //nella lista voglio visualizzare l'id
+                $methods[] = 'getLocalKeyName';
+            }
+
+            foreach ($methods as $method) {
+                if (method_exists($panel->rows, $method)) {
+                    $excepts = $excepts->merge($panel->rows->$method());
+                }
+            }
+        }
+        $excepts = $excepts->unique()->all();
+
+        $fields = collect($panel->fields())
+            ->filter(
+                function ($item) use ($excepts, $act) {
+                    if (! isset($item->except)) {
+                        $item->except = [];
+                    }
+
+                    //!in_array($item->type,['Password']) &&
+                    return ! in_array($act, $item->except) &&
+                        ! in_array($item->name, $excepts);
+                }
+            )->all();
+
+        return $fields;
+    }
+
+    public function indexFields() {
+        $fields = $this->exceptFields(['act' => 'index']);
+
+        return $fields;
+    }
+
+    public function createFields() {
+        $fields = $this->exceptFields(['act' => 'create']);
+
+        return $fields;
+    }
+
+    public function editFields() {
+        $fields = $this->exceptFields(['act' => 'edit']);
+
+        return $fields;
+    }
+
+    public function indexEditFields() {
+        $fields = $this->exceptFields(['act' => 'index_edit']);
+
+        return $fields;
     }
 }

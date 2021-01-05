@@ -2,6 +2,7 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -12,6 +13,17 @@ class StubService {
 
     public static function fromModel($params) {
         extract($params);
+        if (! isset($model)) {
+            dddx(['err' => 'model is missing']);
+
+            return;
+        }
+        if (! isset($stub)) {
+            dddx(['err' => 'stub is missing']);
+
+            return;
+        }
+
         if (! is_object($model)) {
             //dddx($model);
             return false;
@@ -41,6 +53,7 @@ class StubService {
         $params['fields'] = [];
         //ddd($params);
         $stub_name = $stub;
+        $file = '';
         switch ($stub_name) {
             case 'migration_morph_pivot':
                 $file = $dir.'/../Database/Migrations/'.date('Y_m_d_Hi00').'_create_'.Str::snake($class_name).'_table.php';
@@ -92,7 +105,7 @@ class StubService {
                 $params['class_name'] = $params['class_name'].'Policy';
                 break;
             default:
-                ddd('['.$stub_name.'] Unkwonn !');
+                dddx('['.$stub_name.'] Unkwonn !');
                 break;
         }
 
@@ -165,7 +178,7 @@ class StubService {
         }
         */
         if (! $create) {
-            ddd($panel.' NOT EXISTS !');
+            dddx($panel.' NOT EXISTS !');
         } else {
             /* -- 4 debug
         $t= new $panel;
@@ -175,13 +188,43 @@ class StubService {
         }
         self::create($model, $name);
         //return new $panel;
-        ddd($name.' ['.$class_full.']['.$panel.'] is under creating , refresh page');
+        dddx($name.' ['.$class_full.']['.$panel.'] is under creating , refresh page');
         \Session::flash('status', $name.' created');
         //return redirect()->back();
     }
 
     public static function replaces($params) {
         extract($params);
+        if (! isset($namespace)) {
+            dddx(['err' => 'namespace is missing']);
+
+            return;
+        }
+        if (! isset($class_name)) {
+            dddx(['err' => 'class_name is missing']);
+
+            return;
+        }
+        if (! isset($class)) {
+            dddx(['err' => 'class is missing']);
+
+            return;
+        }
+        if (! isset($dummy_id)) {
+            dddx(['err' => 'dummy_id is missing']);
+
+            return;
+        }
+        if (! isset($search)) {
+            dddx(['err' => 'search is missing']);
+
+            return;
+        }
+        if (! isset($fields)) {
+            dddx(['err' => 'fields is missing']);
+
+            return;
+        }
         $replaces = [
             'DummyNamespace' => $namespace,
             'DummyClass' => $class_name,
@@ -244,11 +287,11 @@ class StubService {
             File::put($panel_file, $stub);
         } else {
             echo '<h3>['.$panel_file.'] Just exists</h3>';
-            ddd(debug_backtrace());
+            dddx(debug_backtrace());
         }
     }
 
-    public static function fields($model) {
+    public static function fields(Model $model) {
         if (! method_exists($model, 'getFillable')) {
             return [];
         }
@@ -339,6 +382,16 @@ class StubService {
 
     public static function updatePanel($params) {
         extract($params);
+        if (! isset($func)) {
+            dddx(['err' => 'func is missing']);
+
+            return;
+        }
+        if (! isset($panel)) {
+            dddx(['err' => 'panel is missing']);
+
+            return;
+        }
         $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
         $func_stub = File::get($func_file);
         $autoloader_reflector = new \ReflectionClass($panel);

@@ -24,7 +24,7 @@ class PolicyService {
         $class_name = class_basename($obj);
         $class_ns = substr($class, 0, -(strlen($class_name) + 1));
 
-        self::$in_vars['class_name'] = $class_name; // "LettFPanel"
+        self::$in_vars['class_name'] = $class_name;
         self::$in_vars['class_type'] = '';
         if ($obj instanceof  \Modules\Xot\Models\Panels\XotBasePanel) {
             self::$in_vars['class_type'] = 'panel';
@@ -38,7 +38,7 @@ class PolicyService {
         self::$in_vars['filename'] = $filename;
         self::$in_vars['dirname'] = dirname(self::$in_vars['filename']);
 
-        self::$out_vars['class_name'] = $class_name.'Policy'; // "LettFPanel"
+        self::$out_vars['class_name'] = $class_name.'Policy';
         self::$out_vars['namespace'] = $class_ns.'\Policies';
         self::$out_vars['class'] = self::$out_vars['namespace'].'\\'.self::$out_vars['class_name'];
         $filename = self::$in_vars['dirname'].'/Policies/'.$class_name.'Policy.php';
@@ -59,6 +59,22 @@ class PolicyService {
 
     public static function replaces($params = []) {
         extract(self::$out_vars);
+        if (! isset($namespace)) {
+            dddx(['err' => 'namespace is missing']);
+
+            return;
+        }
+        if (! isset($class_name)) {
+            dddx(['err' => 'class_name is missing']);
+
+            return;
+        }
+        if (! isset($class)) {
+            dddx(['err' => 'class is missing']);
+
+            return;
+        }
+
         $replaces = [
             'DummyNamespace' => $namespace,
             'DummyClass' => $class_name,

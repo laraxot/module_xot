@@ -592,6 +592,7 @@ abstract class XotBasePanel implements PanelContract {
         return (new PanelFormService($this))->formEdit($params);
     }
 
+    /* -- to panelformservice
     public function exceptFields($params = []) {
         extract($params);
         $excepts = collect([]);
@@ -655,7 +656,7 @@ abstract class XotBasePanel implements PanelContract {
 
         return $fields;
     }
-
+    */
     /*
         -- in ingresso "qs" che e' array con le cose da aggiungere
     */

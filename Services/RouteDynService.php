@@ -274,7 +274,7 @@ class RouteDynService {
     }
 
     // /--------------------------------------------------------
-
+    /* ?? deprecated ??
     public static function routes() {
         if ('' != \Request::path()) {
             $tmp = \explode('/', \Request::path());
@@ -294,7 +294,7 @@ class RouteDynService {
             }
         }
     }
-
+    */
     //end routes
     //------------------------------------------------------------------
     public static function prefixedResourceNames($prefix) {

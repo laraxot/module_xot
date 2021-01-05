@@ -37,7 +37,7 @@ class ImportService {
     }
 
     public static function importInit() {
-        \ini_set('max_execution_time', 3000);
+        \ini_set('max_execution_time', '3000');
         $params = \Route::current()->parameters();
         //$cookieJar = new CookieJar();
 
@@ -164,9 +164,10 @@ class ImportService {
             $res = self::$client->request($method, $url, \array_merge(self::$client_options, $attrs));
         } catch (GuzzleException $e) {
             //*
-            if (isset($proxy)) {
-                echo '<h3>Proxy :'.$proxy.'</h3>';
-            }
+            //if (isset($proxy)) {
+            //    echo '<h3>Proxy :'.$proxy.'</h3>';
+            //}
+            /*
             echo '['.__LINE__.']['.__FILE__.']<h3>getRequest ['.$url.']</h3>';
             echo '<pre>';
             \print_r($e->getRequest());
@@ -181,19 +182,21 @@ class ImportService {
                 \print_r($e->getResponse()->getBody());
                 echo '</pre>';
             }
+            */
+
             //dd($e);
             //*/
-            $e->is_error = 1;
+            //$e->is_error = 1;
 
             return $e;
-        } catch (GuzzleHttp\Exception\RequestException $e) {
-            ddd('ooo');
-        } catch (FatalThrowableError $e) {
-            ddd('qui');
-        } catch (GuzzleException\RequestException $e) {
-            ddd('3');
-        } catch (RequestException $e) {
-            ddd('4');
+            //} catch (\GuzzleHttp\Exception\RequestException $e) {
+            //ddd('ooo');
+        //} catch (FatalThrowableError $e) {
+        //    dddx('qui');
+        //} catch (GuzzleException\RequestException $e) {
+        //    dddx('3');
+        //} catch (RequestException $e) {
+        //    dddx('4');
         }
 
         //echo $res->getStatusCode(); // 200
@@ -295,6 +298,11 @@ class ImportService {
 
     public static function getAddressFields($params) {
         \extract($params);
+        if (! isset($address)) {
+            dddx(['err' => 'address is missing']);
+
+            return;
+        }
         $linked = new \stdClass();
         $location_url = config('services.bing.url_location_api').'?query='.\urlencode($address).'&maxResults=5&key='.config('services.bing.maps_key');
         $location_url = config('services.google.url_location_api').'?address='.\urlencode($address).'&key='.config('services.google.maps_key');
@@ -362,6 +370,16 @@ class ImportService {
         //$url
         //$filename
         extract($params);
+        if (! isset($filename)) {
+            dddx(['err' => 'filename is missing']);
+
+            return;
+        }
+        if (! isset($url)) {
+            dddx(['err' => 'url is missing']);
+
+            return;
+        }
         $resource = fopen($filename, 'w');
         $stream = \GuzzleHttp\Psr7\stream_for($resource);
         self::gRequest(
@@ -432,7 +450,7 @@ class ImportService {
     public static function pixabay($params) {
         $lang = app()->getLocale();
         $image_type = 'photo';
-        //$q= necessary
+        $q = 'necessary';
         \extract($params);
         $pixabay_url = 'https://pixabay.com/api/?key=7945761-cdc8fef41b0600630fdabe778';
         $pixabay_url .= '&lang='.$lang;
@@ -451,6 +469,7 @@ class ImportService {
 
     public static function pexels($params) {
         $lang = app()->getLocale();
+        $q = 'necessary';
         \extract($params);
         //--- devono mandare via mail api key ..
         //dd($this->client);
@@ -476,6 +495,9 @@ class ImportService {
 
     public static function googleTrans($params) {
         $host = 'translate.googleapis.com';
+        $q = 'necessary';
+        $from = 'en';
+        $to = 'it';
         \extract($params);
         $q = \urlencode($q);
         $urldata = \file_get_contents("https://translate.googleapis.com/translate_a/single?client=gtx&sl=$from&tl=$to&dt=t&q=$q");
@@ -494,6 +516,9 @@ class ImportService {
 
     public static function mymemoryTrans($params) {
         $host = 'api.mymemory.translated.net';
+        $q = 'necessary';
+        $from = 'en';
+        $to = 'it';
         \extract($params);
         $q = \urlencode($q);
         $urldata = \file_get_contents('http://'.$host.'/get?q='.$q.'&langpair='.$from.'|'.$to.'');
@@ -517,6 +542,8 @@ class ImportService {
     //end mymemoryTrans;
 
     public static function getForms($params) {
+        $html = '';
+        $node_tag = '';
         extract($params);
         $crawler = new Crawler((string) $html);
         $forms = $crawler->filter($node_tag)->each(function (Crawler $node) {
@@ -538,6 +565,7 @@ class ImportService {
     }
 
     public static function formRequest($params) {
+        $form = ['method' => '?', 'action' => '?', 'fields' => '?'];
         extract($params);
 
         return self::gRequest($form['method'], $form['action'], ['form_params' => $form['fields']]);
