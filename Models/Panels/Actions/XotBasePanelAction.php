@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 //----------  SERVICES --------------------------
 use Modules\FormX\Services\FormXService;
-use Modules\Xot\Jobs\Crud\UpdateJob;
 //------------ jobs ----------------------------
 use Modules\Xot\Services\PanelService as Panel;
 
@@ -261,54 +260,17 @@ abstract class XotBasePanelAction {
     }
 
     //end btnItem
-
+    /*
     public function updateRow($params = []) {
         $row = $this->row;
         $container = null;
         extract($params);
 
         $item = $row;
-        //$item=\Modules\Food\Models\Restaurant::first();
         $up = UpdateJob::dispatchNow($container, $item);
-        //try{
-        //$tmp=new UpdateJob($container, $item);
-        //}catch(\Exception $e){
-        //debug_getter_obj(['obj'=>$e]);
-        //ddd($e->getMessage());
-        //ddd($e->errors());
-        /*
-        ValidationException {#1787 ▼
-            +validator: Validator {#1784 ▶}
-            +response: null
-            +status: 422
-            +errorBag: "default"
-            +redirectTo: null
-            #message: "The given data was invalid."
-            #code: 0
-            #file: "C:\var\www\multi\laravel\vendor\laravel\framework\src\Illuminate\Validation\Validator.php"
-            #line: 315
-            trace: {▶}
-          }
-          */
-        // $up->set
-        //}
-
         return $up;
-        //ddd($up);
-        /*
-        $panel = Panel::get($row);
-        $request = \Modules\Xot\Http\Requests\XotRequest::capture();
-        $request->validatePanel($panel);
-        $data = $request->all();
-
-        $res = tap($row)->update($data);
-        */
-        //--- manca update relationship !
-        //----
-        //\Session::flash('status', 'aggiornato! ['.$row->getKey().']!');
-
-        //return $this->handle();
     }
+    */
 
     public function pdf($params = []) {
         if (null == $this->row) {
