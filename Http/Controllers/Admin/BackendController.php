@@ -25,7 +25,7 @@ class BackendController extends Controller {
             return $out;
         }
         */
-
-        return ThemeService::view('adm_theme::admin.dashboard');
+        return view('adm_theme::admin.dashboard');
+        //return ThemeService::view('adm_theme::admin.dashboard');
     }
 }

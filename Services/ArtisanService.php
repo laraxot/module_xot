@@ -130,7 +130,7 @@ class ArtisanService {
 
             return $output;  // dato che mi carico solo le route minime menufull.delete non esiste.. impostare delle route comuni.
         } catch (Exception $e) {
-            return '<br/>'.$command.' non effettuato';
+            return '<br/>'.$command.' non effettuato '.$e->getMessage();
         } /*
         //Dead catch - Symfony\Component\Console\Exception\CommandNotFoundException is already caught by Exception above.
         catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
