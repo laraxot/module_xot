@@ -3,7 +3,7 @@
 namespace Modules\Xot\Traits;
 
 trait Getter {
-    public static function __merge($index, $value) {
+    public static function __merge(string $index, mixed $value): array {
         $tmp = self::__getStatic($index);
         if (! is_array($tmp)) {
             $tmp = [];
@@ -14,7 +14,7 @@ trait Getter {
         return $tmp;
     }
 
-    public static function __getStatic($index) {
+    public static function __getStatic(string $index): mixed {
         if (isset(self::$vars[$index])) {
             return self::$vars[$index];
         }
@@ -35,7 +35,7 @@ trait Getter {
 
     //end __set
 
-    public static function __setStatic($index, $value) {
+    public static function __setStatic(string $index, $value): void {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
         self::$vars[$index] = $value;
     }

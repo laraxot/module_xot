@@ -34,7 +34,7 @@ trait Updater {
     }
     */
 
-    public function getTableColumns() {
+    public function getTableColumns(): array {
         return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
     }
 

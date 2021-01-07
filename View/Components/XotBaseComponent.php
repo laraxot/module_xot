@@ -11,13 +11,13 @@ use Illuminate\View\Component as IlluminateComponent;
 abstract class XotBaseComponent extends IlluminateComponent {
     /** @var array */
     protected static $assets = [];
-    public $attrs = [];
+    public array $attrs = [];
 
     public static function assets(): array {
         return static::$assets;
     }
 
-    public function getView() {
+    public function getView(): string {
         $class = get_class($this);
 
         $module_name = Str::between($class, 'Modules\\', '\Views\\');

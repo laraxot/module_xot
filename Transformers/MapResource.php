@@ -6,10 +6,10 @@ namespace Modules\Xot\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MapResource extends JsonResource {
-    protected $longitude;
-    protected $latitude;
+    protected float $longitude;
+    protected float $latitude;
 
-    public function toArray($request) {
+    public function toArray($request): array {
         return [
             'type' => 'Feature',
             'properties' => [
