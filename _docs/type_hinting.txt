@@ -123,3 +123,16 @@ function foo(): object
     return new stdClass();
 }
 
+
+
+Relazioni
+https://github.com/nunomaduro/larastan/issues/689
+
+"types have capital letter: HasOne, BelongsTo, HasMany, etc
+if using return types, remember to reference them at the beginning with:
+use Illuminate\Database\Eloquent\Relations\HasOne;".
+
+esempio:
+public function articles(): HasMany {
+    return $this->hasMany(Article::class);
+}
