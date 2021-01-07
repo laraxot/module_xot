@@ -14,7 +14,7 @@ trait Getter {
         return $tmp;
     }
 
-    public static function __getStatic(string $index): mixed {
+    public static function __getStatic(string $index) {
         if (isset(self::$vars[$index])) {
             return self::$vars[$index];
         }
