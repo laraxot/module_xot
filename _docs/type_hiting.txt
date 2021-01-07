@@ -1,0 +1,1 @@
+https://mlocati.github.io/articles/php-type-hinting.html
