@@ -7,7 +7,7 @@
             </div>
         @endif
         @foreach($goals as $goal)
-            @livewire('xot::rate.single',['model'=>$model,'goal'=>$goal ])
+            @livewire('blog::rate.single',['model'=>$model,'goal'=>$goal ])
         @endforeach
 
 
