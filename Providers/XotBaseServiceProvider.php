@@ -3,6 +3,7 @@
 namespace Modules\Xot\Providers;
 
 //use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -176,12 +177,12 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
 
     public function loadEventsFrom($path) {
         $events = [];
-        if (! \File::isDirectory($path)) {
-            \File::makeDirectory($path, 0777, true, true);
+        if (! File::isDirectory($path)) {
+            File::makeDirectory($path, 0777, true, true);
         }
         $events_file = $path.'/_events.json';
         $force_recreate = request()->input('force_recreate', true);
-        if (! \File::exists($events_file) || $force_recreate) {
+        if (! File::exists($events_file) || $force_recreate) {
             foreach (\glob($path.'/*.php') as $filename) {
                 $info = pathinfo($filename);
 
@@ -209,16 +210,16 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
                 }
             }
             try {
-                \File::put($events_file, json_encode($events));
+                File::put($events_file, json_encode($events));
             } catch (\Exception $e) {
                 dd($e);
             }
         } else {
-            $events = \File::get($events_file);
+            $events = File::get($events_file);
             $events = json_decode($events);
         }
         foreach ($events as $v) {
-            \Event::listen($v->event, $v->listener);
+            Event::listen($v->event, $v->listener);
         }
     }
 

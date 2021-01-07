@@ -21,10 +21,12 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
         $model = $this->panel->row;
         $model_table = $model->getTable();
         $model_type = PanelService::get($model)->postType();
-        $transformer = \Modules\Geo\Transformers\GeoJsonCollection::class;
+        $transformer = \Modules\Xot\Transformers\GeoJsonCollection::class;
         //--------
+
         $lang = app()->getLocale();
         $rows = $this->panel->rows();
+        /*
         $post_table = app(Post::class)->getTable();
         $rows = $rows->join($post_table.' as post',
             function ($join) use ($lang,$model_table,$model_type) {
@@ -40,6 +42,8 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
                    // ->where('lang', $lang)
                     ->paginate(100)
                     ->appends(\Request::input());
+        */
+        $rows = $rows->paginate(100);
         $out = new $transformer($rows);
         //--------
 
@@ -48,7 +52,7 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
 
     public function outItem($params = null) {
         $model = $this->panel->row;
-        $transformer = \Modules\Geo\Transformers\GeoJsonResource::class;
+        $transformer = \Modules\Xot\Transformers\GeoJsonResource::class;
 
         $out = new $transformer($model);
 
