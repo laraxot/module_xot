@@ -64,7 +64,7 @@ abstract class XotBasePanel implements PanelContract {
      * @return array
      * @var array
      */
-    public function with() {
+    public function with(): array {
         return [];
     }
 
