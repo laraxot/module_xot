@@ -30,12 +30,8 @@ class HomePanel extends XotBasePanel {
 
     /**
      * The relationships that should be eager loaded on index queries.
-     *
-     * @return string[]
-     * @return string[]
-     * @var array
      */
-    public function with() {
+    public function with():array {
         return ['widgets'];
     }
 
