@@ -26,7 +26,8 @@ abstract class XotBaseJob implements ShouldQueue {
     /**
      * __construct.
      *
-     * @return void
+     * @param array $data
+     * @param PanelContract $panel
      */
     public function __construct(array $data, PanelContract &$panel) {
         $this->panel = $panel;

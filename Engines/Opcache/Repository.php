@@ -10,6 +10,9 @@ class Repository extends TaggedCache implements CacheContract {
     /**
      * Get an item from the cache, or store the default value.
      * Override parent method to avoid cache slamming ('thundering herd problem').
+     * @param $key
+     * @param $minutes
+     * @param Closure $callback
      */
     public function remember($key, $minutes, Closure $callback) {
         /*

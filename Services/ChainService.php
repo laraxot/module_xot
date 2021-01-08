@@ -5,7 +5,14 @@ namespace Modules\Xot\Services;
 /**
  * https://github.com/Tinyportal/TinyPortal/blob/master/Sources/TPSubs.php.
  *
- **/
+ * @param $primary_field
+ * @param $parent_field
+ * @param $sort_field
+ * @param $rows
+ * @param int $root_id
+ * @param int $maxlevel
+ * @return mixed
+ */
 
 /* example to use
 $ordered = chain('category_id', 'parent_id', 'category_position', $rows);

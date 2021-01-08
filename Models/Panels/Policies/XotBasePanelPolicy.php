@@ -122,6 +122,7 @@ abstract class XotBasePanelPolicy {
     /**
      * Determine whether the user can view any DocDummyPluralModel.
      *
+     * @param UserContract $user
      * @return mixed
      */
     public function viewAny(UserContract $user) {

@@ -31,6 +31,8 @@ class HomePanel extends XotBasePanel {
     /**
      * The relationships that should be eager loaded on index queries.
      *
+     * @return string[]
+     * @return string[]
      * @var array
      */
     public function with() {
@@ -43,6 +45,8 @@ class HomePanel extends XotBasePanel {
 
     /**
      * on select the option id.
+     * @param $row
+     * @return mixed
      */
     public function optionId($row) {
         return $row->area_id;
@@ -50,6 +54,8 @@ class HomePanel extends XotBasePanel {
 
     /**
      * on select the option label.
+     * @param $row
+     * @return mixed
      */
     public function optionLabel($row) {
         return $row->area_define_name;

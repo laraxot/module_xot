@@ -69,7 +69,8 @@ abstract class XotBaseRequest extends FormRequest {
     /**
      * Cerco di rilevare quando viene chiamato.
      *
-     **/
+     * @param array $data
+     */
     public function modifyInput(array $data) {
         dddx($data);
     }
@@ -95,7 +96,10 @@ abstract class XotBaseRequest extends FormRequest {
     /**
      * Cerco di rilevare quando viene chiamato.
      *
-     **/
+     *
+     * @return array
+     * @return array
+     */
     public function validationData() {
         dddx('aaa');
 

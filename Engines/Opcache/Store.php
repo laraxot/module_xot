@@ -38,6 +38,8 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * Create a new OPcache store.
+     * @param string $prefix
+     * @param string $directory
      */
     public function __construct(string $prefix = '', string $directory = '') {
         // Graceful degradation: if OPcache is not enabled, we're just loading cache files.
@@ -73,6 +75,7 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
+     * @param array $names
      * @return string
      */
     protected function tagsSubDir(array $names) {
@@ -256,6 +259,7 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Get fully qualified file path.
      *
+     * @param string $key
      * @return string
      */
     public function filePath(string $key) {
@@ -307,6 +311,8 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Write the cache file to disk.
      *
+     * @param string $key
+     * @param int $exp
      * @param mixed $val
      *
      * @return bool

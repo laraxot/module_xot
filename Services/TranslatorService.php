@@ -19,8 +19,9 @@ class TranslatorService extends BaseTranslator {
      * get.
      *
      * @param string $key
-     * @param string $locale
-     * @param bool   $fallback
+     * @param array $replace
+     * @param null $locale
+     * @param bool $fallback
      *
      * @return array|string
      */
@@ -47,8 +48,10 @@ class TranslatorService extends BaseTranslator {
     /**
      * getFromJson.
      *
-     * @param mixed       $key
+     * @param mixed $key
+     * @param array $replace
      * @param string|null $locale
+     * @return array|string
      */
     public function getFromJson($key, array $replace = [], $locale = null) {
         return $this->get($key, $replace, $locale);

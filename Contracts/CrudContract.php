@@ -58,6 +58,7 @@ interface CrudContract {
 
     /**
      * Set the related data that should be eager loaded.
+     * @param array $relation
      */
     public function setRelation(array $relation);
 
@@ -78,6 +79,7 @@ interface CrudContract {
 
     /**
      * Create new entry.
+     * @param array $data
      */
     public function create(array $data);
 
@@ -109,6 +111,7 @@ interface CrudContract {
      * Set hasMany relationship by adding the related model, data and
      * relation name.
      *
+     * @param array $data
      * @param string $relatedModel
      * @param string $relation
      */
@@ -118,6 +121,7 @@ interface CrudContract {
      * Add the belongsToMany relationship data to be synced and define
      * the relationship name.
      *
+     * @param array $data
      * @param string $relation
      */
     public function withBelongsToMany(array $data, $relation);
@@ -125,10 +129,11 @@ interface CrudContract {
     /**
      * Handle a file or photo upload.
      *
-     * @param string $field_name   upload field name
-     * @param string $folder       storage folder
+     * @param \Illuminate\Http\Request $request
+     * @param string $field_name upload field name
+     * @param string $folder storage folder
      * @param string $storage_disk storage disk to be used
-     * @param bool   $randomize    to randomize the filename
+     * @param bool $randomize to randomize the filename
      *
      * @return string filename
      */

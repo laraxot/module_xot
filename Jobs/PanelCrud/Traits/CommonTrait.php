@@ -32,6 +32,7 @@ trait CommonTrait {
     /**
      * https://hackernoon.com/eloquent-relationships-cheat-sheet-5155498c209
      * https://laracasts.com/discuss/channels/eloquent/cleanest-way-to-save-model-and-relationships.
+     * @param $params
      */
     public function manageRelationships($params) {
         $act = 'show';

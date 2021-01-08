@@ -60,6 +60,8 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * The relationships that should be eager loaded on index queries.
      *
+     * @return array
+     * @return array
      * @var array
      */
     public function with() {
@@ -186,6 +188,8 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * on select the option label.
+     * @param $row
+     * @return string
      */
     public function optionLabel($row) {
         return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
@@ -381,7 +385,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * Get the filters available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request|null $request
      *
      * @return array
      */
@@ -432,6 +436,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * Build an "index" query for the given resource.
      *
+     * @param $data
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -446,6 +451,7 @@ abstract class XotBasePanel implements PanelContract {
      *
      * This query determines which instances of the model may be attached to other resources.
      *
+     * @param Request $request
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      * @return \Illuminate\Database\Eloquent\Builder

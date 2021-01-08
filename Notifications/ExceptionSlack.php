@@ -14,6 +14,7 @@ class ExceptionSlack extends Notification implements ShouldQueue {
 
     /**
      * Create a new notification instance.
+     * @param Exception $e
      */
     public function __construct(\Exception $e) {
         //ddd($e);

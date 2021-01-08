@@ -136,3 +136,8 @@ esempio:
 public function articles(): HasMany {
     return $this->hasMany(Article::class);
 }
+
+
+
+
+https://github.com/oucil/Code-Hint-Aggregator

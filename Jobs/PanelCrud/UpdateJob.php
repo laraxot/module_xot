@@ -32,7 +32,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *--- hasOne ----.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsHasOne($model, $name, $data) {
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -49,7 +52,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *  belongsTo.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsBelongsTo($model, $name, $data) {
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -63,7 +69,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- hasMany ---.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsHasMany($model, $name, $data) {
         $rows = $model->$name();
         debug_getter_obj(['obj' => $rows]);
@@ -74,7 +83,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- belongsToMany.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsBelongsToMany($model, $name, $data) {
         //$model->$name()->syncWithoutDetaching($data);
         $model->$name()->sync($data);
@@ -88,7 +100,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphOne.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsMorphOne($model, $name, $data) {
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
         $rows = $model->$name();
@@ -104,7 +119,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphMany.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsMorphMany($model, $name, $data) {
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
@@ -122,7 +140,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphToMany.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsMorphToMany($model, $name, $data) {
         //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
@@ -181,7 +202,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * pivot.
-     **/
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function updateRelationshipsPivot($model, $name, $data) {
         $model->$name->update($data);
     }

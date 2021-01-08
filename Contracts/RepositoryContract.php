@@ -29,15 +29,18 @@ interface RepositoryContract {
      *
      * @para string $id
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     *
+     * @param $id
      * @return \Illuminate\Database\Eloquent\Model
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function findOrFail($id);
 
     /**
      * Find data by field and value.
      *
+     * @param $field
+     * @param $value
+     * @param string[] $columns
      * @return Model|Collection
      */
     public function findBy($field, $value, $columns = ['*']);
@@ -56,6 +59,7 @@ interface RepositoryContract {
     /**
      * Find data by multiple fields.
      *
+     * @param array $where
      * @param array $columns
      *
      * @return mixed
@@ -123,6 +127,7 @@ interface RepositoryContract {
     /**
      * Save a new entity in repository.
      *
+     * @param array $attributes
      * @return Model|bool
      */
     public function create(array $attributes);
@@ -130,6 +135,8 @@ interface RepositoryContract {
     /**
      * Update an entity with the given attributes and persist it.
      *
+     * @param Model $entity
+     * @param array $attributes
      * @return bool
      */
     public function update(Model $entity, array $attributes);

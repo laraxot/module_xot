@@ -26,6 +26,7 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
+     * @param Builder $builder
      * @return mixed
      */
     public function search(Builder $builder) {
@@ -113,6 +114,7 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
+     * @param Builder $builder
      * @param int $perPage
      * @param int $page
      *
@@ -143,7 +145,8 @@ class FullTextSearchEngine extends Engine {
     /**
      * Map the given results to instances of the given model.
      *
-     * @param mixed                               $results
+     * @param Builder $builder
+     * @param mixed $results
      * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return \Illuminate\Database\Eloquent\Collection

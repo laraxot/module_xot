@@ -112,7 +112,7 @@ abstract class XotBasePolicy {
     /**
      * Determine whether the user can view any DocDummyPluralModel.
      *
-     * @param \Modules\LU\Models\User $user
+     * @param User $user
      *
      * @return mixed
      */

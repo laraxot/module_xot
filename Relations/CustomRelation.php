@@ -33,7 +33,11 @@ class CustomRelation extends Relation {
     /**
      * Create a new belongs to relationship instance.
      *
-     * @return void
+     * @param Builder $query
+     * @param Model $parent
+     * @param Closure $baseConstraints
+     * @param Closure|null $eagerConstraints
+     * @param Closure|null $eagerMatcher
      */
     public function __construct(Builder $query, Model $parent, Closure $baseConstraints, ?Closure $eagerConstraints, ?Closure $eagerMatcher) {
         $this->baseConstraints = $baseConstraints;
@@ -55,6 +59,7 @@ class CustomRelation extends Relation {
     /**
      * Set the constraints for an eager load of the relation.
      *
+     * @param array $models
      * @return void
      */
     public function addEagerConstraints(array $models) {
@@ -64,6 +69,7 @@ class CustomRelation extends Relation {
     /**
      * Initialize the relation on a set of models.
      *
+     * @param array $models
      * @param string $relation
      *
      * @return array
@@ -79,6 +85,8 @@ class CustomRelation extends Relation {
     /**
      * Match the eagerly loaded results to their parents.
      *
+     * @param array $models
+     * @param Collection $results
      * @param string $relation
      *
      * @return array

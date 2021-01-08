@@ -93,6 +93,7 @@ class MetatagPanel extends XotBasePanel {
     /**
      * Get the actions available for the resource.
      *
+     * @param Request|null $request
      * @return array
      */
     public function actions(Request $request = null) {

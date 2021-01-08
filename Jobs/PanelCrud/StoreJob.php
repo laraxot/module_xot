@@ -11,6 +11,8 @@ use Modules\Xot\Services\PanelService as Panel;
 class StoreJob extends XotBaseJob {
     /**
      * Execute the job.
+     * @return \Modules\Xot\Contracts\PanelContract
+     * @return \Modules\Xot\Contracts\PanelContract
      */
     public function handle() {
         //dd('['.__LINE__.']['.__FILE__.']');
