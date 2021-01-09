@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Arr;
@@ -15,21 +17,19 @@ use Modules\Theme\Services\ThemeService;
 //ddd('leggo');
 
 /**
- * Class TranslatorService
- * @package Modules\Xot\Services
+ * Class TranslatorService.
  */
 class TranslatorService extends BaseTranslator {
     /**
      * get.
      *
-     * @param string $key
-     * @param array $replace
-     * @param null $locale
-     * @param bool $fallback
+     * @param string      $key
+     * @param string|null $locale
+     * @param bool        $fallback
      *
      * @return array|string
      */
-    public function get(string $key, array $replace = [], $locale = null, $fallback = true) {
+    public function get($key, array $replace = [], $locale = null, $fallback = true) {
         $translation = parent::get($key, $replace, $locale, $fallback);
         //echo '<br>['.$key.']['.$translation.']';
         //$langs=ThemeService::__merge('langs', [$key=>$translation]);
@@ -52,9 +52,9 @@ class TranslatorService extends BaseTranslator {
     /**
      * getFromJson.
      *
-     * @param mixed $key
-     * @param array $replace
+     * @param mixed       $key
      * @param string|null $locale
+     *
      * @return array|string
      */
     public function getFromJson($key, array $replace = [], $locale = null) {
@@ -63,6 +63,7 @@ class TranslatorService extends BaseTranslator {
 
     /**
      * @param $params
+     *
      * @return array|void
      */
     public static function parse($params) {

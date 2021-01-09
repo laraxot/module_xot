@@ -16,27 +16,25 @@ use Illuminate\Support\Str;
  * Class XotBaseServiceProvider.
  */
 abstract class XotBaseServiceProvider extends ServiceProvider {
+    /**
+     * @var
+     */
     protected string $module_dir = __DIR__;
 
+    /**
+     * @var
+     */
     protected string $module_ns = __NAMESPACE__;
 
     /**
      * @var
      */
-    protected $module_base_ns;
-
     public string $module_name = 'formx';
-
-    protected string $module_ns = __NAMESPACE__;
 
     /**
      * @var
      */
     protected string $module_base_ns;
-
-    /**
-     * @var
-     */
 
     /**
      * Boot the application events.
