@@ -18,7 +18,7 @@ abstract class BaseModel extends Model {
     /**
      * @var string[]
      */
-    protected array $fillable = ['id'];
+    protected $fillable = ['id'];
     /**
      * @var array
      */
