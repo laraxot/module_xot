@@ -24,13 +24,17 @@ class PanelMakeCommand extends GeneratorCommand {
 
     /**
      * The console command name.
+     *
+     * @var string
      */
-    protected string $name = 'xot:make-panel';
+    protected $name = 'xot:make-panel';
 
     /**
      * The console command description.
+     *
+     * @var string
      */
-    protected string $description = 'Create a new panel class for the specified module';
+    protected $description = 'Create a new panel class for the specified module';
 
     /**
      * @return string
