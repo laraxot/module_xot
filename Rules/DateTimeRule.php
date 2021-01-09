@@ -18,7 +18,7 @@ class DateTimeRule implements Rule {
      * @param mixed $value
      * @return bool
      */
-    public function passes(string $attribute, $value) {
+    public function passes($attribute, $value) {
         //ddd($attribute); //published_at
         //ddd($value);//10/10/2019 13:43
         //return 5 === strlen($value);
