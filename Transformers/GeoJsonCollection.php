@@ -17,7 +17,7 @@ class GeoJsonCollection extends ResourceCollection {
     /**
      * @var string
      */
-    public string $collects = GeoJsonResource::class;
+    public $collects = GeoJsonResource::class;
 
     /**
      * @param \Illuminate\Http\Request $request

@@ -12,7 +12,7 @@ class MapCollection extends ResourceCollection {
     /**
      * @var string
      */
-    public string $collects = MapResource::class;
+    public $collects = MapResource::class;
 
     /**
      * @param \Illuminate\Http\Request $request

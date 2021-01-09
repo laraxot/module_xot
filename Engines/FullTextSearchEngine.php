@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Engines;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -7,8 +9,7 @@ use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
 /**
- * Class FullTextSearchEngine
- * @package Modules\Xot\Engines
+ * Class FullTextSearchEngine.
  */
 class FullTextSearchEngine extends Engine {
     /**
@@ -16,13 +17,11 @@ class FullTextSearchEngine extends Engine {
      *
      * @param \Illuminate\Database\Eloquent\Collection $models
      */
-    public function update(Collection $models) {
+    public function update($models) {
     }
 
     /**
      * Remove the given model from the index.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection $models
      */
     public function delete(Collection $models) {
     }
@@ -30,7 +29,6 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
-     * @param Builder $builder
      * @return mixed
      */
     public function search(Builder $builder) {
@@ -89,8 +87,6 @@ class FullTextSearchEngine extends Engine {
     /**
      * Replaces spaces with full text search wildcards.
      *
-     * @param string $term
-     *
      * @return string
      */
     protected function fullTextWildcards(string $term) {
@@ -117,10 +113,6 @@ class FullTextSearchEngine extends Engine {
 
     /**
      * Perform the given search on the engine.
-     *
-     * @param Builder $builder
-     * @param int $perPage
-     * @param int $page
      *
      * @return mixed
      */
@@ -149,8 +141,7 @@ class FullTextSearchEngine extends Engine {
     /**
      * Map the given results to instances of the given model.
      *
-     * @param Builder $builder
-     * @param mixed $results
+     * @param mixed                               $results
      * @param \Illuminate\Database\Eloquent\Model $model
      *
      * @return \Illuminate\Database\Eloquent\Collection
@@ -174,8 +165,6 @@ class FullTextSearchEngine extends Engine {
 
     /**
      * Flush all of the model's records from the engine.
-     *
-     * @param \Illuminate\Database\Eloquent\Model $model
      */
     public function flush(\Illuminate\Database\Eloquent\Model $model) {
         //$index = $this->algolia->initIndex($model->searchableAs());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
 use Illuminate\Console\Command;
@@ -27,8 +29,7 @@ https://medium.com/@josepostiga/how-i-managed-to-control-chaos-with-laravel-d47b
 */
 
 /**
- * Class CreateAllRepositoriesCommand
- * @package Modules\Xot\Console
+ * Class CreateAllRepositoriesCommand.
  */
 class CreateAllRepositoriesCommand extends Command {
     /**
@@ -36,14 +37,14 @@ class CreateAllRepositoriesCommand extends Command {
      *
      * @var string
      */
-    protected string $name = 'xot:create-all-repos';
+    protected $name = 'xot:create-all-repos';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected string $description = 'Create all repositories ';
+    protected $description = 'Create all repositories ';
 
     /**
      * Create a new command instance.
