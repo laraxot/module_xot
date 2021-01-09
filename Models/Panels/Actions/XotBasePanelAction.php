@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels\Actions;
 
 use ErrorException;
@@ -16,50 +18,28 @@ use Modules\FormX\Services\FormXService;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class XotBasePanelAction
- * @package Modules\Xot\Models\Panels\Actions
+ * Class XotBasePanelAction.
  */
 abstract class XotBasePanelAction {
-    /**
-     * @var bool
-     */
     public bool $onContainer = false;
-    /**
-     * @var bool
-     */
+
     public bool $onItem = false;
-    /**
-     *
-     */
+
     public $row = null;
-    /**
-     *
-     */
+
     public $rows = null;
-    /**
-     *
-     */
+
     public $panel = null;
-    /**
-     *
-     */
-    public string $name = null;
-    /**
-     * @var string
-     */
+
+    public ?string $name = null;
+
     public string $icon = '<i class="far fa-question-circle"></i>';
-    /**
-     * @var string
-     */
+
     public string $class = 'btn btn-secondary mb-2';
-    /**
-     * @var array
-     */
+
     protected array $data = [];
-    /**
-     *
-     */
-    public string $related = null; //post_type per filtrare le azioni nei vari index_edit
+
+    public ?string $related = null; //post_type per filtrare le azioni nei vari index_edit
 
     abstract public function handle();
 
@@ -125,6 +105,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function getUrl($params = []) {
@@ -151,6 +132,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string|void|null
      */
     public function btn($params = []) {
@@ -170,6 +152,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function url($params = []) {
@@ -182,6 +165,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function urlContainer($params = []) {
@@ -211,6 +195,7 @@ abstract class XotBasePanelAction {
     /**
      * @param $key
      * @param null $value
+     *
      * @return $this
      */
     public function with($key, $value = null) {
@@ -225,6 +210,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string|void|null
      */
     public function btnHtml($params = []) {
@@ -269,6 +255,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string|void|null
      */
     public function btnContainer($params = []) {
@@ -287,6 +274,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function urlItem($params = []) {
@@ -324,6 +312,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function btnItem($params = []) {
@@ -370,6 +359,7 @@ abstract class XotBasePanelAction {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function pdf($params = []) {

@@ -19,7 +19,7 @@ abstract class BaseMorphPivot extends MorphPivot {
     /**
      * @var string
      */
-    protected string $primaryKey = 'id';
+    protected $primaryKey = 'id';
     /**
      * @var bool
      */

@@ -50,7 +50,7 @@ abstract class XotBasePanel implements PanelContract {
 
     public ?PanelPresenterContract $presenter = null;
 
-    public null $form = null;
+    public $form = null;
 
     public ?PanelRouteService $route = null;
 

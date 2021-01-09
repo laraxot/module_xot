@@ -22,7 +22,7 @@ abstract class BaseModel extends Model {
     /**
      * @var array
      */
-    protected array $casts = [
+    protected $casts = [
         //'published_at' => 'datetime:Y-m-d', // da verificare
     ];
 
@@ -33,7 +33,7 @@ abstract class BaseModel extends Model {
     /**
      * @var string
      */
-    protected string $primaryKey = 'id';
+    protected $primaryKey = 'id';
     /**
      * @var bool
      */
