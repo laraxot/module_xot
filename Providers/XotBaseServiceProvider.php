@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Providers;
 
 //use Illuminate\Database\Eloquent\Factory;
@@ -11,47 +13,30 @@ use Illuminate\Support\Str;
 //use Modules;
 
 /**
- * Class XotBaseServiceProvider
- * @package Modules\Xot\Providers
+ * Class XotBaseServiceProvider.
  */
 abstract class XotBaseServiceProvider extends ServiceProvider {
-    /**
-     * @var string
-     */
-<<<<<<< HEAD
-<<<<<<< HEAD
     protected string $module_dir = __DIR__;
-    /**
-     * @var string
-     */
+
     protected string $module_ns = __NAMESPACE__;
+
+    /**
+     * @var
+     */
     protected $module_base_ns;
-    /**
-     * @var string
-     */
+
     public string $module_name = 'formx';
-=======
-    protected $module_dir = __DIR__;
-=======
-    protected string $module_dir = __DIR__;
->>>>>>> 3ba9100 (.)
-    /**
-     * @var string
-     */
+
     protected string $module_ns = __NAMESPACE__;
+
     /**
      * @var
      */
     protected string $module_base_ns;
+
     /**
      * @var
      */
-<<<<<<< HEAD
-    public $module_name;
->>>>>>> c906275 (.)
-=======
-    public string $module_name;
->>>>>>> 3ba9100 (.)
 
     /**
      * Boot the application events.
@@ -214,6 +199,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
 
     /**
      * @param $path
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function loadEventsFrom($path) {

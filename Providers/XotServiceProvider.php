@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Providers;
 
 use Illuminate\Cache\TagSet;
@@ -26,46 +28,20 @@ use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
 use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
 /**
- * Class XotServiceProvider
- * @package Modules\Xot\Providers
+ * Class XotServiceProvider.
  */
 class XotServiceProvider extends XotBaseServiceProvider {
     /**
-<<<<<<< HEAD
      * The module directory.
-     *
-     * @var string
      */
     protected string $module_dir = __DIR__;
+
     /**
      * The module namespace.
-     *
-     * @var string
      */
     protected string $module_ns = __NAMESPACE__;
-    /**
-     * The module name.
-     *
-     * @var string
-     */
+
     public string $module_name = 'xot';
-=======
-     * @var string
-     */
-    protected string $module_dir = __DIR__;
-    /**
-     * @var string
-     */
-    protected string $module_ns = __NAMESPACE__;
-    /**
-     * @var string
-     */
-<<<<<<< HEAD
-    public $module_name = 'xot';
->>>>>>> c906275 (.)
-=======
-    public string $module_name = 'xot';
->>>>>>> 3ba9100 (.)
 
     public function bootCallback() {
         $this->mergeConfigs();

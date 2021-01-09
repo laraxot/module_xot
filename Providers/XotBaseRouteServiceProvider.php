@@ -1,51 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider; // per dizionario morph
 use Illuminate\Support\Facades\Route;
 
 /**
- * Class XotBaseRouteServiceProvider
- * @package Modules\Xot\Providers
+ * Class XotBaseRouteServiceProvider.
  */
 abstract class XotBaseRouteServiceProvider extends ServiceProvider {
     /**
-<<<<<<< HEAD
      * The module namespace to assume when generating URLs to actions.
-     *
-     * @var string
      */
     protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
+
     /**
      * The module directory.
-     *
-     * @var string
      */
     protected string $module_dir = __DIR__;
+
     /**
      * The module namespace.
-     *
-     * @var string
      */
     protected string $module_ns = __NAMESPACE__;
-=======
-     * @var string
-     */
-    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
-    /**
-     * @var string
-     */
-    protected string $module_dir = __DIR__;
-    /**
-     * @var string
-     */
-<<<<<<< HEAD
-    protected $module_ns = __NAMESPACE__;
->>>>>>> c906275 (.)
-=======
-    protected string $module_ns = __NAMESPACE__;
->>>>>>> 3ba9100 (.)
 
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso
