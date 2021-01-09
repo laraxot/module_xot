@@ -124,12 +124,13 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache for a given number of minutes.
      *
+     * @param string    $key
      * @param mixed     $value
      * @param float|int $minutes
      *
      * @return bool
      */
-    public function put(string $key, $value, $minutes = 0) {
+    public function put($key, $value, $minutes = 0) {
         $val = var_export($value, true);
         // HHVM fails at __set_state, so just use object cast for now
         $val = str_replace('stdClass::__set_state', '(object)', $val);
@@ -156,11 +157,13 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Increment the value of an item in the cache.
      *
-     * @param mixed $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return int|bool
      */
-    public function increment(string $key, $value = 1) {
+    // Declaration of Modules\Xot\Engines\Opcache\Store::increment(string $key, $value = 1) must be compatible with Illuminate\Contracts\Cache\Store::increment($key, $value = 1)
+    public function increment($key, $value = 1) {
         $val = (int) $this->get($key) + $value;
 
         return $this->put($key, $val) ? $val : false;
@@ -169,31 +172,37 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param mixed $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return int|bool
      */
-    public function decrement(string $key, $value = 1) {
+
+    //Declaration of Modules\Xot\Engines\Opcache\Store::decrement(string $key, $value = 1) must be compatible with Illuminate\Contracts\Cache\Store::decrement($key, $value = 1)
+    public function decrement($key, $value = 1) {
         return $this->increment($key, $value * -1);
     }
 
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param mixed $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return bool
      */
-    public function forever(string $key, $value) {
+    public function forever($key, $value) {
         return $this->put($key, $value, 0);
     }
 
     /**
      * Remove an item from the cache.
      *
+     * @param string $key
+     *
      * @return bool
      */
-    public function forget(string $key) {
+    public function forget($key) {
         if ($this->enabled) {
             opcache_invalidate($this->filePath($key), true);
         }

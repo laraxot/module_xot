@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Traits;
 
 /**
- * Trait Getter
- * @package Modules\Xot\Traits
+ * Trait Getter.
  */
 trait Getter {
     public static function __merge(string $index, array $value): array {
@@ -19,7 +20,6 @@ trait Getter {
     }
 
     /**
-     * @param string $index
      * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
      */
     public static function __getStatic(string $index) {
@@ -44,8 +44,7 @@ trait Getter {
     //end __set
 
     /**
-     * @param string $index
-     * @param $value
+     * @param mixed $value
      */
     public static function __setStatic(string $index, $value): void {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
@@ -54,11 +53,7 @@ trait Getter {
 
     //end __set
 
-    /**
-     * @param $index
-     * @param $value
-     */
-    public static function __concatBeforeStatic($index, $value) {
+    public static function __concatBeforeStatic(string $index, string $value): void {
         $tmp = self::__getStatic($index);
         $tmp = $value.$tmp;
         self::__setStatic($index, $tmp);
@@ -69,6 +64,7 @@ trait Getter {
     /**
      * @param $method
      * @param $args
+     *
      * @return mixed|void
      */
     public static function __callStatic($method, $args) {
@@ -95,6 +91,7 @@ trait Getter {
 
     /**
      * @param $index
+     *
      * @return bool
      */
     public function __isset($index) {
@@ -114,7 +111,6 @@ trait Getter {
     /**
      * @set undefined vars
      *
-     * @param string $index
      * @param mixed $value
      */
     public function __set(string $index, $value) {
@@ -124,6 +120,7 @@ trait Getter {
 
     /**
      * @param $index
+     *
      * @return mixed|null
      */
     public function __get($index) {
@@ -184,6 +181,7 @@ trait Getter {
 
     /**
      * @param array $params
+     *
      * @return mixed|null
      */
     public function __getVars($params = []) {

@@ -21,7 +21,7 @@ class GeoJsonResource extends ResCollection {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public function toArray(\Illuminate\Http\Request $request) {
+    public function toArray($request) {
         $lang = app()->getLocale();
 
         return [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\Route;
@@ -7,14 +9,11 @@ use Illuminate\Support\Str;
 use Modules\Xot\Contracts\PanelContract;
 
 /**
- * Class PanelRouteService
- * @package Modules\Xot\Services
+ * Class PanelRouteService.
  */
 class PanelRouteService {
-    /**
-     * @var
-     */
-    public $panel;
+    public PanelContract $panel;
+
     /*
     public function __construct(&$panel) {
         $this->panel = $panel;
@@ -23,8 +22,6 @@ class PanelRouteService {
 
     /**
      * setPanel.
-     *
-     * @param PanelContract $panel
      *
      * @return $this
      */
@@ -36,6 +33,7 @@ class PanelRouteService {
 
     /**
      * @param array $params
+     *
      * @return array|bool|mixed
      */
     public static function inAdmin($params = []) {
@@ -69,6 +67,7 @@ class PanelRouteService {
 
     /**
      * @param $params
+     *
      * @return string|void
      */
     public function urlPanel($params) {
@@ -175,6 +174,7 @@ class PanelRouteService {
 
     /**
      * @param $params
+     *
      * @return string
      */
     public static function getRoutenameN($params) {
@@ -198,6 +198,7 @@ class PanelRouteService {
 
     /**
      * @param $params
+     *
      * @return string|string[]|void
      */
     public function urlRelatedPanel($params) {
@@ -276,6 +277,7 @@ class PanelRouteService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public static function urlLang($params = []) {

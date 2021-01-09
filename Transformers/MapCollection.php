@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Transformers;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class MapCollection
- * @package Modules\Xot\Transformers
+ * Class MapCollection.
  */
 class MapCollection extends ResourceCollection {
     /**
@@ -16,9 +17,10 @@ class MapCollection extends ResourceCollection {
 
     /**
      * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
-    public function toArray(\Illuminate\Http\Request $request) {
+    public function toArray($request) {
         return [
             'type' => 'FeatureCollection',
             'features' => $this->collection,

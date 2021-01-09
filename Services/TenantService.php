@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Arr;
@@ -12,15 +14,13 @@ use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class TenantService
- * @package Modules\Xot\Services
+ * Class TenantService.
  */
 class TenantService {
     /**
-     * @param array $params
      * @return string
      */
-    public static function getName($params = []) {
+    public static function getName(array $params = []) {
         $default = 'localhost';
         $server_name = $default;
         if (isset($_SERVER['SERVER_NAME']) && '127.0.0.1' != $_SERVER['SERVER_NAME']) {
@@ -63,10 +63,9 @@ class TenantService {
     //end function
 
     /**
-     * @param $filename
      * @return string|string[]
      */
-    public static function filePath($filename) {
+    public static function filePath(string $filename) {
         $path = base_path('config/'.self::getName().'/'.$filename);
         $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
 
@@ -76,10 +75,9 @@ class TenantService {
     //end function
 
     /**
-     * @param $key
      * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
      */
-    public static function config($key) {
+    public static function config(string $key) {
         $group = implode('.', array_slice(explode('.', $key), 0, 2));
         /*
         if (in_admin() && Str::startsWith($key, 'xra.model')) {
@@ -150,8 +148,10 @@ class TenantService {
 
     /**
      * @param $name
-     * @return array|false|mixed
+     *
      * @throws \ReflectionException
+     *
+     * @return array|false|mixed
      */
     public static function model($name) {
         $name = Str::snake($name);
@@ -186,9 +186,11 @@ class TenantService {
 
     /**
      * @param $name
-     * @return mixed
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return mixed
      */
     public static function modelEager($name) {
         $model = self::model($name);
