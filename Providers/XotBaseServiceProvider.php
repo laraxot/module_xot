@@ -11,10 +11,19 @@ use Illuminate\Support\Str;
 //use Modules;
 
 abstract class XotBaseServiceProvider extends ServiceProvider {
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
+    /**
+     * @var string
+     */
+    protected string $module_dir = __DIR__;
+    /**
+     * @var string
+     */
+    protected string $module_ns = __NAMESPACE__;
     protected $module_base_ns;
-    public $module_name;
+    /**
+     * @var string
+     */
+    public string $module_name = 'formx';
 
     /**
      * Boot the application events.

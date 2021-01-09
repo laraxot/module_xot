@@ -6,9 +6,24 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Route;
 
 abstract class XotBaseRouteServiceProvider extends ServiceProvider {
-    protected $moduleNamespace = 'Modules\Xot\Http\Controllers';
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
+    /**
+     * The module namespace to assume when generating URLs to actions.
+     *
+     * @var string
+     */
+    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
+    /**
+     * The module directory.
+     *
+     * @var string
+     */
+    protected string $module_dir = __DIR__;
+    /**
+     * The module namespace.
+     *
+     * @var string
+     */
+    protected string $module_ns = __NAMESPACE__;
 
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso

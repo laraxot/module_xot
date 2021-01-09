@@ -26,9 +26,24 @@ use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
 use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
 class XotServiceProvider extends XotBaseServiceProvider {
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
-    public $module_name = 'xot';
+    /**
+     * The module directory.
+     *
+     * @var string
+     */
+    protected string $module_dir = __DIR__;
+    /**
+     * The module namespace.
+     *
+     * @var string
+     */
+    protected string $module_ns = __NAMESPACE__;
+    /**
+     * The module name.
+     *
+     * @var string
+     */
+    public string $module_name = 'xot';
 
     public function bootCallback() {
         $this->mergeConfigs();
