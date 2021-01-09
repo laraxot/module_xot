@@ -10,10 +10,15 @@ use Illuminate\Support\Str;
 
 //use Modules;
 
+/**
+ * Class XotBaseServiceProvider
+ * @package Modules\Xot\Providers
+ */
 abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
      * @var string
      */
+<<<<<<< HEAD
     protected string $module_dir = __DIR__;
     /**
      * @var string
@@ -24,6 +29,21 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
      * @var string
      */
     public string $module_name = 'formx';
+=======
+    protected $module_dir = __DIR__;
+    /**
+     * @var string
+     */
+    protected $module_ns = __NAMESPACE__;
+    /**
+     * @var
+     */
+    protected $module_base_ns;
+    /**
+     * @var
+     */
+    public $module_name;
+>>>>>>> c906275 (.)
 
     /**
      * Boot the application events.
@@ -184,6 +204,10 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
         return [];
     }
 
+    /**
+     * @param $path
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function loadEventsFrom($path) {
         $events = [];
         if (! File::isDirectory($path)) {

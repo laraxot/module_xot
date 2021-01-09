@@ -6,13 +6,28 @@ use Illuminate\Support\Collection;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelPresenterContract;
 
+/**
+ * Class HtmlPanelPresenter
+ * @package Modules\Xot\Presenters
+ */
 class HtmlPanelPresenter implements PanelPresenterContract {
+    /**
+     * @var
+     */
     protected $panel;
 
+    /**
+     * @param \Modules\Xot\Contracts\PanelContract $panel
+     * @return mixed|void
+     */
     public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @param Collection|null $items
+     * @return mixed|void
+     */
     public function index(?Collection $items) {
         /*
         $count = $items->count();
@@ -32,6 +47,10 @@ class HtmlPanelPresenter implements PanelPresenterContract {
         */
     }
 
+    /**
+     * @param null $params
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function out($params = null) {
         //$route_params = \Route::current()->parameters();
 

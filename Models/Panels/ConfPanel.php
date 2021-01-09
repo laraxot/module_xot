@@ -4,6 +4,10 @@ namespace Modules\Xot\Models\Panels;
 
 //--- Services --
 
+/**
+ * Class ConfPanel
+ * @package Modules\Xot\Models\Panels
+ */
 class ConfPanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.
@@ -19,6 +23,9 @@ class ConfPanel extends XotBasePanel {
      */
     public static $title = 'title';
 
+    /**
+     * @return object[]
+     */
     public function fields() {
         return [
             (object) [

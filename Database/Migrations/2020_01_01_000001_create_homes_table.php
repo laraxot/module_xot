@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 ///use Modules\Blog\Models\Post as MyModel;
 use Modules\Xot\Database\Migrations\XotBaseMigration;
 
+/**
+ * Class CreateHomesTable
+ */
 class CreateHomesTable extends XotBaseMigration {
     public function up() {
         //-- CREATE --

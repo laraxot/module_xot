@@ -6,6 +6,9 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 
 //----- models -----
 
+/**
+ * Class CreateWidgetsTable
+ */
 class CreateWidgetsTable extends XotBaseMigration {
     public function up() {
         //-- CREATE --

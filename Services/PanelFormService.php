@@ -9,7 +9,14 @@ use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelContract;
 
+/**
+ * Class PanelFormService
+ * @package Modules\Xot\Services
+ */
 class PanelFormService {
+    /**
+     * @var
+     */
     protected $panel;
     /*
     public function __construct(&$panel) {
@@ -30,6 +37,10 @@ class PanelFormService {
         return $this;
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function formCreate($params = []) {
         $fields = $this->createFields();
         $row = $this->panel->row;
@@ -50,6 +61,10 @@ class PanelFormService {
         return $res;
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function formEdit($params = []) {
         $submit_btn = '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
@@ -104,6 +119,10 @@ class PanelFormService {
     }
     */
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function btnCrud($params = []) {
         extract($params);
         $acts = ['edit', 'destroy', 'show'];
@@ -128,6 +147,10 @@ class PanelFormService {
         return $html;
     }
 
+    /**
+     * @param $params
+     * @return string|void|null
+     */
     public function btnHtml($params) {
         $params['panel'] = $this->panel;
         //$params['url'] = RouteService::urlPanel($params);
@@ -236,6 +259,10 @@ class PanelFormService {
         return Form::bsSubmit(trans('xot::buttons.save'));
     }
     */
+    /**
+     * @param array $params
+     * @return array
+     */
     public function exceptFields($params = []) {
         $act = 'show';
         $panel = $this->panel;
@@ -278,24 +305,36 @@ class PanelFormService {
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function indexFields() {
         $fields = $this->exceptFields(['act' => 'index']);
 
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function createFields() {
         $fields = $this->exceptFields(['act' => 'create']);
 
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function editFields() {
         $fields = $this->exceptFields(['act' => 'edit']);
 
         return $fields;
     }
 
+    /**
+     * @return array
+     */
     public function indexEditFields() {
         $fields = $this->exceptFields(['act' => 'index_edit']);
 

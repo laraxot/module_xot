@@ -29,6 +29,9 @@ namespace Modules\Xot\Models;
 class Conf extends BaseModel {
     //public $table = '';
 
+    /**
+     * @var string[]
+     */
     public $fillable = [
         'id', 'appname', 'description', 'keywords', 'author',
     ];

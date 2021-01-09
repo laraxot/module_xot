@@ -8,6 +8,10 @@ use Illuminate\Support\Arr;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Class UpdateJob
+ * @package Modules\Xot\Jobs\PanelCrud
+ */
 class UpdateJob extends XotBaseJob {
     /**
      * Execute the job.
@@ -24,6 +28,10 @@ class UpdateJob extends XotBaseJob {
         return $this->panel;
     }
 
+    /**
+     * @param $data
+     * @return $this
+     */
     public function setData($data) {
         $this->data = $data;
 
@@ -210,6 +218,11 @@ class UpdateJob extends XotBaseJob {
         $model->$name->update($data);
     }
 
+    /**
+     * @param $model
+     * @param $name
+     * @param $data
+     */
     public function saveMultiselectTwoSides($model, $name, $data) {
         $items = $model->$name();
         $related = $items->getRelated();

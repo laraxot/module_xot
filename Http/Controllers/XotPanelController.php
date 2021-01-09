@@ -5,7 +5,16 @@ namespace Modules\Xot\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 
+/**
+ * Class XotPanelController
+ * @package Modules\Xot\Http\Controllers
+ */
 class XotPanelController extends Controller {
+    /**
+     * @param string $name
+     * @param array $arg
+     * @return mixed
+     */
     public function __call($name, $arg) {
         //dddx(['name' => $name, 'arg' => $arg]);
         /**

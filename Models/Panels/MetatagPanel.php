@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 //--- Services --
 
+/**
+ * Class MetatagPanel
+ * @package Modules\Xot\Models\Panels
+ */
 class MetatagPanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.
@@ -21,6 +25,9 @@ class MetatagPanel extends XotBasePanel {
      */
     public static $title = 'title';
 
+    /**
+     * @return object[]
+     */
     public function fields() {
         return [
             (object) [

@@ -9,6 +9,10 @@ use Illuminate\Support\Str;
 //use Modules\Food\Models\Profile;
 //--- Rules ---
 
+/**
+ * Class XotBaseRequest
+ * @package Modules\Xot\Http\Requests
+ */
 abstract class XotBaseRequest extends FormRequest {
     //use FormRequestTrait;
 
@@ -16,6 +20,9 @@ abstract class XotBaseRequest extends FormRequest {
     //$this->setContainer(factory(Profile::class));
     //$this->setContainer(app());
     //}
+    /**
+     * @var
+     */
     public $panel;
 
     /**
@@ -36,10 +43,17 @@ abstract class XotBaseRequest extends FormRequest {
         return [];
     }
 
+    /**
+     * @param $panel
+     */
     public function setPanel($panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @param $panel
+     * @param string $act
+     */
     public function validatePanel($panel, $act = '') {
         $this->setPanel($panel);
         $this->prepareForValidation();
@@ -106,6 +120,11 @@ abstract class XotBaseRequest extends FormRequest {
         return [];
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDate($field, $value) {
         if (null == $value) {
             return $value;
@@ -115,6 +134,11 @@ abstract class XotBaseRequest extends FormRequest {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime($field, $value) {
         if (null == $value) {
             return $value;
@@ -124,6 +148,11 @@ abstract class XotBaseRequest extends FormRequest {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime2Fields($field, $value) {
         if (null == $value) {
             return $value;

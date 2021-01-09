@@ -5,15 +5,31 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
+/**
+ * Class PanelService
+ * @package Modules\Xot\Services
+ */
 class PanelService {
+    /**
+     * @var null
+     */
     private static $_instance = null;
+    /**
+     * @var
+     */
     private static $model;
+    /**
+     * @var
+     */
     private static $panel;
 
     /*
     public function __construct($model){
     $this->model=$model;
     }
+     */
+    /**
+     * @return PanelService|null
      */
     public static function getInstance() {
         if (null === self::$_instance) {
@@ -23,6 +39,9 @@ class PanelService {
         return self::$_instance;
     }
 
+    /**
+     * @param $panel
+     */
     public static function setRequestPanel($panel) {
         self::$panel = $panel;
     }
@@ -31,16 +50,31 @@ class PanelService {
         return self::$panel;
     }
 
+    /**
+     * @param $model
+     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function get($model) {
         return self::setModel($model)->panel();
     }
 
+    /**
+     * @param $model
+     * @return PanelService|null
+     */
     public static function setModel($model) {
         self::$model = $model;
 
         return self::getInstance();
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function panel() {
         if (! is_object(self::$model)) {
             //dddx(['model'=>self::$model,'message'=>'is not an object']);
@@ -68,14 +102,25 @@ class PanelService {
         return self::$panel;
     }
 
+    /**
+     * @param $params
+     * @return mixed
+     */
     public function imageHtml($params) {
         return self::$model->image_src;
     }
 
+    /**
+     * @return mixed
+     */
     public function tabs() {
         return self::panel()->tabs();
     }
 
+    /**
+     * @param $route_params
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\Response|mixed|null
+     */
     public static function getByParams($route_params) {
         [$containers, $items] = params2ContainerItem($route_params);
         $in_admin = null;
@@ -147,6 +192,12 @@ class PanelService {
         return $panel;
     }
 
+    /**
+     * @param $model
+     * @return \Illuminate\Http\RedirectResponse|mixed
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function getByModel($model) {
         $class_full = get_class($model);
         $class_name = class_basename($model);
@@ -165,6 +216,11 @@ class PanelService {
         return redirect()->back();
     }
 
+    /**
+     * @param $model
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function createPanel($model) {
         if (! is_object($model)) {
             dddx('da fare');
@@ -215,6 +271,11 @@ class PanelService {
         File::put($panel_file, $stub);
     }
 
+    /**
+     * @param $params
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function updatePanel($params) {
         extract($params);
         if (! isset($func)) {

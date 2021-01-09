@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
+/**
+ * Class FullTextSearchEngine
+ * @package Modules\Xot\Engines
+ */
 class FullTextSearchEngine extends Engine {
     /**
      * Update the given model in the index.

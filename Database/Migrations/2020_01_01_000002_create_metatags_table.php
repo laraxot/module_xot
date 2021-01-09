@@ -6,6 +6,9 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 
 //----- models -----
 
+/**
+ * Class CreateMetatagsTable
+ */
 class CreateMetatagsTable extends XotBaseMigration {
     public function up() {
         //-- CREATE --

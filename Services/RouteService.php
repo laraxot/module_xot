@@ -5,7 +5,15 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
+/**
+ * Class RouteService
+ * @package Modules\Xot\Services
+ */
 class RouteService {
+    /**
+     * @param array $params
+     * @return array|bool|mixed
+     */
     public static function inAdmin($params = []) {
         if (isset($params['in_admin'])) {
             return $params['in_admin'];
@@ -129,6 +137,10 @@ class RouteService {
     //se n=0 => 'container0'
     // se n=1 => 'container0.container1'
 
+    /**
+     * @param $params
+     * @return string
+     */
     public static function getRoutenameN($params) {
         //default vars
         $n = 0;
@@ -227,6 +239,10 @@ class RouteService {
     }
     */
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public static function urlLang($params = []) {
         extract($params);
 

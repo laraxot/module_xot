@@ -5,13 +5,38 @@ namespace Modules\Xot\Http\Livewire;
 //use Illuminate\Support\Carbon;
 use Livewire\Component;
 
+/**
+ * Class Test
+ * @package Modules\Xot\Http\Livewire
+ */
 class Test extends Component {
+    /**
+     * @var string
+     */
     public $animal = '';
+    /**
+     * @var
+     */
     public $options;
+    /**
+     * @var array
+     */
     public $products = [];
+    /**
+     * @var array
+     */
     public $change_cats = [];
+    /**
+     * @var array
+     */
     public $changes = [];
+    /**
+     * @var array
+     */
     public $qty = [];
+    /**
+     * @var array
+     */
     public $qty1 = [];
 
     public function mount() {
@@ -33,6 +58,10 @@ class Test extends Component {
         ];
     }
 
+    /**
+     * @param $arr
+     * @return \Illuminate\Support\Collection
+     */
     public function fix($arr) {
         return collect($arr)->map(
             function ($item) {
@@ -41,6 +70,9 @@ class Test extends Component {
         ); //->all();
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function render() {
         $view_params = [];
         $this->products = $this->fix($this->products);

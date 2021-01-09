@@ -10,6 +10,10 @@ namespace Modules\Xot\Services;
 //http://blog.canispater.com/2017/05/laravel-5-distance-spatial-query-part-2/
 //https://scotch.io/tutorials/achieving-geo-search-with-laravel-scout-and-algolia
 
+/**
+ * Class GeoService
+ * @package Modules\Xot\Services
+ */
 class GeoService {
     /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::                                                                         :*/
@@ -37,6 +41,14 @@ class GeoService {
     /*::         GeoDataSource.com (C) All Rights Reserved 2018                  :*/
     /*::                                                                         :*/
     /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /**
+     * @param $lat1
+     * @param $lon1
+     * @param $lat2
+     * @param $lon2
+     * @param $unit
+     * @return float|int
+     */
     public static function distance($lat1, $lon1, $lat2, $lon2, $unit) {
         if (($lat1 == $lat2) && ($lon1 == $lon2)) {
             return 0;

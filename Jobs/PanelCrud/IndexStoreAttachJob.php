@@ -5,7 +5,14 @@ namespace Modules\Xot\Jobs\PanelCrud;
 //----------- Requests ----------
 //------------ services ----------
 
+/**
+ * Class IndexStoreAttachJob
+ * @package Modules\Xot\Jobs\PanelCrud
+ */
 class IndexStoreAttachJob extends XotBaseJob {
+    /**
+     * @return \Modules\Xot\Contracts\PanelContract
+     */
     public function handle() {
         //dddx([$this->panel, $this->data]);
         //$this->panel->rows->attach($this->data['groups']['to']);

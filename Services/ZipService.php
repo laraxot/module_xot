@@ -9,7 +9,17 @@ use Modules\Xot\Services\PanelService as Panel;
 //---- pear
 use ZipArchive;
 
+/**
+ * Class ZipService
+ * @package Modules\Xot\Services
+ */
 class ZipService {
+    /**
+     * @param $params
+     * @return string|\Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function fromRowsPdf($params) {
         ini_set('max_execution_time', '3600');
         ini_set('memory_limit', '-1');

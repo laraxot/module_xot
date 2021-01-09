@@ -9,6 +9,10 @@ namespace Modules\Xot\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\URL;
 
+/**
+ * Class SetDefaultLocaleForUrlsMiddleware
+ * @package Modules\Xot\Http\Middleware
+ */
 class SetDefaultLocaleForUrlsMiddleware {
     /**
      * Handle the incoming request.

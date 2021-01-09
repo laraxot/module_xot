@@ -8,11 +8,27 @@ namespace Modules\Xot\Models\Panels\Actions;
 
 //-------- bases -----------
 
+/**
+ * Class ChunkUpload
+ * @package Modules\Xot\Models\Panels\Actions
+ */
 class ChunkUpload extends XotBasePanelAction {
+    /**
+     * @var string
+     */
     public $name = 'chunk_upload'; //name for calling Action
+    /**
+     * @var bool
+     */
     public $onContainer = true; //onlyContainer
+    /**
+     * @var string
+     */
     public $icon = '<i class="fas fa-puzzle-piece"></i>';
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function handle() {
         $filename = $_POST['dir'].\DIRECTORY_SEPARATOR.$_POST['name'];
 
@@ -34,6 +50,9 @@ class ChunkUpload extends XotBasePanelAction {
         return response()->json($ris);
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function postHandle() {
         $filename = $_POST['dir'].\DIRECTORY_SEPARATOR.$_POST['name'];
         if (0 == $_POST['seek']) {

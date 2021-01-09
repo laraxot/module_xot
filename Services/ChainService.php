@@ -29,14 +29,45 @@ function chain($primary_field, $parent_field, $sort_field, $rows, $root_id = 0, 
     return $c->chain_table;
 }
 
+/**
+ * Class ChainService
+ * @package Modules\Xot\Services
+ */
 class ChainService {
+    /**
+     * @var
+     */
     public $table;
+    /**
+     * @var
+     */
     public $rows;
+    /**
+     * @var
+     */
     public $chain_table;
+    /**
+     * @var
+     */
     public $primary_field;
+    /**
+     * @var
+     */
     public $parent_field;
+    /**
+     * @var
+     */
     public $sort_field;
 
+    /**
+     * ChainService constructor.
+     * @param $primary_field
+     * @param $parent_field
+     * @param $sort_field
+     * @param $rows
+     * @param int $root_id
+     * @param int $maxlevel
+     */
     public function __construct($primary_field, $parent_field, $sort_field, $rows, $root_id = 0, $maxlevel = 25) {
         $this->rows = $rows;
         $this->primary_field = $primary_field;
@@ -45,6 +76,10 @@ class ChainService {
         $this->buildChain($root_id, $maxlevel);
     }
 
+    /**
+     * @param $rootcatid
+     * @param $maxlevel
+     */
     public function buildChain($rootcatid, $maxlevel) {
         foreach ($this->rows as $row) {
             $this->table[$row[$this->parent_field]][$row[$this->primary_field]] = $row;
@@ -52,6 +87,11 @@ class ChainService {
         $this->makeBranch($rootcatid, 0, $maxlevel);
     }
 
+    /**
+     * @param $parent_id
+     * @param $level
+     * @param $maxlevel
+     */
     public function makeBranch($parent_id, $level, $maxlevel) {
         if (! is_array($this->table)) {
             $this->table = [];
@@ -73,6 +113,11 @@ class ChainService {
         }
     }
 
+    /**
+     * @param $a
+     * @param $b
+     * @return int
+     */
     public function chainCMP($a, $b) {
         if ($a[$a['key']] == $b[$b['key']]) {
             return 0;

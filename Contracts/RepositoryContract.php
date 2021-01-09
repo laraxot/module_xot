@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
+/**
+ * Interface RepositoryContract
+ * @package Modules\Xot\Contracts
+ */
 interface RepositoryContract {
     /**
      * Return model instance.

@@ -16,6 +16,10 @@ use Modules\Xot\Jobs\Crud\createJob;
 use Modules\Xot\Jobs\Crud\storeJob;
 */
 
+/**
+ * Class XotBaseController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 abstract class XotBaseController extends Controller {
     use CrudTrait;
     /*

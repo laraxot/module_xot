@@ -12,7 +12,15 @@ use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\TenantService as Tenant;
 
+/**
+ * Class HomeController
+ * @package Modules\Xot\Http\Controllers
+ */
 class HomeController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request) {
         $home = null;
         try {
@@ -45,6 +53,10 @@ class HomeController extends Controller {
         });
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function show(Request $request) {
         $home = null;
         if ('' != $request->_act) {
@@ -64,6 +76,10 @@ class HomeController extends Controller {
         return $panel->out();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function redirect(Request $request) {
         return redirect($request->url);
     }

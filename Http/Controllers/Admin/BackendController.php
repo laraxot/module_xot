@@ -11,7 +11,15 @@ use Illuminate\Http\Request;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\ArtisanService;
 
+/**
+ * Class BackendController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 class BackendController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed|string
+     */
     public function index(Request $request) {
         if ('routelist' == $request->act) {
             return ArtisanService::exe('route:list');

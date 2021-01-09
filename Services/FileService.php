@@ -8,7 +8,15 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * Class FileService
+ * @package Modules\Xot\Services
+ */
 class FileService {
+    /**
+     * @param $path
+     * @return false|mixed|string
+     */
     public static function asset($path) {
         if ('/' == $path[0]) {
             $path = \mb_substr($path, 1);
@@ -51,6 +59,10 @@ class FileService {
         return asset(self::viewNamespaceToAsset($path));
     }
 
+    /**
+     * @param $view
+     * @return string|string[]
+     */
     public static function viewNamespaceToDir($view) {
         $pos = \mb_strpos($view, '::');
         $pack = \mb_substr($view, 0, $pos);
@@ -67,6 +79,10 @@ class FileService {
         return $view_dir;
     }
 
+    /**
+     * @param $ns
+     * @return mixed|null
+     */
     public static function getViewNameSpacePath($ns) {
         if (null == $ns) {
             return null;
@@ -84,6 +100,11 @@ class FileService {
         }
     }
 
+    /**
+     * @param $ns
+     * @param $path1
+     * @return string
+     */
     public static function getViewNameSpaceUrl($ns, $path1) {
         if (in_array($ns, ['pub_theme', 'adm_theme'])) {
             $path = self::getViewNameSpacePath($ns);
@@ -139,6 +160,11 @@ class FileService {
         return $url;
     }
 
+    /**
+     * @param $ns
+     * @param $path1
+     * @return string
+     */
     public static function getViewNameSpaceUrl_nomodule($ns, $path1) {
         $path = self::getViewNameSpacePath($ns);
         /* 4 debug
@@ -192,6 +218,11 @@ class FileService {
         return asset($path_pub);
     }
 
+    /**
+     * @param $path
+     * @param $ns
+     * @return string
+     */
     public static function path2Url($path, $ns) {
         if (Str::startsWith($path, public_path('/'))) {
             $relative = \mb_substr($path, \mb_strlen(public_path('/')));
@@ -225,6 +256,10 @@ class FileService {
         return asset($path_pub);
     }
 
+    /**
+     * @param $key
+     * @return string
+     */
     public static function viewThemeNamespaceToAsset($key) {
         $ns_name = Str::before($key, '::');
         //$ns_dir = View::getFinder()->getHints()[$ns_name][0];
@@ -273,6 +308,10 @@ class FileService {
         return $asset;
     }
 
+    /**
+     * @param $key
+     * @return string
+     */
     public static function viewNamespaceToAsset($key) {
         $ns_name = Str::before($key, '::');
 
@@ -385,6 +424,10 @@ class FileService {
     }
     */
     //*
+    /**
+     * @param $path
+     * @return string
+     */
     public static function getFileUrl($path) {
         if (Str::startsWith($path, '//')) {
         } elseif (Str::startsWith($path, '/')) {
@@ -416,6 +459,10 @@ class FileService {
 
     //*/
     //*
+    /**
+     * @param $files
+     * @return mixed
+     */
     public static function viewNamespaceToUrl($files) {
         foreach ($files as $k => $filePath) {
             //TODO testare con ARTISAN vendor:publish
@@ -474,6 +521,11 @@ class FileService {
     }
 
     //*/
+
+    /**
+     * @param $path
+     * @return string
+     */
     public static function getRealFile($path) {
         $filename = '';
         if (Str::startsWith($path, asset(''))) {

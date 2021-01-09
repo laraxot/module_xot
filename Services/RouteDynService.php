@@ -5,10 +5,25 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Str;
 use Route;
 
+/**
+ * Class RouteDynService
+ * @package Modules\Xot\Services
+ */
 class RouteDynService {
+    /**
+     * @var string
+     */
     protected static $namespace_start = '';
+    /**
+     * @var null
+     */
     protected static $curr = null;
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return array
+     */
     public static function getGroupOpts($v, $namespace) {
         $group_opts = [
             'prefix' => self::getPrefix($v, $namespace),
@@ -19,6 +34,11 @@ class RouteDynService {
         return $group_opts;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return false|mixed|string|string[]
+     */
     public static function getPrefix($v, $namespace) {
         if (\in_array('prefix', \array_keys($v), true)) {
             return $v['prefix'];
@@ -43,6 +63,11 @@ class RouteDynService {
         return $prefix;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return mixed|string
+     */
     public static function getAs($v, $namespace) {
         if (\in_array('as', \array_keys($v), true)) {
             return $v['as'];
@@ -57,6 +82,11 @@ class RouteDynService {
         return $as.'.';
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return mixed|string|null
+     */
     public static function getNamespace($v, $namespace) {
         if (\in_array('namespace', \array_keys($v), true)) {
             return $v['namespace'];
@@ -73,6 +103,11 @@ class RouteDynService {
         return Str::studly($namespace);
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return mixed|string
+     */
     public static function getAct($v, $namespace) {
         if (\in_array('act', \array_keys($v), true)) {
             return $v['act'];
@@ -88,6 +123,11 @@ class RouteDynService {
         return Str::camel($v['act']);
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return false|mixed|string|string[]
+     */
     public static function getParamName($v, $namespace) {
         if (\in_array('param_name', \array_keys($v), true)) {
             return $v['param_name'];
@@ -101,6 +141,11 @@ class RouteDynService {
         return $param_name;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return array|false|string|string[]
+     */
     public static function getParamsName($v, $namespace) {
         $param_name = self::getParamName($v, $namespace);
         if (! \is_array($param_name)) {
@@ -112,6 +157,11 @@ class RouteDynService {
         return $params_name;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return array
+     */
     public static function getResourceOpts($v, $namespace) {
         $param_name = self::getParamName($v, $namespace);
         $params_name = self::getParamsName($v, $namespace);
@@ -134,6 +184,11 @@ class RouteDynService {
         return $opts;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return mixed|string
+     */
     public static function getController($v, $namespace) {
         if (\in_array('controller', \array_keys($v), true)) {
             return $v['controller'];
@@ -150,6 +205,11 @@ class RouteDynService {
         return $v['controller'];
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return false|string|string[]
+     */
     public static function getUri($v, $namespace) {
         $uri = \mb_strtolower($v['name']);
         /*
@@ -161,6 +221,11 @@ class RouteDynService {
         return $uri;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return mixed|string[]
+     */
     public static function getMethod($v, $namespace) {
         if (\in_array('method', \array_keys($v), true)) {
             return $v['method'];
@@ -169,6 +234,11 @@ class RouteDynService {
         return ['get', 'post'];
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @return string
+     */
     public static function getUses($v, $namespace) {
         $controller = self::getController($v, $namespace);
         $act = self::getAct($v, $namespace);
@@ -177,6 +247,12 @@ class RouteDynService {
         return $uses;
     }
 
+    /**
+     * @param $v
+     * @param $namespace
+     * @param $curr
+     * @return array
+     */
     public static function getCallback($v, $namespace, $curr) {
         $as = Str::slug($v['name']); //!!!!!! test da controllare
         $uses = self::getUses($v, $namespace);
@@ -190,6 +266,12 @@ class RouteDynService {
         return $callback;
     }
 
+    /**
+     * @param $array
+     * @param null $namespace
+     * @param null $namespace_start
+     * @param null $curr
+     */
     public static function dynamic_route($array, $namespace = null, $namespace_start = null, $curr = null) {
         if (null != $namespace_start) {
             self::$namespace_start = $namespace_start;
@@ -212,6 +294,10 @@ class RouteDynService {
     //end function
 
     //--------------------------------------------------------------------------------
+    /**
+     * @param $v
+     * @param $namespace
+     */
     public static function createRouteResource($v, $namespace) {
         if (null == $v['name']) {
             return;
@@ -226,6 +312,12 @@ class RouteDynService {
     }
 
     // ------------------------------------------------------------------------------
+
+    /**
+     * @param $v
+     * @param $namespace
+     * @param $curr
+     */
     public static function createRouteSubs($v, $namespace, $curr) {
         if (! isset($v['subs'])) {
             return;
@@ -253,6 +345,12 @@ class RouteDynService {
     }
 
     //---------------------------------------------------
+
+    /**
+     * @param $v
+     * @param $namespace
+     * @param $curr
+     */
     public static function createRouteActs($v, $namespace, $curr) {
         if (! isset($v['acts'])) {
             return;
@@ -297,6 +395,10 @@ class RouteDynService {
     */
     //end routes
     //------------------------------------------------------------------
+    /**
+     * @param $prefix
+     * @return string[]
+     */
     public static function prefixedResourceNames($prefix) {
         if ('.' == \mb_substr($prefix, -1)) {
             $prefix = \mb_substr($prefix, 0, -1);
@@ -312,6 +414,9 @@ class RouteDynService {
     //end prefixedResourceNames
 
     //--------------------------------------------------
+    /**
+     * @return \string[][]
+     */
     public static function getContainerActs() {
         $cont_acts = [
             [
@@ -331,6 +436,9 @@ class RouteDynService {
         return $cont_acts;
     }
 
+    /**
+     * @return array[]
+     */
     public static function getItemActs() {
         $acts = [
             //['name' => 'attach'], //end act_n
@@ -342,6 +450,10 @@ class RouteDynService {
         return $acts;
     }
 
+    /**
+     * @param int $n
+     * @return array|array[]
+     */
     public static function generate($n = 0) {
         if ($n > 4) {
             return [];

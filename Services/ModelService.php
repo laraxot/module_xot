@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 // per dizionario morph
 //------------ services ----------
 
+/**
+ * Class ModelService
+ * @package Modules\Xot\Services
+ */
 class ModelService {
+    /**
+     * @param $model
+     * @param $data
+     * @return array
+     */
     public static function getRelationshipsAndData($model, $data) {
         $methods = get_class_methods($model);
         Relation::morphMap([$model->post_type => get_class($model)]);

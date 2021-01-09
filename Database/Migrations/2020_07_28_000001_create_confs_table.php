@@ -6,6 +6,9 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 
 //----- models -----
 
+/**
+ * Class CreateConfsTable
+ */
 class CreateConfsTable extends XotBaseMigration {
     public function up() {
         //-- CREATE --

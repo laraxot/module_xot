@@ -2,11 +2,21 @@
 
 namespace Modules\Xot\Database\Migrations;
 
+/**
+ * Trait XotBaseMigrationTrait
+ * @package Modules\Xot\Database\Migrations
+ */
 trait XotBaseMigrationTrait {
+    /**
+     * @return mixed
+     */
     public function getTable() {
         return with(new MyModel())->getTable();
     }
 
+    /**
+     * @return mixed
+     */
     public function getConn() {
         $conn_name = with(new MyModel())->getConnectionName();
         $conn = Schema::connection($conn_name);
@@ -14,10 +24,17 @@ trait XotBaseMigrationTrait {
         return $conn;
     }
 
+    /**
+     * @return mixed
+     */
     public function tableExists() {
         return $this->getConn()->hasTable($this->getTable());
     }
 
+    /**
+     * @param $col
+     * @return mixed
+     */
     public function hasColumn($col) {
         return $this->getConn()->hasColumn($this->getTable(), $col);
     }

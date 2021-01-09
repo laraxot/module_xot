@@ -10,7 +10,17 @@ namespace Modules\Xot\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource as ResCollection;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Class GeoJsonResource
+ * @package Modules\Xot\Transformers
+ */
 class GeoJsonResource extends ResCollection {
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public function toArray($request) {
         $lang = app()->getLocale();
 

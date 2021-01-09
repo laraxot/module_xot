@@ -20,12 +20,31 @@ use Symfony\Component\DomCrawler\Crawler;
 
 //*/
 
+/**
+ * Class ImportService
+ * @package Modules\Xot\Services
+ */
 class ImportService {
+    /**
+     * @var null
+     */
     protected static $client = null;
+    /**
+     * @var array
+     */
     protected static $client_options = [];
+    /**
+     * @var null
+     */
     protected static $res = null;
+    /**
+     * @var null
+     */
     protected static $cookieJar = null;
 
+    /**
+     * @param array $data
+     */
     public static function setClientOptions($data = []) {
         self::$client_options = \array_merge(self::$client_options, $data);
         //ddd(self::$client_options);
@@ -79,6 +98,9 @@ class ImportService {
         //senza verify false errore = #message: "cURL error 60: SSL certificate problem: self signed certificate in certificate chain (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)"
     }
 
+    /**
+     * @param array $cookies
+     */
     public static function enableCookie(array $cookies) {
         //$cookieJar->setCookie(SetCookie::fromString('SID="AuthKey 23ec5d03-86db-4d80-a378-6059139a7ead"; expires=Thu, 24 Nov 2016 13:52:20 GMT; path=/; domain=.sketchup.com'));
         if (null == self::$cookieJar) {
@@ -119,12 +141,22 @@ class ImportService {
         self::setClientOptions(['allow_redirects' => false]);
     }
 
+    /**
+     * @param $x
+     * @return mixed
+     */
     public static function getConfig($x) {
         //$cookieJar = $client->getConfig('cookies');
         //$cookieJar->toArray();
         return self::$client->getConfig($x);
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @return mixed
+     */
     public function getEffectiveUrl($method, $url, $attrs = []) {
         $attrs['allow_redirects'] = [
             'max' => 10,        // allow at most 10 redirects.
@@ -139,10 +171,23 @@ class ImportService {
         return $res->getHeaderLine('X-Guzzle-Redirect-History');
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public static function jqueryRequest($method, $url, $attrs = []) {
         return view('theme::jquery_request');
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @param string $out
+     * @return \Exception|GuzzleException|string|Crawler
+     */
     public static function gRequest($method, $url, $attrs = [], $out = 'res') {
         if (null == self::$client) {
             self::importInit();
@@ -230,12 +275,24 @@ class ImportService {
         //echo $res->getHeaderLine('X-Guzzle-Redirect-Status-History');// 301, 302, etc...
     }
 
+    /**
+     * @param $form
+     * @param $vars
+     * @param $out
+     * @return \Exception|GuzzleException|string|Crawler
+     */
     public static function submit($form, $vars, $out) {
         $vars = \array_merge($form->getValues(), $vars);
 
         return self::gRequest($form->getMethod(), $form->getUri(), ['form_params' => $vars], $out);
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @return string
+     */
     public static function getCacheKey($method, $url, $attrs = []) {
         $key = \json_encode(['method' => $method, 'url' => $url, 'attrs' => $attrs]);
         $key .= '_1';
@@ -243,6 +300,12 @@ class ImportService {
         return $key;
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @return mixed
+     */
     public static function cacheRequest($method, $url, $attrs = []) {
         $key = self::getCacheKey($method, $url, $attrs = []);
         $value = Cache::store('file')->rememberForever($key, function () use ($method,$url,$attrs) {
@@ -259,6 +322,13 @@ class ImportService {
         return $value;
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $attrs
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public static function cacheRequestFile($method, $url, $attrs = []) { //--- uguale ma al posto di usare il sistema cache usa i file
         if (! isset(self::$client_options['base_uri'])) {
             $url_info = \parse_url($url);
@@ -296,6 +366,11 @@ class ImportService {
         return (string) $body;
     }
 
+    /**
+     * @param $params
+     * @return array|void
+     * @throws \Exception
+     */
     public static function getAddressFields($params) {
         \extract($params);
         if (! isset($address)) {
@@ -366,6 +441,9 @@ class ImportService {
     */
 
     //https://phpnews.io/feeditem/chunked-transfer-encoding-in-php-with-guzzle
+    /**
+     * @param $params
+     */
     public static function download($params) {
         //$url
         //$filename
@@ -447,6 +525,10 @@ class ImportService {
     */
 
     //end function
+    /**
+     * @param $params
+     * @return mixed|null
+     */
     public static function pixabay($params) {
         $lang = app()->getLocale();
         $image_type = 'photo';
@@ -467,6 +549,9 @@ class ImportService {
         return $ris;
     }
 
+    /**
+     * @param $params
+     */
     public static function pexels($params) {
         $lang = app()->getLocale();
         $q = 'necessary';
@@ -477,6 +562,11 @@ class ImportService {
     }
 
     //-------------------------------------------------------------------------
+
+    /**
+     * @param $params
+     * @return mixed|string|void
+     */
     public static function trans($params) {
         $i = \rand(0, 20);
         if ($i > 0 && $i < 10) {
@@ -486,6 +576,9 @@ class ImportService {
         return self::mymemoryTrans($params);
     }
 
+    /**
+     * @param $params
+     */
     public static function apertiumTrans($params) {
         //https://github.com/24aitor/Laralang/blob/master/src/Builder/ApertiumTrans.php
         //$host = 'api.apertium.org';
@@ -493,6 +586,10 @@ class ImportService {
         //$data = json_decode($urldata, true);
     }
 
+    /**
+     * @param $params
+     * @return string
+     */
     public static function googleTrans($params) {
         $host = 'translate.googleapis.com';
         $q = 'necessary';
@@ -514,6 +611,10 @@ class ImportService {
         return \trim(\implode(' ', $trans));
     }
 
+    /**
+     * @param $params
+     * @return mixed|void
+     */
     public static function mymemoryTrans($params) {
         $host = 'api.mymemory.translated.net';
         $q = 'necessary';
@@ -541,6 +642,10 @@ class ImportService {
 
     //end mymemoryTrans;
 
+    /**
+     * @param $params
+     * @return array
+     */
     public static function getForms($params) {
         $html = '';
         $node_tag = '';
@@ -564,6 +669,10 @@ class ImportService {
         return $forms;
     }
 
+    /**
+     * @param $params
+     * @return \Exception|GuzzleException|string|Crawler
+     */
     public static function formRequest($params) {
         $form = ['method' => '?', 'action' => '?', 'fields' => '?'];
         extract($params);

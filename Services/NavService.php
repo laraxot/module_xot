@@ -4,7 +4,14 @@ namespace Modules\Xot\Services;
 
 use Carbon\Carbon;
 
+/**
+ * Class NavService
+ * @package Modules\Xot\Services
+ */
 class NavService {
+    /**
+     * @return array
+     */
     public static function yearNav() {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
@@ -32,6 +39,9 @@ class NavService {
         return $nav;
     }
 
+    /**
+     * @return array
+     */
     public static function monthYearNav() { //possiamo trasformarlo in una macro
         $request = \Request::capture();
         $routename = \Route::currentRouteName();

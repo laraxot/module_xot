@@ -9,15 +9,44 @@ use Intervention\Image\Facades\Image;
 
 //---- services ----
 
+/**
+ * Class ImageService
+ * @package Modules\Xot\Services
+ */
 class ImageService {
+    /**
+     * @var null
+     */
     private static $instance = null;
+    /**
+     * @var null
+     */
     protected static $img = null;
+    /**
+     * @var
+     */
     protected static $width;
+    /**
+     * @var
+     */
     protected static $height;
+    /**
+     * @var
+     */
     protected static $src;
+    /**
+     * @var
+     */
     protected static $filename;
+    /**
+     * @var string
+     */
     protected static $dirname = '/imgz';
 
+    /**
+     * @param array $params
+     * @return ImageService|null
+     */
     public static function getInstance($params = []) {
         if (null === self::$instance) {
             self::$instance = new self($params);
@@ -26,11 +55,19 @@ class ImageService {
         return self::$instance;
     }
 
+    /**
+     * ImageService constructor.
+     * @param array $params
+     */
     public function __construct($params = []) {
         $this->init($params);
     }
 
     //---- setter
+
+    /**
+     * @param $params
+     */
     public static function init($params) {
         //$instance == self::getInstance();
         foreach ($params as $k => $v) {
@@ -44,10 +81,16 @@ class ImageService {
         //return self::getInstance();
     }
 
+    /**
+     * @param $dirname
+     */
     public static function setDirname($dirname) {
         self::$dirname = $dirname;
     }
 
+    /**
+     * @param $val
+     */
     public static function setImg($val) {
         $nophoto_path = public_path('img/nophoto.jpg');
         if ('' == $val) {
@@ -66,20 +109,32 @@ class ImageService {
         }
     }
 
+    /**
+     * @param $val
+     */
     public static function setWxh($val) {
         list($w, $h) = \explode('x', $val);
         self::setWidth($w);
         self::setHeight($h);
     }
 
+    /**
+     * @param $val
+     */
     public static function setWidth($val) {
         self::$width = $val;
     }
 
+    /**
+     * @param $val
+     */
     public static function setHeight($val) {
         self::$height = $val;
     }
 
+    /**
+     * @param $val
+     */
     public static function setSrc($val) {
         if ('' == $val) {
             $val = public_path('img/nophoto.jpg');
@@ -100,6 +155,10 @@ class ImageService {
     public static function toHtml() {
     }
 
+    /**
+     * @param $params
+     * @return string|void
+     */
     public static function image_resized_cropped($params) {
         $width = self::$width;
         $height = self::$height;
@@ -168,6 +227,10 @@ class ImageService {
         return $image_resized;
     }
 
+    /**
+     * @param array $params
+     * @return ImageService|null
+     */
     public static function fit($params = []) {
         $me = self::getInstance($params);
 
@@ -180,6 +243,10 @@ class ImageService {
         return self::getInstance();
     }
 
+    /**
+     * @param array $params
+     * @return ImageService|null
+     */
     public static function crop($params = []) {
         $me = self::getInstance($params);
 
@@ -231,6 +298,10 @@ class ImageService {
         return self::getInstance(); /// per il fluent, o chaining
     }
 
+    /**
+     * @param array $params
+     * @return ImageService|null
+     */
     public static function save($params = []) {
         //extract($params);
         $info = pathinfo(self::$src);
@@ -255,10 +326,18 @@ class ImageService {
         return self::getInstance();
     }
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public static function out($params = []) {
         return self::$img->encode('jpg', 60);
     }
 
+    /**
+     * @param array $params
+     * @return string|string[]
+     */
     public static function src($params = []) {
         $src = '/'.str_replace(public_path('/'), '', self::$filename);
         $src = str_replace('//', '/', $src);
@@ -266,6 +345,10 @@ class ImageService {
         return $src;
     }
 
+    /**
+     * @param $params
+     * @return string|void|null
+     */
     public static function image_resized_canvas($params) {
         $width = self::$width;
         $height = self::$height;

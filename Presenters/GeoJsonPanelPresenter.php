@@ -7,16 +7,37 @@ use Modules\Blog\Models\Post;
 use Modules\Xot\Contracts\PanelPresenterContract;
 use Modules\Xot\Services\PanelService;
 
+/**
+ * Class GeoJsonPanelPresenter
+ * @package Modules\Xot\Presenters
+ */
 class GeoJsonPanelPresenter implements PanelPresenterContract {
+    /**
+     * @var
+     */
     protected $panel;
 
+    /**
+     * @param \Modules\Xot\Contracts\PanelContract $panel
+     * @return mixed|void
+     */
     public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @param Collection|null $items
+     * @return mixed|void
+     */
     public function index(?Collection $items) {
     }
 
+    /**
+     * @param null $params
+     * @return \Modules\Xot\Transformers\GeoJsonCollection
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public function outContainer($params = null) {
         $model = $this->panel->row;
         $model_table = $model->getTable();
@@ -50,6 +71,10 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
         return $out;
     }
 
+    /**
+     * @param null $params
+     * @return \Modules\Xot\Transformers\GeoJsonResource
+     */
     public function outItem($params = null) {
         $model = $this->panel->row;
         $transformer = \Modules\Xot\Transformers\GeoJsonResource::class;
@@ -59,6 +84,10 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
         return $out;
     }
 
+    /**
+     * @param null $params
+     * @return \Modules\Xot\Transformers\GeoJsonCollection|\Modules\Xot\Transformers\GeoJsonResource
+     */
     public function out($params = null) {
         if (isContainer()) {
             return $this->outContainer($params);

@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 //--- Services --
 
+/**
+ * Class HomePanel
+ * @package Modules\Xot\Models\Panels
+ */
 class HomePanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.
@@ -35,6 +39,9 @@ class HomePanel extends XotBasePanel {
         return ['widgets'];
     }
 
+    /**
+     * @return array
+     */
     public function search() {
         return [];
     }

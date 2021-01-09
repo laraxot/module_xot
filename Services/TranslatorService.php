@@ -14,6 +14,10 @@ use Modules\Theme\Services\ThemeService;
 
 //ddd('leggo');
 
+/**
+ * Class TranslatorService
+ * @package Modules\Xot\Services
+ */
 class TranslatorService extends BaseTranslator {
     /**
      * get.
@@ -57,6 +61,10 @@ class TranslatorService extends BaseTranslator {
         return $this->get($key, $replace, $locale);
     }
 
+    /**
+     * @param $params
+     * @return array|void
+     */
     public static function parse($params) {
         $lang = app()->getLocale();
         extract($params);
@@ -89,6 +97,9 @@ class TranslatorService extends BaseTranslator {
         ];
     }
 
+    /**
+     * @param $data
+     */
     public static function store($data) {
         $data = collect($data)->map(function ($v, $k) {
             $item = self::parse(['key' => $k]);
@@ -128,6 +139,10 @@ class TranslatorService extends BaseTranslator {
         }
     }
 
+    /**
+     * @param $key
+     * @param $value
+     */
     public static function set($key, $value) {
         $lang = app()->getLocale();
         if (trans($key) == $value) {

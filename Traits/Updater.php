@@ -5,6 +5,10 @@ namespace Modules\Xot\Traits;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Trait Updater
+ * @package Modules\Xot\Traits
+ */
 trait Updater {
     /*
     public function myLog() {

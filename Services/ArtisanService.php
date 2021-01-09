@@ -7,13 +7,25 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 if (! defined('STDIN')) {
+    /**
+     *
+     */
     define('STDIN', fopen('php://stdin', 'r'));
 }
 
 //----- TODO
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
 
+/**
+ * Class ArtisanService
+ * @package Modules\Xot\Services
+ */
 class ArtisanService {
+    /**
+     * @param $act
+     * @return string
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public static function act($act) { //da fare anche in noconsole, e magari mettere un policy
         $module_name = \Request::input('module');
         switch ($act) {
@@ -98,6 +110,9 @@ class ArtisanService {
         return '';
     }
 
+    /**
+     * @return string
+     */
     public static function errorClear() {
         $files = File::files(storage_path('logs'));
 
@@ -110,6 +125,9 @@ class ArtisanService {
         return '<pre>laravel.log cleared !</pre> ('.count($files).' Files )';
     }
 
+    /**
+     * @return string
+     */
     public static function debugbarClear() {
         $files = File::files(storage_path('debugbar'));
         foreach ($files as $file) {
@@ -121,6 +139,11 @@ class ArtisanService {
         return 'Debugbar Storage cleared! ('.count($files).' Files )';
     }
 
+    /**
+     * @param $command
+     * @param array $arguments
+     * @return string
+     */
     public static function exe($command, array $arguments = []) {
         try {
             $output = '';

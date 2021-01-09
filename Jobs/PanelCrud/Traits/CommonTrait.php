@@ -11,7 +11,14 @@ use Illuminate\Support\Str; // per dizionario morph
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Trait CommonTrait
+ * @package Modules\Xot\Jobs\PanelCrud\Traits
+ */
 trait CommonTrait {
+    /**
+     * @return array
+     */
     public function getData() {
         $panel = Panel::get($this->row);
         if (! is_object($panel)) {
@@ -121,6 +128,11 @@ trait CommonTrait {
         }
     }
 
+    /**
+     * @param $data
+     * @param $panel
+     * @return mixed
+     */
     public function prepareForValidation($data, $panel) {
         $date_fields = collect($panel->fields())->filter(
             function ($item) use ($data) {
@@ -143,6 +155,12 @@ trait CommonTrait {
         return $data;
     }
 
+    /**
+     * @param $data
+     * @param $panel
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function prepareAndValidate($data, $panel) {
         $data = $this->prepareForValidation($data, $panel);
         $act = '';
@@ -153,6 +171,11 @@ trait CommonTrait {
         return $validator->validate(); //fa tutto da solo
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDate($field, $value) {
         if (null == $value) {
             return $value;
@@ -162,6 +185,11 @@ trait CommonTrait {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime($field, $value) {
         if (null == $value) {
             return $value;
@@ -171,6 +199,11 @@ trait CommonTrait {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime2Fields($field, $value) {
         if (null == $value) {
             return $value;

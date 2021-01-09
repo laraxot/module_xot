@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 //--- Services --
 
+/**
+ * Class ImagePanel
+ * @package Modules\Xot\Models\Panels
+ */
 class ImagePanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.

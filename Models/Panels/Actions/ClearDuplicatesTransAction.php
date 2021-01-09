@@ -6,8 +6,18 @@ use Illuminate\Support\Facades\File;
 use Modules\Xot\Services\ArrayService;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * Class ClearDuplicatesTransAction
+ * @package Modules\Xot\Models\Panels\Actions
+ */
 class ClearDuplicatesTransAction extends XotBasePanelAction {
+    /**
+     * @var bool
+     */
     public $onContainer = true;
+    /**
+     * @var string
+     */
     public $icon = '<i class="fas fa-hammer"></i>';
 
     public function handle() {
@@ -24,6 +34,9 @@ class ClearDuplicatesTransAction extends XotBasePanelAction {
         }
     }
 
+    /**
+     * @param $files
+     */
     public function fixFiles($files) {
         foreach ($files as $file) {
             $path = $file->getRealPath();

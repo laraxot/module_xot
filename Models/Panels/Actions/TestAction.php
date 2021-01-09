@@ -9,10 +9,23 @@ use Modules\Xot\Models\Panels\Actions\XotBasePanelAction;
 
 //-------- bases -----------
 
+/**
+ * Class TestAction
+ * @package Modules\Xot\Models\Panels\Actions
+ */
 class TestAction extends XotBasePanelAction {
+    /**
+     * @var bool
+     */
     public $onItem = true;
+    /**
+     * @var bool
+     */
     public $onContainer = true;
 
+    /**
+     * @return mixed
+     */
     public function handle() {
         return $this->panel->view();
     }

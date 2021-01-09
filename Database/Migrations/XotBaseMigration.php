@@ -8,7 +8,14 @@ use Illuminate\Support\Str;
 
 //----- models -----
 
+/**
+ * Class XotBaseMigration
+ * @package Modules\Xot\Database\Migrations
+ */
 abstract class XotBaseMigration extends Migration {
+    /**
+     * @var mixed
+     */
     protected $model;
 
     //*
@@ -20,6 +27,10 @@ abstract class XotBaseMigration extends Migration {
     }
 
     //*/
+
+    /**
+     * @return string
+     */
     public function getModel() {
         //ddd(class_basename($this));//CreateDevicesTable
         //ddd(get_class($this));
@@ -55,6 +66,9 @@ abstract class XotBaseMigration extends Migration {
         return $table;
     }
 
+    /**
+     * @return \Illuminate\Database\Schema\Builder
+     */
     public function getConn() {
         //$conn_name=with(new MyModel())->getConnectionName();
         //\DB::reconnect('mysql');
@@ -67,6 +81,9 @@ abstract class XotBaseMigration extends Migration {
         return $conn;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     */
     public function getSchemaManager() {
         $schema_manager = $this->getConn()
             ->getConnection()
@@ -75,6 +92,10 @@ abstract class XotBaseMigration extends Migration {
         return $schema_manager;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Schema\Table
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function getTableDetails() {
         $table_details = $this->getSchemaManager()
             ->listTableDetails($this->getTable());
@@ -82,6 +103,10 @@ abstract class XotBaseMigration extends Migration {
         return $table_details;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Schema\Index[]
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function getTableIndexes() {
         $table_indexes = $this->getSchemaManager()
             ->listTableIndexes($this->getTable());
@@ -89,18 +114,31 @@ abstract class XotBaseMigration extends Migration {
         return $table_indexes;
     }
 
+    /**
+     * @return bool
+     */
     public function tableExists() {
         return $this->getConn()->hasTable($this->getTable());
     }
 
+    /**
+     * @param $col
+     * @return bool
+     */
     public function hasColumn($col) {
         return $this->getConn()->hasColumn($this->getTable(), $col);
     }
 
+    /**
+     * @param $sql
+     */
     public function query($sql) {
         $this->getConn()->getConnection()->statement($sql);
     }
 
+    /**
+     * @return bool
+     */
     public function hasPrimaryKey() {
         $table_details = $this->getTableDetails();
 

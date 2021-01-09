@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 use Modules\LU\Services\ProfileService;
 
+/**
+ * Class XotComposer
+ * @package Modules\Xot\Http\View\Composers
+ */
 class XotComposer {
     /**
      * The user repository implementation.

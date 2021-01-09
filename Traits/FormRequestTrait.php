@@ -2,6 +2,10 @@
 
 namespace Modules\Xot\Traits;
 
+/**
+ * Trait FormRequestTrait
+ * @package Modules\Xot\Traits
+ */
 trait FormRequestTrait {
     /**
      * Get the error messages for the defined validation rules.

@@ -7,6 +7,10 @@ use Closure;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Trait Cacheable
+ * @package Modules\Xot\Traits
+ */
 trait Cacheable {
     /**
      * Cache instance.

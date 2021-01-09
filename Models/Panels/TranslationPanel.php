@@ -4,6 +4,10 @@ namespace Modules\Xot\Models\Panels;
 
 //--- Services --
 
+/**
+ * Class TranslationPanel
+ * @package Modules\Xot\Models\Panels
+ */
 class TranslationPanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.

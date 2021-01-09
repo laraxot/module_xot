@@ -43,5 +43,8 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  */
 class Image extends Model {
+    /**
+     * @var string[]
+     */
     protected $fillable = [''];
 }

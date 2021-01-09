@@ -4,12 +4,28 @@ namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\File;
 
+/**
+ * Class PolicyService
+ * @package Modules\Xot\Services
+ */
 class PolicyService {
+    /**
+     * @var null
+     */
     private static $instance = null;
     //protected static $obj;
+    /**
+     * @var array
+     */
     protected static $in_vars = [];
+    /**
+     * @var array
+     */
     protected static $out_vars = [];
 
+    /**
+     * @return PolicyService|null
+     */
     public static function getInstance() {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -18,6 +34,11 @@ class PolicyService {
         return self::$instance;
     }
 
+    /**
+     * @param $obj
+     * @return PolicyService|null
+     * @throws \ReflectionException
+     */
     public static function get($obj) {
         //self::$obj = $obj;
         $class = get_class($obj);
@@ -49,14 +70,24 @@ class PolicyService {
         return self::getInstance();
     }
 
+    /**
+     * @return mixed
+     */
     public function getClass() {
         return self::$out_vars['class'];
     }
 
+    /**
+     * @return bool
+     */
     public function exists() {
         return File::exists(self::$out_vars['filename']);
     }
 
+    /**
+     * @param array $params
+     * @return array|void
+     */
     public static function replaces($params = []) {
         extract(self::$out_vars);
         if (! isset($namespace)) {
@@ -88,6 +119,10 @@ class PolicyService {
         return $replaces;
     }
 
+    /**
+     * @return PolicyService|null
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function createIfNotExists() {
         if ($this->exists()) {
             return self::getInstance(); //se esiste esce;

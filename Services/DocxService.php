@@ -21,11 +21,27 @@ https://code-boxx.com/convert-html-to-docx-using-php/
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+/**
+ * Class DocxService
+ * @package Modules\Xot\Services
+ */
 class DocxService {
+    /**
+     * @var
+     */
     public $docx_input;
+    /**
+     * @var
+     */
     public $values;
+    /**
+     * @var null
+     */
     private static $instance = null;
 
+    /**
+     * @return DocxService|null
+     */
     public static function getInstance() {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -34,6 +50,10 @@ class DocxService {
         return self::$instance;
     }
 
+    /**
+     * @param $filename
+     * @return DocxService|null
+     */
     public static function setDocxInput($filename) {
         $obj = self::getInstance();
         $obj->docx_input = $filename;
@@ -41,6 +61,10 @@ class DocxService {
         return $obj;
     }
 
+    /**
+     * @param $values
+     * @return DocxService|null
+     */
     public static function setValues($values) {
         $obj = self::getInstance();
         $obj->values = $values;
@@ -48,6 +72,12 @@ class DocxService {
         return $obj;
     }
 
+    /**
+     * @param array $params
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpWord\Exception\CopyFileException
+     * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
+     */
     public function out($params = []) {
         extract($params);
         include __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
@@ -70,6 +100,11 @@ class DocxService {
         return response()->download($filename_out_path);
     }
 
+    /**
+     * @param $row
+     * @param $prefix
+     * @return array
+     */
     public static function rows2Data_test($row, $prefix) {
         if (! is_object($row)) {
             return [];
@@ -114,6 +149,11 @@ class DocxService {
         return $data;
     }
 
+    /**
+     * @param $row
+     * @param $prefix
+     * @return array
+     */
     public static function rows2Data($row, $prefix) {
         if (! is_object($row)) {
             return [];

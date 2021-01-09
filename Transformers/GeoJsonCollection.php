@@ -9,9 +9,20 @@ namespace Modules\Xot\Transformers;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Class GeoJsonCollection
+ * @package Modules\Xot\Transformers
+ */
 class GeoJsonCollection extends ResourceCollection {
+    /**
+     * @var string
+     */
     public $collects = GeoJsonResource::class;
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
     public function toArray($request) {
         return [
             'type' => 'FeatureCollection',

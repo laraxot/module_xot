@@ -12,7 +12,14 @@ use Modules\Xot\Models\Widget;
 
 //------ traits ---
 
+/**
+ * Trait WidgetTrait
+ * @package Modules\Xot\Models\Traits
+ */
 trait WidgetTrait {
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function widgets() {  //questo sarebbe itemWidgets, ma teniamo questo nome
         return $this->morphMany(Widget::class, 'post')
             //->whereNull('layout_position')
@@ -23,6 +30,9 @@ trait WidgetTrait {
             ->orderBy('pos');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function containerWidgets() {
         return $this->hasMany(Widget::class, 'post_type', 'post_type')
             ->orderBy('pos');
@@ -30,6 +40,12 @@ trait WidgetTrait {
     }
 
     //non sembra funzionare, perchè?
+
+    /**
+     * @param $query
+     * @param $layout_position
+     * @return mixed
+     */
     public function scopeOfLayoutPosition($query, $layout_position) {
         return $query->where('layout_position', $layout_position);
     }

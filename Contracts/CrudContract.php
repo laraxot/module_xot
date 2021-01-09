@@ -2,6 +2,10 @@
 
 namespace Modules\Xot\Contracts;
 
+/**
+ * Interface CrudContract
+ * @package Modules\Xot\Contracts
+ */
 interface CrudContract {
     /**
      * Return the Eloquent model from the service.

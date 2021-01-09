@@ -13,6 +13,10 @@ use Modules\Xot\Services\ModelService;
 //----------- Requests ----------
 //------------ services ----------
 
+/**
+ * Class XotBaseJob
+ * @package Modules\Xot\Jobs\PanelCrud
+ */
 abstract class XotBaseJob implements ShouldQueue {
     use Dispatchable;
     use InteractsWithQueue;
@@ -20,7 +24,13 @@ abstract class XotBaseJob implements ShouldQueue {
     use SerializesModels;
     //use Traits\CommonTrait;
 
+    /**
+     * @var PanelContract
+     */
     protected $panel;
+    /**
+     * @var array
+     */
     protected $data;
 
     /**
@@ -44,6 +54,11 @@ abstract class XotBaseJob implements ShouldQueue {
         return $this->panel;
     }
 
+    /**
+     * @param $model
+     * @param $data
+     * @param $act
+     */
     public function manageRelationships($model, $data, $act) {
         $relationships = ModelService::getRelationshipsAndData($model, $data);
         foreach ($relationships as $k => $v) {

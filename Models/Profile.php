@@ -125,5 +125,8 @@ namespace Modules\Xot\Models;
  * @mixin \Eloquent
  */
 class Profile extends BaseModel {
+    /**
+     * @var string[]
+     */
     protected $fillable = ['id', 'auth_user_id'];
 }

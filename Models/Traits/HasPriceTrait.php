@@ -20,14 +20,26 @@ namespace Modules\Xot\Models\Traits;
  * @property int    $qty
  */
 trait HasPriceTrait {
+    /**
+     * @param $value
+     * @return \Cknow\Money\Money
+     */
     public function getPriceCurrencyAttribute($value) {
         return @money((int) $this->price * 100, $this->currency);
     }
 
+    /**
+     * @param $value
+     * @return \Cknow\Money\Money
+     */
     public function getPriceCompleteCurrencyAttribute($value) {
         return @money((int) $this->price_complete * 100, $this->currency);
     }
 
+    /**
+     * @param $value
+     * @return \Cknow\Money\Money
+     */
     public function getSubtotalCurrencyAttribute($value) {
         if ($this->qty > 0) {
             $value = $this->qty * $this->price;
@@ -38,6 +50,10 @@ trait HasPriceTrait {
         return @money((int) $value * 100, $this->currency);
     }
 
+    /**
+     * @param $number
+     * @return \Cknow\Money\Money
+     */
     public function getCurrency($number) {
         return @money((int) $number * 100, $this->currency);
     }

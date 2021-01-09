@@ -6,7 +6,17 @@ use Modules\Xot\Presenters\HtmlPanelPresenter;
 use Modules\Xot\Presenters\JsonPanelPresenter;
 
 
+/**
+ * Class SelectResponseMiddleware
+ * @package Modules\Xot\Http\Middleware
+ */
 class SelectResponseMiddleware {
+    /**
+     * @param $request
+     * @param \Closure $next
+     * @param mixed ...$guards
+     * @return mixed
+     */
     public function handle($request, \Closure $next, ...$guards) {
         $responseType = $request['responseType'];
         /*

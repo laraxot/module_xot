@@ -26,6 +26,10 @@ https://medium.com/@josepostiga/how-i-managed-to-control-chaos-with-laravel-d47b
 
 */
 
+/**
+ * Class CreateAllRepositoriesCommand
+ * @package Modules\Xot\Console
+ */
 class CreateAllRepositoriesCommand extends Command {
     /**
      * The console command name.

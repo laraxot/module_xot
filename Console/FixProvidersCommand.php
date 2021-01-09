@@ -10,8 +10,18 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class FixProvidersCommand
+ * @package Modules\Xot\Console
+ */
 class FixProvidersCommand extends Command {
+    /**
+     * @var string
+     */
     protected $name = 'xot:fix-module-providers';
+    /**
+     * @var string
+     */
     protected $description = 'fix module providers of module ';
     //protected $type = 'ModuleProvider';
     //protected $argumentName='name';
@@ -64,6 +74,9 @@ class FixProvidersCommand extends Command {
         return $module->getExtraPath('Providers\test4.test');
     }
     */
+    /**
+     * @return array[]
+     */
     protected function getArguments() {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the module.'],

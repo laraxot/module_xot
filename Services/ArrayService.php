@@ -7,9 +7,21 @@ use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+/**
+ * Class ArrayService
+ * @package Modules\Xot\Services
+ */
 class ArrayService {
+    /**
+     * @var int
+     */
     protected static $export_processor = 1;
 
+    /**
+     * @param $params
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public static function toXLS($params) {
         require_once __DIR__.'/vendor/autoload.php';
         $data = $params['data'];
@@ -33,6 +45,11 @@ class ArrayService {
         }
     }
 
+    /**
+     * @param $params
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public static function toXLS_phpoffice($params) {
         $filename = 'test';
         \extract($params);
@@ -83,6 +100,9 @@ class ArrayService {
         }
     }
 
+    /**
+     * @param $params
+     */
     public static function save($params) {
         extract($params);
         if (! isset($data)) {

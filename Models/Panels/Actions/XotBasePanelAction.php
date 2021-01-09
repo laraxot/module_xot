@@ -15,16 +15,50 @@ use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Class XotBasePanelAction
+ * @package Modules\Xot\Models\Panels\Actions
+ */
 abstract class XotBasePanelAction {
+    /**
+     * @var bool
+     */
     public $onContainer = false;
+    /**
+     * @var bool
+     */
     public $onItem = false;
+    /**
+     * @var null
+     */
     public $row = null;
+    /**
+     * @var null
+     */
     public $rows = null;
+    /**
+     * @var null
+     */
     public $panel = null;
+    /**
+     * @var null
+     */
     public $name = null;
+    /**
+     * @var string
+     */
     public $icon = '<i class="far fa-question-circle"></i>';
+    /**
+     * @var string
+     */
     public $class = 'btn btn-secondary mb-2';
+    /**
+     * @var array
+     */
     protected $data = [];
+    /**
+     * @var null
+     */
     public $related = null; //post_type per filtrare le azioni nei vari index_edit
 
     abstract public function handle();
@@ -42,10 +76,16 @@ abstract class XotBasePanelAction {
         }
     }
 
+    /**
+     * @param $panel
+     */
     public function setPanel(&$panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName() {
         if (Str::contains($this->name, '::')) {
             $this->name = null;
@@ -62,6 +102,9 @@ abstract class XotBasePanelAction {
         return $this->name;
     }
 
+    /**
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Translation\Translator|string|string[]|null
+     */
     public function getTitle() {
         $name = $this->getName();
 
@@ -80,6 +123,10 @@ abstract class XotBasePanelAction {
         return $title;
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function getUrl($params = []) {
         if (isset($this->onItem) && $this->onItem) {
             return $this->urlItem($params);
@@ -88,14 +135,24 @@ abstract class XotBasePanelAction {
         return $this->urlContainer($params);
     }
 
+    /**
+     * @param $rows
+     */
     public function setRows($rows) {
         $this->rows = $rows;
     }
 
+    /**
+     * @param $row
+     */
     public function setRow($row) {
         $this->row = $row;
     }
 
+    /**
+     * @param array $params
+     * @return string|void|null
+     */
     public function btn($params = []) {
         extract($params);
         if (isset($row)) {
@@ -111,6 +168,10 @@ abstract class XotBasePanelAction {
         return $this->btnContainer($params);
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function url($params = []) {
         if (isset($this->onItem) && $this->onItem) {
             return $this->urlItem($params);
@@ -119,6 +180,10 @@ abstract class XotBasePanelAction {
         return $this->urlContainer($params);
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function urlContainer($params = []) {
         $panel = $this->panel;
         extract($params);
@@ -143,6 +208,11 @@ abstract class XotBasePanelAction {
         return $url;
     }
 
+    /**
+     * @param $key
+     * @param null $value
+     * @return $this
+     */
     public function with($key, $value = null) {
         if (is_array($key)) {
             $this->data = array_merge($this->data, $key);
@@ -153,6 +223,10 @@ abstract class XotBasePanelAction {
         return $this;
     }
 
+    /**
+     * @param array $params
+     * @return string|void|null
+     */
     public function btnHtml($params = []) {
         $params['panel'] = $this->panel;
         $params['url'] = $this->getUrl($params);
@@ -193,6 +267,10 @@ abstract class XotBasePanelAction {
         return FormXService::btnHtml($params);
     }
 
+    /**
+     * @param array $params
+     * @return string|void|null
+     */
     public function btnContainer($params = []) {
         $url = $this->urlContainer($params);
         $title = $this->getTitle();
@@ -206,6 +284,11 @@ abstract class XotBasePanelAction {
     }
 
     //end btnContainer
+
+    /**
+     * @param array $params
+     * @return string
+     */
     public function urlItem($params = []) {
         //dddx($params);
         $url = '';
@@ -239,6 +322,10 @@ abstract class XotBasePanelAction {
         return $url;
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function btnItem($params = []) {
         $url = $this->urlItem($params);
         $title = $this->getTitle();
@@ -281,6 +368,10 @@ abstract class XotBasePanelAction {
     }
     */
 
+    /**
+     * @param array $params
+     * @return mixed
+     */
     public function pdf($params = []) {
         if (null == $this->row) {
             $this->row = clone($this->rows)->get()[0];

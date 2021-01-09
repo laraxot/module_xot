@@ -25,8 +25,13 @@ use Modules\Xot\Presenters\JsonPanelPresenter;
 use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
 use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
+/**
+ * Class XotServiceProvider
+ * @package Modules\Xot\Providers
+ */
 class XotServiceProvider extends XotBaseServiceProvider {
     /**
+<<<<<<< HEAD
      * The module directory.
      *
      * @var string
@@ -44,6 +49,19 @@ class XotServiceProvider extends XotBaseServiceProvider {
      * @var string
      */
     public string $module_name = 'xot';
+=======
+     * @var string
+     */
+    protected $module_dir = __DIR__;
+    /**
+     * @var string
+     */
+    protected $module_ns = __NAMESPACE__;
+    /**
+     * @var string
+     */
+    public $module_name = 'xot';
+>>>>>>> c906275 (.)
 
     public function bootCallback() {
         $this->mergeConfigs();
@@ -145,6 +163,9 @@ class XotServiceProvider extends XotBaseServiceProvider {
         );
     }
 
+    /**
+     * @param $path
+     */
     public function loadHelpersFrom($path) {
         foreach (\glob($path.'/*.php') as $filename) {
             $filename = \str_replace('/', \DIRECTORY_SEPARATOR, $filename);

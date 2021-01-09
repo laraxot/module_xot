@@ -8,6 +8,10 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\View\Component as IlluminateComponent;
 
+/**
+ * Class XotBaseComponent
+ * @package Modules\Xot\View\Components
+ */
 abstract class XotBaseComponent extends IlluminateComponent {
     /** @var array */
     protected static $assets = [];
@@ -40,6 +44,9 @@ abstract class XotBaseComponent extends IlluminateComponent {
         return $view;
     }
 
+    /**
+     * @return \Closure|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Support\Htmlable|\Illuminate\Contracts\View\Factory|View|string
+     */
     public function render() /*: View */
     { //per fare copia ed incolla
         $view = $this->getView();

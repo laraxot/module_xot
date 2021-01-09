@@ -7,9 +7,15 @@ use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 
+/**
+ * Class ExceptionSlack
+ */
 class ExceptionSlack extends Notification implements ShouldQueue {
     use Queueable;
 
+    /**
+     * @var string
+     */
     public $msg = '';
 
     /**
@@ -52,6 +58,10 @@ class ExceptionSlack extends Notification implements ShouldQueue {
         return ['slack'];
     }
 
+    /**
+     * @param $notifiable
+     * @return SlackMessage
+     */
     public function toSlack($notifiable) {
         $content = $this->msg; //$e->getMessage();
 
@@ -60,6 +70,10 @@ class ExceptionSlack extends Notification implements ShouldQueue {
     }
 
     //--------
+
+    /**
+     * @return string
+     */
     public function getIp() {
         foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'] as $key) {
             if (true === array_key_exists($key, $_SERVER)) {

@@ -12,9 +12,21 @@ use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\TenantService as Tenant;
 use Nwidart\Modules\Facades\Module;
 
+/**
+ * Class XotBaseContainerController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 abstract class XotBaseContainerController extends Controller {
+    /**
+     * @var
+     */
     protected $panel;
 
+    /**
+     * @param string $method
+     * @param array $args
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
+     */
     public function __call($method, $args) {
         //dddx(['method' => $method, 'args' => $args]);
         $panel = Panel::getRequestPanel();
@@ -33,6 +45,9 @@ abstract class XotBaseContainerController extends Controller {
         return $this->__callRouteAct($method, $args);
     }
 
+    /**
+     * @return string
+     */
     public function getController() {
         list($containers, $items) = params2ContainerItem();
         $mod_name = $this->panel->getModuleName(); //forse da mettere container0
@@ -50,6 +65,11 @@ abstract class XotBaseContainerController extends Controller {
         return '\Modules\Xot\Http\Controllers\Admin\XotPanelController';
     }
 
+    /**
+     * @param $method
+     * @param $args
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callRouteAct($method, $args) {
         $panel = $this->panel;
 
@@ -77,6 +97,11 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
+    /**
+     * @param $method
+     * @param $args
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callPanelAct($method, $args) {
         $request = request();
         $act = $request->_act;
@@ -103,6 +128,11 @@ abstract class XotBaseContainerController extends Controller {
         return $panel->callAction($act);
     }
 
+    /**
+     * @param $method
+     * @param $panel
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function notAuthorized($method, $panel) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {

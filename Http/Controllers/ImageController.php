@@ -9,11 +9,22 @@ use Illuminate\Support\Str;
 //use File;
 //---- services --
 
+/**
+ * Class ImageController
+ * @package Modules\Xot\Http\Controllers
+ */
 class ImageController extends Controller {
+    /**
+     * @param Request $request
+     */
     public function index(Request $request) {
         dddx('index');
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function show(Request $request) {
         $params = \Route::current()->parameters();
         list($containers, $items) = params2ContainerItem($params);
@@ -22,10 +33,18 @@ class ImageController extends Controller {
         return $this->$last_item($request);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request) {
         return $this->canvas($request);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function canvas(Request $request) {
         $data = $request->all();
         $path_parts = \pathinfo($data['name']);

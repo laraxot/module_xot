@@ -9,6 +9,10 @@ use Illuminate\Contracts\Cache\Store as StoreContract;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+/**
+ * Class Store
+ * @package Modules\Xot\Engines\Opcache
+ */
 class Store extends TaggableStore implements StoreContract {
     use RetrievesMultipleKeys;
     /**
@@ -97,6 +101,10 @@ class Store extends TaggableStore implements StoreContract {
         return file_exists($this->filePath($key));
     }
 
+    /**
+     * @param array|string $key
+     * @return mixed|void
+     */
     public function get($key) {
         /* phpstan dice
         if ($this->exists($key)) {
@@ -221,6 +229,11 @@ class Store extends TaggableStore implements StoreContract {
         return $this->clearCacheInDirectory($this->getFullDirectory(), true);
     }
 
+    /**
+     * @param $dir
+     * @param false $removeDirectory
+     * @return bool
+     */
     public function clearCacheInDirectory($dir, $removeDirectory = false) {
         /*
          * Since we now able to set sub directory to keep files
@@ -295,6 +308,10 @@ class Store extends TaggableStore implements StoreContract {
         return $this->directory;
     }
 
+    /**
+     * @param $subDirectory
+     * @return $this
+     */
     public function setSubDirectory($subDirectory) {
         $this->subDirectory = $subDirectory;
 
@@ -327,6 +344,9 @@ class Store extends TaggableStore implements StoreContract {
         return rename($tmp, $this->filePath($key));
     }
 
+    /**
+     * @param $dir
+     */
     protected function checkDirectory($dir) {
         if (! is_dir($dir)) {
             mkdir($dir, 0777, true);
@@ -346,6 +366,10 @@ class Store extends TaggableStore implements StoreContract {
         return 0 === $minutes ? 9999999999 : strtotime('+'.$seconds.' seconds');
     }
 
+    /**
+     * @param string $key
+     * @param int $minutes
+     */
     public function extendExpiration(string $key, int $minutes = 1) {
         /*
         @include $this->filePath($key);

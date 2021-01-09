@@ -53,18 +53,29 @@ use Modules\Xot\Models\Traits\WidgetTrait;
  */
 class Widget extends BaseModel {
     use WidgetTrait;
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
-        'id', 
+        'id',
         'post_type', 'post_id', //nullablemorph
         'title', 'subtitle',
         'blade', 'pos', 'model', 'limit',
         'order_by', 'image_src', 'layout_position',
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function linked() {
         return $this->morphTo('post');
     }
 
+    /**
+     * @param $value
+     * @return int|mixed
+     */
     public function getPosAttribute($value) {
         if (null != $value) {
             return $value;
@@ -74,6 +85,10 @@ class Widget extends BaseModel {
         return $value;
     }
 
+    /**
+     * @param null $params
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function toHtml($params = null) {
         $view = 'pub_theme::layouts.widgets';
         if (null != $this->layout_position) {

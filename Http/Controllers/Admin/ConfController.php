@@ -10,7 +10,15 @@ use Modules\Settings\Services\ConfService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\TenantService;
 
+/**
+ * Class ConfController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 class ConfController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request) {
         $route_params = \Route::current()->parameters();
         //$confs = Config::all('localhost');
@@ -31,6 +39,9 @@ class ConfController extends Controller {
                 ;
     }
 
+    /**
+     * @param Request $request
+     */
     public function edit(Request $request) {
         $route_params = \Route::current()->parameters();
         extract($route_params);
@@ -44,6 +55,10 @@ class ConfController extends Controller {
         return ThemeService::view()->with('row', $row);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function update(Request $request) {
         $data = $request->all();
         $route_params = \Route::current()->parameters();

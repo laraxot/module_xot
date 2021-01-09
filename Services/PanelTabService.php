@@ -5,13 +5,27 @@ namespace Modules\Xot\Services;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 
+/**
+ * Class PanelTabService
+ * @package Modules\Xot\Services
+ */
 class PanelTabService {
+    /**
+     * @var
+     */
     protected $panel;
 
+    /**
+     * PanelTabService constructor.
+     * @param $panel
+     */
     public function __construct($panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @return array[]
+     */
     public function getItemTabs() {
         $item = $this->panel->row;
         $tabs = $this->panel->tabs();
@@ -35,6 +49,9 @@ class PanelTabService {
         return [$row];
     }
 
+    /**
+     * @return array
+     */
     public function getRowTabs() {
         $data = [];
         foreach ($this->panel->tabs() as $tab) {
@@ -50,6 +67,9 @@ class PanelTabService {
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function getTabs() {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();

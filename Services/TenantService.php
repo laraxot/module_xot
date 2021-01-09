@@ -11,7 +11,15 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Class TenantService
+ * @package Modules\Xot\Services
+ */
 class TenantService {
+    /**
+     * @param array $params
+     * @return string
+     */
     public static function getName($params = []) {
         $default = 'localhost';
         $server_name = $default;
@@ -54,6 +62,10 @@ class TenantService {
 
     //end function
 
+    /**
+     * @param $filename
+     * @return string|string[]
+     */
     public static function filePath($filename) {
         $path = base_path('config/'.self::getName().'/'.$filename);
         $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
@@ -63,6 +75,10 @@ class TenantService {
 
     //end function
 
+    /**
+     * @param $key
+     * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
+     */
     public static function config($key) {
         $group = implode('.', array_slice(explode('.', $key), 0, 2));
         /*
@@ -95,6 +111,9 @@ class TenantService {
         return config($key);
     }
 
+    /**
+     * @param $params
+     */
     public static function saveConfig($params) {
         $name = 'xra';
         $data = [];
@@ -129,6 +148,11 @@ class TenantService {
         File::put($path.'', $content);
     }
 
+    /**
+     * @param $name
+     * @return array|false|mixed
+     * @throws \ReflectionException
+     */
     public static function model($name) {
         $name = Str::snake($name);
         $class = self::config('xra.model.'.$name);
@@ -160,6 +184,12 @@ class TenantService {
         return $model;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
     public static function modelEager($name) {
         $model = self::model($name);
         $panel = Panel::get($model);

@@ -17,7 +17,15 @@ TableException
 */
 use Spipu\Html2Pdf\Html2Pdf;
 
+/**
+ * Class HtmlService
+ * @package Modules\Xot\Services
+ */
 class HtmlService {
+    /**
+     * @param $params
+     * @return string|void
+     */
     public static function toPdf($params) {
         require_once __DIR__.'/vendor/autoload.php';
         $pdforientation = 'L'; //default;

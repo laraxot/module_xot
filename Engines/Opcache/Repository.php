@@ -6,6 +6,10 @@ use Closure;
 use Illuminate\Cache\TaggedCache;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 
+/**
+ * Class Repository
+ * @package Modules\Xot\Engines\Opcache
+ */
 class Repository extends TaggedCache implements CacheContract {
     /**
      * Get an item from the cache, or store the default value.
@@ -26,6 +30,9 @@ class Repository extends TaggedCache implements CacheContract {
         */
     }
 
+    /**
+     * @return bool
+     */
     public function flush() {
         // $this->tags->getNames() ? $this->store->flushSub() : $this->store->flush();
         return true;
