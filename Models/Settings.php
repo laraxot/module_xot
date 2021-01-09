@@ -30,7 +30,7 @@ class Settings extends Model {
     /**
      * @var string[]
      */
-    public array $fillable = [
+    public $fillable = [
         'id', 'appname', 'description', 'keywords', 'author',
     ];
 }

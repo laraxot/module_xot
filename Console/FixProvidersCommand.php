@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
 use Exception;
@@ -11,18 +13,19 @@ use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Class FixProvidersCommand
- * @package Modules\Xot\Console
+ * Class FixProvidersCommand.
  */
 class FixProvidersCommand extends Command {
     /**
      * @var string
      */
-    protected string $name = 'xot:fix-module-providers';
+    protected $name = 'xot:fix-module-providers';
+
     /**
      * @var string
      */
-    protected string $description = 'fix module providers of module ';
+    protected $description = 'fix module providers of module ';
+
     //protected $type = 'ModuleProvider';
     //protected $argumentName='name';
 
@@ -74,6 +77,7 @@ class FixProvidersCommand extends Command {
         return $module->getExtraPath('Providers\test4.test');
     }
     */
+
     /**
      * @return array[]
      */

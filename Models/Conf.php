@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models;
 
 /**
- * Modules\Xot\Models\Conf
+ * Modules\Xot\Models\Conf.
  *
- * @property int $id
- * @property string $appname
- * @property string $description
- * @property string $created_by
- * @property string $updated_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\Xot\Models\Image[] $images
- * @property-read int|null $images_count
+ * @property int                                                                  $id
+ * @property string                                                               $appname
+ * @property string                                                               $description
+ * @property string                                                               $created_by
+ * @property string                                                               $updated_by
+ * @property \Illuminate\Support\Carbon|null                                      $created_at
+ * @property \Illuminate\Support\Carbon|null                                      $updated_at
+ * @property \Illuminate\Database\Eloquent\Collection|\Modules\Xot\Models\Image[] $images
+ * @property int|null                                                             $images_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Conf newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conf newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conf query()
@@ -32,7 +35,7 @@ class Conf extends BaseModel {
     /**
      * @var string[]
      */
-    public array $fillable = [
+    public $fillable = [
         'id', 'appname', 'description', 'keywords', 'author',
     ];
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Relations;
 
 use Closure;
@@ -9,14 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
- * Class CustomRelation
- * @package Modules\Xot\Relations
+ * Class CustomRelation.
  */
 class CustomRelation extends Relation {
     /**
      * The baseConstraints callback.
-     *
-     * @var \Closure
      */
     protected Closure $baseConstraints;
 
@@ -36,12 +35,6 @@ class CustomRelation extends Relation {
 
     /**
      * Create a new belongs to relationship instance.
-     *
-     * @param Builder $query
-     * @param Model $parent
-     * @param Closure $baseConstraints
-     * @param Closure|null $eagerConstraints
-     * @param Closure|null $eagerMatcher
      */
     public function __construct(Builder $query, Model $parent, Closure $baseConstraints, ?Closure $eagerConstraints, ?Closure $eagerMatcher) {
         $this->baseConstraints = $baseConstraints;
@@ -63,7 +56,6 @@ class CustomRelation extends Relation {
     /**
      * Set the constraints for an eager load of the relation.
      *
-     * @param array $models
      * @return void
      */
     public function addEagerConstraints(array $models) {
@@ -73,12 +65,12 @@ class CustomRelation extends Relation {
     /**
      * Initialize the relation on a set of models.
      *
-     * @param array $models
+     * @param array  $models
      * @param string $relation
      *
      * @return array
      */
-    public function initRelation(array $models, string $relation) {
+    public function initRelation($models, $relation) {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->related->newCollection());
         }
@@ -89,13 +81,11 @@ class CustomRelation extends Relation {
     /**
      * Match the eagerly loaded results to their parents.
      *
-     * @param array $models
-     * @param Collection $results
      * @param string $relation
      *
      * @return array
      */
-    public function match(array $models, Collection $results, string $relation) {
+    public function match(array $models, Collection $results, $relation) {
         return ($this->eagerMatcher)($models, $results, $relation, $this);
     }
 

@@ -23,7 +23,7 @@ class FullTextSearchEngine extends Engine {
     /**
      * Remove the given model from the index.
      */
-    public function delete(Collection $models) {
+    public function delete($models) {
     }
 
     /**
@@ -114,9 +114,12 @@ class FullTextSearchEngine extends Engine {
     /**
      * Perform the given search on the engine.
      *
+     * @param int $perPage
+     * @param int $page
+     *
      * @return mixed
      */
-    public function paginate(Builder $builder, int $perPage, int $page) {
+    public function paginate(Builder $builder, $perPage, $page) {
         $builder->limit = $perPage;
         if (property_exists($builder, 'offset')) {
             $builder->offset = ($perPage * $page) - $perPage;
@@ -165,8 +168,10 @@ class FullTextSearchEngine extends Engine {
 
     /**
      * Flush all of the model's records from the engine.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
-    public function flush(\Illuminate\Database\Eloquent\Model $model) {
+    public function flush($model) {
         //$index = $this->algolia->initIndex($model->searchableAs());
         //$index->clearObjects();
     }

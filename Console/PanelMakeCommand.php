@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
 use Illuminate\Support\Str;
@@ -10,8 +12,7 @@ use Nwidart\Modules\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Class PanelMakeCommand
- * @package Modules\Xot\Console
+ * Class PanelMakeCommand.
  */
 class PanelMakeCommand extends GeneratorCommand {
     use ModuleCommandTrait;
@@ -19,19 +20,15 @@ class PanelMakeCommand extends GeneratorCommand {
     /**
      * @var string
      */
-    protected string $argumentName = 'name';
+    protected $argumentName = 'name';
 
     /**
      * The console command name.
-     *
-     * @var string
      */
     protected string $name = 'xot:make-panel';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
     protected string $description = 'Create a new panel class for the specified module';
 

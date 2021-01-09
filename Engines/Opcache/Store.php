@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Engines\Opcache;
 
 use Illuminate\Cache\RetrievesMultipleKeys;
@@ -10,40 +12,35 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
- * Class Store
- * @package Modules\Xot\Engines\Opcache
+ * Class Store.
  */
 class Store extends TaggableStore implements StoreContract {
     use RetrievesMultipleKeys;
+
     /**
      * The file cache directory.
      *
      * @var string
      */
     protected $directory;
+
     /**
      * The file cache sub directory.
-     *
-     * @var string|null
      */
     protected ?string $subDirectory;
+
     /**
      * String that should be prepended to keys.
-     *
-     * @var string
      */
     protected string $prefix;
+
     /**
      * Is OPcache enabled or not.
-     *
-     * @var bool
      */
     protected bool $enabled = false;
 
     /**
      * Create a new OPcache store.
-     * @param string $prefix
-     * @param string $directory
      */
     public function __construct(string $prefix = '', string $directory = '') {
         // Graceful degradation: if OPcache is not enabled, we're just loading cache files.
@@ -66,7 +63,7 @@ class Store extends TaggableStore implements StoreContract {
      *
      * @return \Illuminate\Cache\TaggedCache
      */
-    public function tags(array $names) {
+    public function tags($names) {
         $names = is_array($names) ? $names : func_get_args();
         /*
          * Now we are able to flush only tagged cache items
@@ -79,7 +76,6 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
-     * @param array $names
      * @return string
      */
     protected function tagsSubDir(array $names) {
@@ -88,8 +84,6 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * Determines whether the key exists within the cache.
-     *
-     * @param string $key
      *
      * @return bool
      */
@@ -103,6 +97,7 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * @param array|string $key
+     *
      * @return mixed|void
      */
     public function get($key) {
@@ -129,8 +124,7 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param mixed     $value
      * @param float|int $minutes
      *
      * @return bool
@@ -146,8 +140,7 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache if the key doesn't exist.
      *
-     * @param string $key
-     * @param mixed $value
+     * @param mixed     $value
      * @param float|int $minutes
      *
      * @return bool
@@ -163,7 +156,6 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Increment the value of an item in the cache.
      *
-     * @param string $key
      * @param mixed $value
      *
      * @return int|bool
@@ -177,7 +169,6 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param string $key
      * @param mixed $value
      *
      * @return int|bool
@@ -189,7 +180,6 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param string $key
      * @param mixed $value
      *
      * @return bool
@@ -200,8 +190,6 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * Remove an item from the cache.
-     *
-     * @param string $key
      *
      * @return bool
      */
@@ -232,6 +220,7 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * @param $dir
      * @param false $removeDirectory
+     *
      * @return bool
      */
     public function clearCacheInDirectory($dir, $removeDirectory = false) {
@@ -272,7 +261,6 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Get fully qualified file path.
      *
-     * @param string $key
      * @return string
      */
     public function filePath(string $key) {
@@ -310,6 +298,7 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * @param $subDirectory
+     *
      * @return $this
      */
     public function setSubDirectory($subDirectory) {
@@ -328,8 +317,6 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Write the cache file to disk.
      *
-     * @param string $key
-     * @param int $exp
      * @param mixed $val
      *
      * @return bool
@@ -366,10 +353,6 @@ class Store extends TaggableStore implements StoreContract {
         return 0 === $minutes ? 9999999999 : strtotime('+'.$seconds.' seconds');
     }
 
-    /**
-     * @param string $key
-     * @param int $minutes
-     */
     public function extendExpiration(string $key, int $minutes = 1) {
         /*
         @include $this->filePath($key);
