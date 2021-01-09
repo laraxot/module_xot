@@ -27,9 +27,7 @@ class ArtisanAction extends XotBasePanelAction {
      */
     public string $icon = '<i class="far fa-file-excel fa-1x"></i>';
 
-    /**
-     * @var
-     */
+
     protected $cmd;
     /**
      * @var array

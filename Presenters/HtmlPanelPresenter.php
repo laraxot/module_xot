@@ -11,9 +11,7 @@ use Modules\Xot\Contracts\PanelPresenterContract;
  * @package Modules\Xot\Presenters
  */
 class HtmlPanelPresenter implements PanelPresenterContract {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

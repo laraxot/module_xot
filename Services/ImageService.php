@@ -22,21 +22,13 @@ class ImageService {
      *
      */
     protected static $img = null;
-    /**
-     * @var
-     */
+
     protected static $width;
-    /**
-     * @var
-     */
+
     protected static $height;
-    /**
-     * @var
-     */
+
     protected static $src;
-    /**
-     * @var
-     */
+
     protected static $filename;
     /**
      * @var string

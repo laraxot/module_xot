@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Request;
  * @package Modules\Xot\Services
  */
 class PanelTabService {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

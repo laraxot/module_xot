@@ -12,9 +12,7 @@ use Modules\Xot\Services\PanelService;
  * @package Modules\Xot\Presenters
  */
 class GeoJsonPanelPresenter implements PanelPresenterContract {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

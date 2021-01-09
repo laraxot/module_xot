@@ -7,9 +7,7 @@ namespace Modules\Xot\Services;
  * @package Modules\Xot\Services
  */
 class PanelActionService {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

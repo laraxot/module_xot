@@ -14,9 +14,7 @@ class Test extends Component {
      * @var string
      */
     public string $animal = '';
-    /**
-     * @var
-     */
+
     public $options;
     /**
      * @var array

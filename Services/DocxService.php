@@ -26,13 +26,9 @@ use PhpOffice\PhpWord\TemplateProcessor;
  * @package Modules\Xot\Services
  */
 class DocxService {
-    /**
-     * @var
-     */
+
     public $docx_input;
-    /**
-     * @var
-     */
+
     public $values;
     /**
      *

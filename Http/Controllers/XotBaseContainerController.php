@@ -14,9 +14,7 @@ use Modules\Xot\Services\PanelService as Panel;
  * @package Modules\Xot\Http\Controllers
  */
 abstract class XotBaseContainerController extends Controller {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

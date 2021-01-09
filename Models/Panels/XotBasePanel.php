@@ -54,9 +54,7 @@ abstract class XotBasePanel implements PanelContract {
 
     public ?PanelRouteService $route = null;
 
-    /**
-     * @var
-     */
+
     protected static string $model;
 
     public function __construct(PanelPresenterContract $presenter, PanelRouteService $route) {

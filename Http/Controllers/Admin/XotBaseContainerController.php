@@ -17,9 +17,7 @@ use Nwidart\Modules\Facades\Module;
  * @package Modules\Xot\Http\Controllers\Admin
  */
 abstract class XotBaseContainerController extends Controller {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

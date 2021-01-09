@@ -11,9 +11,7 @@ use Modules\Xot\Services\StubService;
  * @package Modules\Xot\Presenters
  */
 class JsonPanelPresenter implements PanelPresenterContract {
-    /**
-     * @var
-     */
+
     protected $panel;
 
     /**

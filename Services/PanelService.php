@@ -14,13 +14,9 @@ class PanelService {
      *
      */
     private static ?PanelService $_instance = null;
-    /**
-     * @var
-     */
+
     private static $model;
-    /**
-     * @var
-     */
+
     private static $panel;
 
     /*

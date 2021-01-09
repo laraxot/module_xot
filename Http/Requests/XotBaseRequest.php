@@ -20,9 +20,7 @@ abstract class XotBaseRequest extends FormRequest {
     //$this->setContainer(factory(Profile::class));
     //$this->setContainer(app());
     //}
-    /**
-     * @var
-     */
+
     public $panel;
 
     /**

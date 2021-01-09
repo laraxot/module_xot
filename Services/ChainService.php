@@ -34,29 +34,17 @@ function chain($primary_field, $parent_field, $sort_field, $rows, $root_id = 0, 
  * @package Modules\Xot\Services
  */
 class ChainService {
-    /**
-     * @var
-     */
+
     public $table;
-    /**
-     * @var
-     */
+
     public $rows;
-    /**
-     * @var
-     */
+
     public $chain_table;
-    /**
-     * @var
-     */
+
     public $primary_field;
-    /**
-     * @var
-     */
+
     public $parent_field;
-    /**
-     * @var
-     */
+
     public $sort_field;
 
     /**

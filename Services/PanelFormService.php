@@ -14,9 +14,7 @@ use Modules\Xot\Contracts\PanelContract;
  * @package Modules\Xot\Services
  */
 class PanelFormService {
-    /**
-     * @var
-     */
+
     protected $panel;
     /*
     public function __construct(&$panel) {
