@@ -77,6 +77,13 @@ trait FilterTrait {
         }
     }
 
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+
     public function scopeOfSearch($query, $q) {
         $model = $query->getModel();
         $tbl = $model->getTable();
@@ -114,6 +121,13 @@ trait FilterTrait {
         //return $query;
         return $query->whereIn('id', $candyShops['ids']);
     }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
 
     public function scopeOfFilter1($query, $params) {
         $model = $query->getModel();
