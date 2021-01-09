@@ -23,16 +23,16 @@ abstract class BaseMorphPivot extends MorphPivot {
     /**
      * @var bool
      */
-    public bool $incrementing = true;
+    public $incrementing = true;
     /**
      * @var bool
      */
-    public bool $timestamps = true;
+    public $timestamps = true;
     //protected $attributes = ['related_type' => 'cuisine_cat'];
     /**
      * @var string[]
      */
-    protected array $dates = [
+    protected $dates = [
         'created_at',
         'updated_at',
         'deleted_at',

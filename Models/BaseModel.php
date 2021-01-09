@@ -29,7 +29,7 @@ abstract class BaseModel extends Model {
     /**
      * @var string[]
      */
-    protected array $dates = ['published_at', 'created_at', 'updated_at'];
+    protected $dates = ['published_at', 'created_at', 'updated_at'];
     /**
      * @var string
      */
@@ -37,17 +37,17 @@ abstract class BaseModel extends Model {
     /**
      * @var bool
      */
-    public bool $incrementing = true;
+    public $incrementing = true;
     /**
      * @var array
      */
-    protected array $hidden = [
+    protected $hidden = [
         //'password'
     ];
     /**
      * @var bool
      */
-    public bool $timestamps = true;
+    public $timestamps = true;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

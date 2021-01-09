@@ -34,7 +34,7 @@ class DummyClass extends XotBasePanel {
      *
      * @var array
      */
-    public function with() {
+    public function with():array {
         return [];
     }
 
