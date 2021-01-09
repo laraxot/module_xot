@@ -54,7 +54,6 @@ abstract class XotBasePanel implements PanelContract {
 
     public ?PanelRouteService $route = null;
 
-
     protected static string $model;
 
     public function __construct(PanelPresenterContract $presenter, PanelRouteService $route) {
@@ -680,7 +679,10 @@ abstract class XotBasePanel implements PanelContract {
      *
      * @return mixed
      */
-    public function applySearch($query, $q) {
+    public function applySearch($query, ?string $q) {
+        if (! isset($q)) {
+            return $query;
+        }
         $tipo = 0; //0 a mano , 1 repository, 2 = scout
 
         switch ($tipo) {

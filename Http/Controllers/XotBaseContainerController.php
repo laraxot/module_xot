@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Routing\Controller;
@@ -10,19 +12,21 @@ use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class XotBaseContainerController
- * @package Modules\Xot\Http\Controllers
+ * Class XotBaseContainerController.
  */
 abstract class XotBaseContainerController extends Controller {
-
     protected $panel;
 
     /**
      * @param string $method
-     * @param array $args
+     * @param array  $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
      */
-    public function __call(string $method, array $args) {
+
+    //Declaration of Modules\Xot\Http\Controllers\XotBaseContainerController::__call($method, $args) should be compatible with Illuminate\Routing\Controller::__call($method, $parameters)
+
+    public function __call($method, $args) {
         $panel = Panel::getRequestPanel();
         $this->panel = $panel;
 
@@ -56,6 +60,7 @@ abstract class XotBaseContainerController extends Controller {
     /**
      * @param $method
      * @param $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function __callRouteAct($method, $args) {
@@ -84,6 +89,7 @@ abstract class XotBaseContainerController extends Controller {
     /**
      * @param $method
      * @param $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function __callPanelAct($method, $args) {
@@ -104,6 +110,7 @@ abstract class XotBaseContainerController extends Controller {
     /**
      * @param $method
      * @param $panel
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function notAuthorized($method, $panel) {
