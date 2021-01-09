@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
  */
 class PolicyService {
     /**
-     * @var null
+     *
      */
     private static ?PolicyService $instance = null;
     //protected static $obj;

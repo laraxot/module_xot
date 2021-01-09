@@ -29,19 +29,19 @@ abstract class XotBasePanelAction {
      */
     public bool $onItem = false;
     /**
-     * @var null
+     *
      */
     public $row = null;
     /**
-     * @var null
+     *
      */
     public $rows = null;
     /**
-     * @var null
+     *
      */
     public $panel = null;
     /**
-     * @var null
+     *
      */
     public string $name = null;
     /**
@@ -57,7 +57,7 @@ abstract class XotBasePanelAction {
      */
     protected array $data = [];
     /**
-     * @var null
+     *
      */
     public string $related = null; //post_type per filtrare le azioni nei vari index_edit
 

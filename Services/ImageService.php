@@ -15,11 +15,11 @@ use Intervention\Image\Facades\Image;
  */
 class ImageService {
     /**
-     * @var null
+     *
      */
     private static ?ImageService $instance = null;
     /**
-     * @var null
+     *
      */
     protected static $img = null;
     /**

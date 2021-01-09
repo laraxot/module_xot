@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
  */
 class PanelService {
     /**
-     * @var null
+     *
      */
     private static ?PanelService $_instance = null;
     /**

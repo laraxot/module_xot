@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -26,50 +28,32 @@ use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\StubService;
 
 /**
- * Class XotBasePanel
- * @package Modules\Xot\Models\Panels
+ * Class XotBasePanel.
  */
 abstract class XotBasePanel implements PanelContract {
-    /**
-     * @var null
-     */
     public $out = null;
-    /**
-     * @var bool
-     */
+
     public bool $force_exit = false;
-    /**
-     * @var string
-     */
+
     public string $msg = 'msg from panel';
+
     /**
      * @var \Illuminate\Contracts\Foundation\Application|mixed|null
      */
     public $row = null;
-    /**
-     * @var null
-     */
+
     public $rows = null;
-    /**
-     * @var null
-     */
+
     public $parent = null;
-    /**
-     * @var null
-     */
+
     public $in_admin = null;
-    /**
-     * @var PanelPresenterContract|null
-     */
+
     public ?PanelPresenterContract $presenter = null;
-    /**
-     * @var null
-     */
+
     public null $form = null;
-    /**
-     * @var PanelRouteService|null
-     */
+
     public ?PanelRouteService $route = null;
+
     /**
      * @var
      */
@@ -97,8 +81,6 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * The relationships that should be eager loaded on index queries.
      *
-     * @return array
-     * @return array
      * @var array
      */
     public function with(): array {
@@ -107,6 +89,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $row
+     *
      * @return $this
      */
     public function setRow($row) {
@@ -117,6 +100,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $rows
+     *
      * @return $this
      */
     public function setRows($rows) {
@@ -137,6 +121,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $parent
+     *
      * @return $this
      */
     public function setParent($parent) {
@@ -180,6 +165,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $type
+     *
      * @return mixed
      */
     public function findParentType($type) {
@@ -192,6 +178,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $row
+     *
      * @return mixed
      */
     public function optionId($row) {
@@ -233,6 +220,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $label
+     *
      * @return mixed
      */
     public function setLabel($label) {
@@ -265,7 +253,9 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * on select the option label.
+     *
      * @param $row
+     *
      * @return string
      */
     public function optionLabel($row) {
@@ -294,6 +284,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param null $data
+     *
      * @return mixed
      */
     public function options($data = null) {
@@ -306,6 +297,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param null $data
+     *
      * @return array
      */
     public function optionsTree($data = null) {
@@ -377,6 +369,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return array
      */
     public function rules($params = []) {
@@ -498,8 +491,6 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * Get the filters available for the resource.
      *
-     * @param Request|null $request
-     *
      * @return array
      */
     public function filters(Request $request = null) {
@@ -522,6 +513,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getActions($params = []) {
@@ -530,6 +522,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return \Illuminate\Support\Collection
      */
     public function containerActions($params = []) {
@@ -538,6 +531,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return \Illuminate\Support\Collection
      */
     public function itemActions($params = []) {
@@ -546,6 +540,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function itemAction($act) {
@@ -554,6 +549,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function containerAction($act) {
@@ -562,6 +558,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function urlContainerAction($act) {
@@ -570,6 +567,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function urlItemAction($act) {
@@ -578,6 +576,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function btnItemAction($act) {
@@ -602,9 +601,6 @@ abstract class XotBasePanel implements PanelContract {
      *
      * This query determines which instances of the model may be attached to other resources.
      *
-     * @param Request $request
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public static function relatableQuery(Request $request, Builder $query) {
@@ -615,6 +611,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function applyJoin($query) {
@@ -629,6 +626,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @param $query
      * @param $filters
+     *
      * @return mixed|void
      */
     public function applyFilter($query, $filters) {
@@ -681,6 +679,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @param $query
      * @param $q
+     *
      * @return mixed
      */
     public function applySearch($query, $q) {
@@ -732,6 +731,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @param $query
      * @param $sort
+     *
      * @return mixed
      */
     public function applySort($query, $sort) {
@@ -757,8 +757,8 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param Request $request
      * @param $query
+     *
      * @return mixed
      */
     public function indexRows(Request $request, $query) {
@@ -791,6 +791,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function formCreate($params = []) {
@@ -799,6 +800,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function formEdit($params = []) {
@@ -917,8 +919,10 @@ abstract class XotBasePanel implements PanelContract {
     }
     */
     //-- nella registrazione 1 tasto, nelle modifiche 3
+
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function btnSubmit($params = []) {
@@ -928,8 +932,10 @@ abstract class XotBasePanel implements PanelContract {
     /*
      return $this->form->formCreate($params);
     */
+
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function btnDelete($params = []) {
@@ -938,6 +944,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function btnDetach($params = []) {
@@ -946,6 +953,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function btnCrud($params = []) {
@@ -954,6 +962,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $params
+     *
      * @return mixed
      */
     public function btnHtml($params) {
@@ -963,6 +972,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @param $act
      * @param array $params
+     *
      * @return mixed
      */
     public function btn($act, $params = []) {
@@ -971,6 +981,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $params
+     *
      * @return string
      */
     public function imageHtml($params) { //usare PanelImageService
@@ -987,6 +998,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $params
+     *
      * @return string|string[]
      */
     public function imgSrc($params) { //usare PanelImageService
@@ -1054,6 +1066,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $lang
+     *
      * @return string
      */
     public function langUrl($lang) {
@@ -1066,6 +1079,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $params
+     *
      * @return string
      */
     public function relatedUrlRecursive($params) { //vedere chi lo usa
@@ -1097,6 +1111,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $params
+     *
      * @return string|string[]|void
      */
     public function relatedUrl($params) {
@@ -1108,6 +1123,7 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @param $name
      * @param null $id
+     *
      * @return null
      */
     public function relatedName($name, $id = null) {
@@ -1128,6 +1144,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return string|void
      */
     public function url($params = []) {
@@ -1353,6 +1370,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param null $data
+     *
      * @return null
      */
     public function rows($data = null) {
@@ -1403,6 +1421,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return null
      */
     public function callItemActionWithGate($act) {
@@ -1414,6 +1433,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return mixed
      */
     public function callAction($act) {
@@ -1441,6 +1461,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return null
      */
     public function callItemAction($act) {
@@ -1466,6 +1487,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $act
+     *
      * @return null
      */
     public function callContainerAction($act) {
@@ -1494,6 +1516,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return mixed
      */
     public function out($params = []) {
@@ -1503,6 +1526,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function pdfFilename($params = []) {
@@ -1529,6 +1553,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param array $params
+     *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|void
      */
     public function pdf($params = []) {
@@ -1559,6 +1584,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $relationship
+     *
      * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      */
     public function related($relationship) {
@@ -1627,6 +1653,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param int $length
+     *
      * @return string
      */
     public function getExcerpt($length = 225) {
@@ -1670,6 +1697,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param null $params
+     *
      * @return mixed
      */
     public function view($params = null) {
@@ -1708,6 +1736,7 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * @param $data
+     *
      * @return mixed
      */
     public function update($data) {

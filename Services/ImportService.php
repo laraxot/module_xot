@@ -26,7 +26,7 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class ImportService {
     /**
-     * @var null
+     *
      */
     protected static $client = null;
     /**
@@ -34,11 +34,11 @@ class ImportService {
      */
     protected static array $client_options = [];
     /**
-     * @var null
+     *
      */
     protected static $res = null;
     /**
-     * @var null
+     *
      */
     protected static $cookieJar = null;
 
