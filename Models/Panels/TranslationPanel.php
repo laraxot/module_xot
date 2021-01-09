@@ -14,7 +14,7 @@ class TranslationPanel extends XotBasePanel {
      *
      * @var string
      */
-    protected static $model = 'Modules\Xot\Models\Translation';
+    protected static string $model = 'Modules\Xot\Models\Translation';
 
     /**
      * Undocumented function.

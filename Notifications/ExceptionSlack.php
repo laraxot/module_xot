@@ -16,7 +16,7 @@ class ExceptionSlack extends Notification implements ShouldQueue {
     /**
      * @var string
      */
-    public $msg = '';
+    public string $msg = '';
 
     /**
      * Create a new notification instance.

@@ -17,7 +17,7 @@ class MapResource extends JsonResource {
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function toArray($request): array {
+    public function toArray(\Illuminate\Http\Request $request): array {
         return [
             'type' => 'Feature',
             'properties' => [

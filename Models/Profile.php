@@ -128,5 +128,5 @@ class Profile extends BaseModel {
     /**
      * @var string[]
      */
-    protected $fillable = ['id', 'auth_user_id'];
+    protected array $fillable = ['id', 'auth_user_id'];
 }

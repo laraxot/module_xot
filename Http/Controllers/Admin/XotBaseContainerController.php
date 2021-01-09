@@ -27,7 +27,7 @@ abstract class XotBaseContainerController extends Controller {
      * @param array $args
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
      */
-    public function __call($method, $args) {
+    public function __call(string $method, array $args) {
         //dddx(['method' => $method, 'args' => $args]);
         $panel = Panel::getRequestPanel();
         $this->panel = $panel;

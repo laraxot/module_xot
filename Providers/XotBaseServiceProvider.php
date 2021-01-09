@@ -19,6 +19,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
      * @var string
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
     protected string $module_dir = __DIR__;
     /**
      * @var string
@@ -31,19 +32,26 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     public string $module_name = 'formx';
 =======
     protected $module_dir = __DIR__;
+=======
+    protected string $module_dir = __DIR__;
+>>>>>>> 3ba9100 (.)
     /**
      * @var string
      */
-    protected $module_ns = __NAMESPACE__;
+    protected string $module_ns = __NAMESPACE__;
     /**
      * @var
      */
-    protected $module_base_ns;
+    protected string $module_base_ns;
     /**
      * @var
      */
+<<<<<<< HEAD
     public $module_name;
 >>>>>>> c906275 (.)
+=======
+    public string $module_name;
+>>>>>>> 3ba9100 (.)
 
     /**
      * Boot the application events.

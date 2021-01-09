@@ -52,16 +52,20 @@ class XotServiceProvider extends XotBaseServiceProvider {
 =======
      * @var string
      */
-    protected $module_dir = __DIR__;
+    protected string $module_dir = __DIR__;
     /**
      * @var string
      */
-    protected $module_ns = __NAMESPACE__;
+    protected string $module_ns = __NAMESPACE__;
     /**
      * @var string
      */
+<<<<<<< HEAD
     public $module_name = 'xot';
 >>>>>>> c906275 (.)
+=======
+    public string $module_name = 'xot';
+>>>>>>> 3ba9100 (.)
 
     public function bootCallback() {
         $this->mergeConfigs();

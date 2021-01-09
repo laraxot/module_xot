@@ -21,7 +21,7 @@ class SetDefaultLocaleForUrlsMiddleware {
      * @param Closure $next
      * @return \Illuminate\Http\Response
      */
-    public function handle($request, Closure $next) {
+    public function handle(\Illuminate\Http\Request $request, Closure $next) {
         URL::defaults(
             [
                 'lang' => app()->getLocale(),

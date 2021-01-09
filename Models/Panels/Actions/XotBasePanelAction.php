@@ -23,11 +23,11 @@ abstract class XotBasePanelAction {
     /**
      * @var bool
      */
-    public $onContainer = false;
+    public bool $onContainer = false;
     /**
      * @var bool
      */
-    public $onItem = false;
+    public bool $onItem = false;
     /**
      * @var null
      */
@@ -43,23 +43,23 @@ abstract class XotBasePanelAction {
     /**
      * @var null
      */
-    public $name = null;
+    public string $name = null;
     /**
      * @var string
      */
-    public $icon = '<i class="far fa-question-circle"></i>';
+    public string $icon = '<i class="far fa-question-circle"></i>';
     /**
      * @var string
      */
-    public $class = 'btn btn-secondary mb-2';
+    public string $class = 'btn btn-secondary mb-2';
     /**
      * @var array
      */
-    protected $data = [];
+    protected array $data = [];
     /**
      * @var null
      */
-    public $related = null; //post_type per filtrare le azioni nei vari index_edit
+    public string $related = null; //post_type per filtrare le azioni nei vari index_edit
 
     abstract public function handle();
 

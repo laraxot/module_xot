@@ -14,14 +14,14 @@ class ConfPanel extends XotBasePanel {
      *
      * @var string
      */
-    public static $model = 'Modules\Xot\Models\Conf';
+    public static string $model = 'Modules\Xot\Models\Conf';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static string $title = 'title';
 
     /**
      * @return object[]

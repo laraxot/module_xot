@@ -12,7 +12,7 @@ class ImagePolicy extends XotBasePolicy {
      * @param $post
      * @return bool
      */
-    public function store($user, $post) {
+    public function store(\Modules\Xot\Contracts\UserContract $user, $post) {
         return true; //da aggiungere pezzi
     }
 }

@@ -15,7 +15,7 @@ class XotPanelController extends Controller {
      * @param array $arg
      * @return mixed
      */
-    public function __call($name, $arg) {
+    public function __call(string $name, array $arg) {
         //dddx(['name' => $name, 'arg' => $arg]);
         /**
          * 0 => xotrequest

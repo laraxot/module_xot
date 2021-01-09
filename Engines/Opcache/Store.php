@@ -26,19 +26,19 @@ class Store extends TaggableStore implements StoreContract {
      *
      * @var string|null
      */
-    protected $subDirectory;
+    protected ?string $subDirectory;
     /**
      * String that should be prepended to keys.
      *
      * @var string
      */
-    protected $prefix;
+    protected string $prefix;
     /**
      * Is OPcache enabled or not.
      *
      * @var bool
      */
-    protected $enabled = false;
+    protected bool $enabled = false;
 
     /**
      * Create a new OPcache store.
@@ -66,7 +66,7 @@ class Store extends TaggableStore implements StoreContract {
      *
      * @return \Illuminate\Cache\TaggedCache
      */
-    public function tags($names) {
+    public function tags(array $names) {
         $names = is_array($names) ? $names : func_get_args();
         /*
          * Now we are able to flush only tagged cache items
@@ -93,7 +93,7 @@ class Store extends TaggableStore implements StoreContract {
      *
      * @return bool
      */
-    protected function exists($key) {
+    protected function exists(string $key) {
         if ($this->enabled && opcache_is_script_cached($this->filePath($key))) {
             return true;
         }
@@ -129,13 +129,13 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param string    $key
-     * @param mixed     $value
+     * @param string $key
+     * @param mixed $value
      * @param float|int $minutes
      *
      * @return bool
      */
-    public function put($key, $value, $minutes = 0) {
+    public function put(string $key, $value, $minutes = 0) {
         $val = var_export($value, true);
         // HHVM fails at __set_state, so just use object cast for now
         $val = str_replace('stdClass::__set_state', '(object)', $val);
@@ -146,13 +146,13 @@ class Store extends TaggableStore implements StoreContract {
     /**
      * Store an item in the cache if the key doesn't exist.
      *
-     * @param string    $key
-     * @param mixed     $value
+     * @param string $key
+     * @param mixed $value
      * @param float|int $minutes
      *
      * @return bool
      */
-    public function add($key, $value, $minutes = 0) {
+    public function add(string $key, $value, $minutes = 0) {
         if ($this->exists($key)) {
             return false;
         }
@@ -164,11 +164,11 @@ class Store extends TaggableStore implements StoreContract {
      * Increment the value of an item in the cache.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return int|bool
      */
-    public function increment($key, $value = 1) {
+    public function increment(string $key, $value = 1) {
         $val = (int) $this->get($key) + $value;
 
         return $this->put($key, $val) ? $val : false;
@@ -178,11 +178,11 @@ class Store extends TaggableStore implements StoreContract {
      * Decrement the value of an item in the cache.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return int|bool
      */
-    public function decrement($key, $value = 1) {
+    public function decrement(string $key, $value = 1) {
         return $this->increment($key, $value * -1);
     }
 
@@ -190,11 +190,11 @@ class Store extends TaggableStore implements StoreContract {
      * Store an item in the cache indefinitely.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
-    public function forever($key, $value) {
+    public function forever(string $key, $value) {
         return $this->put($key, $value, 0);
     }
 
@@ -205,7 +205,7 @@ class Store extends TaggableStore implements StoreContract {
      *
      * @return bool
      */
-    public function forget($key) {
+    public function forget(string $key) {
         if ($this->enabled) {
             opcache_invalidate($this->filePath($key), true);
         }

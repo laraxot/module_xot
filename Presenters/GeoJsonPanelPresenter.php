@@ -21,7 +21,7 @@ class GeoJsonPanelPresenter implements PanelPresenterContract {
      * @param \Modules\Xot\Contracts\PanelContract $panel
      * @return mixed|void
      */
-    public function setPanel(&$panel) {
+    public function setPanel(\Modules\Xot\Contracts\PanelContract &$panel) {
         $this->panel = $panel;
     }
 

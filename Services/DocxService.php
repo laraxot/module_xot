@@ -37,7 +37,7 @@ class DocxService {
     /**
      * @var null
      */
-    private static $instance = null;
+    private static ?DocxService $instance = null;
 
     /**
      * @return DocxService|null

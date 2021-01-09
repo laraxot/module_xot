@@ -17,15 +17,15 @@ class ArtisanAction extends XotBasePanelAction {
     /**
      * @var bool
      */
-    public $onContainer = false; //onlyContainer
+    public bool $onContainer = false; //onlyContainer
     /**
      * @var bool
      */
-    public $onItem = true; //onlyContainer
+    public bool $onItem = true; //onlyContainer
     /**
      * @var string
      */
-    public $icon = '<i class="far fa-file-excel fa-1x"></i>';
+    public string $icon = '<i class="far fa-file-excel fa-1x"></i>';
 
     /**
      * @var
@@ -34,7 +34,7 @@ class ArtisanAction extends XotBasePanelAction {
     /**
      * @var array
      */
-    protected $cmd_params;
+    protected array $cmd_params;
 
     /**
      * ArtisanAction constructor.

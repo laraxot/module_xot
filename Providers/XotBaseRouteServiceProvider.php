@@ -32,16 +32,20 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider {
 =======
      * @var string
      */
-    protected $moduleNamespace = 'Modules\Xot\Http\Controllers';
+    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
     /**
      * @var string
      */
-    protected $module_dir = __DIR__;
+    protected string $module_dir = __DIR__;
     /**
      * @var string
      */
+<<<<<<< HEAD
     protected $module_ns = __NAMESPACE__;
 >>>>>>> c906275 (.)
+=======
+    protected string $module_ns = __NAMESPACE__;
+>>>>>>> 3ba9100 (.)
 
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso

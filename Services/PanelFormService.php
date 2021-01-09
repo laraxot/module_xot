@@ -31,7 +31,7 @@ class PanelFormService {
      *
      * @return $this
      */
-    public function setPanel(&$panel) {
+    public function setPanel(PanelContract &$panel) {
         $this->panel = $panel;
 
         return $this;

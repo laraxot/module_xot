@@ -12,7 +12,7 @@ class HomePanelPolicy extends XotBasePanelPolicy {
      * @param \Modules\Xot\Contracts\PanelContract $post
      * @return bool
      */
-    public function index($user, $post) {
+    public function index(?\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $post) {
         return true; //da aggiungere pezzi
     }
 
@@ -21,7 +21,7 @@ class HomePanelPolicy extends XotBasePanelPolicy {
      * @param \Modules\Xot\Contracts\PanelContract $post
      * @return bool
      */
-    public function show($user, $post) {
+    public function show(?\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $post) {
         return true; //da aggiungere pezzi
     }
 

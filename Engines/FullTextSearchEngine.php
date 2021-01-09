@@ -16,7 +16,7 @@ class FullTextSearchEngine extends Engine {
      *
      * @param \Illuminate\Database\Eloquent\Collection $models
      */
-    public function update($models) {
+    public function update(Collection $models) {
     }
 
     /**
@@ -24,7 +24,7 @@ class FullTextSearchEngine extends Engine {
      *
      * @param \Illuminate\Database\Eloquent\Collection $models
      */
-    public function delete($models) {
+    public function delete(Collection $models) {
     }
 
     /**
@@ -93,7 +93,7 @@ class FullTextSearchEngine extends Engine {
      *
      * @return string
      */
-    protected function fullTextWildcards($term) {
+    protected function fullTextWildcards(string $term) {
         // removing symbols used by MySQL
         $reservedSymbols = ['-', '+', '<', '>', '@', '(', ')', '~'];
         $term = str_replace($reservedSymbols, '', $term);
@@ -124,7 +124,7 @@ class FullTextSearchEngine extends Engine {
      *
      * @return mixed
      */
-    public function paginate(Builder $builder, $perPage, $page) {
+    public function paginate(Builder $builder, int $perPage, int $page) {
         $builder->limit = $perPage;
         if (property_exists($builder, 'offset')) {
             $builder->offset = ($perPage * $page) - $perPage;
@@ -177,7 +177,7 @@ class FullTextSearchEngine extends Engine {
      *
      * @param \Illuminate\Database\Eloquent\Model $model
      */
-    public function flush($model) {
+    public function flush(\Illuminate\Database\Eloquent\Model $model) {
         //$index = $this->algolia->initIndex($model->searchableAs());
         //$index->clearObjects();
     }

@@ -12,16 +12,16 @@ class PolicyService {
     /**
      * @var null
      */
-    private static $instance = null;
+    private static ?PolicyService $instance = null;
     //protected static $obj;
     /**
      * @var array
      */
-    protected static $in_vars = [];
+    protected static array $in_vars = [];
     /**
      * @var array
      */
-    protected static $out_vars = [];
+    protected static array $out_vars = [];
 
     /**
      * @return PolicyService|null

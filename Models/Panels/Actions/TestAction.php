@@ -17,11 +17,11 @@ class TestAction extends XotBasePanelAction {
     /**
      * @var bool
      */
-    public $onItem = true;
+    public bool $onItem = true;
     /**
      * @var bool
      */
-    public $onContainer = true;
+    public bool $onContainer = true;
 
     /**
      * @return mixed

@@ -17,7 +17,7 @@ class ImageService {
     /**
      * @var null
      */
-    private static $instance = null;
+    private static ?ImageService $instance = null;
     /**
      * @var null
      */
@@ -41,7 +41,7 @@ class ImageService {
     /**
      * @var string
      */
-    protected static $dirname = '/imgz';
+    protected static string $dirname = '/imgz';
 
     /**
      * @param array $params

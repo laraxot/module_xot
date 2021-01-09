@@ -13,7 +13,7 @@ class Test extends Component {
     /**
      * @var string
      */
-    public $animal = '';
+    public string $animal = '';
     /**
      * @var
      */
@@ -21,23 +21,23 @@ class Test extends Component {
     /**
      * @var array
      */
-    public $products = [];
+    public array $products = [];
     /**
      * @var array
      */
-    public $change_cats = [];
+    public array $change_cats = [];
     /**
      * @var array
      */
-    public $changes = [];
+    public array $changes = [];
     /**
      * @var array
      */
-    public $qty = [];
+    public array $qty = [];
     /**
      * @var array
      */
-    public $qty1 = [];
+    public array $qty1 = [];
 
     public function mount() {
         $this->options = ['one' => true, 'two' => false, 'three' => false];

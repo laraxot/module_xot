@@ -36,14 +36,14 @@ class CreateAllRepositoriesCommand extends Command {
      *
      * @var string
      */
-    protected $name = 'xot:create-all-repos';
+    protected string $name = 'xot:create-all-repos';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create all repositories ';
+    protected string $description = 'Create all repositories ';
 
     /**
      * Create a new command instance.

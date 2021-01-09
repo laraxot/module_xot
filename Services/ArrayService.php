@@ -15,7 +15,7 @@ class ArrayService {
     /**
      * @var int
      */
-    protected static $export_processor = 1;
+    protected static int $export_processor = 1;
 
     /**
      * @param $params

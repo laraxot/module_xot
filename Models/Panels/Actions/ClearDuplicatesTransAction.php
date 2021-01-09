@@ -14,11 +14,11 @@ class ClearDuplicatesTransAction extends XotBasePanelAction {
     /**
      * @var bool
      */
-    public $onContainer = true;
+    public bool $onContainer = true;
     /**
      * @var string
      */
-    public $icon = '<i class="fas fa-hammer"></i>';
+    public string $icon = '<i class="fas fa-hammer"></i>';
 
     public function handle() {
         //return 'qui';

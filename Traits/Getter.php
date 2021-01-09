@@ -115,9 +115,9 @@ trait Getter {
      * @set undefined vars
      *
      * @param string $index
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function __set($index, $value) {
+    public function __set(string $index, $value) {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
         $this->vars[$index] = $value;
     }

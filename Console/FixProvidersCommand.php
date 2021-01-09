@@ -18,11 +18,11 @@ class FixProvidersCommand extends Command {
     /**
      * @var string
      */
-    protected $name = 'xot:fix-module-providers';
+    protected string $name = 'xot:fix-module-providers';
     /**
      * @var string
      */
-    protected $description = 'fix module providers of module ';
+    protected string $description = 'fix module providers of module ';
     //protected $type = 'ModuleProvider';
     //protected $argumentName='name';
 

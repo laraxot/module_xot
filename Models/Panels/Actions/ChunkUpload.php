@@ -16,15 +16,15 @@ class ChunkUpload extends XotBasePanelAction {
     /**
      * @var string
      */
-    public $name = 'chunk_upload'; //name for calling Action
+    public ?string $name = 'chunk_upload'; //name for calling Action
     /**
      * @var bool
      */
-    public $onContainer = true; //onlyContainer
+    public bool $onContainer = true; //onlyContainer
     /**
      * @var string
      */
-    public $icon = '<i class="fas fa-puzzle-piece"></i>';
+    public string $icon = '<i class="fas fa-puzzle-piece"></i>';
 
     /**
      * @return \Illuminate\Http\JsonResponse

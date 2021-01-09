@@ -42,5 +42,5 @@ class Home extends BaseModel {
     /**
      * @var string[]
      */
-    protected $fillable = ['id', 'article_type', 'icon_src'];
+    protected array $fillable = ['id', 'article_type', 'icon_src'];
 }

@@ -16,21 +16,21 @@ class HomePanel extends XotBasePanel {
      *
      * @var string
      */
-    public static $model = 'Modules\Xot\Models\Home';
+    public static string $model = 'Modules\Xot\Models\Home';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static string $title = 'title';
 
     /**
      * The columns that should be searched.
      *
      * @var array
      */
-    public static $search = [];
+    public static array $search = [];
 
     /**
      * The relationships that should be eager loaded on index queries.

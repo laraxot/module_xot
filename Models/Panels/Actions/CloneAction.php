@@ -18,11 +18,11 @@ class CloneAction extends XotBasePanelAction
     /**
      * @var bool
      */
-    public $onItem = true;
+    public bool $onItem = true;
     /**
      * @var string
      */
-    public $icon = '<i class="far fa-clone"></i>';
+    public string $icon = '<i class="far fa-clone"></i>';
 
     /**
      * @return \Illuminate\Http\RedirectResponse

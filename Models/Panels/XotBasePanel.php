@@ -37,11 +37,11 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @var bool
      */
-    public $force_exit = false;
+    public bool $force_exit = false;
     /**
      * @var string
      */
-    public $msg = 'msg from panel';
+    public string $msg = 'msg from panel';
     /**
      * @var \Illuminate\Contracts\Foundation\Application|mixed|null
      */
@@ -61,19 +61,19 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * @var PanelPresenterContract|null
      */
-    public $presenter = null;
+    public ?PanelPresenterContract $presenter = null;
     /**
      * @var null
      */
-    public $form = null;
+    public null $form = null;
     /**
      * @var PanelRouteService|null
      */
-    public $route = null;
+    public ?PanelRouteService $route = null;
     /**
      * @var
      */
-    protected static $model;
+    protected static string $model;
 
     public function __construct(PanelPresenterContract $presenter, PanelRouteService $route) {
         //$this->row = $model;
@@ -607,7 +607,7 @@ abstract class XotBasePanel implements PanelContract {
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function relatableQuery(Request $request, $query) {
+    public static function relatableQuery(Request $request, Builder $query) {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         //return $query->where('user_id', $request->user()->id);
         return $query;

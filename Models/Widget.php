@@ -57,7 +57,7 @@ class Widget extends BaseModel {
     /**
      * @var string[]
      */
-    protected $fillable = [
+    protected array $fillable = [
         'id',
         'post_type', 'post_id', //nullablemorph
         'title', 'subtitle',

@@ -17,15 +17,15 @@ class XlsAction extends XotBasePanelAction {
     /**
      * @var string
      */
-    public $name = 'xls'; //name for calling Action
+    public ?string $name = 'xls'; //name for calling Action
     /**
      * @var bool
      */
-    public $onContainer = true; //onlyContainer
+    public bool $onContainer = true; //onlyContainer
     /**
      * @var string
      */
-    public $icon = '<i class="far fa-file-excel fa-1x"></i>';
+    public string $icon = '<i class="far fa-file-excel fa-1x"></i>';
 
     /**
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse

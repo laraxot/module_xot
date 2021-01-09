@@ -18,21 +18,21 @@ class CustomRelation extends Relation {
      *
      * @var \Closure
      */
-    protected $baseConstraints;
+    protected Closure $baseConstraints;
 
     /**
      * The eagerConstraints callback.
      *
      * @var \Closure
      */
-    protected $eagerConstraints;
+    protected ?Closure $eagerConstraints;
 
     /**
      * The eager constraints model matcher.
      *
      * @var \Closure
      */
-    protected $eagerMatcher;
+    protected ?Closure $eagerMatcher;
 
     /**
      * Create a new belongs to relationship instance.
@@ -78,7 +78,7 @@ class CustomRelation extends Relation {
      *
      * @return array
      */
-    public function initRelation(array $models, $relation) {
+    public function initRelation(array $models, string $relation) {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->related->newCollection());
         }
@@ -95,7 +95,7 @@ class CustomRelation extends Relation {
      *
      * @return array
      */
-    public function match(array $models, Collection $results, $relation) {
+    public function match(array $models, Collection $results, string $relation) {
         return ($this->eagerMatcher)($models, $results, $relation, $this);
     }
 

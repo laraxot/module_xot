@@ -13,7 +13,7 @@ class PanelService {
     /**
      * @var null
      */
-    private static $_instance = null;
+    private static ?PanelService $_instance = null;
     /**
      * @var
      */

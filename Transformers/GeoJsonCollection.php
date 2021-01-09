@@ -17,13 +17,13 @@ class GeoJsonCollection extends ResourceCollection {
     /**
      * @var string
      */
-    public $collects = GeoJsonResource::class;
+    public string $collects = GeoJsonResource::class;
 
     /**
      * @param \Illuminate\Http\Request $request
      * @return array
      */
-    public function toArray($request) {
+    public function toArray(\Illuminate\Http\Request $request) {
         return [
             'type' => 'FeatureCollection',
             'features' => $this->collection,

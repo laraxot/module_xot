@@ -32,7 +32,7 @@ class Conf extends BaseModel {
     /**
      * @var string[]
      */
-    public $fillable = [
+    public array $fillable = [
         'id', 'appname', 'description', 'keywords', 'author',
     ];
 }

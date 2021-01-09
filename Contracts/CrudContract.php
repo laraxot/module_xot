@@ -37,14 +37,14 @@ interface CrudContract {
      *
      * @param int $id
      */
-    public function find($id);
+    public function find(int $id);
 
     /**
      * Paginate collection result.
      *
      * @param int $perPage defines the number of items per page
      */
-    public function paginate($perPage);
+    public function paginate(int $perPage);
 
     /**
      * Get single item or all items from trash if ID is null.
@@ -58,7 +58,7 @@ interface CrudContract {
      *
      * @param int $id
      */
-    public function getTrashedItem($id);
+    public function getTrashedItem(int $id);
 
     /**
      * Set the related data that should be eager loaded.
@@ -79,7 +79,7 @@ interface CrudContract {
      * @param string $field ordering field
      * @param string $order ordering direction asc is default
      */
-    public function orderBy($field, $order = 'asc');
+    public function orderBy(string $field, $order = 'asc');
 
     /**
      * Create new entry.
@@ -90,26 +90,26 @@ interface CrudContract {
     /**
      * Update model. Make sure fillable is set on the model.
      *
-     * @param int   $id           of model you want to update
-     * @param array $data         of model data that should be updated
-     * @param bool  $return_model set to true if you need a model instance back
+     * @param int $id of model you want to update
+     * @param array $data of model data that should be updated
+     * @param bool $return_model set to true if you need a model instance back
      */
-    public function update($id, array $data, $return_model = false);
+    public function update(int $id, array $data, $return_model = false);
 
     /**
      * Delete item either by softdelete or harddelete.
      *
-     * @param int  $id
+     * @param int $id
      * @param bool $hardDelete
      */
-    public function delete($id, $hardDelete = false);
+    public function delete(int $id, $hardDelete = false);
 
     /**
      * Restore a soft deleted model.
      *
      * @param int $id
      */
-    public function restore($id);
+    public function restore(int $id);
 
     /**
      * Set hasMany relationship by adding the related model, data and
@@ -119,7 +119,7 @@ interface CrudContract {
      * @param string $relatedModel
      * @param string $relation
      */
-    public function withHasMany(array $data, $relatedModel, $relation);
+    public function withHasMany(array $data, string $relatedModel, string $relation);
 
     /**
      * Add the belongsToMany relationship data to be synced and define
@@ -128,7 +128,7 @@ interface CrudContract {
      * @param array $data
      * @param string $relation
      */
-    public function withBelongsToMany(array $data, $relation);
+    public function withBelongsToMany(array $data, string $relation);
 
     /**
      * Handle a file or photo upload.

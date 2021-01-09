@@ -13,7 +13,7 @@ class RouteDynService {
     /**
      * @var string
      */
-    protected static $namespace_start = '';
+    protected static string $namespace_start = '';
     /**
      * @var null
      */

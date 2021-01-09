@@ -27,11 +27,11 @@ abstract class XotBaseJob implements ShouldQueue {
     /**
      * @var PanelContract
      */
-    protected $panel;
+    protected PanelContract $panel;
     /**
      * @var array
      */
-    protected $data;
+    protected array $data;
 
     /**
      * __construct.

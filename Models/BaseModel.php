@@ -18,36 +18,36 @@ abstract class BaseModel extends Model {
     /**
      * @var string[]
      */
-    protected $fillable = ['id'];
+    protected array $fillable = ['id'];
     /**
      * @var array
      */
-    protected $casts = [
+    protected array $casts = [
         //'published_at' => 'datetime:Y-m-d', // da verificare
     ];
 
     /**
      * @var string[]
      */
-    protected $dates = ['published_at', 'created_at', 'updated_at'];
+    protected array $dates = ['published_at', 'created_at', 'updated_at'];
     /**
      * @var string
      */
-    protected $primaryKey = 'id';
+    protected string $primaryKey = 'id';
     /**
      * @var bool
      */
-    public $incrementing = true;
+    public bool $incrementing = true;
     /**
      * @var array
      */
-    protected $hidden = [
+    protected array $hidden = [
         //'password'
     ];
     /**
      * @var bool
      */
-    public $timestamps = true;
+    public bool $timestamps = true;
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

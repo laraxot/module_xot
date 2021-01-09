@@ -12,15 +12,15 @@ class StoreFileMetatagAction extends XotBasePanelAction {
     /**
      * @var bool
      */
-    public $onContainer = false; //per tutte le righe, esempio xls
+    public bool $onContainer = false; //per tutte le righe, esempio xls
     /**
      * @var bool
      */
-    public $onItem = true; //per riga selezionata
+    public bool $onItem = true; //per riga selezionata
     /**
      * @var string
      */
-    public $icon = '<i class="far fa-save"></i>';
+    public string $icon = '<i class="far fa-save"></i>';
 
     /**
      * @return string

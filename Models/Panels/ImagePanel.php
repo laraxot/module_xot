@@ -16,14 +16,14 @@ class ImagePanel extends XotBasePanel {
      *
      * @var string
      */
-    protected static $model = 'Modules\Xot\Models\Image';
+    protected static string $model = 'Modules\Xot\Models\Image';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    protected static $title = 'title';
+    protected static string $title = 'title';
 
     /**
      * Get the actions available for the resource.

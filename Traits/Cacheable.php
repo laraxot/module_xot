@@ -17,21 +17,21 @@ trait Cacheable {
      *
      * @var CacheManager
      */
-    protected static $cache = null;
+    protected static ?CacheManager $cache = null;
 
     /**
      * Flush the cache after create/update/delete events.
      *
      * @var bool
      */
-    protected $eventFlushCache = false;
+    protected bool $eventFlushCache = false;
 
     /**
      * Global lifetime of the cache.
      *
      * @var int
      */
-    protected $cacheMinutes = 60;
+    protected int $cacheMinutes = 60;
 
     /**
      * Set cache manager.
@@ -68,12 +68,12 @@ trait Cacheable {
      * Get Cache key for the method.
      *
      * @param string $method
-     * @param mixed  $args
+     * @param mixed $args
      * @param string $tag
      *
      * @return string
      */
-    public function getCacheKey($method, $args = null, $tag) {
+    public function getCacheKey(string $method, $args = null, string $tag) {
         // Sort through arguments
         foreach ($args as &$a) {
             if ($a instanceof Model) {
@@ -103,7 +103,7 @@ trait Cacheable {
      *
      * @return mixed
      */
-    public function cacheCallback($method, $args, Closure $callback, $time = null) {
+    public function cacheCallback(string $method, array $args, Closure $callback, $time = null) {
         // Cache disabled, just execute query & return result
         if (true === $this->skippedCache()) {
             return \call_user_func($callback);

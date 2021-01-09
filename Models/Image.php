@@ -46,5 +46,5 @@ class Image extends Model {
     /**
      * @var string[]
      */
-    protected $fillable = [''];
+    protected array $fillable = [''];
 }

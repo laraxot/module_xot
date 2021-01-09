@@ -32,7 +32,7 @@ class ImportService {
     /**
      * @var array
      */
-    protected static $client_options = [];
+    protected static array $client_options = [];
     /**
      * @var null
      */

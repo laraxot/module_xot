@@ -16,7 +16,7 @@ abstract class XotBaseMigration extends Migration {
     /**
      * @var mixed
      */
-    protected $model;
+    protected string $model;
 
     //*
     public function __construct() {
