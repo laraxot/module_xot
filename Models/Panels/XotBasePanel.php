@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\View;
 //----------  SERVICES --------------------------
 use Illuminate\Support\Str;
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Contracts\PanelPresenterContract;
 use Modules\Xot\Services\ChainService;
@@ -85,7 +86,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $row
+     * @param object $row
      *
      * @return $this
      */
@@ -96,7 +97,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $rows
+     * @param object $rows
      *
      * @return $this
      */
@@ -174,11 +175,11 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $row
+     * @param object $row
      *
      * @return mixed
      */
-    public function optionId($row) {
+    public function optionId(object $row) {
         return $row->getKey();
     }
 
@@ -215,12 +216,7 @@ abstract class XotBasePanel implements PanelContract {
         return false;
     }
 
-    /**
-     * @param $label
-     *
-     * @return mixed
-     */
-    public function setLabel($label) {
+    public function setLabel(string $label): ModelContract {
         $model = $this->row;
         $res = $model::whereHas(
             'post',
@@ -250,12 +246,8 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * on select the option label.
-     *
-     * @param $row
-     *
-     * @return string
      */
-    public function optionLabel($row) {
+    public function optionLabel(object $row): string {
         return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
     }
 
@@ -334,10 +326,7 @@ abstract class XotBasePanel implements PanelContract {
         return 'matr';
     }
 
-    /**
-     * @return array
-     */
-    public function search() {
+    public function search(): array {
         return [];
     }
 
@@ -358,9 +347,9 @@ abstract class XotBasePanel implements PanelContract {
     /**
      * Get the actions available for the resource.
      *
-     * @return array
+
      */
-    public function fields() {
+    public function fields(): array {
         return [];
     }
 

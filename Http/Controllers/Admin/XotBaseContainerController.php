@@ -128,7 +128,7 @@ abstract class XotBaseContainerController extends Controller {
 
     /**
      * @param $method
-     * @param $panel
+     * @param PanelContract $panel
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function notAuthorized($method, $panel) {

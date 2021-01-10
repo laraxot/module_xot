@@ -27,9 +27,9 @@ interface PanelContract {
 
     public function findParentType($type);
 
-    public function optionId($row);
+    public function optionId(object $row);
 
-    public function optionLabel($row);
+    public function optionLabel(object $row):string;
 
     public function setItem($guid);
 

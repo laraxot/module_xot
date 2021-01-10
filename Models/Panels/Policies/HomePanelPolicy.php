@@ -1,45 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels\Policies;
 
+use Modules\Xot\Contracts\PanelContract;
+use Modules\Xot\Contracts\UserContract;
+
 /**
- * Class HomePanelPolicy
- * @package Modules\Xot\Models\Panels\Policies
+ * Class HomePanelPolicy.
  */
 class HomePanelPolicy extends XotBasePanelPolicy {
-    /**
-     * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param \Modules\Xot\Contracts\PanelContract $post
-     * @return bool
-     */
-    public function index(?\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $post) {
+    public function index(?UserContract $user, PanelContract $panel): bool {
         return true; //da aggiungere pezzi
     }
 
-    /**
-     * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param \Modules\Xot\Contracts\PanelContract $post
-     * @return bool
-     */
-    public function show(?\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $post) {
+    public function show(?UserContract $user, PanelContract $panel): bool {
         return true; //da aggiungere pezzi
     }
 
-    /**
-     * @param $user
-     * @param $post
-     * @return bool
-     */
-    public function artisan($user, $post) {
+    public function artisan(UserContract $user, PanelContract $panel): bool {
         return true; //da aggiungere pezzi
     }
 
-    /**
-     * @param $user
-     * @param $post
-     * @return bool
-     */
-    public function test($user, $post) {
+    public function test(UserContract $user, PanelContract $panel): bool {
         return true; //da aggiungere pezzi
     }
 }

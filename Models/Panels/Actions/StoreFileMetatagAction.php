@@ -23,7 +23,7 @@ class StoreFileMetatagAction extends XotBasePanelAction {
     public string $icon = '<i class="far fa-save"></i>';
 
     /**
-     * @return string
+     * @return mixed
      */
     public function handle() {
         $data = $this->row->toArray();

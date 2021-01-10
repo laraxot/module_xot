@@ -10,6 +10,11 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
  * Class CreateWidgetsTable
  */
 class CreateWidgetsTable extends XotBaseMigration {
+/**
+* db up
+*
+* @return void
+*/
     public function up() {
         //-- CREATE --
         if (! $this->tableExists()) {

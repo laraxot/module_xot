@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\View\Composers;
 
 //use App\Repositories\UserRepository;
@@ -9,8 +11,7 @@ use Illuminate\View\View;
 use Modules\LU\Services\ProfileService;
 
 /**
- * Class XotComposer
- * @package Modules\Xot\Http\View\Composers
+ * Class XotComposer.
  */
 class XotComposer {
     /**
@@ -36,13 +37,16 @@ class XotComposer {
     /**
      * Bind data to the view.
      *
-     * @param View $view
      * @return void
      */
     public function compose(View $view) {
         $profile = ProfileService::get(Auth::user());
         $lang = app()->getLocale();
-        $params = Route::current()->parameters();
+        $params = [];
+        $route_current = Route::current();
+        if (null != $route_current) {
+            $params = $route_current->parameters();
+        }
 
         $view->with('params', $params);
         $view->with('lang', $lang);

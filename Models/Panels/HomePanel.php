@@ -42,25 +42,26 @@ class HomePanel extends XotBasePanel {
     /**
      * @return array
      */
-    public function search() {
+    public function search() :array {
+
         return [];
     }
 
     /**
      * on select the option id.
-     * @param $row
+     * @param object $row
      * @return mixed
      */
-    public function optionId($row) {
+    public function optionId(object $row) {
         return $row->area_id;
     }
 
     /**
      * on select the option label.
-     * @param $row
-     * @return mixed
+     * @param object $row
+     * @return string
      */
-    public function optionLabel($row) {
+    public function optionLabel(object $row):string {
         return $row->area_define_name;
     }
 
@@ -77,7 +78,7 @@ class HomePanel extends XotBasePanel {
         'value'=>'..',
      */
 
-    public function fields() {
+    public function fields(): array {
         return [
         ];
     }

@@ -9,6 +9,11 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
  * Class CreateTranslationsTable
  */
 class CreateTranslationsTable extends XotBaseMigration {
+/**
+* db up
+*
+* @return void
+*/
     public function up() {
         //-- CREATE --
         if (! $this->tableExists()) {

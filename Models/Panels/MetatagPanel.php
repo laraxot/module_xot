@@ -28,7 +28,7 @@ class MetatagPanel extends XotBasePanel {
     /**
      * @return object[]
      */
-    public function fields() {
+    public function fields(): array {
         return [
             (object) [
                 'type' => 'Id',

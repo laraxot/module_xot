@@ -10,6 +10,11 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
  * Class CreateMetatagsTable
  */
 class CreateMetatagsTable extends XotBaseMigration {
+/**
+* db up
+*
+* @return void
+*/
     public function up() {
         //-- CREATE --
         if (! $this->tableExists()) {

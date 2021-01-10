@@ -12,7 +12,7 @@ class PanelActionService {
 
     /**
      * PanelActionService constructor.
-     * @param $panel
+     * @param PanelContract $panel
      */
     public function __construct(&$panel) {
         $this->panel = $panel;

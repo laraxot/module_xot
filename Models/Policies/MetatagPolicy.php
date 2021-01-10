@@ -14,7 +14,7 @@ use Modules\Xot\Models\Policies\XotBasePolicy;
 class MetatagPolicy extends XotBasePolicy {
 
     /**
-     * @param $user
+     * @param UserContract $user
      * @param $metatag
      * @return false
      */

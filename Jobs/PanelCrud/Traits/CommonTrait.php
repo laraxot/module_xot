@@ -130,7 +130,7 @@ trait CommonTrait {
 
     /**
      * @param $data
-     * @param $panel
+     * @param PanelContract $panel
      * @return mixed
      */
     public function prepareForValidation($data, $panel) {
@@ -157,7 +157,7 @@ trait CommonTrait {
 
     /**
      * @param $data
-     * @param $panel
+     * @param PanelContract $panel
      * @return array
      * @throws \Illuminate\Validation\ValidationException
      */

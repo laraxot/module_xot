@@ -36,7 +36,7 @@ class PanelService {
     }
 
     /**
-     * @param $panel
+     * @param PanelContract $panel
      */
     public static function setRequestPanel($panel) {
         self::$panel = $panel;

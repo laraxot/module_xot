@@ -42,14 +42,14 @@ abstract class XotBaseRequest extends FormRequest {
     }
 
     /**
-     * @param $panel
+     * @param PanelContract $panel
      */
     public function setPanel($panel) {
         $this->panel = $panel;
     }
 
     /**
-     * @param $panel
+     * @param PanelContract $panel
      * @param string $act
      */
     public function validatePanel($panel, $act = '') {
@@ -110,7 +110,7 @@ abstract class XotBaseRequest extends FormRequest {
      *
      *
      * @return array
-     * @return array
+
      */
     public function validationData() {
         dddx('aaa');

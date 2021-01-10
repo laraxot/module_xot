@@ -1,32 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels;
 
 //--- Services --
 
 /**
- * Class SettingsPanel
- * @package Modules\Xot\Models\Panels
+ * Class SettingsPanel.
  */
 class SettingsPanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.
-     *
-     * @var string
      */
     public static string $model = 'Modules\Xot\Models\Settings';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
      */
     public static string $title = 'title';
 
-    /**
-     * @return object[]
-     */
-    public function fields() {
+    // @return object[]
+
+    public function fields(): array {
         return [
             (object) [
                 'type' => 'Id',

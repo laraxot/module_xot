@@ -15,7 +15,7 @@ class TranslationPanelPolicy extends XotBasePanelPolicy {
      * @param PanelContract $panel
      * @return bool
      */
-    public function clearDuplicatesTrans(UserContract $user, PanelContract $panel) {
+    public function clearDuplicatesTrans(UserContract $user, PanelContract $panel):bool {
         return true;
     }
 }

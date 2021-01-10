@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Database\Migrations;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -9,29 +12,25 @@ use Illuminate\Support\Str;
 //----- models -----
 
 /**
- * Class XotBaseMigration
- * @package Modules\Xot\Database\Migrations
+ * Class XotBaseMigration.
  */
 abstract class XotBaseMigration extends Migration {
     /**
      * @var mixed
      */
-    protected string $model;
+    protected ?Model $model = null;
 
     //*
     public function __construct() {
         if (null == $this->model) {
-            $this->model = $this->getModel();
+            $this->model = app($this->getModel());
         }
-        $this->model = new $this->model();
+        //$this->model = new $this->model();
     }
 
     //*/
 
-    /**
-     * @return string
-     */
-    public function getModel() {
+    public function getModel(): string {
         //ddd(class_basename($this));//CreateDevicesTable
         //ddd(get_class($this));
         $name = class_basename($this);
@@ -56,7 +55,7 @@ abstract class XotBaseMigration extends Migration {
         return $model_ns;
     }
 
-    public function getTable() {
+    public function getTable(): string {
         $table = $this->model->getTable();
         /*
         if (Str::endsWith($table, '_pivot')) {
@@ -93,8 +92,9 @@ abstract class XotBaseMigration extends Migration {
     }
 
     /**
-     * @return \Doctrine\DBAL\Schema\Table
      * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Doctrine\DBAL\Schema\Table
      */
     public function getTableDetails() {
         $table_details = $this->getSchemaManager()
@@ -104,8 +104,9 @@ abstract class XotBaseMigration extends Migration {
     }
 
     /**
-     * @return \Doctrine\DBAL\Schema\Index[]
      * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Doctrine\DBAL\Schema\Index[]
      */
     public function getTableIndexes() {
         $table_indexes = $this->getSchemaManager()
@@ -123,6 +124,7 @@ abstract class XotBaseMigration extends Migration {
 
     /**
      * @param $col
+     *
      * @return bool
      */
     public function hasColumn($col) {

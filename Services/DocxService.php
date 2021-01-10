@@ -97,7 +97,7 @@ class DocxService {
     }
 
     /**
-     * @param $row
+     * @param object $row
      * @param $prefix
      * @return array
      */
@@ -146,7 +146,7 @@ class DocxService {
     }
 
     /**
-     * @param $row
+     * @param object $row
      * @param $prefix
      * @return array
      */

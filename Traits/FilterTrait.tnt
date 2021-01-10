@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use TeamTNT\TNTSearch\TNTSearch;
 
 trait FilterTrait {
-    public function fields() {
+    public function fields(): array {
         $rows = new self();
         $schema = $rows->getConnection()->getSchemaBuilder();
         $tbl = $rows->getTable();

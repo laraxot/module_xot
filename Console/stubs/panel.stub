@@ -38,21 +38,22 @@ class DummyClass extends XotBasePanel {
         return [];
     }
 
-    public function search() {
+    public function search() :array {
+
         return [];
     }
 
     /**
      * on select the option id.
      */
-    public function optionId($row) {
+    public function optionId(object $row) {
         return $row->area_id;
     }
 
     /**
      * on select the option label.
      */
-    public function optionLabel($row) {
+    public function optionLabel(object $row):string {
         return $row->area_define_name;
     }
 
@@ -100,7 +101,7 @@ class DummyClass extends XotBasePanel {
         'rules_messages' => ['it'=>['required'=>'Nome Obbligatorio']],
         'value'=>'..',
      */
-    public function fields() {
+    public function fields(): array {
         return dummy_fields;
     }
 

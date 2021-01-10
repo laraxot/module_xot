@@ -19,7 +19,7 @@ class TranslationPanel extends XotBasePanel {
     /**
      * Undocumented function.
      * @return array
-     * @return array
+
      */
     public function actions(): array {
         return [

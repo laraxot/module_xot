@@ -12,7 +12,7 @@ class HomePolicy extends XotBasePolicy {
      * @param $post
      * @return bool
      */
-    public function index(?\Modules\Xot\Contracts\UserContract $user, $post) {
+    public function index(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{
         return true; //da aggiungere pezzi
     }
 
@@ -21,7 +21,7 @@ class HomePolicy extends XotBasePolicy {
      * @param $post
      * @return bool
      */
-    public function show(?\Modules\Xot\Contracts\UserContract $user, $post) {
+    public function show(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{
         return true; //da aggiungere pezzi
     }
 }

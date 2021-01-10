@@ -10,7 +10,11 @@ class CreateImageTable extends Migration {
     public function getTable() {
         return with(new MyModel())->getTable();
     }
-
+/**
+* db up
+*
+* @return void
+*/
     public function up() {
         //----- create -----
         if (! Schema::hasTable($this->getTable())) {

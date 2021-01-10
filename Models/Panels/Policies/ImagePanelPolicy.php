@@ -12,7 +12,7 @@ class ImagePanelPolicy extends XotBasePanelPolicy {
      * @param \Modules\Xot\Contracts\PanelContract $panel
      * @return bool
      */
-    public function store(\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $panel) {
+    public function store(\Modules\Xot\Contracts\UserContract $user, \Modules\Xot\Contracts\PanelContract $panel):bool {
         return true; //da aggiungere pezzi
     }
 }

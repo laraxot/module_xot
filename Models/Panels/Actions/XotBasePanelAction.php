@@ -57,7 +57,7 @@ abstract class XotBasePanelAction {
     }
 
     /**
-     * @param $panel
+     * @param PanelContract $panel
      */
     public function setPanel(&$panel) {
         $this->panel = $panel;
@@ -117,14 +117,14 @@ abstract class XotBasePanelAction {
     }
 
     /**
-     * @param $rows
+     * @param object $rows
      */
     public function setRows($rows) {
         $this->rows = $rows;
     }
 
     /**
-     * @param $row
+     * @param object $row
      */
     public function setRow($row) {
         $this->row = $row;
