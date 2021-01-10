@@ -12,6 +12,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
      * @var string
      */
     protected $moduleNamespace = 'DummyControllerNamespace';
-    protected $module_dir = __DIR__;
+    protected string $module_dir
+ = __DIR__;
     protected $module_ns = __NAMESPACE__;
 }
