@@ -100,7 +100,7 @@ trait Getter {
 
     /**
      * @param $index
-     * @param $value
+     * @param mixed $value
      */
     public function __concat($index, $value) { //default After
         $tmp = $this->__get($index);
@@ -133,7 +133,7 @@ trait Getter {
 
     /**
      * @param $index
-     * @param $value
+     * @param mixed $value
      */
     public function __concatBefore($index, $value) {
         $tmp = $this->__get($index);

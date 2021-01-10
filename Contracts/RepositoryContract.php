@@ -43,7 +43,7 @@ interface RepositoryContract {
      * Find data by field and value.
      *
      * @param $field
-     * @param $value
+     * @param mixed $value
      * @param string[] $columns
      * @return Model|Collection
      */

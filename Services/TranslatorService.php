@@ -137,7 +137,7 @@ class TranslatorService extends BaseTranslator {
 
     /**
      * @param $key
-     * @param $value
+     * @param mixed $value
      */
     public static function set($key, $value) {
         $lang = app()->getLocale();

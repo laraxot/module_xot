@@ -73,7 +73,7 @@ class Widget extends BaseModel {
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      * @return int|mixed
      */
     public function getPosAttribute($value) {

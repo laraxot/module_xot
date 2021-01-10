@@ -173,7 +173,7 @@ trait CommonTrait {
 
     /**
      * @param $field
-     * @param $value
+     * @param mixed $value
      * @return Carbon|false|null
      */
     public function ConvDate($field, $value) {
@@ -187,7 +187,7 @@ trait CommonTrait {
 
     /**
      * @param $field
-     * @param $value
+     * @param mixed $value
      * @return Carbon|false|null
      */
     public function ConvDateTime($field, $value) {
@@ -201,7 +201,7 @@ trait CommonTrait {
 
     /**
      * @param $field
-     * @param $value
+     * @param mixed $value
      * @return Carbon|false|null
      */
     public function ConvDateTime2Fields($field, $value) {

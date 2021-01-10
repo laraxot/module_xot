@@ -58,7 +58,7 @@ class DocxService {
     }
 
     /**
-     * @param $values
+     * @param mixed $values
      * @return DocxService|null
      */
     public static function setValues($values) {
