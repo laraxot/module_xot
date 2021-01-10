@@ -1,34 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models;
 
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Traits\Updater;
 
 /**
- * Class BaseMorphPivot
- * @package Modules\Xot\Models
+ * Class BaseMorphPivot.
  */
-abstract class BaseMorphPivot extends MorphPivot {
+abstract class BaseMorphPivot extends MorphPivot implements ModelContract {
     use Updater;
 
     /**
      * @var array
      */
     protected $appends = [];
+
     /**
      * @var string
      */
     protected $primaryKey = 'id';
+
     /**
      * @var bool
      */
     public $incrementing = true;
+
     /**
      * @var bool
      */
     public $timestamps = true;
+
     //protected $attributes = ['related_type' => 'cuisine_cat'];
+
     /**
      * @var string[]
      */
@@ -38,6 +45,7 @@ abstract class BaseMorphPivot extends MorphPivot {
         'deleted_at',
         // 'published_at',
     ];
+
     /**
      * @var string[]
      */

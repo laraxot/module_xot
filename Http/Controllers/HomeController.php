@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Database\Schema\Blueprint;
@@ -13,12 +15,10 @@ use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\TenantService as Tenant;
 
 /**
- * Class HomeController
- * @package Modules\Xot\Http\Controllers
+ * Class HomeController.
  */
 class HomeController extends Controller {
     /**
-     * @param Request $request
      * @return mixed
      */
     public function index(Request $request) {
@@ -54,7 +54,6 @@ class HomeController extends Controller {
     }
 
     /**
-     * @param Request $request
      * @return mixed
      */
     public function show(Request $request) {
@@ -77,7 +76,6 @@ class HomeController extends Controller {
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function redirect(Request $request) {
