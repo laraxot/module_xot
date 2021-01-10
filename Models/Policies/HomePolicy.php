@@ -9,7 +9,7 @@ namespace Modules\Xot\Models\Policies;
 class HomePolicy extends XotBasePolicy {
     /**
      * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param $post
+     * @param ModelContract $post
      * @return bool
      */
     public function index(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{
@@ -18,7 +18,7 @@ class HomePolicy extends XotBasePolicy {
 
     /**
      * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param $post
+     * @param ModelContract $post
      * @return bool
      */
     public function show(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{

@@ -9,7 +9,7 @@ namespace Modules\Xot\Models\Policies;
 class ImagePolicy extends XotBasePolicy {
     /**
      * @param \Modules\Xot\Contracts\UserContract $user
-     * @param $post
+     * @param ModelContract $post
      * @return bool
      */
     public function store(\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{

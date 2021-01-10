@@ -31,28 +31,28 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function index(?User $user, ModelContract $post): bool {
         return true;
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function show(?User $user, ModelContract $post): bool {
         return true;
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function create(User $user, ModelContract $post): bool {
         return true;
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function edit(User $user, ModelContract $post): bool {
         //return true;
@@ -64,7 +64,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -77,7 +77,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -93,7 +93,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -102,7 +102,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -111,7 +111,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return false
      */
@@ -120,7 +120,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -133,7 +133,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -146,7 +146,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -159,13 +159,13 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function forceDelete(User $user, ModelContract $post) {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      *
      * @return bool
      */
@@ -190,7 +190,7 @@ abstract class XotBasePolicy {
     }
 
     /**
-     * @param $post
+     * @param ModelContract $post
      */
     public function view(User $user, ModelContract $post) {
     }
