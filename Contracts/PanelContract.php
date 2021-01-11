@@ -50,6 +50,8 @@ interface PanelContract {
 
     public function setParent(PanelContract $panel): PanelContract;
 
+    public function view($params = null);
+
     /*
     public function __construct($model = null);
 
@@ -251,7 +253,7 @@ interface PanelContract {
 
     public function dataTable();
 
-    public function view($params = null);
+
 
     public function id();
     */
