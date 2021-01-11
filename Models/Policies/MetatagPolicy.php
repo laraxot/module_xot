@@ -1,24 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Modules\LU\Models\User as User;
-use Modules\Xot\Models\Metatag as Post;
-
-use Modules\Xot\Models\Policies\XotBasePolicy;
+use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\UserContract;
 
 /**
- * Class MetatagPolicy
- * @package Modules\Xot\Models\Policies
+ * Class MetatagPolicy.
  */
 class MetatagPolicy extends XotBasePolicy {
-
-    /**
-     * @param UserContract $user
-     * @param $metatag
-     * @return false
-     */
-    public function storeFileMetatag($user, $metatag){
+    public function storeFileMetatag(UserContract $user, ModelContract $post): bool {
         //return ($metatag->tennant_name=='foodlocal');
         return false;
     }

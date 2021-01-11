@@ -1,29 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Presenters;
 
 use Illuminate\Support\Collection;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Contracts\PanelPresenterContract;
 use Modules\Xot\Services\StubService;
 
 /**
- * Class JsonPanelPresenter
- * @package Modules\Xot\Presenters
+ * Class JsonPanelPresenter.
  */
 class JsonPanelPresenter implements PanelPresenterContract {
+    protected PanelContract $panel;
 
-    protected $panel;
-
-    /**
-     * @param \Modules\Xot\Contracts\PanelContract $panel
-     * @return mixed|void
-     */
-    public function setPanel(\Modules\Xot\Contracts\PanelContract &$panel) {
+    public function setPanel(PanelContract &$panel): self {
         $this->panel = $panel;
+
+        return $this;
     }
 
     /**
-     * @param Collection|null $items
      * @return mixed|void
      */
     public function index(?Collection $items) {
@@ -31,9 +29,11 @@ class JsonPanelPresenter implements PanelPresenterContract {
 
     /**
      * @param null $params
-     * @return mixed
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return mixed
      */
     public function outContainer($params = null) {
         $model = $this->panel->row;
@@ -46,9 +46,11 @@ class JsonPanelPresenter implements PanelPresenterContract {
 
     /**
      * @param null $params
-     * @return mixed
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return mixed
      */
     public function outItem($params = null) {
         $model = $this->panel->row;
@@ -60,6 +62,7 @@ class JsonPanelPresenter implements PanelPresenterContract {
 
     /**
      * @param null $params
+     *
      * @return mixed
      */
     public function out($params = null) {

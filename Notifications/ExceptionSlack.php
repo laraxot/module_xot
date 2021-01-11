@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -8,18 +10,16 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 
 /**
- * Class ExceptionSlack
+ * Class ExceptionSlack.
  */
 class ExceptionSlack extends Notification implements ShouldQueue {
     use Queueable;
 
-    /**
-     * @var string
-     */
     public string $msg = '';
 
     /**
      * Create a new notification instance.
+     *
      * @param Exception $e
      */
     public function __construct(\Exception $e) {
@@ -59,7 +59,8 @@ class ExceptionSlack extends Notification implements ShouldQueue {
     }
 
     /**
-     * @param $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable) {
@@ -71,10 +72,7 @@ class ExceptionSlack extends Notification implements ShouldQueue {
 
     //--------
 
-    /**
-     * @return string
-     */
-    public function getIp() {
+    public function getIp(): string {
         foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'] as $key) {
             if (true === array_key_exists($key, $_SERVER)) {
                 foreach (explode(',', $_SERVER[$key]) as $ip) {
@@ -85,6 +83,8 @@ class ExceptionSlack extends Notification implements ShouldQueue {
                 }
             }
         }
+
+        return '';
     }
 
     //end getIp

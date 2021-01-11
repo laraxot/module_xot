@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Exception;
@@ -9,15 +11,13 @@ use Illuminate\Support\Str;
 use Nwidart\Modules\Facades\Module;
 
 /**
- * Class FileService
- * @package Modules\Xot\Services
+ * Class FileService.
  */
 class FileService {
     /**
-     * @param $path
      * @return false|mixed|string
      */
-    public static function asset($path) {
+    public static function asset(string $path) {
         if ('/' == $path[0]) {
             $path = \mb_substr($path, 1);
         }
@@ -60,10 +60,9 @@ class FileService {
     }
 
     /**
-     * @param $view
      * @return string|string[]
      */
-    public static function viewNamespaceToDir($view) {
+    public static function viewNamespaceToDir(string $view) {
         $pos = \mb_strpos($view, '::');
         $pack = \mb_substr($view, 0, $pos);
         //relative from pack
@@ -80,10 +79,9 @@ class FileService {
     }
 
     /**
-     * @param $ns
-     * @return mixed|null
+     * @return string
      */
-    public static function getViewNameSpacePath($ns) {
+    public static function getViewNameSpacePath(string $ns): ?string {
         if (null == $ns) {
             return null;
         }
@@ -98,14 +96,11 @@ class FileService {
         if (isset($viewHints[$ns])) {
             return $viewHints[$ns][0];
         }
+
+        return null;
     }
 
-    /**
-     * @param $ns
-     * @param $path1
-     * @return string
-     */
-    public static function getViewNameSpaceUrl($ns, $path1) {
+    public static function getViewNameSpaceUrl(string $ns, string $path1): string {
         if (in_array($ns, ['pub_theme', 'adm_theme'])) {
             $path = self::getViewNameSpacePath($ns);
         } else {
@@ -160,12 +155,7 @@ class FileService {
         return $url;
     }
 
-    /**
-     * @param $ns
-     * @param $path1
-     * @return string
-     */
-    public static function getViewNameSpaceUrl_nomodule($ns, $path1) {
+    public static function getViewNameSpaceUrl_nomodule(string $ns, string $path1): string {
         $path = self::getViewNameSpacePath($ns);
         /* 4 debug
         if(basename($path1)=='font-awesome.min.css'){
@@ -218,12 +208,7 @@ class FileService {
         return asset($path_pub);
     }
 
-    /**
-     * @param $path
-     * @param $ns
-     * @return string
-     */
-    public static function path2Url($path, $ns) {
+    public static function path2Url(string $path, string $ns): string {
         if (Str::startsWith($path, public_path('/'))) {
             $relative = \mb_substr($path, \mb_strlen(public_path('/')));
 
@@ -256,11 +241,7 @@ class FileService {
         return asset($path_pub);
     }
 
-    /**
-     * @param $key
-     * @return string
-     */
-    public static function viewThemeNamespaceToAsset($key) {
+    public static function viewThemeNamespaceToAsset(string $key): string {
         $ns_name = Str::before($key, '::');
         //$ns_dir = View::getFinder()->getHints()[$ns_name][0];
         $ns_dir = self::getViewNameSpacePath($ns_name);
@@ -301,18 +282,14 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                dddx('Caught exception: '.$e->getMessage());
+                dddx(['Caught exception: '.$e->getMessage()]);
             }
         }
 
         return $asset;
     }
 
-    /**
-     * @param $key
-     * @return string
-     */
-    public static function viewNamespaceToAsset($key) {
+    public static function viewNamespaceToAsset(string $key): string {
         $ns_name = Str::before($key, '::');
 
         //$ns_dir = View::getFinder()->getHints()[$ns_name][0];
@@ -381,7 +358,7 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                dddx('Caught exception: '.$e->getMessage());
+                dddx(['Caught exception: '.$e->getMessage()]);
             }
         } else {
             //if (! File::exists($filename_from)) {
@@ -424,11 +401,8 @@ class FileService {
     }
     */
     //*
-    /**
-     * @param $path
-     * @return string
-     */
-    public static function getFileUrl($path) {
+
+    public static function getFileUrl(string $path): string {
         if (Str::startsWith($path, '//')) {
         } elseif (Str::startsWith($path, '/')) {
             $path = \mb_substr($path, 1);
@@ -459,8 +433,10 @@ class FileService {
 
     //*/
     //*
+
     /**
-     * @param $files
+     * @param mixed[] $files
+     *
      * @return mixed
      */
     public static function viewNamespaceToUrl($files) {
@@ -522,11 +498,7 @@ class FileService {
 
     //*/
 
-    /**
-     * @param $path
-     * @return string
-     */
-    public static function getRealFile($path) {
+    public static function getRealFile(string $path): string {
         $filename = '';
         if (Str::startsWith($path, asset(''))) {
             return public_path(substr($path, strlen(asset(''))));

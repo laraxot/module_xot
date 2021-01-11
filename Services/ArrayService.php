@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\File;
@@ -8,21 +10,19 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
- * Class ArrayService
- * @package Modules\Xot\Services
+ * Class ArrayService.
  */
 class ArrayService {
-    /**
-     * @var int
-     */
     protected static int $export_processor = 1;
 
+    //ret array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
+
     /**
-     * @param array $params
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     *
+     * @return mixed
      */
-    public static function toXLS($params) {
+    public static function toXLS(array $params) {
         require_once __DIR__.'/vendor/autoload.php';
         $data = $params['data'];
         $res = [];
@@ -40,17 +40,19 @@ class ArrayService {
             //case 2:return self::toXLS_Maatwebsite($params); //break;
             //case 3:return self::toXLS_phpexcel($params); //break;
             default:
-                dddx('unknown export_processor ['.self::$export_processor.']');
+                dddx(['unknown export_processor ['.self::$export_processor.']']);
             break;
         }
     }
 
+    //ret array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
+
     /**
-     * @param array $params
-     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     *
+     * @return mixed
      */
-    public static function toXLS_phpoffice($params) {
+    public static function toXLS_phpoffice(array $params) {
         $filename = 'test';
         \extract($params);
         if (! isset($data)) {
@@ -100,10 +102,7 @@ class ArrayService {
         }
     }
 
-    /**
-     * @param array $params
-     */
-    public static function save($params) {
+    public static function save(array $params): void {
         extract($params);
         if (! isset($data)) {
             dddx(['err' => 'data is missing']);

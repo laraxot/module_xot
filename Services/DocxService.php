@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Carbon\Carbon;
@@ -22,17 +24,13 @@ use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 /**
- * Class DocxService
- * @package Modules\Xot\Services
+ * Class DocxService.
  */
 class DocxService {
+    public string $docx_input;
 
-    public $docx_input;
+    public array $values;
 
-    public $values;
-    /**
-     *
-     */
     private static ?DocxService $instance = null;
 
     /**
@@ -47,7 +45,8 @@ class DocxService {
     }
 
     /**
-     * @param $filename
+     * @param string $filename
+     *
      * @return DocxService|null
      */
     public static function setDocxInput($filename) {
@@ -59,6 +58,7 @@ class DocxService {
 
     /**
      * @param mixed $values
+     *
      * @return DocxService|null
      */
     public static function setValues($values) {
@@ -70,9 +70,11 @@ class DocxService {
 
     /**
      * @param array $params
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     *
      * @throws \PhpOffice\PhpWord\Exception\CopyFileException
      * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function out($params = []) {
         extract($params);
@@ -90,7 +92,7 @@ class DocxService {
             $tpl->saveAs($filename_out_path);
         } catch (\Exception $e) {
             //handle exception
-            dddx($e);
+            dddx([$e]);
         }
 
         return response()->download($filename_out_path);
@@ -98,7 +100,8 @@ class DocxService {
 
     /**
      * @param object $row
-     * @param $prefix
+     * @param string $prefix
+     *
      * @return array
      */
     public static function rows2Data_test($row, $prefix) {
@@ -147,7 +150,8 @@ class DocxService {
 
     /**
      * @param object $row
-     * @param $prefix
+     * @param string $prefix
+     *
      * @return array
      */
     public static function rows2Data($row, $prefix) {

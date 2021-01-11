@@ -43,7 +43,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     public string $module_name = 'xot';
 
-    public function bootCallback():void {
+    public function bootCallback(): void {
         $this->mergeConfigs();
 
         if (\Request::has('act') && 'migrate' == \Request::input('act')) {
@@ -98,14 +98,14 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     //end bootCallback
 
-    private function registerViewComposers() {
+    private function registerViewComposers(): void {
         //Factory $view
         //$view->composer('bootstrap-italia::page', BootstrapItaliaComposer::class);
         View::composer('*', XotComposer::class);
         //dddx($res);
     }
 
-    public function mergeConfigs() {
+    public function mergeConfigs(): void {
         $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra', 'social'];
         foreach ($configs as $v) {
             $tmp = Tenant::config($v);
@@ -118,7 +118,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     //end mergeConfigs
 
-    public function registerCallback() {
+    public function registerCallback(): void {
         $this->loadHelpersFrom(__DIR__.'/../Helpers');
         $loader = AliasLoader::getInstance();
         $loader->alias('Panel', 'Modules\Xot\Services\PanelService');
@@ -143,17 +143,14 @@ class XotServiceProvider extends XotBaseServiceProvider {
         );
     }
 
-    /**
-     * @param $path
-     */
-    public function loadHelpersFrom($path) {
+    public function loadHelpersFrom(string $path): void {
         foreach (\glob($path.'/*.php') as $filename) {
             $filename = \str_replace('/', \DIRECTORY_SEPARATOR, $filename);
             require_once $filename;
         }
     }
 
-    public function registerTranslator() {
+    public function registerTranslator(): void {
         // Override the JSON Translator
         $this->app->extend('translator', function (Translator $translator) {
             $trans = new TranslatorService($translator->getLoader(), $translator->getLocale());
@@ -163,7 +160,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
         });
     }
 
-    public function registerCacheOPCache() {
+    public function registerCacheOPCache(): void {
         Cache::extend('opcache', function () {
             $store = new \Modules\Xot\Engines\Opcache\Store();
 

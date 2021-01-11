@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -9,8 +11,7 @@ use Modules\Xot\Contracts\UserContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class XotBasePanelPolicy
- * @package Modules\Xot\Models\Panels\Policies
+ * Class XotBasePanelPolicy.
  */
 abstract class XotBasePanelPolicy {
     use HandlesAuthorization;
@@ -18,6 +19,7 @@ abstract class XotBasePanelPolicy {
     /**
      * @param UserContract $user
      * @param $ability
+     *
      * @return bool
      */
     public function before($user, $ability) {
@@ -26,39 +28,19 @@ abstract class XotBasePanelPolicy {
         }
     }
 
-    /**
-     * @param UserContract|null $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function index(?UserContract $user, PanelContract $panel):bool {
+    public function index(?UserContract $user, PanelContract $panel): bool {
         return true;
     }
 
-    /**
-     * @param UserContract|null $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function show(?UserContract $user, PanelContract $panel):bool {
+    public function show(?UserContract $user, PanelContract $panel): bool {
         return true;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function create(UserContract $user, PanelContract $panel):bool {
+    public function create(UserContract $user, PanelContract $panel): bool {
         return true;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function edit(UserContract $user, PanelContract $panel):bool {
+    public function edit(UserContract $user, PanelContract $panel): bool {
         //return true;
         $post = $panel->row;
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
@@ -68,12 +50,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function update(UserContract $user, PanelContract $panel):bool {
+    public function update(UserContract $user, PanelContract $panel): bool {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
@@ -83,12 +60,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function store(UserContract $user, PanelContract $panel):bool {
+    public function store(UserContract $user, PanelContract $panel): bool {
         /*
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
@@ -99,39 +71,22 @@ abstract class XotBasePanelPolicy {
         return true;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function indexAttach(UserContract $user, PanelContract $panel):bool {
+    public function indexAttach(UserContract $user, PanelContract $panel): bool {
+        return true;
+    }
+
+    public function indexEdit(UserContract $user, PanelContract $panel): bool {
         return true;
     }
 
     /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function indexEdit(UserContract $user, PanelContract $panel):bool {
-        return true;
-    }
-
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
      * @return false
      */
-    public function updateTranslate(UserContract $user, PanelContract $panel):bool {
+    public function updateTranslate(UserContract $user, PanelContract $panel): bool {
         return false; //update-translate di @can()
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function destroy(UserContract $user, PanelContract $panel):bool {
+    public function destroy(UserContract $user, PanelContract $panel): bool {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
@@ -141,12 +96,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function delete(UserContract $user, PanelContract $panel):bool {
+    public function delete(UserContract $user, PanelContract $panel): bool {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle) {
@@ -156,12 +106,7 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function restore(UserContract $user, PanelContract $panel):bool {
+    public function restore(UserContract $user, PanelContract $panel): bool {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle) {
@@ -171,19 +116,10 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     */
-    public function forceDelete(UserContract $user, PanelContract $panel):bool {
+    public function forceDelete(UserContract $user, PanelContract $panel): bool {
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     * @return bool
-     */
-    public function detach(UserContract $user, PanelContract $panel):bool {
+    public function detach(UserContract $user, PanelContract $panel): bool {
         $post = $panel->row;
 
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
@@ -193,23 +129,16 @@ abstract class XotBasePanelPolicy {
         return false;
     }
 
-    public function clone(UserContract $user, PanelContract $panel):bool {
+    public function clone(UserContract $user, PanelContract $panel): bool {
         return true;
     }
 
     /**
      * Determine whether the user can view any DocDummyPluralModel.
-     *
-     * @param UserContract $user
-     * @return mixed
      */
-    public function viewAny(UserContract $user) {
+    public function viewAny(UserContract $user): bool {
     }
 
-    /**
-     * @param UserContract $user
-     * @param PanelContract $panel
-     */
-    public function view(UserContract $user, PanelContract $panel):bool {
+    public function view(UserContract $user, PanelContract $panel): bool {
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Support\Facades\File;
 //use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -10,6 +12,7 @@ use Modules\Xot\Services\TenantService as Tenant;
 if (! \function_exists('snake_case')) {
     /**
      * @param $str
+     *
      * @return string
      */
     function snake_case($str) {
@@ -20,6 +23,7 @@ if (! \function_exists('snake_case')) {
 if (! \function_exists('str_slug')) {
     /**
      * @param $str
+     *
      * @return string
      */
     function str_slug($str) {
@@ -30,6 +34,7 @@ if (! \function_exists('str_slug')) {
 if (! function_exists('str_singular')) {
     /**
      * @param $str
+     *
      * @return string
      */
     function str_singular($str) {
@@ -41,6 +46,7 @@ if (! function_exists('starts_with')) {
     /**
      * @param $str
      * @param $str1
+     *
      * @return bool
      */
     function starts_with($str, $str1) {
@@ -52,6 +58,7 @@ if (! function_exists('ends_with')) {
     /**
      * @param $str
      * @param $str1
+     *
      * @return bool
      */
     function ends_with($str, $str1) {
@@ -63,6 +70,7 @@ if (! function_exists('str_contains')) {
     /**
      * @param $str
      * @param $str1
+     *
      * @return bool
      */
     function str_contains($str, $str1) {
@@ -100,6 +108,7 @@ if (! \function_exists('dddx')) {
 if (! \function_exists('getFilename')) {
     /**
      * @param array $params
+     *
      * @return string
      */
     function getFilename($params) {
@@ -130,6 +139,7 @@ if (! \function_exists('req_uri')) {
 if (! \function_exists('in_admin')) {
     /**
      * @param array $params
+     *
      * @return array|bool|mixed
      */
     function in_admin($params = []) {
@@ -139,6 +149,7 @@ if (! \function_exists('in_admin')) {
 if (! \function_exists('inAdmin')) {
     /**
      * @param array $params
+     *
      * @return array|bool|mixed
      */
     function inAdmin($params = []) {
@@ -198,6 +209,7 @@ if (! \function_exists('fullTextWildcards')) {
     /*protected */
     /**
      * @param $term
+     *
      * @return string
      */
     function fullTextWildcards($term) {
@@ -246,10 +258,11 @@ if (! \function_exists('isItem')) {
 
 if (! \function_exists('params2ContainerItem')) {
     /**
-     * @param null $params
+     * @param array $params
+     *
      * @return array[]
      */
-    function params2ContainerItem($params = null) {
+    function params2ContainerItem(?array $params = null) {
         if (null == $params) {
             $params = \Route::current()->parameters();
         }
@@ -272,6 +285,7 @@ if (! \function_exists('params2ContainerItem')) {
 if (! \function_exists('getModelFields')) {
     /**
      * @param $model
+     *
      * @return mixed
      */
     function getModelFields($model) {
@@ -286,6 +300,7 @@ if (! \function_exists('getModelFields')) {
 if (! \function_exists('getModuleFromModel')) {
     /**
      * @param $model
+     *
      * @return mixed|\Nwidart\Modules\Module|void|null
      */
     function getModuleFromModel($model) {
@@ -300,6 +315,7 @@ if (! \function_exists('getModuleFromModel')) {
 if (! \function_exists('getModuleNameFromModel')) {
     /**
      * @param $model
+     *
      * @return string|null
      */
     function getModuleNameFromModel($model) {
@@ -316,6 +332,7 @@ if (! \function_exists('getModuleNameFromModel')) {
 if (! \function_exists('getModuleNameFromModelName')) {
     /**
      * @param $model_name
+     *
      * @return string|null
      */
     function getModuleNameFromModelName($model_name) {
@@ -329,6 +346,7 @@ if (! \function_exists('getTransformerFromModel')) {
     /**
      * @param $model
      * @param string $type
+     *
      * @return mixed|string
      */
     function getTransformerFromModel($model, $type = 'Resource') {
@@ -346,8 +364,9 @@ if (! \function_exists('getTransformerFromModel')) {
 
 if (! \function_exists('getAllModulesModels')) {
     /**
-     * @return array
      * @throws ReflectionException
+     *
+     * @return array
      */
     function getAllModulesModels() {
         $res = [];
@@ -364,8 +383,10 @@ if (! \function_exists('getAllModulesModels')) {
 if (! \function_exists('getModuleModels')) {
     /**
      * @param $module
-     * @return array
+     *
      * @throws ReflectionException
+     *
+     * @return array
      */
     function getModuleModels($module) {
         if (Str::startsWith($module, 'trasferte')) { //caso eccezzionale
@@ -406,6 +427,7 @@ if (! \function_exists('getModuleModels')) {
 if (! \function_exists('xotModel')) {
     /**
      * @param $name
+     *
      * @return array|false|mixed
      */
     function xotModel($name) {
@@ -416,6 +438,7 @@ if (! \function_exists('xotModel')) {
 if (! \function_exists('transFields')) {
     /**
      * @param array $params
+     *
      * @return mixed|stdClass
      */
     function transFields($params) {
@@ -582,8 +605,10 @@ if (! \function_exists('debug_getter_obj')) {
 
     /**
      * @param array $params
-     * @return array|void
+     *
      * @throws ReflectionException
+     *
+     * @return array|void
      */
     function debug_getter_obj($params) {
         extract($params);
@@ -643,6 +668,7 @@ if (! \function_exists('bracketsToDotted')) {
     /**
      * @param $str
      * @param string $quotation_marks
+     *
      * @return string|string[]
      */
     function bracketsToDotted($str, $quotation_marks = '') {
@@ -654,6 +680,7 @@ if (! \function_exists('dottedToBrackets')) {
     /**
      * @param $str
      * @param string $quotation_marks
+     *
      * @return string
      */
     function dottedToBrackets($str, $quotation_marks = '') {
@@ -667,8 +694,6 @@ if (! \function_exists('dottedToBrackets')) {
 
 if (! \function_exists('array_merge_recursive_distinct')) {
     /**
-     * @param array $array1
-     * @param array $array2
      * @return array
      */
     function array_merge_recursive_distinct(array &$array1, array &$array2) {
@@ -758,8 +783,10 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
 if (! function_exists('getRelationships')) {
     /**
      * @param $model
-     * @return array
+     *
      * @throws ReflectionException
+     *
+     * @return array
      */
     function getRelationships($model) { //working
         $methods = get_class_methods($model);
@@ -837,7 +864,6 @@ if (! function_exists('getRelationships')) {
 
 if (! function_exists('removeQueryParams')) {
     /**
-     * @param array $params
      * @return string
      */
     function removeQueryParams(array $params = []) {
@@ -866,7 +892,6 @@ if (! function_exists('removeQueryParams')) {
  */
 if (! function_exists('addQueryParams')) {
     /**
-     * @param array $params
      * @return string
      */
     function addQueryParams(array $params = []) {
@@ -895,6 +920,7 @@ if (! function_exists('isJson')) {
 */
     /**
      * @param $string
+     *
      * @return bool
      */
     function isJson($string) {

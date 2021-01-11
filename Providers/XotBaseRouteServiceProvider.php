@@ -26,6 +26,11 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider {
      */
     protected string $module_ns = __NAMESPACE__;
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     public function boot() {
         \Config::set('extra_conn', \Request::segment(2)); //Se configurato va a prendere db diverso
         if (method_exists($this, 'bootCallback')) {
@@ -34,17 +39,32 @@ abstract class XotBaseRouteServiceProvider extends ServiceProvider {
         parent::boot();
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     public function map() {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     protected function mapWebRoutes() {
         Route::middleware('web')
             ->namespace($this->moduleNamespace)
             ->group($this->module_dir.'/../Routes/web.php');
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @return void
+     */
     protected function mapApiRoutes() {
         Route::prefix('api')
             ->middleware('api')

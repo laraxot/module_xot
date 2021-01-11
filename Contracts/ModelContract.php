@@ -13,6 +13,7 @@ use Modules\Food\Models\RestaurantOwner;
  *
  * @property int                             $id
  * @property int|null                        $auth_user_id
+ * @property string|null                     $post_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null                     $created_by
@@ -22,9 +23,17 @@ use Modules\Food\Models\RestaurantOwner;
  * @property Collection|RestaurantOwner[]    $restaurantOwners
  * @property bool                            $is_reclamed
  * @property bool                            $table_enable
+ * @property PivotContract|null              $pivot
  *
- * @method mixed getKey()
- * @method bool  isBellBoyAuthID($auth_user_id)
+ * @method mixed  getKey()
+ * @method bool   isBellBoyAuthID($auth_user_id)
+ * @method string getRouteKey()
+ * @method string getRouteKeyName()
+ * @method string getTable()
+ * @method mixed  with($array)
+ * @method array  getFillable()
+ * @method mixed  fill($array)
+ * @method mixed  getConnection()
  */
 interface ModelContract {
 }

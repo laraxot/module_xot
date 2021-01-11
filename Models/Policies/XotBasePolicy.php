@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Modules\Xot\Models\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-//use Modules\Food\Models\Restaurant as Post;
 //use Illuminate\Database\Eloquent\Model as Post;
 //use Modules\LU\Models\User;
 use Modules\Xot\Contracts\ModelContract;
-use Modules\Xot\Contracts\UserContract as User;
+use Modules\Xot\Contracts\UserContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
@@ -20,41 +19,31 @@ abstract class XotBasePolicy {
 
     /**
      * @param UserContract $user
-     * @param $ability
+     * @param string       $ability
      *
-     * @return bool
+     * @return bool|null
      */
-    public function before($user, $ability) {
+    public function before(?UserContract $user, $ability) {
         if (is_object($user) && Panel::get($user)->isSuperAdmin()) {
             return true;
         }
+
+        // return;
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function index(?User $user, ModelContract $post): bool {
+    public function index(?UserContract $user, ModelContract $post): bool {
         return true;
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function show(?User $user, ModelContract $post): bool {
+    public function show(?UserContract $user, ModelContract $post): bool {
         return true;
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function create(User $user, ModelContract $post): bool {
+    public function create(UserContract $user, ModelContract $post): bool {
         return true;
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function edit(User $user, ModelContract $post): bool {
+    public function edit(UserContract $user, ModelContract $post): bool {
         //return true;
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
             return true;
@@ -63,12 +52,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function update(User $user, ModelContract $post) {
+    public function update(UserContract $user, ModelContract $post): bool {
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle || $post->auth_user_id == $user->auth_user_id) {
             return true;
         }
@@ -76,12 +60,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function store(User $user, ModelContract $post) {
+    public function store(UserContract $user, ModelContract $post): bool {
         /*
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
@@ -92,39 +71,22 @@ abstract class XotBasePolicy {
         return true;
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function indexAttach(User $user, ModelContract $post) {
+    public function indexAttach(UserContract $user, ModelContract $post): bool {
+        return true;
+    }
+
+    public function indexEdit(UserContract $user, ModelContract $post): bool {
         return true;
     }
 
     /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function indexEdit(User $user, ModelContract $post) {
-        return true;
-    }
-
-    /**
-     * @param ModelContract $post
-     *
      * @return false
      */
-    public function updateTranslate(User $user, ModelContract $post) {
+    public function updateTranslate(UserContract $user, ModelContract $post): bool {
         return false; //update-translate di @can()
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function destroy(User $user, ModelContract $post) {
+    public function destroy(UserContract $user, ModelContract $post): bool {
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
@@ -132,12 +94,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function delete(User $user, ModelContract $post) {
+    public function delete(UserContract $user, ModelContract $post): bool {
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -145,12 +102,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function restore(User $user, ModelContract $post) {
+    public function restore(UserContract $user, ModelContract $post): bool {
         if ($post->created_by == $user->handle) {
             return true;
         }
@@ -158,18 +110,10 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function forceDelete(User $user, ModelContract $post) {
+    public function forceDelete(UserContract $user, ModelContract $post): bool {
     }
 
-    /**
-     * @param ModelContract $post
-     *
-     * @return bool
-     */
-    public function detach(User $user, ModelContract $post) {
+    public function detach(UserContract $user, ModelContract $post): bool {
         if ($post->created_by == $user->handle || $post->updated_by == $user->handle) {
             return true;
         }
@@ -177,7 +121,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    public function clone(User $user, ModelContract $post) {
+    public function clone(UserContract $user, ModelContract $post): bool {
         return true;
     }
 
@@ -186,12 +130,9 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function viewAny(User $user) {
+    public function viewAny(UserContract $user) {
     }
 
-    /**
-     * @param ModelContract $post
-     */
-    public function view(User $user, ModelContract $post) {
+    public function view(UserContract $user, ModelContract $post) {
     }
 }

@@ -1,24 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 //----------- Requests ----------
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Modules\Xot\Contracts\ModelContract;
 
 // per dizionario morph
 //------------ services ----------
 
 /**
- * Class ModelService
- * @package Modules\Xot\Services
+ * Class ModelService.
  */
 class ModelService {
-    /**
-     * @param $model
-     * @param $data
-     * @return array
-     */
-    public static function getRelationshipsAndData($model, $data) {
+    public static function getRelationshipsAndData(ModelContract $model, array $data): array {
         $methods = get_class_methods($model);
         Relation::morphMap([$model->post_type => get_class($model)]);
         $data = collect($data)->filter(

@@ -1,27 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Policies;
 
+use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\UserContract;
+
 /**
- * Class HomePolicy
- * @package Modules\Xot\Models\Policies
+ * Class HomePolicy.
  */
 class HomePolicy extends XotBasePolicy {
-    /**
-     * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param ModelContract $post
-     * @return bool
-     */
-    public function index(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{
+    public function index(?UserContract $user, ModelContract $post): bool {
         return true; //da aggiungere pezzi
     }
 
-    /**
-     * @param \Modules\Xot\Contracts\UserContract|null $user
-     * @param ModelContract $post
-     * @return bool
-     */
-    public function show(?\Modules\Xot\Contracts\UserContract $user,ModelContract $post):bool{
+    public function show(?UserContract $user, ModelContract $post): bool {
         return true; //da aggiungere pezzi
     }
 }

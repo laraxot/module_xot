@@ -58,7 +58,7 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     /**
-     * @param $method
+     * @param string $method
      * @param $args
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
@@ -87,7 +87,7 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     /**
-     * @param $method
+     * @param string $method
      * @param $args
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
@@ -108,7 +108,7 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     /**
-     * @param $method
+     * @param string $method
      * @param PanelContract $panel
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response

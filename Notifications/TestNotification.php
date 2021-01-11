@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
 /**
- * Class TestNotification
+ * Class TestNotification.
  */
 class TestNotification extends Notification implements ShouldQueue {
     use Queueable;
@@ -29,7 +31,8 @@ class TestNotification extends Notification implements ShouldQueue {
     }
 
     /**
-     * @param $notifiable
+     * @param mixed $notifiable
+     *
      * @return SlackMessage
      */
     public function toSlack($notifiable) {

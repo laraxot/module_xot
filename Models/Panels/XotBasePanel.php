@@ -117,28 +117,20 @@ abstract class XotBasePanel implements PanelContract {
         return $this;
     }
 
-    /**
-     * @param $parent
-     *
-     * @return $this
-     */
-    public function setParent($parent) {
+    public function setParent(PanelContract $parent): self {
         $this->parent = $parent;
 
         return $this;
     }
 
     /**
-     * @return null
+     * @return PanelContract
      */
     public function getParent() {
         return $this->parent;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function getParents() {
+    public function getParents(): \Illuminate\Support\Collection {
         /*
         $curr = $this;
         $parents = [];
@@ -162,11 +154,9 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $type
-     *
      * @return mixed
      */
-    public function findParentType($type) {
+    public function findParentType(string $type) {
         return collect($this->getParents())->filter(
             function ($item) use ($type) {
                 return $type == $item->postType();
@@ -175,18 +165,13 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param object $row
-     *
      * @return mixed
      */
     public function optionId(object $row) {
         return $row->getKey();
     }
 
-    /**
-     * @param $guid
-     */
-    public function setItem($guid) {
+    public function setItem(string $guid) {
         $model = $this->row;
         $rows = $this->rows;
         $pk = $model->getRouteKeyName($this->in_admin);
@@ -284,12 +269,7 @@ abstract class XotBasePanel implements PanelContract {
         return $this->rows($data)->get();
     }
 
-    /**
-     * @param null $data
-     *
-     * @return array
-     */
-    public function optionsTree($data = null) {
+    public function optionsTree(array $data = []): array {
         if (null == $data) {
             $data = request()->all();
         }
@@ -346,8 +326,6 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * Get the actions available for the resource.
-     *
-
      */
     public function fields(): array {
         return [];
@@ -525,7 +503,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -534,7 +512,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -543,7 +521,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -552,7 +530,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -561,7 +539,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -959,8 +937,8 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
-     * @param array $params
+     * @param string $act
+     * @param array  $params
      *
      * @return mixed
      */
@@ -1409,7 +1387,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return null
      */
@@ -1421,7 +1399,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return mixed
      */
@@ -1449,7 +1427,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return null
      */
@@ -1475,7 +1453,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $act
+     * @param string $act
      *
      * @return null
      */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Collective\Html\FormFacade as Form;
@@ -10,12 +12,11 @@ use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Contracts\PanelContract;
 
 /**
- * Class PanelFormService
- * @package Modules\Xot\Services
+ * Class PanelFormService.
  */
 class PanelFormService {
+    protected PanelContract $panel;
 
-    protected $panel;
     /*
     public function __construct(&$panel) {
         $this->panel = $panel;
@@ -24,8 +25,6 @@ class PanelFormService {
 
     /**
      * setPanel.
-     *
-     * @param PanelContract $panel
      *
      * @return $this
      */
@@ -37,6 +36,7 @@ class PanelFormService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function formCreate($params = []) {
@@ -61,6 +61,7 @@ class PanelFormService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function formEdit($params = []) {
@@ -119,6 +120,7 @@ class PanelFormService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public function btnCrud($params = []) {
@@ -147,6 +149,7 @@ class PanelFormService {
 
     /**
      * @param array $params
+     *
      * @return string|void|null
      */
     public function btnHtml($params) {
@@ -257,8 +260,10 @@ class PanelFormService {
         return Form::bsSubmit(trans('xot::buttons.save'));
     }
     */
+
     /**
      * @param array $params
+     *
      * @return array
      */
     public function exceptFields($params = []) {

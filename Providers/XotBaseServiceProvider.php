@@ -16,20 +16,18 @@ use Illuminate\Support\Str;
  * Class XotBaseServiceProvider.
  */
 abstract class XotBaseServiceProvider extends ServiceProvider {
-
     protected string $module_dir = __DIR__;
-
 
     protected string $module_ns = __NAMESPACE__;
 
-
     public string $module_name = 'formx';
-
 
     protected string $module_base_ns;
 
     /**
      * Boot the application events.
+     *
+     * @return void
      */
     public function boot() {
         //echo '<h3>Time :'.class_basename($this).' '.(microtime(true) - LARAVEL_START).'</h3>';
@@ -69,7 +67,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
      * Register config.
      */
-    protected function registerConfig() {
+    protected function registerConfig(): void {
         $this->publishes([
             $this->module_dir.'/../Config/config.php' => config_path($this->module_name.'.php'),
         ], 'config');
@@ -82,7 +80,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
      * Register views.
      */
-    public function registerViews() {
+    public function registerViews(): void {
         $sourcePath = realpath($this->module_dir.'/../Resources/views');
         /*
         $viewPath = resource_path('views/modules/'.$this->module_name);
@@ -102,7 +100,7 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
      * Register translations.
      */
-    public function registerTranslations() {
+    public function registerTranslations(): void {
         $langPath = resource_path('lang/modules/'.$this->module_name);
 
         if (is_dir($langPath)) {
@@ -115,13 +113,13 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     /**
      * Register an additional directory of factories.
      */
-    public function registerFactories() {
+    public function registerFactories(): void {
         if (! app()->environment('production')) {
             //app(Factory::class)->load($this->module_dir.'/../Database/factories');
         }
     }
 
-    public function registerLivewireComponents() {
+    public function registerLivewireComponents(): void {
         $components_json = $this->module_dir.'/../Http/Livewire/_components.json';
         $force_recreate = request()->input('force_recreate', true);
         $exists = File::exists($components_json);
@@ -188,11 +186,9 @@ abstract class XotBaseServiceProvider extends ServiceProvider {
     }
 
     /**
-     * @param $path
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function loadEventsFrom($path) {
+    public function loadEventsFrom(string $path): void {
         $events = [];
         if (! File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);

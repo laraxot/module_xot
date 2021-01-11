@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Transformers;
 
 /*
@@ -11,19 +13,20 @@ use Illuminate\Http\Resources\Json\JsonResource as ResCollection;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class GeoJsonResource
- * @package Modules\Xot\Transformers
+ * Class GeoJsonResource.
  */
 class GeoJsonResource extends ResCollection {
     /**
      * @param \Illuminate\Http\Request $request
-     * @return array
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return array
      */
     public function toArray($request) {
         $lang = app()->getLocale();
-
+        //34     Parameter #1 $model of static method Modules\Xot\Services\PanelService::get() expects Illuminate\Database\Eloquent\Model, $this(Modules\Xot\Transformers\GeoJsonResource) given.
         return [
             'type' => 'Feature',
             'properties' => [
@@ -31,7 +34,7 @@ class GeoJsonResource extends ResCollection {
                 //"index"=> 0,
                 'isActive' => true,
                 //"logo"=> "http://placehold.it/32x32",
-                'image' => Panel::get($this)->imgSrc(['width' => 200, 'height' => 200]),
+                //'image' => Panel::get($this)->imgSrc(['width' => 200, 'height' => 200]),
                 'link' => $this->url,
                 'url' => '#',
                 'name' => $this->title,

@@ -7,6 +7,7 @@ namespace Modules\Xot\Services;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\ModelContract;
 
 /**
  * Class StubService.
@@ -157,7 +158,7 @@ class StubService {
      *
      * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      */
-    public static function getByModel(Model $model, string $name, bool $create = false) {
+    public static function getByModel(ModelContract $model, string $name, bool $create = false) {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();
@@ -207,7 +208,7 @@ class StubService {
         }
         self::create($model, $name);
         //return new $panel;
-        dddx($name.' ['.$class_full.']['.$panel.'] is under creating , refresh page');
+        dddx([$name.' ['.$class_full.']['.$panel.'] is under creating , refresh page']);
         \Session::flash('status', $name.' created');
         //return redirect()->back();
     }
@@ -265,13 +266,10 @@ class StubService {
     }
 
     /**
-     * @param $model
-     * @param $name
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function create($model, $name) {
+    public static function create(Model $model, string $name): void {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
@@ -289,10 +287,13 @@ class StubService {
         $fields = self::fields($model);
 
         $dummy_id = $model->getRouteKeyName();
+        /*
+        Call to function is_array() with string will always evaluate to false.
         if (is_array($dummy_id)) {
             echo '<h3>not work with multiple keys</h3>';
             $dummy_id = var_export($dummy_id, true);
         }
+        */
         $replace = [
             'DummyNamespace' => $panel_namespace,
             'DummyClass' => $class_name.Str::studly($name),
@@ -324,10 +325,8 @@ class StubService {
 
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     *
-     * @return array
      */
-    public static function fields(Model $model) {
+    public static function fields(Model $model): array {
         if (! method_exists($model, 'getFillable')) {
             return [];
         }
@@ -422,7 +421,7 @@ class StubService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function updatePanel($params) {
+    public static function updatePanel($params): void {
         extract($params);
         if (! isset($func)) {
             dddx(['err' => 'func is missing']);

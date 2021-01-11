@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Exception;
@@ -7,9 +9,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
 if (! defined('STDIN')) {
-    /**
-     *
-     */
     define('STDIN', fopen('php://stdin', 'r'));
 }
 
@@ -17,16 +16,15 @@ if (! defined('STDIN')) {
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
 
 /**
- * Class ArtisanService
- * @package Modules\Xot\Services
+ * Class ArtisanService.
  */
 class ArtisanService {
     /**
-     * @param $act
-     * @return string
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return string
      */
-    public static function act($act) { //da fare anche in noconsole, e magari mettere un policy
+    public static function act(string $act) { //da fare anche in noconsole, e magari mettere un policy
         $module_name = \Request::input('module');
         switch ($act) {
             case 'migrate':
@@ -133,6 +131,7 @@ class ArtisanService {
         foreach ($files as $file) {
             if ('json' == $file->getExtension()) {
                 File::delete($file);
+                //$file->delete();
             }
         }
 
@@ -140,11 +139,9 @@ class ArtisanService {
     }
 
     /**
-     * @param $command
-     * @param array $arguments
-     * @return string
+     * @param string $command
      */
-    public static function exe($command, array $arguments = []) {
+    public static function exe($command, array $arguments = []): string {
         try {
             $output = '';
 

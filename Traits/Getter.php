@@ -62,7 +62,7 @@ trait Getter {
     //* //se lo togli non funziona piu' le funzioni del themeservice
 
     /**
-     * @param $method
+     * @param string $method
      * @param $args
      *
      * @return mixed|void

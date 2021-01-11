@@ -1,20 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class StoreJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class StoreJob.
  */
 class StoreJob extends XotBaseJob {
     /**
      * Execute the job.
+     *
      * @return \Modules\Xot\Contracts\PanelContract
      * @return \Modules\Xot\Contracts\PanelContract
      */
@@ -146,12 +149,11 @@ class StoreJob extends XotBaseJob {
 
     //end handle
     */
+
     /**
      * @param $model
-     * @param $name
-     * @param $data
      */
-    public function storeRelationshipsPivot($model, $name, $data) {
+    public function storeRelationshipsPivot(ModelContract $model, string $name, array $data): void {
         /*
         extract($params);
         $types=Str::plural($container);
@@ -163,12 +165,7 @@ class StoreJob extends XotBaseJob {
         */
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsHasOne($model, $name, $data) {
+    public function storeRelationshipsHasOne(ModelContract $model, string $name, array $data): void {
         $rows = $model->$name();
         $related = $rows->getRelated();
 
@@ -199,21 +196,11 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsHasMany($model, $name, $data) {
+    public function storeRelationshipsHasMany(ModelContract $model, string $name, array $data): void {
         //$rows = $model->$name();
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsBelongsTo($model, $name, $data) {
+    public function storeRelationshipsBelongsTo(ModelContract $model, string $name, array $data): void {
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
         $related = $rows->create($data);
@@ -226,12 +213,7 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsMorphOne($model, $name, $data) {
+    public function storeRelationshipsMorphOne(ModelContract $model, string $name, array $data): void {
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = app()->getLocale();
         }
@@ -242,12 +224,7 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsMorphToMany($model, $name, $data) {
+    public function storeRelationshipsMorphToMany(ModelContract $model, string $name, array $data): void {
         //ddd(\Request::all());
         //return ;
 
@@ -298,24 +275,14 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsHasManyThrough($model, $name, $data) {
+    public function storeRelationshipsHasManyThrough(ModelContract $model, string $name, array $data): void {
         /*
         Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
         */
         //$this->storeRelationshipsMorphToMany($params); //
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function storeRelationshipsBelongsToMany($model, $name, $data) {
+    public function storeRelationshipsBelongsToMany(ModelContract $model, string $name, array $data): void {
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($model, $name, $data);
 
@@ -324,12 +291,7 @@ class StoreJob extends XotBaseJob {
         $model->$name()->syncWithoutDetaching($data);
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param $data
-     */
-    public function saveMultiselectTwoSides($model, $name, $data) {
+    public function saveMultiselectTwoSides(ModelContract $model, string $name, array $data): void {
         //passo request o direttamente data ?
 
         $items = $model->$name();

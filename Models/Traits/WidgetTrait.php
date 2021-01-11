@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Traits;
 
 //use Laravel\Scout\Searchable;
 
 //----- models------
+use Illuminate\Database\Eloquent\Builder;
 use Modules\Xot\Models\Widget;
 
 //---- services -----
@@ -13,8 +16,7 @@ use Modules\Xot\Models\Widget;
 //------ traits ---
 
 /**
- * Trait WidgetTrait
- * @package Modules\Xot\Models\Traits
+ * Trait WidgetTrait.
  */
 trait WidgetTrait {
     /**
@@ -42,8 +44,9 @@ trait WidgetTrait {
     //non sembra funzionare, perchè?
 
     /**
-     * @param $query
-     * @param $layout_position
+     * @param Builder $query
+     * @param string  $layout_position
+     *
      * @return mixed
      */
     public function scopeOfLayoutPosition($query, $layout_position) {

@@ -1,29 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Presenters;
 
 use Illuminate\Support\Collection;
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Contracts\PanelPresenterContract;
 
 /**
- * Class HtmlPanelPresenter
- * @package Modules\Xot\Presenters
+ * Class HtmlPanelPresenter.
  */
 class HtmlPanelPresenter implements PanelPresenterContract {
+    protected PanelContract $panel;
 
-    protected $panel;
-
-    /**
-     * @param \Modules\Xot\Contracts\PanelContract $panel
-     * @return mixed|void
-     */
-    public function setPanel(\Modules\Xot\Contracts\PanelContract &$panel) {
+    public function setPanel(PanelContract &$panel): self {
         $this->panel = $panel;
+
+        return $this;
     }
 
     /**
-     * @param Collection|null $items
      * @return mixed|void
      */
     public function index(?Collection $items) {
@@ -47,6 +45,7 @@ class HtmlPanelPresenter implements PanelPresenterContract {
 
     /**
      * @param null $params
+     *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function out($params = null) {

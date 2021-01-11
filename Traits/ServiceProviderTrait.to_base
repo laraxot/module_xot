@@ -114,7 +114,7 @@ trait ServiceProviderTrait {
     	}
     }
     */
-    public function loadHelpersFrom($path) {
+    public function loadHelpersFrom(string $path):void {
         foreach (\glob($path.'/*.php') as $filename) {
             $filename = \str_replace('/', \DIRECTORY_SEPARATOR, $filename);
             require_once $filename;

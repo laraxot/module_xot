@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 /**
  * https://github.com/Tinyportal/TinyPortal/blob/master/Sources/TPSubs.php.
  *
- * @param $primary_field
- * @param $parent_field
- * @param $sort_field
+ * @param string $primary_field
+ * @param string $parent_field
+ * @param string $sort_field
  * @param object $rows
- * @param int $root_id
- * @param int $maxlevel
+ * @param int    $root_id
+ * @param int    $maxlevel
+ *
  * @return mixed
  */
 
@@ -30,31 +33,30 @@ function chain($primary_field, $parent_field, $sort_field, $rows, $root_id = 0, 
 }
 
 /**
- * Class ChainService
- * @package Modules\Xot\Services
+ * Class ChainService.
  */
 class ChainService {
+    public array $table;
 
-    public $table;
+    public array $rows;
 
-    public $rows;
+    public array $chain_table;
 
-    public $chain_table;
+    public string $primary_field;
 
-    public $primary_field;
+    public string $parent_field;
 
-    public $parent_field;
-
-    public $sort_field;
+    public string $sort_field;
 
     /**
      * ChainService constructor.
-     * @param $primary_field
-     * @param $parent_field
-     * @param $sort_field
+     *
+     * @param string $primary_field
+     * @param string $parent_field
+     * @param string $sort_field
      * @param object $rows
-     * @param int $root_id
-     * @param int $maxlevel
+     * @param int    $root_id
+     * @param int    $maxlevel
      */
     public function __construct($primary_field, $parent_field, $sort_field, $rows, $root_id = 0, $maxlevel = 25) {
         $this->rows = $rows;
@@ -65,10 +67,10 @@ class ChainService {
     }
 
     /**
-     * @param $rootcatid
-     * @param $maxlevel
+     * @param int $rootcatid
+     * @param int $maxlevel
      */
-    public function buildChain($rootcatid, $maxlevel) {
+    public function buildChain($rootcatid, $maxlevel): void {
         foreach ($this->rows as $row) {
             $this->table[$row[$this->parent_field]][$row[$this->primary_field]] = $row;
         }
@@ -76,11 +78,11 @@ class ChainService {
     }
 
     /**
-     * @param $parent_id
-     * @param $level
-     * @param $maxlevel
+     * @param int $parent_id
+     * @param int $level
+     * @param int $maxlevel
      */
-    public function makeBranch($parent_id, $level, $maxlevel) {
+    public function makeBranch($parent_id, $level, $maxlevel): void {
         if (! is_array($this->table)) {
             $this->table = [];
         }
@@ -102,8 +104,9 @@ class ChainService {
     }
 
     /**
-     * @param $a
-     * @param $b
+     * @param array $a
+     * @param array $b
+     *
      * @return int
      */
     public function chainCMP($a, $b) {

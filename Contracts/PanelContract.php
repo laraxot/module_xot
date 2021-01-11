@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Modules\Xot\Contracts;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Modules\Xot\Services\PanelRouteService;
+
 //use Illuminate\Support\Facades\Request;
 
 //use Illuminate\Contracts\Auth\UserProvider;
@@ -11,17 +15,39 @@ namespace Modules\Xot\Contracts;
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- * @property ModelContract|null $row
+ * @property ModelContract|null         $row
+ * @property bool                       $in_admin
+ * @property PanelRouteService          $route
+ * @property Collection|ModelContract[] $rows
  *
- * @method mixed findParentType($type)
+ * @method mixed                          findParentType($type)
+ * @method string                         imgSrc($params)
+ * @method \Illuminate\Support\Collection getParents()
+ * @method string                         postType()
+ * @method string                         guid()
+ * @method string                         pdfFilename()
+ * @method array                          with()
+ * @method mixed                          pdf($params)
+ * @method PanelContract|null             getParent()
+ * @method array                          fields()
+ * @method array                          actions()
+ * @method Builder                        rows()
+ * @method string                         getModuleNameLow()
+ * @method bool                           isSuperAdmin()
  */
 interface PanelContract {
+    public function setRows($rows);
+
+    public function setItem(string $guid);
+
+    public function setParent(PanelContract $panel): PanelContract;
+
     /*
     public function __construct($model = null);
 
     public function setRow($row);
 
-    public function setRows($rows);
+
 
     public function initRows();
 
@@ -35,7 +61,7 @@ interface PanelContract {
 
     public function optionLabel(object $row):string;
 
-    public function setItem($guid);
+
 
     public function hasLang();
 

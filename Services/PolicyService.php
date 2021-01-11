@@ -1,26 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\File;
 
 /**
- * Class PolicyService
- * @package Modules\Xot\Services
+ * Class PolicyService.
  */
 class PolicyService {
-    /**
-     *
-     */
     private static ?PolicyService $instance = null;
+
     //protected static $obj;
-    /**
-     * @var array
-     */
+
     protected static array $in_vars = [];
-    /**
-     * @var array
-     */
+
     protected static array $out_vars = [];
 
     /**
@@ -35,11 +30,10 @@ class PolicyService {
     }
 
     /**
-     * @param $obj
-     * @return PolicyService|null
      * @throws \ReflectionException
      */
-    public static function get($obj) {
+    //ret PolicyService|null
+    public static function get(object $obj): self {
         //self::$obj = $obj;
         $class = get_class($obj);
         $class_name = class_basename($obj);
@@ -86,6 +80,7 @@ class PolicyService {
 
     /**
      * @param array $params
+     *
      * @return array|void
      */
     public static function replaces($params = []) {
@@ -120,8 +115,9 @@ class PolicyService {
     }
 
     /**
-     * @return PolicyService|null
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return PolicyService|null
      */
     public function createIfNotExists() {
         if ($this->exists()) {
