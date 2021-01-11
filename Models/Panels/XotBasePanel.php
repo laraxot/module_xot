@@ -549,13 +549,8 @@ abstract class XotBasePanel implements PanelContract {
 
     /**
      * Build an "index" query for the given resource.
-     *
-     * @param $data
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function indexQuery($data, $query) {
+    public static function indexQuery(array $data, Builder $query): Builder {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         return $query;
     }
@@ -564,10 +559,8 @@ abstract class XotBasePanel implements PanelContract {
      * Build a "relatable" query for the given resource.
      *
      * This query determines which instances of the model may be attached to other resources.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function relatableQuery(Request $request, Builder $query) {
+    public static function relatableQuery(Request $request, Builder $query): Builder {
         //return $query->where('auth_user_id', $request->user()->auth_user_id);
         //return $query->where('user_id', $request->user()->id);
         return $query;
@@ -737,7 +730,8 @@ abstract class XotBasePanel implements PanelContract {
         $act = isset($data['_act']) ? $data['_act'] : null;
 
         $query = $query->with($this->with());
-        $query = $this->indexQuery($request, $query);
+        //$query = $this->indexQuery($request, $query);
+        $query = $this->indexQuery($data, $query);
 
         //$query=$query->withPost('a');
         $query = $this->applyJoin($query);
@@ -1702,7 +1696,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $data
+     * @param array $data
      *
      * @return mixed
      */
