@@ -28,7 +28,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
      */
     protected string $module_ns = __NAMESPACE__;
 
-    public function bootCallback() {
+    public function bootCallback():void {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));

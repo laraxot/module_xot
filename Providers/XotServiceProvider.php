@@ -43,7 +43,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     public string $module_name = 'xot';
 
-    public function bootCallback() {
+    public function bootCallback():void {
         $this->mergeConfigs();
 
         if (\Request::has('act') && 'migrate' == \Request::input('act')) {
