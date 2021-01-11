@@ -12,7 +12,7 @@ use Modules\Xot\Presenters\JsonPanelPresenter;
  */
 class SelectResponseMiddleware {
     /**
-     * @param $request
+     * @param \Illuminate\Http\Request $request
      * @param \Closure $next
      * @param mixed ...$guards
      * @return mixed
