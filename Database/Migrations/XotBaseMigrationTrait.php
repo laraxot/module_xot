@@ -8,9 +8,9 @@ namespace Modules\Xot\Database\Migrations;
  */
 trait XotBaseMigrationTrait {
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTable() {
+    public function getTable():string {
         return with(new MyModel())->getTable();
     }
 
