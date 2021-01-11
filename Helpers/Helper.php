@@ -5,13 +5,14 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\File;
 //use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Services\RouteService;
 use Modules\Xot\Services\TenantService as Tenant;
 
 //------------------------------------------------
 if (! \function_exists('snake_case')) {
     /**
-     * @param $str
+     * @param string $str
      *
      * @return string
      */
@@ -22,7 +23,7 @@ if (! \function_exists('snake_case')) {
 
 if (! \function_exists('str_slug')) {
     /**
-     * @param $str
+     * @param string $str
      *
      * @return string
      */
@@ -33,7 +34,7 @@ if (! \function_exists('str_slug')) {
 
 if (! function_exists('str_singular')) {
     /**
-     * @param $str
+     * @param string $str
      *
      * @return string
      */
@@ -44,8 +45,8 @@ if (! function_exists('str_singular')) {
 
 if (! function_exists('starts_with')) {
     /**
-     * @param $str
-     * @param $str1
+     * @param string $str
+     * @param string $str1
      *
      * @return bool
      */
@@ -56,8 +57,8 @@ if (! function_exists('starts_with')) {
 
 if (! function_exists('ends_with')) {
     /**
-     * @param $str
-     * @param $str1
+     * @param string $str
+     * @param string $str1
      *
      * @return bool
      */
@@ -68,8 +69,8 @@ if (! function_exists('ends_with')) {
 
 if (! function_exists('str_contains')) {
     /**
-     * @param $str
-     * @param $str1
+     * @param string $str
+     * @param string $str1
      *
      * @return bool
      */
@@ -82,7 +83,7 @@ if (! function_exists('str_contains')) {
 
 if (! \function_exists('dddx')) {
     /**
-     * @param array $params
+     * @param array|mixed $params
      */
     function dddx($params) {
         $tmp = \debug_backtrace();
@@ -284,7 +285,7 @@ if (! \function_exists('params2ContainerItem')) {
 
 if (! \function_exists('getModelFields')) {
     /**
-     * @param $model
+     * @param object $model
      *
      * @return mixed
      */
@@ -299,7 +300,7 @@ if (! \function_exists('getModelFields')) {
 
 if (! \function_exists('getModuleFromModel')) {
     /**
-     * @param $model
+     * @param object $model
      *
      * @return mixed|\Nwidart\Modules\Module|void|null
      */
@@ -314,7 +315,7 @@ if (! \function_exists('getModuleFromModel')) {
 
 if (! \function_exists('getModuleNameFromModel')) {
     /**
-     * @param $model
+     * @param object $model
      *
      * @return string|null
      */
@@ -331,7 +332,7 @@ if (! \function_exists('getModuleNameFromModel')) {
 
 if (! \function_exists('getModuleNameFromModelName')) {
     /**
-     * @param $model_name
+     * @param string $model_name
      *
      * @return string|null
      */
@@ -344,7 +345,7 @@ if (! \function_exists('getModuleNameFromModelName')) {
 
 if (! \function_exists('getTransformerFromModel')) {
     /**
-     * @param $model
+     * @param object $model
      * @param string $type
      *
      * @return mixed|string
@@ -382,7 +383,7 @@ if (! \function_exists('getAllModulesModels')) {
 
 if (! \function_exists('getModuleModels')) {
     /**
-     * @param $module
+     * @param string $module
      *
      * @throws ReflectionException
      *
@@ -426,7 +427,7 @@ if (! \function_exists('getModuleModels')) {
 
 if (! \function_exists('xotModel')) {
     /**
-     * @param $name
+     * @param string $name
      *
      * @return array|false|mixed
      */
@@ -522,21 +523,22 @@ if (! \function_exists('transFields')) {
 }
 
 if (! \function_exists('deltaTime')) {
+    /**
+     * @return mixed
+     */
     function deltaTime() {
         echo '<h3>Time : '.(microtime(true) - LARAVEL_START).'</h3>';
     }
 }
 
 if (! \function_exists('debug_getter_obj')) {
-    /**
-     * @param array $params
-     */
+    /*
     function debug_getter_objOLD($params) {
         extract($params);
         if (! isset($obj)) {
             dddx(['err' => 'obj is missing']);
 
-            return;
+            return null;
         }
         $methods = collect(get_class_methods($obj))->filter(function ($item) {
             $exclude = [
@@ -602,20 +604,21 @@ if (! \function_exists('debug_getter_obj')) {
         echo $html;
         dddx($methods);
     }//end function
+    */
 
     /**
      * @param array $params
      *
      * @throws ReflectionException
      *
-     * @return array|void
+     * @return array|null
      */
     function debug_getter_obj($params) {
         extract($params);
         if (! isset($obj)) {
             dddx(['err' => 'obj is missing']);
 
-            return;
+            return null;
         }
         $methods = get_class_methods($obj);
         $data = [];
@@ -666,10 +669,10 @@ if (! \function_exists('debug_getter_obj')) {
 if (! \function_exists('bracketsToDotted')) {
     // privacies[111][pivot][title] => privacies.111.pivot.title
     /**
-     * @param $str
+     * @param string $str
      * @param string $quotation_marks
      *
-     * @return string|string[]
+     * @return string
      */
     function bracketsToDotted($str, $quotation_marks = '') {
         return str_replace(['[', ']'], ['.', ''], $str);
@@ -678,7 +681,7 @@ if (! \function_exists('bracketsToDotted')) {
 if (! \function_exists('dottedToBrackets')) {
     // privacies.111.pivot.title => privacies[111][pivot][title]
     /**
-     * @param $str
+     * @param string $str
      * @param string $quotation_marks
      *
      * @return string
@@ -782,7 +785,7 @@ https://gist.github.com/ImLiam/49c420ddb2db881afd59d77635d039f8
 
 if (! function_exists('getRelationships')) {
     /**
-     * @param $model
+     * @param ModelContract $model
      *
      * @throws ReflectionException
      *
@@ -919,7 +922,7 @@ if (! function_exists('isJson')) {
     }
 */
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */

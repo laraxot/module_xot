@@ -28,7 +28,7 @@ abstract class XotBasePolicy {
             return true;
         }
 
-        // return;
+        return false;
     }
 
     public function index(?UserContract $user, ModelContract $post): bool {
@@ -110,7 +110,7 @@ abstract class XotBasePolicy {
         return false;
     }
 
-    public function forceDelete(UserContract $user, ModelContract $post): bool {
+    public function forceDelete(UserContract $user, ModelContract $post): mixed {
     }
 
     public function detach(UserContract $user, ModelContract $post): bool {
@@ -130,9 +130,9 @@ abstract class XotBasePolicy {
      *
      * @return mixed
      */
-    public function viewAny(UserContract $user) {
+    public function viewAny(UserContract $user): mixed {
     }
 
-    public function view(UserContract $user, ModelContract $post) {
+    public function view(UserContract $user, ModelContract $post): mixed {
     }
 }

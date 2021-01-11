@@ -7,8 +7,7 @@ use Modules\Xot\Services\ArrayService;
 use Nwidart\Modules\Facades\Module;
 
 /**
- * Class ClearDuplicatesTransAction
- * @package Modules\Xot\Models\Panels\Actions
+ * Class ClearDuplicatesTransAction.
  */
 class ClearDuplicatesTransAction extends XotBasePanelAction {
     /**
@@ -20,7 +19,7 @@ class ClearDuplicatesTransAction extends XotBasePanelAction {
      */
     public string $icon = '<i class="fas fa-hammer"></i>';
 
-    public function handle() {
+    public function handle(): void {
         //return 'qui';
         $modules = Module::all();
         foreach ($modules as $module) {
@@ -35,9 +34,9 @@ class ClearDuplicatesTransAction extends XotBasePanelAction {
     }
 
     /**
-     * @param $files
+     * @param array $files
      */
-    public function fixFiles($files) {
+    public function fixFiles($files): mixed {
         foreach ($files as $file) {
             $path = $file->getRealPath();
             try {

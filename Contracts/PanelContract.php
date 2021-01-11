@@ -36,8 +36,16 @@ use Modules\Xot\Services\PanelRouteService;
  * @method bool                           isSuperAdmin()
  */
 interface PanelContract {
+    /**
+     * @param ModelContract|null $rows
+     *
+     * @return iterable|null
+     */
     public function setRows($rows);
 
+    /**
+     * @return object|null
+     */
     public function setItem(string $guid);
 
     public function setParent(PanelContract $panel): PanelContract;
