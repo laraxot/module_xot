@@ -84,6 +84,8 @@ if (! function_exists('str_contains')) {
 if (! \function_exists('dddx')) {
     /**
      * @param array|mixed $params
+     *
+     * @return string
      */
     function dddx($params) {
         $tmp = \debug_backtrace();
@@ -209,7 +211,7 @@ if (! \function_exists('inAdmin')) {
 if (! \function_exists('fullTextWildcards')) {
     /*protected */
     /**
-     * @param $term
+     * @param string $term
      *
      * @return string
      */
