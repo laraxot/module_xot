@@ -33,6 +33,9 @@ use Modules\Xot\Services\StubService;
  * Class XotBasePanel.
  */
 abstract class XotBasePanel implements PanelContract {
+    /**
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
     public $out = null;
 
     public bool $force_exit = false;
@@ -43,7 +46,9 @@ abstract class XotBasePanel implements PanelContract {
      * @var \Illuminate\Contracts\Foundation\Application|mixed|null
      */
     public $row = null;
-
+    /**
+     * @var array
+     */
     public $rows = null;
 
     public $parent = null;
@@ -51,7 +56,9 @@ abstract class XotBasePanel implements PanelContract {
     public $in_admin = null;
 
     public ?PanelPresenterContract $presenter = null;
-
+    /**
+     * @var object|mixed|null
+     */
     public $form = null;
 
     public ?PanelRouteService $route = null;

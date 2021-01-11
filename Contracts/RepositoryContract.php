@@ -7,8 +7,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
 /**
- * Interface RepositoryContract
- * @package Modules\Xot\Contracts
+ * Interface RepositoryContract.
  */
 interface RepositoryContract {
     /**
@@ -31,20 +30,21 @@ interface RepositoryContract {
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @para string $id
+     * @param string $id
      *
-     * @param $id
-     * @return \Illuminate\Database\Eloquent\Model
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function findOrFail($id);
 
     /**
      * Find data by field and value.
      *
-     * @param $field
-     * @param mixed $value
+     * @param string   $field
+     * @param mixed    $value
      * @param string[] $columns
+     *
      * @return Model|Collection
      */
     public function findBy($field, $value, $columns = ['*']);
@@ -63,7 +63,6 @@ interface RepositoryContract {
     /**
      * Find data by multiple fields.
      *
-     * @param array $where
      * @param array $columns
      *
      * @return mixed
@@ -73,17 +72,12 @@ interface RepositoryContract {
     /**
      * Order results by.
      *
-     * @param string $column
-     * @param string $direction
-     *
      * @return self
      */
     public function orderBy(string $column, string $direction);
 
     /**
      * Filter results by given query params.
-     *
-     * @param string $queries
      *
      * @return self
      */
@@ -101,7 +95,6 @@ interface RepositoryContract {
     /**
      * Get an array with the values of a given column.
      *
-     * @param string $value
      * @param null $key
      *
      * @return array
@@ -131,7 +124,6 @@ interface RepositoryContract {
     /**
      * Save a new entity in repository.
      *
-     * @param array $attributes
      * @return Model|bool
      */
     public function create(array $attributes);
@@ -139,8 +131,6 @@ interface RepositoryContract {
     /**
      * Update an entity with the given attributes and persist it.
      *
-     * @param Model $entity
-     * @param array $attributes
      * @return bool
      */
     public function update(Model $entity, array $attributes);
@@ -165,10 +155,8 @@ interface RepositoryContract {
 
     /**
      * Add a message to the repository's error messages.
-     *
-     * @param string $message
      */
-    public function addError(string $message);
+    public function addError(string $message): string;
 
     /**
      * Get the repository's error messages.

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Gate;
 //------------ jobs ----------------------------
 use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
@@ -24,11 +25,17 @@ abstract class XotBasePanelAction {
     public bool $onContainer = false;
 
     public bool $onItem = false;
-
+    /**
+     * @var object|null
+     */
     public $row = null;
-
+    /**
+     * @var iterable|null
+     */
     public $rows = null;
-
+    /**
+     * @var PanelContract|null
+     */
     public $panel = null;
 
     public ?string $name = null;

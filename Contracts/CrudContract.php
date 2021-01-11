@@ -3,12 +3,13 @@
 namespace Modules\Xot\Contracts;
 
 /**
- * Interface CrudContract
- * @package Modules\Xot\Contracts
+ * Interface CrudContract.
  */
 interface CrudContract {
     /**
      * Return the Eloquent model from the service.
+     *
+     * @return object|null
      */
     public function raw();
 
@@ -16,6 +17,8 @@ interface CrudContract {
      * Include your where statement here with variable parameters.
      *
      * @param mixed $params
+     *
+     * @return iterable|null
      */
     public function where(...$params);
 
@@ -24,18 +27,22 @@ interface CrudContract {
      * Alias of find method when used with ID.
      *
      * @param int $id
+     *
+     * @return object|null
      */
     public function get($id = null);
 
     /**
      * Returns the first row of the selected resource.
+     *
+     * @return object
      */
     public function first();
 
     /**
      * Get a single item.
      *
-     * @param int $id
+     * @return object|null
      */
     public function find(int $id);
 
@@ -43,6 +50,8 @@ interface CrudContract {
      * Paginate collection result.
      *
      * @param int $perPage defines the number of items per page
+     *
+     * @return iterable|null
      */
     public function paginate(int $perPage);
 
@@ -50,19 +59,22 @@ interface CrudContract {
      * Get single item or all items from trash if ID is null.
      *
      * @param int $id
+     *
+     * @return object|null
      */
     public function getTrash($id = null);
 
     /**
      * Get single trashed item.
      *
-     * @param int $id
+     * @return object|null
      */
     public function getTrashedItem(int $id);
 
     /**
      * Set the related data that should be eager loaded.
-     * @param array $relation
+     *
+     * @return iterable
      */
     public function setRelation(array $relation);
 
@@ -83,61 +95,49 @@ interface CrudContract {
 
     /**
      * Create new entry.
-     * @param array $data
      */
     public function create(array $data);
 
     /**
      * Update model. Make sure fillable is set on the model.
      *
-     * @param int $id of model you want to update
-     * @param array $data of model data that should be updated
-     * @param bool $return_model set to true if you need a model instance back
+     * @param int   $id           of model you want to update
+     * @param array $data         of model data that should be updated
+     * @param bool  $return_model set to true if you need a model instance back
      */
     public function update(int $id, array $data, $return_model = false);
 
     /**
      * Delete item either by softdelete or harddelete.
      *
-     * @param int $id
      * @param bool $hardDelete
      */
     public function delete(int $id, $hardDelete = false);
 
     /**
      * Restore a soft deleted model.
-     *
-     * @param int $id
      */
     public function restore(int $id);
 
     /**
      * Set hasMany relationship by adding the related model, data and
      * relation name.
-     *
-     * @param array $data
-     * @param string $relatedModel
-     * @param string $relation
      */
     public function withHasMany(array $data, string $relatedModel, string $relation);
 
     /**
      * Add the belongsToMany relationship data to be synced and define
      * the relationship name.
-     *
-     * @param array $data
-     * @param string $relation
      */
     public function withBelongsToMany(array $data, string $relation);
 
     /**
      * Handle a file or photo upload.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param string $field_name upload field name
-     * @param string $folder storage folder
+     * @param string $field_name   upload field name
+     * @param string $folder       storage folder
      * @param string $storage_disk storage disk to be used
-     * @param bool $randomize to randomize the filename
+     * @param bool   $randomize    to randomize the filename
      *
      * @return string filename
      */
