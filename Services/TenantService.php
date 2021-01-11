@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Config;
 //---- services ----
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
@@ -142,7 +141,7 @@ class TenantService {
     /**
      * @throws \ReflectionException
      */
-    public static function model(string $name): ?ModelContract {
+    public static function model(string $name): ?Model {
         $name = Str::snake($name);
         $class = self::config('xra.model.'.$name);
         if ('' == $class) {

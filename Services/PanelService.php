@@ -16,9 +16,9 @@ use Modules\Xot\Contracts\PanelContract;
 class PanelService {
     private static ?PanelService $_instance = null;
 
-    private static ModelContract $model;
+    private static Model $model;
 
-    private static PanelContract $panel;
+    private static ?PanelContract $panel;
 
     /*
     public function __construct($model){
@@ -46,11 +46,11 @@ class PanelService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function get(ModelContract $model): ?PanelContract {
+    public static function get(Model $model): ?PanelContract {
         return self::setModel($model)->panel();
     }
 
-    public static function setModel(ModelContract $model): self {
+    public static function setModel(Model $model): self {
         self::$model = $model;
 
         return self::getInstance();
