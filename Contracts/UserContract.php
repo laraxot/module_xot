@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Contracts;
 
 /**
@@ -84,7 +86,8 @@ namespace Modules\Xot\Contracts;
  *
  * @property \Modules\Blog\Models\Profile|null $profile
  *
- * @method bool hasRole($value)
+ * @method bool  hasRole($value)
+ * @method mixed role($value)
  */
 interface UserContract {
     /*

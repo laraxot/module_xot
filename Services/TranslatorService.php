@@ -96,6 +96,9 @@ class TranslatorService extends BaseTranslator {
         ];
     }
 
+    /**
+     * @return void
+     */
     public static function store(array $data) {
         $data = collect($data)->map(function ($v, $k) {
             $item = self::parse(['key' => $k]);
@@ -136,8 +139,10 @@ class TranslatorService extends BaseTranslator {
     }
 
     /**
-     * @param $key
-     * @param mixed $value
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
      */
     public static function set($key, $value) {
         $lang = app()->getLocale();

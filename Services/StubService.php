@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,8 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 /**
- * Class StubService
- * @package Modules\Xot\Services
+ * Class StubService.
  */
 class StubService {
     //-- model (object) or class (string)
@@ -16,10 +17,12 @@ class StubService {
     //-- create yes or not
 
     /**
-     * @param $params
-     * @return false|string|void
+     * @param array $params
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return false|string|void
      */
     public static function fromModel($params) {
         extract($params);
@@ -115,7 +118,7 @@ class StubService {
                 $params['class_name'] = $params['class_name'].'Policy';
                 break;
             default:
-                dddx('['.$stub_name.'] Unkwonn !');
+                dddx(['['.$stub_name.'] Unkwonn !']);
                 break;
         }
 
@@ -149,14 +152,12 @@ class StubService {
     }
 
     /**
-     * @param $model
-     * @param $name
-     * @param false $create
-     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      */
-    public static function getByModel($model, $name, $create = false) {
+    public static function getByModel(Model $model, string $name, bool $create = false) {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();
@@ -196,7 +197,7 @@ class StubService {
         }
         */
         if (! $create) {
-            dddx($panel.' NOT EXISTS !');
+            dddx([$panel.' NOT EXISTS !']);
         } else {
             /* -- 4 debug
         $t= new $panel;
@@ -212,7 +213,8 @@ class StubService {
     }
 
     /**
-     * @param $params
+     * @param array $params
+     *
      * @return array|void
      */
     public static function replaces($params) {
@@ -265,6 +267,7 @@ class StubService {
     /**
      * @param $model
      * @param $name
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
@@ -320,9 +323,9 @@ class StubService {
     }
 
     /**
-     * @param Model $model
-     * @return array
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return array
      */
     public static function fields(Model $model) {
         if (! method_exists($model, 'getFillable')) {
@@ -414,7 +417,8 @@ class StubService {
     }
 
     /**
-     * @param $params
+     * @param array $params
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */

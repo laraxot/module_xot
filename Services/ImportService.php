@@ -367,7 +367,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return array|void
      * @throws \Exception
      */
@@ -442,7 +442,7 @@ class ImportService {
 
     //https://phpnews.io/feeditem/chunked-transfer-encoding-in-php-with-guzzle
     /**
-     * @param $params
+     * @param array $params
      */
     public static function download($params) {
         //$url
@@ -526,7 +526,7 @@ class ImportService {
 
     //end function
     /**
-     * @param $params
+     * @param array $params
      * @return mixed|null
      */
     public static function pixabay($params) {
@@ -550,7 +550,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      */
     public static function pexels($params) {
         $lang = app()->getLocale();
@@ -564,7 +564,7 @@ class ImportService {
     //-------------------------------------------------------------------------
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed|string|void
      */
     public static function trans($params) {
@@ -577,7 +577,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      */
     public static function apertiumTrans($params) {
         //https://github.com/24aitor/Laralang/blob/master/src/Builder/ApertiumTrans.php
@@ -587,7 +587,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return string
      */
     public static function googleTrans($params) {
@@ -612,7 +612,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed|void
      */
     public static function mymemoryTrans($params) {
@@ -643,7 +643,7 @@ class ImportService {
     //end mymemoryTrans;
 
     /**
-     * @param $params
+     * @param array $params
      * @return array
      */
     public static function getForms($params) {
@@ -670,7 +670,7 @@ class ImportService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return \Exception|GuzzleException|string|Crawler
      */
     public static function formRequest($params) {

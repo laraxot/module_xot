@@ -66,7 +66,7 @@ class PanelRouteService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string|void
      */
@@ -173,7 +173,7 @@ class PanelRouteService {
     // se n=1 => 'container0.container1'
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string
      */
@@ -197,7 +197,7 @@ class PanelRouteService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string|string[]|void
      */

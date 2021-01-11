@@ -58,7 +58,7 @@ class ImageService {
     //---- setter
 
     /**
-     * @param $params
+     * @param array $params
      */
     public static function init($params) {
         //$instance == self::getInstance();
@@ -148,7 +148,7 @@ class ImageService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return string|void
      */
     public static function image_resized_cropped($params) {
@@ -338,7 +338,7 @@ class ImageService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return string|void|null
      */
     public static function image_resized_canvas($params) {

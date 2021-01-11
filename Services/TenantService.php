@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
 //use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
 //---- services ----
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
@@ -17,10 +18,7 @@ use Modules\Xot\Services\PanelService as Panel;
  * Class TenantService.
  */
 class TenantService {
-    /**
-     * @return string
-     */
-    public static function getName(array $params = []) {
+    public static function getName(array $params = []): string {
         $default = 'localhost';
         $server_name = $default;
         if (isset($_SERVER['SERVER_NAME']) && '127.0.0.1' != $_SERVER['SERVER_NAME']) {
@@ -62,10 +60,7 @@ class TenantService {
 
     //end function
 
-    /**
-     * @return string|string[]
-     */
-    public static function filePath(string $filename) {
+    public static function filePath(string $filename): string {
         $path = base_path('config/'.self::getName().'/'.$filename);
         $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
 
@@ -109,10 +104,7 @@ class TenantService {
         return config($key);
     }
 
-    /**
-     * @param $params
-     */
-    public static function saveConfig($params) {
+    public static function saveConfig(array $params): void {
         $name = 'xra';
         $data = [];
         extract($params);
@@ -147,20 +139,16 @@ class TenantService {
     }
 
     /**
-     * @param $name
-     *
      * @throws \ReflectionException
-     *
-     * @return array|false|mixed
      */
-    public static function model($name) {
+    public static function model(string $name): ?Model {
         $name = Str::snake($name);
         $class = self::config('xra.model.'.$name);
         if ('' == $class) {
             $models = getAllModulesModels();
             if (! isset($models[$name])) {
                 //abort(403, 'Unauthorized path '.$name);
-                return false;
+                return null;
             }
             $class = $models[$name];
             $data = [];
@@ -185,14 +173,10 @@ class TenantService {
     }
 
     /**
-     * @param $name
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
-     *
-     * @return mixed
      */
-    public static function modelEager($name) {
+    public static function modelEager(string $name): \Illuminate\Database\Eloquent\Builder {
         $model = self::model($name);
         $panel = Panel::get($model);
         $with = $panel->with();

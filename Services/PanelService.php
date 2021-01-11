@@ -99,7 +99,7 @@ class PanelService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return mixed
      */
     public function imageHtml($params) {
@@ -268,7 +268,7 @@ class PanelService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */

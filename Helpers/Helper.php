@@ -74,7 +74,7 @@ if (! function_exists('str_contains')) {
 
 if (! \function_exists('dddx')) {
     /**
-     * @param $params
+     * @param array $params
      */
     function dddx($params) {
         $tmp = \debug_backtrace();
@@ -99,7 +99,7 @@ if (! \function_exists('dddx')) {
 
 if (! \function_exists('getFilename')) {
     /**
-     * @param $params
+     * @param array $params
      * @return string
      */
     function getFilename($params) {
@@ -415,7 +415,7 @@ if (! \function_exists('xotModel')) {
 
 if (! \function_exists('transFields')) {
     /**
-     * @param $params
+     * @param array $params
      * @return mixed|stdClass
      */
     function transFields($params) {
@@ -506,7 +506,7 @@ if (! \function_exists('deltaTime')) {
 
 if (! \function_exists('debug_getter_obj')) {
     /**
-     * @param $params
+     * @param array $params
      */
     function debug_getter_objOLD($params) {
         extract($params);
@@ -581,7 +581,7 @@ if (! \function_exists('debug_getter_obj')) {
     }//end function
 
     /**
-     * @param $params
+     * @param array $params
      * @return array|void
      * @throws ReflectionException
      */

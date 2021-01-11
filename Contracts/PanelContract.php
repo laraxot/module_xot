@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Contracts;
 
-use Illuminate\Support\Facades\Request;
+//use Illuminate\Support\Facades\Request;
 
 //use Illuminate\Contracts\Auth\UserProvider;
 
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- *  @property ModelContract|null                               $row
+ * @property ModelContract|null $row
+ *
+ * @method mixed findParentType($type)
  */
 interface PanelContract {
     /*

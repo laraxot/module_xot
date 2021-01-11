@@ -23,7 +23,7 @@ use Spipu\Html2Pdf\Html2Pdf;
  */
 class HtmlService {
     /**
-     * @param $params
+     * @param array $params
      * @return string|void
      */
     public static function toPdf($params) {

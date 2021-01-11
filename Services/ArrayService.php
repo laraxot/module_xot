@@ -18,7 +18,7 @@ class ArrayService {
     protected static int $export_processor = 1;
 
     /**
-     * @param $params
+     * @param array $params
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -46,7 +46,7 @@ class ArrayService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|string|\Symfony\Component\HttpFoundation\BinaryFileResponse
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      */
@@ -101,7 +101,7 @@ class ArrayService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      */
     public static function save($params) {
         extract($params);

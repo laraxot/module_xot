@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\File;
@@ -10,15 +12,16 @@ use Modules\Xot\Services\PanelService as Panel;
 use ZipArchive;
 
 /**
- * Class ZipService
- * @package Modules\Xot\Services
+ * Class ZipService.
  */
 class ZipService {
     /**
-     * @param $params
-     * @return string|\Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     * @param array $params
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return string|\Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public static function fromRowsPdf($params) {
         ini_set('max_execution_time', '3600');
@@ -51,7 +54,7 @@ class ZipService {
         $zip = new ZipArchive();
         $filename_zip = Storage::disk('cache')->path($filename_zip);
         if (true !== $zip->open($filename_zip, ZipArchive::CREATE)) {
-            dddx('NO');
+            dddx(['NO']);
         }
 
         foreach ($rows as $row) {

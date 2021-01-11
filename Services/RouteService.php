@@ -138,7 +138,7 @@ class RouteService {
     // se n=1 => 'container0.container1'
 
     /**
-     * @param $params
+     * @param array $params
      * @return string
      */
     public static function getRoutenameN($params) {

@@ -425,7 +425,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      */
     public function pivotRules($params) {
         extract($params);
@@ -950,7 +950,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return mixed
      */
@@ -969,7 +969,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string
      */
@@ -986,7 +986,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string|string[]
      */
@@ -1067,7 +1067,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string
      */
@@ -1099,7 +1099,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $params
+     * @param array $params
      *
      * @return string|string[]|void
      */

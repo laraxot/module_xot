@@ -146,7 +146,7 @@ class PanelFormService {
     }
 
     /**
-     * @param $params
+     * @param array $params
      * @return string|void|null
      */
     public function btnHtml($params) {
