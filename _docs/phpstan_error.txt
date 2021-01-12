@@ -1,0 +1,55 @@
+modulo Food:
+
+  Line   Http\Livewire\RestaurantOwnerBellBoys.php
+ ------ ------------------------------------------------
+  99     Call to an undefined method
+         Modules\Xot\Contracts\PivotContract::update().
+
+
+
+
+
+
+modulo Formx
+  Line   Datagrid.php
+ ------ -----------------------------------------------------------------
+  40     PHPDoc tag @param has invalid value ($_panel): Unexpected token
+         "$_panel", expected type at offset 291
+
+
+
+
+
+modulo Theme
+(ce ne sono parecchie di questi errori con unexpected $this)
+  Line   Models\Panels\Actions\TestAction.php
+ ------ --------------------------------------------------------------------
+         ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Theme\Models\Panels\Actions\TestAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols
+  5      ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Xot\Models\Panels\Actions\XotBasePanelAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols
+  11     ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Xot\Models\Panels\Actions\XotBasePanelAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols
+ ------ --------------------------------------------------------------------
+
+ ------ --------------------------------------------------------------------
+  Line   Models\Panels\HomePanel.php
+ ------ --------------------------------------------------------------------
+         ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Xot\Models\Panels\Actions\ArtisanAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols
+  55     ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Xot\Models\Panels\Actions\ArtisanAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols
+  56     ParseError (syntax error, unexpected '$this' (T_VARIABLE)) thrown
+         while looking for class
+         Modules\Xot\Models\Panels\Actions\ArtisanAction.
+         💡 Learn more at https://phpstan.org/user-guide/discovering-symbols

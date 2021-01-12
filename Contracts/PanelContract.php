@@ -46,7 +46,7 @@ use Modules\Xot\Services\PanelRouteService;
  * @method mixed                          rules($params)
  * @method array                          rulesMessages()
  * @method array                          areas()
- * @method array                          indexFields($params)
+ * @method array                          indexFields()
  */
 interface PanelContract {
     public function setRows($rows);
