@@ -108,7 +108,10 @@ class ImageService {
         self::$height = $val;
     }
 
-    public static function setSrc(string $val): void {
+    /**
+     * @param string|null $val
+     */
+    public static function setSrc($val): void {
         if ('' == $val) {
             $val = public_path('img/nophoto.jpg');
         }

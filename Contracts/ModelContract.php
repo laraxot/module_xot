@@ -9,7 +9,7 @@ use Modules\Food\Contracts\BellBoyContract;
 use Modules\Food\Models\RestaurantOwner;
 
 /**
- * Modules\Xot\Contracts\PanelContract.
+ * Modules\Xot\Contracts\ModelContract.
  *
  * @property int                             $id
  * @property int|null                        $auth_user_id
@@ -26,7 +26,6 @@ use Modules\Food\Models\RestaurantOwner;
  * @property PivotContract|null              $pivot
  *
  * @method mixed  getKey()
- * @method bool   isBellBoyAuthID($auth_user_id)
  * @method string getRouteKey()
  * @method string getRouteKeyName()
  * @method string getTable()
