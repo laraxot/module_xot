@@ -352,17 +352,23 @@ abstract class XotBasePanelAction {
     }
 
     //end btnItem
-    /*
+    //* --
     public function updateRow($params = []) {
         $row = $this->row;
-        $container = null;
         extract($params);
+        $this->panel->setRow($row);
+        $data = request()->all();
+        $this->panel->update($data);
 
+        return $this->panel;
+        /*
         $item = $row;
         $up = UpdateJob::dispatchNow($container, $item);
         return $up;
+        */
     }
-    */
+
+    //*/
 
     /**
      * @param array $params

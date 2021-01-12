@@ -6,6 +6,7 @@ namespace Modules\Xot\Services;
 
 //----------- Requests ----------
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Schema;
 use Modules\Xot\Contracts\ModelContract;
 
 // per dizionario morph
@@ -46,4 +47,87 @@ class ModelService {
 
         return $data;
     }
+
+    public static function indexIfNotExists(ModelContract $model, $index) {
+        if (\is_array($index)) {
+            foreach ($index as $i) {
+                self::indexIfNotExists($model, $i);
+            }
+        } else {
+            $tbl = $model->getTable();
+            $conn = $model->getConnection();
+            $dbSchemaManager = $conn->getDoctrineSchemaManager();
+            $doctrineTable = $dbSchemaManager->listTableDetails($tbl);
+            //faremo dei controlli per non aggiungere troppe chiavi
+            if (! $doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
+                Schema::connection($conn->getName())->table(
+                    $tbl,
+                    function ($table) use ($index) {
+                        $table->index($index);
+                    }
+                );
+            }
+        }
+    }
+
+    /*
+    public static function indexIfNotExistsStatic($index, $tbl = null, $conn = null) { //viene chiamato all'interno di filtertrait che e' static ..
+        if (null == $tbl) {
+            $self = new self();
+            $tbl = $self->getTable();
+            if (null == $conn) {
+                $conn = $self->getConnection();
+            }
+        }
+        if (\is_array($index)) {
+            foreach ($index as $i) {
+                self::indexIfNotExistsStatic($i, $tbl, $conn);
+            }
+        } else {
+            $dbSchemaManager = $conn->getDoctrineSchemaManager();
+            $doctrineTable = $dbSchemaManager->listTableDetails($tbl);
+            //faremo dei controlli per non aggiungere troppe chiavi
+            //-- metodo alternativo da testare
+            //if (collect(DB::select("SHOW INDEXES FROM persons"))->pluck('Key_name')->contains('persons_body_unique')) {
+            //    $table->dropUnique('persons_body_unique');
+            //}
+            //
+            //-- altro metodo da testare
+            //    $indexesFound = $dbSchemaManager->listTableIndexes($tbl);
+            //
+            try {
+                if (! $doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
+                    Schema::connection($conn->getName())->table($tbl, function ($table) use ($index) {
+                        $table->index($index);
+                    });
+                }
+            } catch (\Exception $e) {
+                echo '<small>'.$e->getMessage().'</small>';
+            }
+        }
+    }
+
+    public function indexIfNotExists($index, $tbl = null, $conn = null) {
+        if (null == $tbl) {
+            $tbl = $this->getTable();
+        }
+        if (null == $conn) {
+            $conn = $this->getConnection();
+        }
+        if (\is_array($index)) {
+            foreach ($index as $i) {
+                $this->indexIfNotExists($i, $tbl, $conn);
+            }
+        } else {
+            $dbSchemaManager = $conn->getDoctrineSchemaManager();
+            $doctrineTable = $dbSchemaManager->listTableDetails($tbl);
+            //faremo dei controlli per non aggiungere troppe chiavi
+            if (! $doctrineTable->hasIndex($tbl.'_'.$index.'_index')) {
+                Schema::connection($conn->getName())->table($tbl, function ($table) use ($index) {
+                    $table->index($index);
+                });
+            }
+        }
+    }
+    */
 }

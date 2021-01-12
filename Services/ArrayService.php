@@ -114,8 +114,13 @@ class ArrayService {
 
             return;
         }
-        $content = '<'.'?php '.chr(13).'return '.var_export($data, true).';'.chr(13);
+        $content = var_export($data, true);
+
+        // HHVM fails at __set_state, so just use object cast for now
         $content = str_replace('stdClass::__set_state', '(object)', $content);
+
+        $content = '<'.'?php '.chr(13).'return '.$content.';'.chr(13);
+        //$content = str_replace('stdClass::__set_state', '(object)', $content);
         File::makeDirectory(dirname($filename), 0775, true, true);
         File::put($filename, $content);
     }

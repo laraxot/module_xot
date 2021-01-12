@@ -2,16 +2,20 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 /**
- * Class RouteService
- * @package Modules\Xot\Services
+ * Class RouteService.
+ * Modules\Xot\Services\RouteService.
+ *
+ * @method string urlAct($params)
  */
 class RouteService {
     /**
      * @param array $params
+     *
      * @return array|bool|mixed
      */
     public static function inAdmin($params = []) {
@@ -35,7 +39,44 @@ class RouteService {
         return false;
     }
 
-    /*
+    //--- sarebbe deprecata ma il mal di testa
+
+    public static function urlAct(array $params): string {
+        $query = [];
+        $act = 'show';
+        $row = (object) [];
+        extract($params);
+        /*
+        $mutator = $act.'_url';
+        try {
+            $route = $row->$mutator;
+        } catch (\Exception $e) {
+            $route = '#';
+        }
+        */
+        $route_action = \Route::currentRouteAction();
+        $old_act = Str::snake(Str::after($route_action, '@'));
+        $routename = Request::route()->getName();
+        $old_act_route = last(explode('.', $routename));
+
+        $routename_act = Str::before($routename, $old_act_route).''.$act;
+        try {
+            $route_params = \Route::current()->parameters();
+        } catch (\Exception $e) {
+            $route_params = [];
+        }
+        if (\Route::has($routename_act)) {
+            $parz = array_merge($route_params, [$row]);
+            $parz = array_merge($parz, $query);
+            $route = route($routename_act, $parz);
+        } else {
+            $route = '#'.$routename_act;
+        }
+
+        return $route;
+    }
+
+    /* // move to RoutePanelService
     public static function urlPanel($params) {
         extract($params);
 
@@ -139,6 +180,7 @@ class RouteService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public static function getRoutenameN($params) {
@@ -241,6 +283,7 @@ class RouteService {
 
     /**
      * @param array $params
+     *
      * @return string
      */
     public static function urlLang($params = []) {

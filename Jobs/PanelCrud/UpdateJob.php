@@ -5,12 +5,12 @@ namespace Modules\Xot\Jobs\PanelCrud;
 use Illuminate\Support\Arr;
 //----------- Requests ----------
 //------------ services ----------
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
- * Class UpdateJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class UpdateJob.
  */
 class UpdateJob extends XotBaseJob {
     /**
@@ -30,6 +30,7 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * @param array $data
+     *
      * @return $this
      */
     public function setData($data) {
@@ -40,11 +41,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *--- hasOne ----.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsHasOne(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsHasOne(ModelContract $model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             if (! is_array($data)) {
@@ -60,11 +58,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *  belongsTo.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsBelongsTo(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsBelongsTo(ModelContract $model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             $model->$name()->update($data);
@@ -77,11 +72,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- hasMany ---.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsHasMany(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsHasMany(ModelContract $model, string $name, array $data): void {
         $rows = $model->$name();
         debug_getter_obj(['obj' => $rows]);
         //---------- TO DO ------------//
@@ -91,11 +83,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- belongsToMany.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsBelongsToMany(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsBelongsToMany(ModelContract $model, string $name, array $data): void {
         //$model->$name()->syncWithoutDetaching($data);
         $model->$name()->sync($data);
     }
@@ -108,11 +97,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphOne.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsMorphOne(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsMorphOne(ModelContract $model, string $name, array $data): void {
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -127,11 +113,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphMany.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsMorphMany(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsMorphMany(ModelContract $model, string $name, array $data): void {
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
             if (! is_array($v)) {
@@ -148,11 +131,8 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphToMany.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsMorphToMany(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsMorphToMany(ModelContract $model, string $name, array $data): void {
         //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
@@ -210,20 +190,12 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * pivot.
-     * @param $model
-     * @param $name
-     * @param array $data
      */
-    public function updateRelationshipsPivot(ModelContract $model,string $name,array $data):void {
+    public function updateRelationshipsPivot(ModelContract $model, string $name, array $data): void {
         $model->$name->update($data);
     }
 
-    /**
-     * @param $model
-     * @param $name
-     * @param array $data
-     */
-    public function saveMultiselectTwoSides(ModelContract $model,string $name,array $data):void {
+    public function saveMultiselectTwoSides(ModelContract $model, string $name, array $data): void {
         $items = $model->$name();
         $related = $items->getRelated();
         $container_obj = $model;

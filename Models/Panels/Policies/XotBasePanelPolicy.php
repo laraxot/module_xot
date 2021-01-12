@@ -117,6 +117,8 @@ abstract class XotBasePanelPolicy {
     }
 
     public function forceDelete(UserContract $user, PanelContract $panel): bool {
+
+        return false;
     }
 
     public function detach(UserContract $user, PanelContract $panel): bool {
@@ -137,8 +139,12 @@ abstract class XotBasePanelPolicy {
      * Determine whether the user can view any DocDummyPluralModel.
      */
     public function viewAny(UserContract $user): bool {
+
+        return true;
     }
 
     public function view(UserContract $user, PanelContract $panel): bool {
+
+        return true;
     }
 }
