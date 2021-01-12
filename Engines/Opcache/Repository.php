@@ -17,7 +17,7 @@ class Repository extends TaggedCache implements CacheContract {
      * Override parent method to avoid cache slamming ('thundering herd problem').
      *
      * @param string $key
-     * @param $minutes
+     * @param int    $minutes
      */
     public function remember($key, $minutes, Closure $callback) {
         /*

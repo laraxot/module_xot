@@ -15,9 +15,6 @@ use Illuminate\Support\Str;
  * Class XotBaseMigration.
  */
 abstract class XotBaseMigration extends Migration {
-    /**
-     * @var mixed
-     */
     protected ?Model $model = null;
 
     //*
@@ -123,7 +120,7 @@ abstract class XotBaseMigration extends Migration {
     }
 
     /**
-     * @param $col
+     * @param string $col
      *
      * @return bool
      */
@@ -132,7 +129,7 @@ abstract class XotBaseMigration extends Migration {
     }
 
     /**
-     * @param $sql
+     * @param string $sql
      */
     public function query($sql) {
         $this->getConn()->getConnection()->statement($sql);

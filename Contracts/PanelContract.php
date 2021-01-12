@@ -42,6 +42,8 @@ use Modules\Xot\Services\PanelRouteService;
  * @method mixed                          out($data=null)
  * @method mixed                          callItemActionWithGate($act)
  * @method mixed                          rules($params)
+ * @method array                          rulesMessages()
+ * @method array                          areas()
  */
 interface PanelContract {
     /**
