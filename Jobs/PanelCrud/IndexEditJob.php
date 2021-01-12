@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
+
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
 /**
- * Class IndexEditJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class IndexEditJob.
  */
 class IndexEditJob extends XotBaseJob {
-    /**
-     * @return mixed|\Modules\Xot\Contracts\PanelContract
-     */
-    public function handle() {
+    public function handle(): PanelContract {
         if ('POST' == \Request::getMethod()) {
             return IndexUpdateJob::dispatchNow($this->data, $this->panel);
         }

@@ -25,6 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Settings whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Settings whereUpdatedBy($value)
  * @mixin \Eloquent
+ * @property string $keywords
+ * @property string $author
+ * @method static \Illuminate\Database\Eloquent\Builder|Settings whereAuthor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Settings whereKeywords($value)
  */
 class Settings extends Model {
     /**

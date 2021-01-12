@@ -31,6 +31,8 @@ use Modules\Xot\Services\StubService;
 
 /**
  * Class XotBasePanel.
+ *
+ * Modules\Xot\Models\Panels\XotBasePanel.
  */
 abstract class XotBasePanel implements PanelContract {
     /**
@@ -46,8 +48,9 @@ abstract class XotBasePanel implements PanelContract {
      * @var \Illuminate\Contracts\Foundation\Application|mixed|null
      */
     public $row = null;
+
     /**
-     * @var array
+     * @var \Illuminate\Database\Eloquent\Collection|Builder|ModelContract[]
      */
     public $rows = null;
 
@@ -56,6 +59,7 @@ abstract class XotBasePanel implements PanelContract {
     public $in_admin = null;
 
     public ?PanelPresenterContract $presenter = null;
+
     /**
      * @var object|mixed|null
      */
@@ -179,7 +183,7 @@ abstract class XotBasePanel implements PanelContract {
         return $row->getKey();
     }
 
-    public function setItem(string $guid) {
+    public function setItem(string $guid): self {
         $model = $this->row;
         $rows = $this->rows;
         $pk = $model->getRouteKeyName($this->in_admin);
@@ -191,13 +195,18 @@ abstract class XotBasePanel implements PanelContract {
 
         $value = Str::slug($guid); //retrocompatibilita'
         if ('guid' == $pk_full) {
-            $rows = $rows->whereHas('post', function (Builder $query) use ($value) {
-                $query->where('guid', $value);
-            });
+            $rows = $rows->whereHas(
+                'post',
+                function (Builder $query) use ($value) {
+                    $query->where('guid', $value);
+                }
+            );
         } else {
             $rows = $rows->where([$pk_full => $value]);
         }
         $this->row = $rows->first();
+
+        return $this;
     }
 
     //funzione/flag da settare a true ad ogni pannello/modello che abbia le traduzioni
@@ -578,12 +587,8 @@ abstract class XotBasePanel implements PanelContract {
         return $query;
     }
 
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function applyJoin($query) {
+    /* da rivalutare
+    public function applyJoin(Builder $query): Builder {
         $model = $query->getModel();
         if (method_exists($model, 'scopeWithPost')) {
             $query = $query->withPost('a');
@@ -591,24 +596,24 @@ abstract class XotBasePanel implements PanelContract {
 
         return $query;
     }
+    */
 
-    /**
-     * @param $query
-     * @param $filters
-     *
-     * @return mixed|void
-     */
-    public function applyFilter($query, $filters) {
+    public function applyFilter(Builder $query, array $filters): Builder {
         //https://github.com/spatie/laravel-query-builder
         $lang = app()->getLocale();
         $filters_fields = $this->filters();
 
-        $filters_rules = collect($filters_fields)->filter(function ($item) {
-            return isset($item->rules);
-        })->map(function ($item) {
-            return [$item->param_name => $item->rules];
-        })->collapse()
-            ->all();
+        $filters_rules = collect($filters_fields)
+            ->filter(
+                function ($item) {
+                    return isset($item->rules);
+                }
+            )->map(
+                function ($item) {
+                    return [$item->param_name => $item->rules];
+                }
+            )->collapse()
+        ->all();
 
         $validator = Validator::make($filters, $filters_rules);
         if ($validator->fails()) {
@@ -633,7 +638,7 @@ abstract class XotBasePanel implements PanelContract {
                     if (! isset($v->field_name)) {
                         dddx(['err' => 'field_name is missing']);
 
-                        return;
+                        return $query;
                     }
                     $query = $query->{$v->where_method}($v->field_name, $filter_val);
                 } else {
@@ -645,13 +650,7 @@ abstract class XotBasePanel implements PanelContract {
         return $query;
     }
 
-    /**
-     * @param $query
-     * @param $q
-     *
-     * @return mixed
-     */
-    public function applySearch($query, ?string $q) {
+    public function applySearch(Builder $query, ?string $q): Builder {
         if (! isset($q)) {
             return $query;
         }
@@ -675,9 +674,12 @@ abstract class XotBasePanel implements PanelContract {
                             if (Str::contains($v, '.')) {
                                 [$rel, $rel_field] = explode('.', $v);
                                 //dddx([$rel, $rel_field, $q]);
-                                $subquery->orWhereHas($rel, function ($subquery1) use ($rel_field, $q) {
-                                    $subquery1->where($rel_field, 'like', '%'.$q.'%');
-                                });
+                                $subquery->orWhereHas(
+                                    $rel,
+                                    function (Builder $subquery1) use ($rel_field, $q) {
+                                        $subquery1->where($rel_field, 'like', '%'.$q.'%');
+                                    }
+                                );
                             } else {
                                 $subquery->orWhere($v, 'like', '%'.$q.'%');
                             }
@@ -696,17 +698,13 @@ abstract class XotBasePanel implements PanelContract {
 
                 break;
         } //end switch
+
+        return $query;
     }
 
     //end applySearch
 
-    /**
-     * @param $query
-     * @param $sort
-     *
-     * @return mixed
-     */
-    public function applySort($query, $sort) {
+    public function applySort(Builder $query, $sort): Builder {
         if (! is_array($sort)) {
             return $query;
         }
@@ -728,12 +726,7 @@ abstract class XotBasePanel implements PanelContract {
         return $query;
     }
 
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function indexRows(Request $request, $query) {
+    public function indexRows(Request $request, $query): Builder {
         $data = $request->all();
 
         $filters = $data;
@@ -746,7 +739,7 @@ abstract class XotBasePanel implements PanelContract {
         $query = $this->indexQuery($data, $query);
 
         //$query=$query->withPost('a');
-        $query = $this->applyJoin($query);
+        //$query = $this->applyJoin($query);
         $query = $this->applyFilter($query, $filters);
         $query = $this->applySearch($query, $q);
 
@@ -1038,7 +1031,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $lang
+     * @param string $lang
      *
      * @return string
      */
@@ -1094,10 +1087,10 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $name
-     * @param null $id
+     * @param string $name
+     * @param ?int   $id
      *
-     * @return null
+     * @return self
      */
     public function relatedName($name, $id = null) {
         //bell_boy => Modules\Food\Models\BellBoy
@@ -1334,19 +1327,11 @@ abstract class XotBasePanel implements PanelContract {
         return (new PanelTabService($this))->getRowTabs();
     }
 
-    /**
-     * @return array
-     */
-    public function getTabs() {
+    public function getTabs(): array {
         return (new PanelTabService($this))->getTabs();
     }
 
-    /**
-     * @param null $data
-     *
-     * @return null
-     */
-    public function rows($data = null) {
+    public function rows(?array $data = null): Builder {
         if (null == $data) {
             $data = request()->all();
         }
@@ -1376,7 +1361,7 @@ abstract class XotBasePanel implements PanelContract {
         $query = $this->indexQuery($data, $query);
 
         //$query=$query->withPost('a');
-        $query = $this->applyJoin($query);
+        //$query = $this->applyJoin($query);
         $query = $this->applyFilter($query, $filters);
         $query = $this->applySearch($query, $q);
         $query = $this->applySort($query, $sort);
@@ -1556,9 +1541,9 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param $relationship
+     * @param string $relationship
      *
-     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
+     * @return self
      */
     public function related($relationship) {
         $related = $this->row->$relationship()->getRelated();
@@ -1589,6 +1574,8 @@ abstract class XotBasePanel implements PanelContract {
      * @return array
      */
     public function breadcrumbs() {
+        return [];
+        /*
         $curr = $this;
         $parents = [];
         while (null != $curr) {
@@ -1622,6 +1609,7 @@ abstract class XotBasePanel implements PanelContract {
         //dddx($bread);
 
         return $bread;
+        */
     }
 
     /**

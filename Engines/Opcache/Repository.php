@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Engines\Opcache;
 
 use Closure;
@@ -7,16 +9,15 @@ use Illuminate\Cache\TaggedCache;
 use Illuminate\Contracts\Cache\Repository as CacheContract;
 
 /**
- * Class Repository
- * @package Modules\Xot\Engines\Opcache
+ * Class Repository.
  */
 class Repository extends TaggedCache implements CacheContract {
     /**
      * Get an item from the cache, or store the default value.
      * Override parent method to avoid cache slamming ('thundering herd problem').
-     * @param $key
+     *
+     * @param string $key
      * @param $minutes
-     * @param Closure $callback
      */
     public function remember($key, $minutes, Closure $callback) {
         /*

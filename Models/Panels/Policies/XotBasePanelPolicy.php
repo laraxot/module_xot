@@ -18,14 +18,16 @@ abstract class XotBasePanelPolicy {
 
     /**
      * @param UserContract $user
-     * @param $ability
+     * @param string       $ability
      *
-     * @return bool
+     * @return bool|null
      */
     public function before($user, $ability) {
         if (is_object($user) && Panel::get($user)->isSuperAdmin()) {
             return true;
         }
+
+        return;
     }
 
     public function index(?UserContract $user, PanelContract $panel): bool {
@@ -117,7 +119,6 @@ abstract class XotBasePanelPolicy {
     }
 
     public function forceDelete(UserContract $user, PanelContract $panel): bool {
-
         return false;
     }
 
@@ -139,12 +140,10 @@ abstract class XotBasePanelPolicy {
      * Determine whether the user can view any DocDummyPluralModel.
      */
     public function viewAny(UserContract $user): bool {
-
         return true;
     }
 
     public function view(UserContract $user, PanelContract $panel): bool {
-
         return true;
     }
 }

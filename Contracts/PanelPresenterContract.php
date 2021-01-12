@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Contracts;
 
 use Illuminate\Support\Collection;
 
 /**
- * Interface PanelPresenterContract
- * @package Modules\Xot\Contracts
+ * Interface PanelPresenterContract.
  */
 interface PanelPresenterContract {
     /**
-     * @param Collection|null $items
      * @return mixed
      */
     public function index(?Collection $items);
 
     /**
-     * @param PanelContract $panel
      * @return mixed
      */
     public function setPanel(PanelContract &$panel);
+
+    public function out(?array $params = null);
 }

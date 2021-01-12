@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 //--- services ---
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
@@ -59,7 +60,7 @@ abstract class XotBaseContainerController extends Controller {
 
     /**
      * @param string $method
-     * @param $args
+     * @param array  $args
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
@@ -88,7 +89,7 @@ abstract class XotBaseContainerController extends Controller {
 
     /**
      * @param string $method
-     * @param $args
+     * @param array  $args
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
@@ -108,12 +109,9 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     /**
-     * @param string $method
-     * @param PanelContract $panel
-     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
-    public function notAuthorized($method, $panel) {
+    public function notAuthorized(string $method, PanelContract $panel) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
             //$request = \Modules\Xot\Http\Requests\XotRequest::capture();

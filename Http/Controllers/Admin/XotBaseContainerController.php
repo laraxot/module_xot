@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 //--- services ---
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PolicyService;
@@ -13,16 +16,15 @@ use Modules\Xot\Services\TenantService as Tenant;
 use Nwidart\Modules\Facades\Module;
 
 /**
- * Class XotBaseContainerController
- * @package Modules\Xot\Http\Controllers\Admin
+ * Class XotBaseContainerController.
  */
 abstract class XotBaseContainerController extends Controller {
-
     protected $panel;
 
     /**
      * @param string $method
-     * @param array $args
+     * @param array  $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
      */
     public function __call($method, $args) {
@@ -65,7 +67,8 @@ abstract class XotBaseContainerController extends Controller {
 
     /**
      * @param string $method
-     * @param $args
+     * @param array  $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function __callRouteAct($method, $args) {
@@ -97,7 +100,8 @@ abstract class XotBaseContainerController extends Controller {
 
     /**
      * @param string $method
-     * @param $args
+     * @param array  $args
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function __callPanelAct($method, $args) {
@@ -127,8 +131,9 @@ abstract class XotBaseContainerController extends Controller {
     }
 
     /**
-     * @param string $method
+     * @param string        $method
      * @param PanelContract $panel
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function notAuthorized($method, $panel) {

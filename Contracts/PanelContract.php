@@ -36,6 +36,12 @@ use Modules\Xot\Services\PanelRouteService;
  * @method bool                           isSuperAdmin()
  * @method mixed                          itemAction()
  * @method string|string[]|void           relatedUrl()
+ * @method string                         url($params)
+ * @method self                           setRow($row)
+ * @method self                           update($data)
+ * @method mixed                          out($data=null)
+ * @method mixed                          callItemActionWithGate($act)
+ * @method mixed                          rules($params)
  */
 interface PanelContract {
     /**
@@ -57,6 +63,8 @@ interface PanelContract {
     public function itemAction($act);
 
     public function relatedUrl($params);
+
+    public function setLabel(string $label): ModelContract;
 
     /*
     public function __construct($model = null);

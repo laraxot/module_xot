@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
+
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
 /**
- * Class EditJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class EditJob.
  */
 class EditJob extends XotBaseJob {
-    /**
-     * @return \Modules\Xot\Contracts\PanelContract
-     */
-    public function handle() {
+    public function handle(): PanelContract {
         return $this->panel;
     }
 }

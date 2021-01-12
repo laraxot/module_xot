@@ -33,6 +33,12 @@ use Modules\Food\Models\RestaurantOwner;
  * @method array  getFillable()
  * @method mixed  fill($array)
  * @method mixed  getConnection()
+ * @method mixed  update($params)
+ * @method mixed  delete($params)
+ * @method mixed  detach($params)
+ * @method mixed  attach($params)
+ * @method mixed  save($params)
+ * @mixin \Eloquent
  */
 interface ModelContract {
 }

@@ -6,15 +6,18 @@ namespace Modules\Xot\Models\Panels\Actions;
 
 use ErrorException;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 //use Illuminate\Database\Eloquent\Model;
 //use Laravel\Scout\Searchable;
 
 //----------  SERVICES --------------------------
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Database\Eloquent\Collection;
 //------------ jobs ----------------------------
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
@@ -25,14 +28,17 @@ abstract class XotBasePanelAction {
     public bool $onContainer = false;
 
     public bool $onItem = false;
+
     /**
      * @var object|null
      */
     public $row = null;
+
     /**
-     * @var iterable|null
+     * @var Collection|ModelContract[]|Builder|null
      */
     public $rows = null;
+
     /**
      * @var PanelContract|null
      */
@@ -170,12 +176,7 @@ abstract class XotBasePanelAction {
         return $this->urlContainer($params);
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
-    public function urlContainer($params = []) {
+    public function urlContainer(array $params = []): string {
         $panel = $this->panel;
         extract($params);
         $request = \Request::capture();
@@ -189,7 +190,8 @@ abstract class XotBasePanelAction {
         $this->data = array_merge(request()->query(), $this->data);
         //$this->data = collect($this->data)->except(['fingerprint', 'serverMemo', 'updates'])->all();
 
-        $url = $panel->indexUrl();
+        //$url = $panel->indexUrl();
+        $url = $panel->url(['act' => 'index']);
         $url = url_queries(['_act' => $name], $url);
         $this->data['page'] = 1;
         $this->data['_act'] = $name;
@@ -200,8 +202,8 @@ abstract class XotBasePanelAction {
     }
 
     /**
-     * @param $key
-     * @param null $value
+     * @param array|string $key
+     * @param null         $value
      *
      * @return $this
      */
@@ -376,6 +378,7 @@ abstract class XotBasePanelAction {
      * @return mixed
      */
     public function pdf($params = []) {
+        /*
         if (null == $this->row) {
             $this->row = clone($this->rows)->get()[0];
             if (! is_object($this->row)) {
@@ -385,7 +388,7 @@ abstract class XotBasePanelAction {
         }
         $panel = Panel::get($this->row);
         $panel->setRows($this->rows);
-
-        return $panel->pdf($params);
+        */
+        return $this->panel->pdf($params);
     }
 }

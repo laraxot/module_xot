@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
+
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
 /**
- * Class IndexOrderJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class IndexOrderJob.
  */
 class IndexOrderJob extends XotBaseJob {
-    /**
-     * @return \Modules\Xot\Contracts\PanelContract
-     */
-    public function handle() {
+    public function handle(): PanelContract {
         return $this->panel;
     }
 }

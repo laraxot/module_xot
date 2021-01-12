@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 
 //use Modules\Food\Models\Profile;
 //--- Rules ---
 
 /**
- * Class XotBaseRequest
- * @package Modules\Xot\Http\Requests
+ * Class XotBaseRequest.
  */
 abstract class XotBaseRequest extends FormRequest {
     //use FormRequestTrait;
@@ -50,7 +52,7 @@ abstract class XotBaseRequest extends FormRequest {
 
     /**
      * @param PanelContract $panel
-     * @param string $act
+     * @param string        $act
      */
     public function validatePanel($panel, $act = '') {
         $this->setPanel($panel);
@@ -80,8 +82,6 @@ abstract class XotBaseRequest extends FormRequest {
 
     /**
      * Cerco di rilevare quando viene chiamato.
-     *
-     * @param array $data
      */
     public function modifyInput(array $data) {
         dddx($data);
@@ -108,9 +108,7 @@ abstract class XotBaseRequest extends FormRequest {
     /**
      * Cerco di rilevare quando viene chiamato.
      *
-     *
      * @return array
-
      */
     public function validationData() {
         dddx('aaa');
@@ -119,8 +117,9 @@ abstract class XotBaseRequest extends FormRequest {
     }
 
     /**
-     * @param $field
-     * @param mixed $value
+     * @param string $field
+     * @param mixed  $value
+     *
      * @return Carbon|false|null
      */
     public function ConvDate($field, $value) {
@@ -133,8 +132,9 @@ abstract class XotBaseRequest extends FormRequest {
     }
 
     /**
-     * @param $field
-     * @param mixed $value
+     * @param string $field
+     * @param mixed  $value
+     *
      * @return Carbon|false|null
      */
     public function ConvDateTime($field, $value) {
@@ -147,8 +147,9 @@ abstract class XotBaseRequest extends FormRequest {
     }
 
     /**
-     * @param $field
-     * @param mixed $value
+     * @param string $field
+     * @param mixed  $value
+     *
      * @return Carbon|false|null
      */
     public function ConvDateTime2Fields($field, $value) {

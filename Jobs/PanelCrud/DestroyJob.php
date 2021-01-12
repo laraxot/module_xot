@@ -1,19 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
+
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
 /**
- * Class DestroyJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class DestroyJob.
  */
 class DestroyJob extends XotBaseJob {
-    /**
-     * @return \Modules\Xot\Contracts\PanelContract
-     */
-    public function handle() {
+    public function handle(): PanelContract {
         $this->panel->row->delete();
         \Session::flash('status', 'eliminato');
 

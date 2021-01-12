@@ -63,7 +63,7 @@ trait Getter {
 
     /**
      * @param string $method
-     * @param $args
+     * @param array  $args
      *
      * @return mixed|void
      */
@@ -90,7 +90,7 @@ trait Getter {
     //*/
 
     /**
-     * @param $index
+     * @param string $index
      *
      * @return bool
      */
@@ -99,8 +99,8 @@ trait Getter {
     }
 
     /**
-     * @param $index
-     * @param mixed $value
+     * @param string $index
+     * @param mixed  $value
      */
     public function __concat($index, $value) { //default After
         $tmp = $this->__get($index);
@@ -119,7 +119,7 @@ trait Getter {
     }
 
     /**
-     * @param $index
+     * @param string $index
      *
      * @return mixed|null
      */
@@ -132,8 +132,8 @@ trait Getter {
     }
 
     /**
-     * @param $index
-     * @param mixed $value
+     * @param string $index
+     * @param mixed  $value
      */
     public function __concatBefore($index, $value) {
         $tmp = $this->__get($index);

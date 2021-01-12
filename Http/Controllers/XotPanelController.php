@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
  */
 class XotPanelController extends Controller {
     /**
-     * @param string $name
+     * @param string $method
      * @param array  $arg
      *
      * @return mixed

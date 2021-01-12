@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -14,8 +17,7 @@ use Modules\Xot\Services\ModelService;
 //------------ services ----------
 
 /**
- * Class XotBaseJob
- * @package Modules\Xot\Jobs\PanelCrud
+ * Class XotBaseJob.
  */
 abstract class XotBaseJob implements ShouldQueue {
     use Dispatchable;
@@ -24,20 +26,12 @@ abstract class XotBaseJob implements ShouldQueue {
     use SerializesModels;
     //use Traits\CommonTrait;
 
-    /**
-     * @var PanelContract
-     */
     protected PanelContract $panel;
-    /**
-     * @var array
-     */
+
     protected array $data;
 
     /**
      * __construct.
-     *
-     * @param array $data
-     * @param PanelContract $panel
      */
     public function __construct(array $data, PanelContract &$panel) {
         $this->panel = $panel;
@@ -47,16 +41,14 @@ abstract class XotBaseJob implements ShouldQueue {
 
     /**
      * Execute the job.
-     *
-     * @return PanelContract
      */
-    public function handle() {
+    public function handle(): PanelContract {
         return $this->panel;
     }
 
     /**
-     * @param $model
-     * @param array $data
+     * @param Model  $model
+     * @param array  $data
      * @param string $act
      */
     public function manageRelationships($model, $data, $act) {

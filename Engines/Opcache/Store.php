@@ -227,8 +227,8 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
-     * @param $dir
-     * @param false $removeDirectory
+     * @param string $dir
+     * @param false  $removeDirectory
      *
      * @return bool
      */
@@ -306,7 +306,7 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
-     * @param $subDirectory
+     * @param string $subDirectory
      *
      * @return $this
      */
@@ -341,7 +341,7 @@ class Store extends TaggableStore implements StoreContract {
     }
 
     /**
-     * @param $dir
+     * @param string $dir
      */
     protected function checkDirectory($dir) {
         if (! is_dir($dir)) {

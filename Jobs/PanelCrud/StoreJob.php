@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
 use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
 /**
@@ -17,11 +18,8 @@ use Modules\Xot\Services\PanelService as Panel;
 class StoreJob extends XotBaseJob {
     /**
      * Execute the job.
-     *
-     * @return \Modules\Xot\Contracts\PanelContract
-     * @return \Modules\Xot\Contracts\PanelContract
      */
-    public function handle() {
+    public function handle(): PanelContract {
         //dd('['.__LINE__.']['.__FILE__.']');
         $row = $this->panel->row;
         $data = $this->data;
@@ -150,9 +148,6 @@ class StoreJob extends XotBaseJob {
     //end handle
     */
 
-    /**
-     * @param $model
-     */
     public function storeRelationshipsPivot(ModelContract $model, string $name, array $data): void {
         /*
         extract($params);

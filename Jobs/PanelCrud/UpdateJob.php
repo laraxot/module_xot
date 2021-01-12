@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
 use Illuminate\Support\Arr;
@@ -15,10 +17,8 @@ use Modules\Xot\Services\PanelService as Panel;
 class UpdateJob extends XotBaseJob {
     /**
      * Execute the job.
-     *
-     * @return PanelContract
      */
-    public function handle() {
+    public function handle(): PanelContract {
         $row = $this->panel->row;
         $data = $this->data;
         $ris = $row->update($data);
