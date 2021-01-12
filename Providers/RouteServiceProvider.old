@@ -16,9 +16,9 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\Xot\Http\Controllers';
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
+    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
+    protected string $module_dir = __DIR__;
+    protected string $module_ns = __NAMESPACE__;
 
     public function bootCallback() {
         $router = $this->app['router'];

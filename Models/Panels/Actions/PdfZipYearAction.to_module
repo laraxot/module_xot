@@ -11,8 +11,8 @@ use Modules\Xot\Services\PanelService as Panel;
 use ZipArchive;
 
 class PdfZipYearAction extends XotBasePanelAction {
-    public $onContainer = true;
-    public $icon = '<i class="far fa-file-pdf"></i><i class="far fa-file-archive"></i>';
+    public bool $onContainer = true;
+    public string $icon = '<i class="far fa-file-pdf"></i><i class="far fa-file-archive"></i>';
     public $year = null;
     public $pdf_view = null;
 

@@ -13,14 +13,14 @@ class DummyClass extends XotBasePanel {
      *
      * @var string
      */
-    public static $model = 'DummyFullModel';
+    public static string $model = 'DummyFullModel';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'dummy_title';
+    public static string $title = 'dummy_title';
 
     /**
      * The columns that should be searched.
@@ -77,19 +77,7 @@ class DummyClass extends XotBasePanel {
         return $query;
     }
 
-    /**
-     * Build a "relatable" query for the given resource.
-     *
-     * This query determines which instances of the model may be attached to other resources.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public static function relatableQuery(Request $request, $query) {
-        //return $query->where('auth_user_id', $request->user()->auth_user_id);
-         //return $query->where('user_id', $request->user()->id);
-    }
+    
 
     /**
      * Get the fields displayed by the resource.

@@ -32,7 +32,6 @@ use Modules\Xot\Models\Traits\WidgetTrait;
  * @property \Illuminate\Database\Eloquent\Model|\Eloquent                        $linked
  * @property \Illuminate\Database\Eloquent\Collection|Widget[]                    $widgets
  * @property int|null                                                             $widgets_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Widget newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Widget newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Widget ofLayoutPosition($layout_position)

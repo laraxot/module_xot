@@ -16,7 +16,6 @@ namespace Modules\Xot\Models;
  * @property \Illuminate\Support\Carbon|null                                      $updated_at
  * @property \Illuminate\Database\Eloquent\Collection|\Modules\Xot\Models\Image[] $images
  * @property int|null                                                             $images_count
- *
  * @method static \Illuminate\Database\Eloquent\Builder|Conf newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conf newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Conf query()

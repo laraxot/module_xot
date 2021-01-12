@@ -159,7 +159,7 @@ abstract class XotBasePanel {
     /**
      * on select the option label.
      */
-    public function optionLabel($row) {
+    public function optionLabel(object $row):string {
         return $row->matr.' ['.$row->email.']['.$row->ha_diritto.'] '.$row->cognome.' '.$row->cognome.' ';
     }
 
@@ -219,7 +219,7 @@ abstract class XotBasePanel {
         return 'matr';
     }
 
-    public function search() {
+    public function search():array {
         return [];
     }
 
@@ -228,7 +228,7 @@ abstract class XotBasePanel {
     }
 
     /*
-    public function fields(){
+    public function fields():array{
         return [];
     }
     //*/
@@ -476,19 +476,7 @@ abstract class XotBasePanel {
         return $query;
     }
 
-    /**
-     * Build a "relatable" query for the given resource.
-     *
-     * This query determines which instances of the model may be attached to other resources.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public static function relatableQuery(Request $request, $query) {
-        //return $query->where('auth_user_id', $request->user()->auth_user_id);
-        //return $query->where('user_id', $request->user()->id);
-    }
+   
 
     public function applyJoin($query) {
         $model = $query->getModel();

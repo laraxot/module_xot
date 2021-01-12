@@ -123,6 +123,10 @@ namespace Modules\Xot\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUpdatedIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Profile whereWebsite($value)
  * @mixin \Eloquent
+ * @property string|null $post_type
+ * @property string|null $bio
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile wherePostType($value)
  */
 class Profile extends BaseModel {
     /**
