@@ -27,7 +27,7 @@ abstract class XotBasePanelPolicy {
             return true;
         }
 
-        return;
+        return null;
     }
 
     public function index(?UserContract $user, PanelContract $panel): bool {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Models\Panels\Actions;
 
 use Illuminate\Support\Facades\File;
@@ -10,13 +12,8 @@ use Nwidart\Modules\Facades\Module;
  * Class ClearDuplicatesTransAction.
  */
 class ClearDuplicatesTransAction extends XotBasePanelAction {
-    /**
-     * @var bool
-     */
     public bool $onContainer = true;
-    /**
-     * @var string
-     */
+
     public string $icon = '<i class="fas fa-hammer"></i>';
 
     public function handle(): void {
@@ -33,10 +30,7 @@ class ClearDuplicatesTransAction extends XotBasePanelAction {
         }
     }
 
-    /**
-     * @param array $files
-     */
-    public function fixFiles($files): mixed {
+    public function fixFiles(array $files): void {
         foreach ($files as $file) {
             $path = $file->getRealPath();
             try {

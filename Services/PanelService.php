@@ -16,7 +16,7 @@ use Modules\Xot\Contracts\PanelContract;
 class PanelService {
     private static ?PanelService $_instance = null;
 
-    private static Model $model;
+    private static ModelContract $model;
 
     private static ?PanelContract $panel;
 
@@ -46,11 +46,11 @@ class PanelService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function get(Model $model): ?PanelContract {
+    public static function get(ModelContract $model): ?PanelContract {
         return self::setModel($model)->panel();
     }
 
-    public static function setModel(Model $model): self {
+    public static function setModel(ModelContract $model): self {
         self::$model = $model;
 
         return self::getInstance();
@@ -172,14 +172,12 @@ class PanelService {
     }
 
     /**
-     * @param ModelContract $model
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      *
      * @return \Illuminate\Http\RedirectResponse|mixed
      */
-    public static function getByModel($model) {
+    public static function getByModel(ModelContract $model) {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         $class = Str::before($class_full, $class_name);
@@ -198,12 +196,10 @@ class PanelService {
     }
 
     /**
-     * @param ModelContract $model
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function createPanel($model): void {
+    public static function createPanel(ModelContract $model): void {
         if (! is_object($model)) {
             dddx(['da fare']);
         }

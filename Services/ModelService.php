@@ -48,7 +48,7 @@ class ModelService {
         return $data;
     }
 
-    public static function indexIfNotExists(ModelContract $model, $index) {
+    public static function indexIfNotExists(ModelContract $model, $index): void {
         if (\is_array($index)) {
             foreach ($index as $i) {
                 self::indexIfNotExists($model, $i);

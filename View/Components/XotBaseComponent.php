@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Modules\Xot\View\Components;
 
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\View\Component as IlluminateComponent;
 
 /**
- * Class XotBaseComponent
- * @package Modules\Xot\View\Components
+ * Class XotBaseComponent.
  */
 abstract class XotBaseComponent extends IlluminateComponent {
     /** @var array */
     protected static array $assets = [];
+
     public array $attrs = [];
 
     public static function assets(): array {
@@ -44,16 +45,14 @@ abstract class XotBaseComponent extends IlluminateComponent {
         return $view;
     }
 
-    /**
-     * @return \Closure|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Support\Htmlable|\Illuminate\Contracts\View\Factory|View|string
-     */
-    public function render() /*: View */
-    { //per fare copia ed incolla
+    // ret \Closure|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Support\Htmlable|\Illuminate\Contracts\View\Factory|View|string
+
+    public function render(): Renderable { //per fare copia ed incolla
         $view = $this->getView();
         $view_params = [
             'view' => $view,
         ];
 
-        return view($view, $view_params);
+        return view()->make($view, $view_params);
     }
 }

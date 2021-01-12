@@ -6,6 +6,8 @@ namespace Modules\Xot\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Modules\Xot\Services\PanelRouteService;
 
 //use Illuminate\Support\Facades\Request;
@@ -15,10 +17,10 @@ use Modules\Xot\Services\PanelRouteService;
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- * @property ModelContract|null         $row
- * @property bool                       $in_admin
- * @property PanelRouteService          $route
- * @property Collection|ModelContract[] $rows
+ * @property ModelContract|null                                    $row
+ * @property bool                                                  $in_admin
+ * @property PanelRouteService                                     $route
+ * @property Collection|BelongsToMany|HasOneOrMany|ModelContract[] $rows
  *
  * @method mixed                          findParentType($type)
  * @method string                         imgSrc($params)
@@ -44,18 +46,11 @@ use Modules\Xot\Services\PanelRouteService;
  * @method mixed                          rules($params)
  * @method array                          rulesMessages()
  * @method array                          areas()
+ * @method array                          indexFields($params)
  */
 interface PanelContract {
-    /**
-     * @param ModelContract|null $rows
-     *
-     * @return iterable|null
-     */
     public function setRows($rows);
 
-    /**
-     * @return object|null
-     */
     public function setItem(string $guid);
 
     public function setParent(PanelContract $panel): PanelContract;

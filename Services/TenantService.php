@@ -26,6 +26,10 @@ class TenantService {
         }
 
         $server_name = \str_replace('www.', '', $server_name);
+        if (is_array($server_name)) {
+            $server_name = implode('', $server_name);
+        }
+        $server_name = (string) $server_name;
         $tmp = explode('.', $server_name);
         $subdomain = null;
         $domain = null;

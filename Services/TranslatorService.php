@@ -61,16 +61,13 @@ class TranslatorService extends BaseTranslator {
         return $this->get($key, $replace, $locale);
     }
 
-    /**
-     * @return array|void
-     */
-    public static function parse(array $params) {
+    public static function parse(array $params): array {
         $lang = app()->getLocale();
         extract($params);
         if (! isset($key)) {
             dddx(['err' => 'key is missing']);
 
-            return;
+            return [];
         }
         $translator = app('translator');
         $tmp = ($translator->parseKey($key));
@@ -100,12 +97,14 @@ class TranslatorService extends BaseTranslator {
      * @return void
      */
     public static function store(array $data) {
-        $data = collect($data)->map(function ($v, $k) {
-            $item = self::parse(['key' => $k]);
-            $item['value'] = $v;
+        $data = collect($data)->map(
+            function ($v, $k) {
+                $item = self::parse(['key' => $k]);
+                $item['value'] = $v;
 
-            return $item;
-        })
+                return $item;
+            }
+        )
         //->dd()
         ->filter(function ($v, $k) {
             return $v['dir_exists'] && strlen($v['lang_dir']) > 3;

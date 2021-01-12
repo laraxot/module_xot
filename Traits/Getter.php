@@ -99,10 +99,9 @@ trait Getter {
     }
 
     /**
-     * @param string $index
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function __concat($index, $value) { //default After
+    public function __concat(string $index, $value): void { //default After
         $tmp = $this->__get($index);
         $tmp = $tmp.$value;
         $this->__set($index, $tmp);
@@ -113,7 +112,7 @@ trait Getter {
      *
      * @param mixed $value
      */
-    public function __set(string $index, $value) {
+    public function __set(string $index, $value): void {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
         $this->vars[$index] = $value;
     }
@@ -135,7 +134,7 @@ trait Getter {
      * @param string $index
      * @param mixed  $value
      */
-    public function __concatBefore($index, $value) {
+    public function __concatBefore($index, $value): void {
         $tmp = $this->__get($index);
         $tmp = $value.$tmp;
         $this->__set($index, $tmp);

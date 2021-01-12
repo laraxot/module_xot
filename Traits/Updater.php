@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Traits;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Trait Updater
- * @package Modules\Xot\Traits
+ * Trait Updater.
  */
 trait Updater {
     /*
@@ -50,7 +51,9 @@ trait Updater {
          **/
         static::creating(function ($model) {
             if (null != Auth::user()) {
-                $model->created_by = Auth::user()->handle;
+                // Cannot call method getAttribute() on Modules\LU\Models\User|null.
+                // Cannot access property $handle on Modules\LU\Models\User|null.
+                $model->created_by = Auth::user()->handle.'';
                 $model->updated_by = Auth::user()->handle.'';
             }
         });

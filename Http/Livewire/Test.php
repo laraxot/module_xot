@@ -44,17 +44,12 @@ class Test extends Component {
         ];
     }
 
-    /**
-     * @param array $arr
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function fix($arr) {
+    public function fix(array $arr): array {
         return collect($arr)->map(
             function ($item) {
                 return (object) $item;
             }
-        ); //->all();
+        )->all();
     }
 
     /**

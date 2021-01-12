@@ -82,6 +82,7 @@ namespace Modules\Xot\Contracts;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTokenCheck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedBy($value)
+ * @method mixed  forceFill($params)
  * @mixin \Eloquent
  *
  * @property \Modules\Blog\Models\Profile|null $profile

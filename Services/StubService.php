@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\PanelContract;
 
 /**
  * Class StubService.
@@ -18,14 +19,12 @@ class StubService {
     //-- create yes or not
 
     /**
-     * @param array $params
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      *
      * @return false|string|void
      */
-    public static function fromModel($params) {
+    public static function fromModel(array $params) {
         extract($params);
         if (! isset($model)) {
             dddx(['err' => 'model is missing']);
@@ -155,10 +154,8 @@ class StubService {
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      */
-    public static function getByModel(ModelContract $model, string $name, bool $create = false) {
+    public static function getByModel(ModelContract $model, string $name, bool $create = false): ?PanelContract {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();
@@ -174,51 +171,13 @@ class StubService {
             self::create($model, $name);
         }
 
-        try {
-            return app($panel);
-        } catch (\Exception $e) {
-            /*
-            dd(['e' => $e,
-                'line' => __LINE__,
-                'file' => __FILE__,
-            ]);
-            */
-        }
-
-        /*
-        try {
-            if (class_exists($panel)) {
-                return new $panel();
-            }
-        } catch (\Exception $e) {
-            dd(['e' => $e,
-                'line' => __LINE__,
-                'file' => __FILE__,
-            ]);
-        }
-        */
-        if (! $create) {
-            dddx([$panel.' NOT EXISTS !']);
-        } else {
-            /* -- 4 debug
-        $t= new $panel;
-        ddd($t);
-        ddd('devo creare '.$panel);
-         */
-        }
-        self::create($model, $name);
-        //return new $panel;
-        dddx([$name.' ['.$class_full.']['.$panel.'] is under creating , refresh page']);
-        \Session::flash('status', $name.' created');
-        //return redirect()->back();
+        return app($panel);
     }
 
     /**
-     * @param array $params
-     *
      * @return array|void
      */
-    public static function replaces($params) {
+    public static function replaces(array $params) {
         extract($params);
         if (! isset($namespace)) {
             dddx(['err' => 'namespace is missing']);
@@ -269,7 +228,7 @@ class StubService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function create(Model $model, string $name): void {
+    public static function create(ModelContract $model, string $name): void {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
@@ -326,7 +285,7 @@ class StubService {
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public static function fields(Model $model): array {
+    public static function fields(ModelContract $model): array {
         if (! method_exists($model, 'getFillable')) {
             return [];
         }
@@ -416,12 +375,10 @@ class StubService {
     }
 
     /**
-     * @param array $params
-     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function updatePanel($params): void {
+    public static function updatePanel(array $params): void {
         extract($params);
         if (! isset($func)) {
             dddx(['err' => 'func is missing']);

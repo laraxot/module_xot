@@ -46,7 +46,12 @@ class StoreJob extends XotBaseJob {
             }
             try {
                 //$tmp = $parent_row->$types()->save($row, $pivot_data);
-                $tmp = $this->panel->rows->save($row, $pivot_data);
+                $tmp = $this->panel->rows->save($row, $pivot_data); //??
+                /*
+                Model
+                BelongsToMany
+                HasOneOrMany
+                */
             } catch (\Exception $e) {
                 dddx(['e' => $e]);
                 /*

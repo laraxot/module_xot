@@ -35,14 +35,12 @@ use Modules\Xot\Services\StubService;
  * Modules\Xot\Models\Panels\XotBasePanel.
  */
 abstract class XotBasePanel implements PanelContract {
-    /**
-     * @var \Illuminate\Contracts\Foundation\Application
-     */
-    public $out = null;
+    //public $out = null; //deprecated
 
-    public bool $force_exit = false;
+    //public bool $force_exit = false; //deprecated
 
-    public string $msg = 'msg from panel';
+    //public string $msg = 'msg from panel';
+    protected static string $model;
 
     /**
      * @var \Illuminate\Contracts\Foundation\Application|mixed|null
@@ -54,20 +52,15 @@ abstract class XotBasePanel implements PanelContract {
      */
     public $rows = null;
 
-    public $parent = null;
+    public ?PanelContract $parent = null;
 
-    public $in_admin = null;
+    public ?bool $in_admin = null;
 
     public ?PanelPresenterContract $presenter = null;
 
-    /**
-     * @var object|mixed|null
-     */
-    public $form = null;
+    public ?PanelFormService $form = null;
 
     public ?PanelRouteService $route = null;
-
-    protected static string $model;
 
     public function __construct(PanelPresenterContract $presenter, PanelRouteService $route) {
         //$this->row = $model;
@@ -1086,13 +1079,7 @@ abstract class XotBasePanel implements PanelContract {
         return $this->route->urlRelatedPanel($params);
     }
 
-    /**
-     * @param string $name
-     * @param ?int   $id
-     *
-     * @return self
-     */
-    public function relatedName($name, $id = null) {
+    public function relatedName(string $name, ?int $id = null): ?PanelContract {
         //bell_boy => Modules\Food\Models\BellBoy
         $model = xotModel($name);
         if (null != $id) {
@@ -1108,12 +1095,7 @@ abstract class XotBasePanel implements PanelContract {
         return $panel;
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string|void
-     */
-    public function url($params = []) {
+    public function url(array $params = []): string {
         $act = 'show';
         extract($params);
         $act = Str::snake($act);
@@ -1540,12 +1522,8 @@ abstract class XotBasePanel implements PanelContract {
         return HtmlService::toPdf($params);
     }
 
-    /**
-     * @param string $relationship
-     *
-     * @return self
-     */
-    public function related($relationship) {
+    //Method Modules\Xot\Models\Panels\XotBasePanel::related() should return Modules\Xot\Models\Panels\XotBasePanel but returns Modules\Xot\Contracts\PanelContract|null.
+    public function related(string $relationship): PanelContract {
         $related = $this->row->$relationship()->getRelated();
         $panel_related = Panel::get($related);
         $panel_related->setParent($this);
@@ -1553,27 +1531,18 @@ abstract class XotBasePanel implements PanelContract {
         return $panel_related;
     }
 
-    /**
-     * @return string
-     */
-    public function getModuleName() {
+    public function getModuleName(): string {
         $model = $this::$model;
         $module_name = Str::before(Str::after($model, 'Modules\\'), '\\Models\\');
 
         return $module_name;
     }
 
-    /**
-     * @return string
-     */
-    public function getModuleNameLow() {
+    public function getModuleNameLow(): string {
         return Str::lower($this->getModuleName());
     }
 
-    /**
-     * @return array
-     */
-    public function breadcrumbs() {
+    public function breadcrumbs(): array {
         return [];
         /*
         $curr = $this;

@@ -54,6 +54,11 @@ abstract class XotBasePanelAction {
 
     public ?string $related = null; //post_type per filtrare le azioni nei vari index_edit
 
+    /**
+     * handle.
+     *
+     * @return mixed
+     */
     abstract public function handle();
 
     /*
@@ -69,17 +74,13 @@ abstract class XotBasePanelAction {
         }
     }
 
-    /**
-     * @param PanelContract $panel
-     */
-    public function setPanel(&$panel) {
+    public function setPanel(PanelContract &$panel) :$this{
         $this->panel = $panel;
+
+        return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getName() {
+    public function getName(): ?string {
         if (Str::contains($this->name, '::')) {
             $this->name = null;
         }
