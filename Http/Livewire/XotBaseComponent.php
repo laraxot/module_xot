@@ -6,7 +6,14 @@ namespace Modules\Xot\Http\Livewire;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
+/**
+ * Class XotBaseComponent
+ * @package Modules\Xot\Http\Livewire
+ */
 abstract class XotBaseComponent extends Component {
+    /**
+     * @return string|string[]
+     */
     public function getView() {
         $class = get_class($this);
         $module_name = Str::between($class, 'Modules\\', '\Http\\');
@@ -27,6 +34,9 @@ abstract class XotBaseComponent extends Component {
         return $view;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
     public function render() { //per fare copia ed incolla
         $view = $this->getView();
         $view_params = [

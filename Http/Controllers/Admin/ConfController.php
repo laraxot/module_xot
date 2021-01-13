@@ -10,7 +10,15 @@ use Modules\Settings\Services\ConfService;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\TenantService;
 
+/**
+ * Class ConfController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 class ConfController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request) {
         $route_params = \Route::current()->parameters();
         //$confs = Config::all('localhost');
@@ -31,14 +39,26 @@ class ConfController extends Controller {
                 ;
     }
 
+    /**
+     * @param Request $request
+     */
     public function edit(Request $request) {
         $route_params = \Route::current()->parameters();
         extract($route_params);
+        if (! isset($item0)) {
+            dddx(['err' => 'item0 is missing']);
+
+            return;
+        }
         $row = config($item0);
 
         return ThemeService::view()->with('row', $row);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function update(Request $request) {
         $data = $request->all();
         $route_params = \Route::current()->parameters();
@@ -46,6 +66,11 @@ class ConfController extends Controller {
         $data = collect($data)->except(['_token', '_method'])->all();
 
         extract($route_params);
+        if (! isset($item0)) {
+            dddx(['err' => 'item0 is missing']);
+
+            return;
+        }
         TenantService::saveConfig(['name' => $item0, 'data' => $data]);
         /*
         $data['_token'] = '';

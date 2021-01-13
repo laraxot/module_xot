@@ -11,6 +11,10 @@ use Modules\Xot\Services\TenantService;
 
 //use Illuminate\Http\Response;
 
+/**
+ * Class PanelMiddleware
+ * @package Modules\Xot\Http\Middleware
+ */
 class PanelMiddleware {
     /*
     public function __construct($params) {
@@ -18,6 +22,11 @@ class PanelMiddleware {
     }
     */
 
+    /**
+     * @param Request $request
+     * @param Closure $next
+     * @return \Illuminate\Http\Response|mixed
+     */
     public function handle(Request $request, Closure $next) {
         $parameters = request()->route()->parameters();
         //if (! isset($parameters['lang'])) {

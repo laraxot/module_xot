@@ -1,7 +1,7 @@
 <div>
     @component('theme::components.modal.simple',['guid'=>$modal_guid,'title'=>$modal_title])
     @slot('content')
-        @livewire('xot::rate_single')
+        @livewire('blog::rate_single')
 
 
 

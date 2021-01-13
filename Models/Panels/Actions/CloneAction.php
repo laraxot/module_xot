@@ -5,19 +5,24 @@ namespace Modules\Xot\Models\Panels\Actions;
 //-------- models -----------
 
 //-------- services --------
-use Modules\Xot\Services\ArrayService;
 
 //-------- bases -----------
 
-class CloneAction extends XotBasePanelAction
-{
-    public $onItem = true;
-    public $icon = '<i class="far fa-clone"></i>';
+/**
+ * Class CloneAction.
+ */
+class CloneAction extends XotBasePanelAction {
+    public bool $onItem = true;
 
-    public function handle()
-    {
-        $cloned=$this->row->replicate();
+    public string $icon = '<i class="far fa-clone"></i>';
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handle() {
+        $cloned = $this->row->replicate();
         $cloned->push();
+
         return redirect()->back();
     }
 }

@@ -1,26 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Database\Migrations;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 //----- models -----
 
+/**
+ * Class XotBaseMigration.
+ */
 abstract class XotBaseMigration extends Migration {
-    protected $model;
+    protected ?Model $model = null;
 
     //*
     public function __construct() {
         if (null == $this->model) {
-            $this->model = $this->getModel();
+            $this->model = app($this->getModel());
         }
-        $this->model = new $this->model();
+        //$this->model = new $this->model();
     }
 
     //*/
-    public function getModel() {
+
+    public function getModel(): string {
         //ddd(class_basename($this));//CreateDevicesTable
         //ddd(get_class($this));
         $name = class_basename($this);
@@ -45,7 +52,7 @@ abstract class XotBaseMigration extends Migration {
         return $model_ns;
     }
 
-    public function getTable() {
+    public function getTable(): string {
         $table = $this->model->getTable();
         /*
         if (Str::endsWith($table, '_pivot')) {
@@ -55,6 +62,9 @@ abstract class XotBaseMigration extends Migration {
         return $table;
     }
 
+    /**
+     * @return \Illuminate\Database\Schema\Builder
+     */
     public function getConn() {
         //$conn_name=with(new MyModel())->getConnectionName();
         //\DB::reconnect('mysql');
@@ -67,6 +77,9 @@ abstract class XotBaseMigration extends Migration {
         return $conn;
     }
 
+    /**
+     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     */
     public function getSchemaManager() {
         $schema_manager = $this->getConn()
             ->getConnection()
@@ -75,6 +88,11 @@ abstract class XotBaseMigration extends Migration {
         return $schema_manager;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Doctrine\DBAL\Schema\Table
+     */
     public function getTableDetails() {
         $table_details = $this->getSchemaManager()
             ->listTableDetails($this->getTable());
@@ -82,6 +100,11 @@ abstract class XotBaseMigration extends Migration {
         return $table_details;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     *
+     * @return \Doctrine\DBAL\Schema\Index[]
+     */
     public function getTableIndexes() {
         $table_indexes = $this->getSchemaManager()
             ->listTableIndexes($this->getTable());
@@ -89,18 +112,32 @@ abstract class XotBaseMigration extends Migration {
         return $table_indexes;
     }
 
+    /**
+     * @return bool
+     */
     public function tableExists() {
         return $this->getConn()->hasTable($this->getTable());
     }
 
+    /**
+     * @param string $col
+     *
+     * @return bool
+     */
     public function hasColumn($col) {
         return $this->getConn()->hasColumn($this->getTable(), $col);
     }
 
+    /**
+     * @param string $sql
+     */
     public function query($sql) {
         $this->getConn()->getConnection()->statement($sql);
     }
 
+    /**
+     * @return bool
+     */
     public function hasPrimaryKey() {
         $table_details = $this->getTableDetails();
 

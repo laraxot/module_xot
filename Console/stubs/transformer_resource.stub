@@ -7,7 +7,7 @@ namespace DummyNamespace;
 * https://jsonapi.org/
 **/
 
-//use Illuminate\Http\Resources\Json\Resource;
+//use Illuminate\Http\Resources\Json\JsonResource as Resource;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
 class DummyClass extends Resource {

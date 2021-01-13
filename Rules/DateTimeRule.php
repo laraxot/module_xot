@@ -5,10 +5,19 @@ namespace Modules\Xot\Rules;
 use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
 
+/**
+ * Class DateTimeRule
+ * @package Modules\Xot\Rules
+ */
 class DateTimeRule implements Rule {
     public function __construct() {
     }
 
+    /**
+     * @param string $attribute
+     * @param mixed $value
+     * @return bool
+     */
     public function passes($attribute, $value) {
         //ddd($attribute); //published_at
         //ddd($value);//10/10/2019 13:43
@@ -27,6 +36,9 @@ class DateTimeRule implements Rule {
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function message() {
         return 'The :attribute is not a valid datetime';
         //    return trans('validation.only_uppercase');

@@ -1,20 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
-class PanelActionService {
-    protected $panel;
+use Modules\Xot\Contracts\PanelContract;
 
-    public function __construct($panel) {
+/**
+ * Class PanelActionService.
+ */
+class PanelActionService {
+    protected PanelContract $panel;
+
+    /**
+     * PanelActionService constructor.
+     */
+    public function __construct(PanelContract &$panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function getActions($params = []) {
         $panel = $this->panel;
-        $filters = [];
+
         extract($params);
+        if (! isset($filters)) {
+            $filters = [];
+        }
         $actions = collect($panel->actions())->filter(
-            function ($item) use ($panel, $filters) {
+            function ($item) use ($filters) {
                 $item->getName();
                 $res = true;
                 foreach ($filters as $k => $v) {
@@ -39,19 +57,32 @@ class PanelActionService {
         return $actions;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function containerActions($params = []) {
         $params['filters']['onContainer'] = true;
 
         return $this->getActions($params);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function itemActions($params = []) {
         $params['filters']['onItem'] = true;
 
         return $this->getActions($params);
     }
 
-    public function itemAction($act) {
+    /**
+     * @return mixed
+     */
+    public function itemAction(string $act) {
         $itemActions = $this->itemActions();
         $itemAction = $itemActions->firstWhere('name', $act);
         if (! is_object($itemAction)) {
@@ -67,7 +98,10 @@ class PanelActionService {
         return $itemAction;
     }
 
-    public function containerAction($act) {
+    /**
+     * @return mixed
+     */
+    public function containerAction(string $act) {
         $actions = $this->containerActions();
         $action = $actions->firstWhere('name', $act);
         if (! is_object($action)) {
@@ -85,7 +119,10 @@ class PanelActionService {
         return $action;
     }
 
-    public function urlContainerAction($act) {
+    /**
+     * @return mixed
+     */
+    public function urlContainerAction(string $act) {
         $containerActions = $this->containerActions();
         $containerAction = $containerActions->firstWhere('name', $act);
         if (is_object($containerAction)) {
@@ -93,14 +130,20 @@ class PanelActionService {
         }
     }
 
-    public function urlItemAction($act) {
+    /**
+     * @return mixed
+     */
+    public function urlItemAction(string $act) {
         $itemAction = $this->itemAction($act);
         if (is_object($itemAction)) {
             return $itemAction->urlItem(['row' => $this->panel->row, 'panel' => $this->panel]);
         }
     }
 
-    public function btnItemAction($act) {
+    /**
+     * @return mixed
+     */
+    public function btnItemAction(string $act) {
         $itemAction = $this->itemAction($act);
         if (is_object($itemAction)) {
             return $itemAction->btn(['row' => $this->panel->row, 'panel' => $this->panel]);

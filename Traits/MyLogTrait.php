@@ -9,6 +9,10 @@ namespace Modules\Xot\Traits;
 //Str::studly() 'foo_bar' FooBar
 //title_case() 'a nice title uses the correct case'
 
+/**
+ * Trait MyLogTrait
+ * @package Modules\Xot\Traits
+ */
 trait MyLogTrait {
     protected static function boot() {
         parent::boot();

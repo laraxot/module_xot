@@ -1,17 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
-use Illuminate\Console\Command;
+use Exception;
 //use Illuminate\Console\GeneratorCommand;
 //use Nwidart\Modules\Commands\GeneratorCommand;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class FixProvidersCommand.
+ */
 class FixProvidersCommand extends Command {
+    /**
+     * @var string
+     */
     protected $name = 'xot:fix-module-providers';
+
+    /**
+     * @var string
+     */
     protected $description = 'fix module providers of module ';
+
     //protected $type = 'ModuleProvider';
     //protected $argumentName='name';
 
@@ -63,6 +77,10 @@ class FixProvidersCommand extends Command {
         return $module->getExtraPath('Providers\test4.test');
     }
     */
+
+    /**
+     * @return array[]
+     */
     protected function getArguments() {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the module.'],

@@ -1,17 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 //--- services ---
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
-
+/**
+ * Class XotBaseContainerController.
+ */
 abstract class XotBaseContainerController extends Controller {
+    protected $panel;
+
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
+     */
+
+    //Declaration of Modules\Xot\Http\Controllers\XotBaseContainerController::__call($method, $args) should be compatible with Illuminate\Routing\Controller::__call($method, $parameters)
+
     public function __call($method, $args) {
         $panel = Panel::getRequestPanel();
         $this->panel = $panel;
@@ -23,6 +38,9 @@ abstract class XotBaseContainerController extends Controller {
         return $this->__callRouteAct($method, $args);
     }
 
+    /**
+     * @return string
+     */
     public function getController() {
         list($containers, $items) = params2ContainerItem();
         $mod_name = $this->panel->getModuleName(); //forse da mettere container0
@@ -40,6 +58,12 @@ abstract class XotBaseContainerController extends Controller {
         return '\Modules\Xot\Http\Controllers\XotPanelController';
     }
 
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callRouteAct($method, $args) {
         $panel = $this->panel;
         //$authorized = Gate::allows($method, $model);
@@ -51,8 +75,9 @@ abstract class XotBaseContainerController extends Controller {
 
         $request = XotRequest::capture();
         $controller = $this->getController();
+        $data = $request->all();
 
-        $panel = app($controller)->$method($request, $panel);
+        $panel = app($controller)->$method($data, $panel);
 
         return $panel->out(
             [
@@ -62,6 +87,12 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callPanelAct($method, $args) {
         $request = request();
         $act = $request->_act;
@@ -77,7 +108,10 @@ abstract class XotBaseContainerController extends Controller {
         return $panel->callAction($act);
     }
 
-    public function notAuthorized($method, $panel) {
+    /**
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
+    public function notAuthorized(string $method, PanelContract $panel) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
             //$request = \Modules\Xot\Http\Requests\XotRequest::capture();
@@ -99,6 +133,7 @@ abstract class XotBaseContainerController extends Controller {
         }
         $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.get_class($panel).']';
 
-        return abort(403, $msg);
+        //abort(403, $msg);
+        return response()->view('pub_theme::errors.403', ['msg' => $msg], 403);
     }
 }

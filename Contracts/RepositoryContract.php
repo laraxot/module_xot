@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
+/**
+ * Interface RepositoryContract.
+ */
 interface RepositoryContract {
     /**
      * Return model instance.
@@ -27,7 +30,7 @@ interface RepositoryContract {
     /**
      * Find a model by its primary key or throw an exception.
      *
-     * @para string $id
+     * @param string $id
      *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      *
@@ -38,9 +41,9 @@ interface RepositoryContract {
     /**
      * Find data by field and value.
      *
-     * @param       $field
-     * @param       $value
-     * @param array $columns
+     * @param string   $field
+     * @param mixed    $value
+     * @param string[] $columns
      *
      * @return Model|Collection
      */
@@ -69,21 +72,16 @@ interface RepositoryContract {
     /**
      * Order results by.
      *
-     * @param string $column
-     * @param string $direction
-     *
      * @return self
      */
-    public function orderBy($column, $direction);
+    public function orderBy(string $column, string $direction);
 
     /**
      * Filter results by given query params.
      *
-     * @param string $queries
-     *
      * @return self
      */
-    public function search($queries);
+    public function search(string $queries);
 
     /**
      * Retrieve all data of repository.
@@ -97,12 +95,11 @@ interface RepositoryContract {
     /**
      * Get an array with the values of a given column.
      *
-     * @param string $value
-     * @param string $key
+     * @param null $key
      *
      * @return array
      */
-    public function pluck($value, $key = null);
+    public function pluck(string $value, $key = null);
 
     /**
      * Retrieve all data of repository, paginated.
@@ -158,10 +155,8 @@ interface RepositoryContract {
 
     /**
      * Add a message to the repository's error messages.
-     *
-     * @param string $message
      */
-    public function addError($message);
+    public function addError(string $message): string;
 
     /**
      * Get the repository's error messages.

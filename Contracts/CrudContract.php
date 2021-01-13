@@ -2,9 +2,14 @@
 
 namespace Modules\Xot\Contracts;
 
+/**
+ * Interface CrudContract.
+ */
 interface CrudContract {
     /**
      * Return the Eloquent model from the service.
+     *
+     * @return object|null
      */
     public function raw();
 
@@ -12,6 +17,8 @@ interface CrudContract {
      * Include your where statement here with variable parameters.
      *
      * @param mixed $params
+     *
+     * @return iterable|null
      */
     public function where(...$params);
 
@@ -20,46 +27,54 @@ interface CrudContract {
      * Alias of find method when used with ID.
      *
      * @param int $id
+     *
+     * @return object|null
      */
     public function get($id = null);
 
     /**
      * Returns the first row of the selected resource.
      *
-     * @return Model
+     * @return object
      */
     public function first();
 
     /**
      * Get a single item.
      *
-     * @param int $id
+     * @return object|null
      */
-    public function find($id);
+    public function find(int $id);
 
     /**
      * Paginate collection result.
      *
      * @param int $perPage defines the number of items per page
+     *
+     * @return iterable|null
      */
-    public function paginate($perPage);
+    public function paginate(int $perPage);
 
     /**
      * Get single item or all items from trash if ID is null.
      *
      * @param int $id
+     *
+     * @return object|null
      */
     public function getTrash($id = null);
 
     /**
      * Get single trashed item.
      *
-     * @param int $id
+     * @return object|null
      */
-    public function getTrashedItem($id);
+    public function getTrashedItem(int $id);
 
     /**
      * Set the related data that should be eager loaded.
+     *
+     * @return iterable
      */
     public function setRelation(array $relation);
 
@@ -76,7 +91,7 @@ interface CrudContract {
      * @param string $field ordering field
      * @param string $order ordering direction asc is default
      */
-    public function orderBy($field, $order = 'asc');
+    public function orderBy(string $field, $order = 'asc');
 
     /**
      * Create new entry.
@@ -90,39 +105,31 @@ interface CrudContract {
      * @param array $data         of model data that should be updated
      * @param bool  $return_model set to true if you need a model instance back
      */
-    public function update($id, array $data, $return_model = false);
+    public function update(int $id, array $data, $return_model = false);
 
     /**
      * Delete item either by softdelete or harddelete.
      *
-     * @param int  $id
      * @param bool $hardDelete
      */
-    public function delete($id, $hardDelete = false);
+    public function delete(int $id, $hardDelete = false);
 
     /**
      * Restore a soft deleted model.
-     *
-     * @param int $id
      */
-    public function restore($id);
+    public function restore(int $id);
 
     /**
      * Set hasMany relationship by adding the related model, data and
      * relation name.
-     *
-     * @param string $relatedModel
-     * @param string $relation
      */
-    public function withHasMany(array $data, $relatedModel, $relation);
+    public function withHasMany(array $data, string $relatedModel, string $relation);
 
     /**
      * Add the belongsToMany relationship data to be synced and define
      * the relationship name.
-     *
-     * @param string $relation
      */
-    public function withBelongsToMany(array $data, $relation);
+    public function withBelongsToMany(array $data, string $relation);
 
     /**
      * Handle a file or photo upload.

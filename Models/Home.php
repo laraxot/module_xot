@@ -38,5 +38,9 @@ use Modules\Xot\Models\Traits\WidgetTrait;
  */
 class Home extends BaseModel {
     use WidgetTrait;
+
+    /**
+     * @var string[]
+     */
     protected $fillable = ['id', 'article_type', 'icon_src'];
 }

@@ -6,17 +6,39 @@ namespace Modules\Xot\Services;
 //use PHPExcel;
 //use PhpOffice\PhpSpreadsheet\Spreadsheet;
 //use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Spipu\Html2Pdf\Exception\Html2PdfException;
+/*
+ExceptionFormatter
+HtmlParsingException
+ImageException
+LocaleException
+LongSentenceException
+TableException
+*/
 use Spipu\Html2Pdf\Html2Pdf;
 
+/**
+ * Class HtmlService
+ * @package Modules\Xot\Services
+ */
 class HtmlService {
-
+    /**
+     * @param array $params
+     * @return string|void
+     */
     public static function toPdf($params) {
         require_once __DIR__.'/vendor/autoload.php';
         $pdforientation = 'L'; //default;
         $out = 'show';
+        $filename = 'test';
         extract($params);
-        if(request('debug', false)){
+        if (! isset($html)) {
+            dddx(['err' => 'html is missing']);
 
+            return;
+        }
+
+        if (request('debug', false)) {
             return $html;
         }
         try {
@@ -29,7 +51,8 @@ class HtmlService {
             }
 
             return $html2pdf->Output();
-        } catch (HTML2PDF_exception $e) {
+            //} catch (HTML2PDF_exception $e) {
+        } catch (Html2PdfException $e) {
             echo '<pre>';
             \print_r($e);
             echo '</pre>';

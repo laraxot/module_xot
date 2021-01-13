@@ -1,55 +1,44 @@
-<?php
-
-return [
-    /*
-    |--------------------------------------------------------------------------
-    | Buttons Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used in buttons throughout the system.
-    | Regardless where it is placed, a button can be listed here so it is easily
-    | found in a intuitive way.
-    |
-    */
-
-    'backend' => [
-        'access' => [
-            'users' => [
-                'activate' => 'Attiva',
-                'change_password' => 'Cambia password',
-                'deactivate' => 'Disattiva',
-                'delete_permanently' => 'Elimina definitivamente',
-                'login_as' => 'Login As :user',
-                'resend_email' => 'Reinvia e-mail di conferma',
-                'restore_user' => 'Ripristina utente',
-            ],
-        ],
-    ],
-
-    'emails' => [
-        'auth' => [
-            'confirm_account' => 'Confirm Account',
-            'reset_password' => 'Reset Password',
-        ],
-    ],
-
-    'general' => [
-        'cancel' => 'Annulla',
-
-        'crud' => [
-            'create' => 'Crea',
-            'delete' => 'Elimina',
-            'edit' => 'Modifica',
-            'update' => 'Aggiorna',
-            'view' => 'View',
-        ],
-
-        'save' => 'Salva',
-        'view' => 'Visualizza',
-    ],
-
+<?php return array (
+  'backend' => 
+  array (
+    'access' => 
+    array (
+      'users' => 
+      array (
+        'activate' => 'Attiva',
+        'change_password' => 'Cambia password',
+        'deactivate' => 'Disattiva',
+        'delete_permanently' => 'Elimina definitivamente',
+        'login_as' => 'Login As :user',
+        'resend_email' => 'Reinvia e-mail di conferma',
+        'restore_user' => 'Ripristina utente',
+      ),
+    ),
+  ),
+  'emails' => 
+  array (
+    'auth' => 
+    array (
+      'confirm_account' => 'Confirm Account',
+      'reset_password' => 'Reset Password',
+    ),
+  ),
+  'general' => 
+  array (
+    'cancel' => 'Annulla',
+    'crud' => 
+    array (
+      'create' => 'Crea',
+      'delete' => 'Elimina',
+      'edit' => 'Modifica',
+      'update' => 'Aggiorna',
+      'view' => 'View',
+    ),
     'save' => 'Salva',
-    'close' => 'Chiudi',
-    'back' => 'Indietro',
-    'confirm' => 'Conferma',
-];
+    'view' => 'Visualizza',
+  ),
+  'save' => 'Salva',
+  'close' => 'Chiudi',
+  'back' => 'Indietro',
+  'confirm' => 'Conferma',
+);

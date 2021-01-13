@@ -7,30 +7,35 @@ use Closure;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Trait Cacheable
+ * @package Modules\Xot\Traits
+ */
 trait Cacheable {
     /**
      * Cache instance.
      *
      * @var CacheManager
      */
-    protected static $cache = null;
+    protected static ?CacheManager $cache = null;
 
     /**
      * Flush the cache after create/update/delete events.
      *
      * @var bool
      */
-    protected $eventFlushCache = false;
+    protected bool $eventFlushCache = false;
 
     /**
      * Global lifetime of the cache.
      *
      * @var int
      */
-    protected $cacheMinutes = 60;
+    protected int $cacheMinutes = 60;
 
     /**
      * Set cache manager.
+     * @param CacheManager $cache
      */
     public static function setCacheInstance(CacheManager $cache) {
         self::$cache = $cache;
@@ -63,12 +68,12 @@ trait Cacheable {
      * Get Cache key for the method.
      *
      * @param string $method
-     * @param mixed  $args
+     * @param mixed $args
      * @param string $tag
      *
      * @return string
      */
-    public function getCacheKey($method, $args = null, $tag) {
+    public function getCacheKey(string $method, $args = null, string $tag) {
         // Sort through arguments
         foreach ($args as &$a) {
             if ($a instanceof Model) {
@@ -92,12 +97,13 @@ trait Cacheable {
      * Get an item from the cache, or store the default value.
      *
      * @param string $method
-     * @param array  $args
-     * @param int    $time
+     * @param array $args
+     * @param Closure $callback
+     * @param null $time
      *
      * @return mixed
      */
-    public function cacheCallback($method, $args, Closure $callback, $time = null) {
+    public function cacheCallback(string $method, array $args, Closure $callback, $time = null) {
         // Cache disabled, just execute query & return result
         if (true === $this->skippedCache()) {
             return \call_user_func($callback);

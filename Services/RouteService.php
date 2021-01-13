@@ -2,10 +2,22 @@
 
 namespace Modules\Xot\Services;
 
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
+/**
+ * Class RouteService.
+ * Modules\Xot\Services\RouteService.
+ *
+ * @method string urlAct($params)
+ */
 class RouteService {
+    /**
+     * @param array $params
+     *
+     * @return array|bool|mixed
+     */
     public static function inAdmin($params = []) {
         if (isset($params['in_admin'])) {
             return $params['in_admin'];
@@ -25,18 +37,60 @@ class RouteService {
         }
 
         return false;
-        //dddx(session('in_admin'));
-        /*
-        $segments = request()->segments();
-        dddx($_SERVER);
-
-        return 'admin' == 'aa';
-        */
-        //return in_admin();
     }
 
+    //--- sarebbe deprecata ma il mal di testa
+
+    public static function urlAct(array $params): string {
+        $query = [];
+        $act = 'show';
+        $row = (object) [];
+        extract($params);
+        /*
+        $mutator = $act.'_url';
+        try {
+            $route = $row->$mutator;
+        } catch (\Exception $e) {
+            $route = '#';
+        }
+        */
+        $route_action = \Route::currentRouteAction();
+        $old_act = Str::snake(Str::after($route_action, '@'));
+        $routename = Request::route()->getName();
+        $old_act_route = last(explode('.', $routename));
+
+        $routename_act = Str::before($routename, $old_act_route).''.$act;
+        try {
+            $route_params = \Route::current()->parameters();
+        } catch (\Exception $e) {
+            $route_params = [];
+        }
+        if (\Route::has($routename_act)) {
+            $parz = array_merge($route_params, [$row]);
+            $parz = array_merge($parz, $query);
+            $route = route($routename_act, $parz);
+        } else {
+            $route = '#'.$routename_act;
+        }
+
+        return $route;
+    }
+
+    /* // move to RoutePanelService
     public static function urlPanel($params) {
         extract($params);
+
+        if (! isset($panel)) {
+            dddx(['err' => 'panel is missing']);
+
+            return;
+        }
+        if (! isset($act)) {
+            dddx(['err' => 'act is missing']);
+
+            return;
+        }
+
         $parents = $panel->getParents();
 
         $container_root = $panel->row;
@@ -61,18 +115,18 @@ class RouteService {
         }
 
         $post_type = $panel->postType();
-        /*
-        if( $post_type==null) {
-            $post_type=Str::snake(class_basename($panel->row));
+        //
+        //if( $post_type==null) {
+        //    $post_type=Str::snake(class_basename($panel->row));
+        //
+        //    if($panel->getParent()!=null){
+        //        $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
+        //        if(Str::startsWith($post_type,$parent_post_type.'_')){
+        //            $post_type=Str::after($post_type,$parent_post_type.'_');
+        //        }
+        //    }
+        //}
 
-            if($panel->getParent()!=null){
-                $parent_post_type=Str::snake(class_basename($panel->getParent()->row));
-                if(Str::startsWith($post_type,$parent_post_type.'_')){
-                    $post_type=Str::after($post_type,$parent_post_type.'_');
-                }
-            }
-        }
-        */
 
         $route_params['container'.($n + $i)] = $panel->postType();
 
@@ -88,10 +142,8 @@ class RouteService {
         try {
             $route = route($route_name, $route_params, false);
         } catch (\Exception $e) {
-            return '#['.__LINE__.']['.__FILE__.']';
-
-            ///*
-            dddx(
+            if (request()->input('debug', false)) {
+                dddx(
                 ['e' => $e->getMessage(),
                     'params' => $params,
                     'route_name' => $route_name,
@@ -106,6 +158,9 @@ class RouteService {
                     //'routes' => \Route::getRoutes(),
                 ]
             );
+            }
+
+            return '#['.__LINE__.']['.__FILE__.']';
         }
 
         //--- aggiungo le query string all'url corrente
@@ -119,11 +174,19 @@ class RouteService {
 
         return $url;
     }
-
+    */
     //se n=0 => 'container0'
     // se n=1 => 'container0.container1'
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public static function getRoutenameN($params) {
+        //default vars
+        $n = 0;
+        $act = 'show';
         extract($params);
         $tmp = [];
         //dddx(inAdmin());
@@ -139,8 +202,20 @@ class RouteService {
         return $routename;
     }
 
+    /*
     public static function urlRelatedPanel($params) {
+        $act = 'show';
         extract($params);
+        if (! isset($panel)) {
+            dddx(['err' => 'panel is missing']);
+
+            return;
+        }
+        if (! isset($related_name)) {
+            dddx(['err' => 'related_name is missing']);
+
+            return;
+        }
         $parents = collect([]);
         $panel_curr = $panel;
 
@@ -150,22 +225,22 @@ class RouteService {
         }
         $container_root = $panel->row;
         if ($parents->count() > 0) {
-            /*
-            $tmp='['.$parents->count().']';
-            foreach($parents as $parent){
-                $tmp.=$parent->row->post_type.'-';
-            }
-            return $tmp;
-            */
+
+            //$tmp='['.$parents->count().']';
+            //foreach($parents as $parent){
+            //    $tmp.=$parent->row->post_type.'-';
+            //}
+            //return $tmp;
+
             $container_root = $parents->first()->row;
         }
-        /*
-        $containers_class = self::getContainersClass();
-        $n = collect($containers_class)->search(get_class($container_root));
-        if (null === $n) {
-            $n = 0;
-        }
-        */
+
+        //$containers_class = self::getContainersClass();
+        //$n = collect($containers_class)->search(get_class($container_root));
+        //if (null === $n) {
+        //    $n = 0;
+        //}
+
         $n = 0;
 
         $route_name = self::getRoutenameN(['n' => $n + 1 + $parents->count(), 'act' => $act]);
@@ -189,22 +264,33 @@ class RouteService {
         try {
             $url = str_replace(url(''), '', route($route_name, $route_params));
         } catch (\Exception $e) {
+            if (request()->input('debug', false)) {
+                dd([
+                    'route_name' => $route_name,
+                    'route_params' => $route_params,
+                    'line' => __LINE__,
+                    'file' => __FILE__,
+                    'e' => $e->getMessage(),
+                ]);
+            }
+
             return '#['.__LINE__.']['.__FILE__.']';
-            dd([
-                'route_name' => $route_name,
-                'route_params' => $route_params,
-                'line' => __LINE__,
-                'file' => __FILE__,
-                'e' => $e->getMessage(),
-            ]);
         }
 
         return $url;
     }
+    */
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public static function urlLang($params = []) {
         extract($params);
 
+        return '?';
+        /*
         return '?'.$lang; //da fixare dopo
         //$row=$this->row;
         //$row->lang=$lang;
@@ -233,14 +319,14 @@ class RouteService {
                     $fields = ['title', 'subtitle', 'txt', 'meta_description', 'meta_keywords'];
                     foreach ($fields as $field) {
                         $trans = ImportService::trans(['q' => $new_post->$field, 'from' => app()->getLocale(), 'to' => $lang]);
-                        /*
-                        dddx([
-                            'from'=>app()->getLocale(),
-                            'to'=>$lang,
-                            'trans'=>$trans,
 
-                        ]);
-                        */
+                        //dddx([
+                        //    'from'=>app()->getLocale(),
+                        //    'to'=>$lang,
+                        //    'trans'=>$trans,
+
+                        //]);
+
                         $new_post->$field = $trans;
                     }
                     $new_post->lang = $lang;
@@ -262,5 +348,6 @@ class RouteService {
         } catch (\Exception $e) {
             return url($lang);
         }
+        */
     }
 }

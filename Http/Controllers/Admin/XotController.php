@@ -2,7 +2,9 @@
 
 namespace Modules\Xot\Http\Controllers\Admin;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
-
+/**
+ * Class XotController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 class XotController extends XotBaseController {
 }

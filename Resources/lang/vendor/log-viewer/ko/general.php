@@ -1,6 +1,4 @@
-<?php
-
-return [
-    'all'  => '전체',
-    'date' => '날짜',
-];
+<?php return array (
+  'all' => '전체',
+  'date' => '날짜',
+);

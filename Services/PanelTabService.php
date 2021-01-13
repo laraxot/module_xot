@@ -1,18 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
+use Modules\Xot\Models\Panels\XotBasePanel;
 
+/**
+ * Class PanelTabService.
+ */
 class PanelTabService {
-    protected $panel;
+    protected XotBasePanel $panel;
 
-    public function __construct($panel) {
+    /**
+     * PanelTabService constructor.
+     */
+    public function __construct(XotBasePanel &$panel) {
         $this->panel = $panel;
     }
 
-    public function getItemTabs() {
+    public function getItemTabs(): array {
         $item = $this->panel->row;
         $tabs = $this->panel->tabs();
         $routename = \Route::currentRouteName();
@@ -35,7 +44,7 @@ class PanelTabService {
         return [$row];
     }
 
-    public function getRowTabs() {
+    public function getRowTabs(): array {
         $data = [];
         foreach ($this->panel->tabs() as $tab) {
             $tmp = (object) [];
@@ -50,7 +59,7 @@ class PanelTabService {
         return $data;
     }
 
-    public function getTabs() {
+    public function getTabs(): array {
         $request = \Request::capture();
         $routename = \Route::currentRouteName();
         $act = last(explode('.', $routename));
@@ -95,11 +104,14 @@ class PanelTabService {
                 }
                 $tmp->url = $url;
                 $tmp->title = 'Content '; //.'['.request()->url().']['.$url.']';
+                /*
                 if ($url_test = 1) {
                     $tmp->active = request()->url() == $url;
                 } else {
                     $tmp->active = request()->routeIs('admin.container0.'.$act);
                 }
+                */
+                $tmp->active = request()->url() == $url;
                 if (null != $panel->guid()) {
                     $row[] = $tmp;
                 }

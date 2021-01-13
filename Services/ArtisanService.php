@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
+use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 
@@ -12,8 +15,16 @@ if (! defined('STDIN')) {
 //----- TODO
 //--  1) capire come far fare da chiamato non da consolle "scout:import"
 
+/**
+ * Class ArtisanService.
+ */
 class ArtisanService {
-    public static function act($act) { //da fare anche in noconsole, e magari mettere un policy
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return string
+     */
+    public static function act(string $act) { //da fare anche in noconsole, e magari mettere un policy
         $module_name = \Request::input('module');
         switch ($act) {
             case 'migrate':
@@ -81,7 +92,14 @@ class ArtisanService {
                  return self::errorClear();
 
             //-------------------------------------------------------------------------
-            case 'spatiecache-clear': return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+            case 'spatiecache-clear':
+                /* da vedere se e' necessaria
+                try {
+                    return \Spatie\ResponseCache\Facades\ResponseCache::clear();
+                } catch (\Exception $e) {
+                    dddx($e);
+                }
+                */
             //case 'spatiecache-clear1': return ArtisanService::exe('responsecache:clear'); //The command "responsecache:clear" does not exist.
 
             default: return '';
@@ -90,30 +108,45 @@ class ArtisanService {
         return '';
     }
 
+    /**
+     * @return string
+     */
     public static function errorClear() {
         $files = File::files(storage_path('logs'));
 
         foreach ($files as $file) {
             if ('log' == $file->getExtension()) {
-                File::delete($file);
+                //Parameter #1 $paths of static method Illuminate\Filesystem\Filesystem::delete() expects array|string, Symfony\Component\Finder\SplFileInfo given.
+                echo '<br/>'.$file->getRealPath();
+
+                File::delete($file->getRealPath());
             }
         }
 
         return '<pre>laravel.log cleared !</pre> ('.count($files).' Files )';
     }
 
+    /**
+     * @return string
+     */
     public static function debugbarClear() {
         $files = File::files(storage_path('debugbar'));
         foreach ($files as $file) {
             if ('json' == $file->getExtension()) {
-                File::delete($file);
+                echo '<br/>'.$file->getRealPath();
+
+                File::delete($file->getRealPath());
+                //$file->delete();
             }
         }
 
         return 'Debugbar Storage cleared! ('.count($files).' Files )';
     }
 
-    public static function exe($command, array $arguments = []) {
+    /**
+     * @param string $command
+     */
+    public static function exe($command, array $arguments = []): string {
         try {
             $output = '';
 
@@ -122,9 +155,11 @@ class ArtisanService {
 
             return $output;  // dato che mi carico solo le route minime menufull.delete non esiste.. impostare delle route comuni.
         } catch (Exception $e) {
+            return '<br/>'.$command.' non effettuato '.$e->getMessage();
+        } /*
+        //Dead catch - Symfony\Component\Console\Exception\CommandNotFoundException is already caught by Exception above.
+        catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
             return '<br/>'.$command.' non effettuato';
-        } catch (\Symfony\Component\Console\Exception\CommandNotFoundException $e) {
-            return '<br/>'.$command.' non effettuato';
-        }
+        }*/
     }
 }

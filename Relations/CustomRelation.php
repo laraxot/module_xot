@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Relations;
 
 use Closure;
@@ -8,32 +10,31 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * Class CustomRelation.
+ */
 class CustomRelation extends Relation {
     /**
      * The baseConstraints callback.
-     *
-     * @var \Closure
      */
-    protected $baseConstraints;
+    protected Closure $baseConstraints;
 
     /**
      * The eagerConstraints callback.
      *
      * @var \Closure
      */
-    protected $eagerConstraints;
+    protected ?Closure $eagerConstraints;
 
     /**
      * The eager constraints model matcher.
      *
      * @var \Closure
      */
-    protected $eagerMatcher;
+    protected ?Closure $eagerMatcher;
 
     /**
      * Create a new belongs to relationship instance.
-     *
-     * @return void
      */
     public function __construct(Builder $query, Model $parent, Closure $baseConstraints, ?Closure $eagerConstraints, ?Closure $eagerMatcher) {
         $this->baseConstraints = $baseConstraints;
@@ -64,11 +65,12 @@ class CustomRelation extends Relation {
     /**
      * Initialize the relation on a set of models.
      *
+     * @param array  $models
      * @param string $relation
      *
      * @return array
      */
-    public function initRelation(array $models, $relation) {
+    public function initRelation($models, $relation) {
         foreach ($models as $model) {
             $model->setRelation($relation, $this->related->newCollection());
         }

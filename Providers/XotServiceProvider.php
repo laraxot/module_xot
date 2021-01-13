@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Providers;
 
 use Illuminate\Cache\TagSet;
@@ -25,12 +27,23 @@ use Modules\Xot\Presenters\JsonPanelPresenter;
 use Modules\Xot\Services\TenantService as Tenant; // per slegarmi da tntsearch
 use Modules\Xot\Services\TranslatorService; // per dizionario morph
 
+/**
+ * Class XotServiceProvider.
+ */
 class XotServiceProvider extends XotBaseServiceProvider {
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
-    public $module_name = 'xot';
+    /**
+     * The module directory.
+     */
+    protected string $module_dir = __DIR__;
 
-    public function bootCallback() {
+    /**
+     * The module namespace.
+     */
+    protected string $module_ns = __NAMESPACE__;
+
+    public string $module_name = 'xot';
+
+    public function bootCallback(): void {
         $this->mergeConfigs();
 
         if (\Request::has('act') && 'migrate' == \Request::input('act')) {
@@ -85,14 +98,14 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     //end bootCallback
 
-    private function registerViewComposers() {
+    private function registerViewComposers(): void {
         //Factory $view
         //$view->composer('bootstrap-italia::page', BootstrapItaliaComposer::class);
         View::composer('*', XotComposer::class);
         //dddx($res);
     }
 
-    public function mergeConfigs() {
+    public function mergeConfigs(): void {
         $configs = ['database', 'filesystems', 'auth', 'metatag', 'services', 'xra', 'social'];
         foreach ($configs as $v) {
             $tmp = Tenant::config($v);
@@ -105,7 +118,7 @@ class XotServiceProvider extends XotBaseServiceProvider {
 
     //end mergeConfigs
 
-    public function registerCallback() {
+    public function registerCallback(): void {
         $this->loadHelpersFrom(__DIR__.'/../Helpers');
         $loader = AliasLoader::getInstance();
         $loader->alias('Panel', 'Modules\Xot\Services\PanelService');
@@ -130,14 +143,14 @@ class XotServiceProvider extends XotBaseServiceProvider {
         );
     }
 
-    public function loadHelpersFrom($path) {
+    public function loadHelpersFrom(string $path): void {
         foreach (\glob($path.'/*.php') as $filename) {
             $filename = \str_replace('/', \DIRECTORY_SEPARATOR, $filename);
             require_once $filename;
         }
     }
 
-    public function registerTranslator() {
+    public function registerTranslator(): void {
         // Override the JSON Translator
         $this->app->extend('translator', function (Translator $translator) {
             $trans = new TranslatorService($translator->getLoader(), $translator->getLocale());
@@ -147,11 +160,11 @@ class XotServiceProvider extends XotBaseServiceProvider {
         });
     }
 
-    public function registerCacheOPCache() {
+    public function registerCacheOPCache(): void {
         Cache::extend('opcache', function () {
-            $store = new Opcache\Store();
+            $store = new \Modules\Xot\Engines\Opcache\Store();
 
-            return new Opcache\Repository($store, new TagSet($store));
+            return new \Modules\Xot\Engines\Opcache\Repository($store, new TagSet($store));
         });
         // Extend Collection to implement __set_state magic method
         if (! Collection::hasMacro('__set_state')) {

@@ -1,62 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
 //----------- Requests ----------
 //------------ services ----------
+use Illuminate\Support\Arr;
+use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
 
-class UpdateJob implements ShouldQueue {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Traits\CommonTrait;
-
-    protected $container;
-    protected $item;
-    protected $row;
-    protected $data;
-
-    protected $panel;
-
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct($request, $panel) {
-        $this->panel = $panel;
-        if (is_array($request)) {
-            $this->data = $request;
-        } else {
-            $this->data = $request->all();
-        }
-    }
-
+/**
+ * Class UpdateJob.
+ */
+class UpdateJob extends XotBaseJob {
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle() {
+    public function handle(): PanelContract {
         $row = $this->panel->row;
         $data = $this->data;
-        //--
-        //dddx($data);
         $ris = $row->update($data);
-        $this->manageRelationships(['model' => $row, 'data' => $data, 'act' => 'update']);
+        $this->manageRelationships($row, $data, 'update');
         \Session::flash('status', 'aggiornato! ['.$row->getKey().']!'); //.implode(',',$row->getChanges())
 
         return $this->panel;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return $this
+     */
     public function setData($data) {
         $this->data = $data;
 
@@ -65,9 +42,10 @@ class UpdateJob implements ShouldQueue {
 
     /**
      *--- hasOne ----.
-     **/
-    public function updateRelationshipsHasOne($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsHasOne($model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             if (! is_array($data)) {
@@ -76,29 +54,33 @@ class UpdateJob implements ShouldQueue {
                 $model->$name()->update($data);
             }
         } else {
-            $this->storeRelationshipsHasOne($params);
+            dddx(['err' => 'wip']);
+            //$this->storeRelationshipsHasOne($params);
         }
     }
 
     /**
      *  belongsTo.
-     **/
-    public function updateRelationshipsBelongsTo($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsBelongsTo($model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             $model->$name()->update($data);
         //$model->$name->update($data);
         } else {
-            $this->storeRelationshipsBelongsTo($params);
+            //$this->storeRelationshipsBelongsTo($params);
+            dddx(['err' => 'wip']);
         }
     }
 
     /**
      * --- hasMany ---.
-     **/
-    public function updateRelationshipsHasMany($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsHasMany($model, string $name, array $data): void {
         $rows = $model->$name();
         debug_getter_obj(['obj' => $rows]);
         //---------- TO DO ------------//
@@ -108,14 +90,10 @@ class UpdateJob implements ShouldQueue {
 
     /**
      * --- belongsToMany.
-     **/
-    public function updateRelationshipsBelongsToMany($params) {
-        extract($params);
-        if (isset($data['from']) || isset($data['to'])) {
-            $this->saveMultiselectTwoSides($params);
-
-            return;
-        }
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsBelongsToMany($model, string $name, array $data): void {
         //$model->$name()->syncWithoutDetaching($data);
         $model->$name()->sync($data);
     }
@@ -128,9 +106,10 @@ class UpdateJob implements ShouldQueue {
 
     /**
      * morphOne.
-     **/
-    public function updateRelationshipsMorphOne($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsMorphOne($model, string $name, array $data): void {
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -145,9 +124,10 @@ class UpdateJob implements ShouldQueue {
 
     /**
      * morphMany.
-     **/
-    public function updateRelationshipsMorphMany($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsMorphMany($model, string $name, array $data): void {
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
             if (! is_array($v)) {
@@ -164,9 +144,10 @@ class UpdateJob implements ShouldQueue {
 
     /**
      * morphToMany.
-     **/
-    public function updateRelationshipsMorphToMany($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsMorphToMany($model, string $name, array $data): void {
         //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
@@ -224,18 +205,21 @@ class UpdateJob implements ShouldQueue {
 
     /**
      * pivot.
-     **/
-    public function updateRelationshipsPivot($params) {
-        extract($params);
+     *
+     * @param ModelContract|Model $model
+     */
+    public function updateRelationshipsPivot($model, string $name, array $data): void {
         $model->$name->update($data);
     }
 
-    public function saveMultiselectTwoSides($params) {
-        //passo request o direttamente data ?
-        extract($params);
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function saveMultiselectTwoSides($model, string $name, array $data): void {
         $items = $model->$name();
         $related = $items->getRelated();
         $container_obj = $model;
+        $container = $container_obj->post_type;
         //$items_key = $container_obj->getKeyName();
         $items_key = $related->getKeyName();
         $items_0 = $items->get()->pluck($items_key);

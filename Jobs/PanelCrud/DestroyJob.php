@@ -1,41 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
-class DestroyJob implements ShouldQueue {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    use Traits\CommonTrait;
-
-    protected $container;
-    protected $item;
-    protected $row;
-    protected $rows;
-    protected $data;
-
-    protected $panel;
-
-    public function __construct($request, $panel) {
-        $this->panel = $panel;
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle() {
+/**
+ * Class DestroyJob.
+ */
+class DestroyJob extends XotBaseJob {
+    public function handle(): PanelContract {
         $this->panel->row->delete();
         \Session::flash('status', 'eliminato');
 

@@ -1,17 +1,79 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Contracts;
 
-use Illuminate\Support\Facades\Request;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Modules\Xot\Services\PanelRouteService;
+
+//use Illuminate\Support\Facades\Request;
 
 //use Illuminate\Contracts\Auth\UserProvider;
 
+//prop Collection|BelongsToMany|HasOneOrMany|ModelContract[] $rows
+
+/**
+ * Modules\Xot\Contracts\PanelContract.
+ *
+ * @property ModelContract|null                 $row
+ * @property bool                               $in_admin
+ * @property PanelRouteService                  $route
+ * @property HasMany|BelongsToMany|HasOneOrMany $rows
+ *
+ * @method mixed                          findParentType($type)
+ * @method string                         imgSrc($params)
+ * @method \Illuminate\Support\Collection getParents()
+ * @method string                         postType()
+ * @method string                         guid()
+ * @method string                         pdfFilename()
+ * @method array                          with()
+ * @method mixed                          pdf($params)
+ * @method PanelContract|null             getParent()
+ * @method array                          fields()
+ * @method array                          actions()
+ * @method Builder                        rows()
+ * @method string                         getModuleNameLow()
+ * @method bool                           isSuperAdmin()
+ * @method mixed                          itemAction()
+ * @method string|string[]|void           relatedUrl()
+ * @method string                         url($params)
+ * @method self                           setRow($row)
+ * @method self                           update($data)
+ * @method mixed                          out($data=null)
+ * @method mixed                          callItemActionWithGate($act)
+ * @method mixed                          rules($params=[])
+ * @method array                          rulesMessages()
+ * @method array                          areas()
+ * @method array                          indexFields()
+ * @method mixed                          relatedName($params)
+ * @method string                         showUrl()
+ */
 interface PanelContract {
+    public function setRows($rows);
+
+    public function setItem(string $guid);
+
+    public function setParent(PanelContract $panel): PanelContract;
+
+    public function view($params = null);
+
+    public function itemAction($act);
+
+    public function relatedUrl($params);
+
+    public function setLabel(string $label): ModelContract;
+
+    /*
     public function __construct($model = null);
 
     public function setRow($row);
 
-    public function setRows($rows);
+
 
     public function initRows();
 
@@ -21,11 +83,11 @@ interface PanelContract {
 
     public function findParentType($type);
 
-    public function optionId($row);
+    public function optionId(object $row);
 
-    public function optionLabel($row);
+    public function optionLabel(object $row):string;
 
-    public function setItem($guid);
+
 
     public function hasLang();
 
@@ -207,7 +269,8 @@ interface PanelContract {
 
     public function dataTable();
 
-    public function view($params = null);
+
 
     public function id();
+    */
 }

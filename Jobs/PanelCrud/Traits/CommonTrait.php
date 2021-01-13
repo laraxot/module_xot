@@ -11,7 +11,14 @@ use Illuminate\Support\Str; // per dizionario morph
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Trait CommonTrait
+ * @package Modules\Xot\Jobs\PanelCrud\Traits
+ */
 trait CommonTrait {
+    /**
+     * @return array
+     */
     public function getData() {
         $panel = Panel::get($this->row);
         if (! is_object($panel)) {
@@ -32,12 +39,24 @@ trait CommonTrait {
     /**
      * https://hackernoon.com/eloquent-relationships-cheat-sheet-5155498c209
      * https://laracasts.com/discuss/channels/eloquent/cleanest-way-to-save-model-and-relationships.
+     * @param array $params
      */
     public function manageRelationships($params) {
+        $act = 'show';
         extract($params);
+        if (! isset($model)) {
+            dddx(['err' => 'model is missing']);
+
+            return;
+        }
+        if (! isset($data)) {
+            dddx(['err' => 'data is missing']);
+
+            return;
+        }
         if (! is_object($model)) {
             return;
-            dddx(['model' => $model]);
+            //dddx(['model' => $model]);
         }
         $methods = get_class_methods($model);
         //dddx($model->post_type);
@@ -50,7 +69,7 @@ trait CommonTrait {
         //dddx($params);
         $data1 = collect($data)->filter(function ($item, $key) use ($methods) {
             return in_array($key, $methods);
-        })->map(function ($v, $k) use ($model) {
+        })->map(function ($v, $k) use ($model,$data) {
             if (! is_string($k)) {
                 dddx([$k, $v, $data]);
             }
@@ -109,6 +128,11 @@ trait CommonTrait {
         }
     }
 
+    /**
+     * @param array $data
+     * @param PanelContract $panel
+     * @return mixed
+     */
     public function prepareForValidation($data, $panel) {
         $date_fields = collect($panel->fields())->filter(
             function ($item) use ($data) {
@@ -131,6 +155,12 @@ trait CommonTrait {
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @param PanelContract $panel
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function prepareAndValidate($data, $panel) {
         $data = $this->prepareForValidation($data, $panel);
         $act = '';
@@ -141,6 +171,11 @@ trait CommonTrait {
         return $validator->validate(); //fa tutto da solo
     }
 
+    /**
+     * @param $field
+     * @param mixed $value
+     * @return Carbon|false|null
+     */
     public function ConvDate($field, $value) {
         if (null == $value) {
             return $value;
@@ -150,6 +185,11 @@ trait CommonTrait {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param mixed $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime($field, $value) {
         if (null == $value) {
             return $value;
@@ -159,6 +199,11 @@ trait CommonTrait {
         return $value_new;
     }
 
+    /**
+     * @param $field
+     * @param mixed $value
+     * @return Carbon|false|null
+     */
     public function ConvDateTime2Fields($field, $value) {
         if (null == $value) {
             return $value;

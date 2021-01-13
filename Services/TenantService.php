@@ -1,18 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
 //use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
 //---- services ----
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Modules\Xot\Services\PanelService as Panel;
 
+/**
+ * Class TenantService.
+ */
 class TenantService {
-    public static function getName($params = []) {
+    public static function getName(array $params = []): string {
         $default = 'localhost';
         $server_name = $default;
         if (isset($_SERVER['SERVER_NAME']) && '127.0.0.1' != $_SERVER['SERVER_NAME']) {
@@ -20,6 +26,10 @@ class TenantService {
         }
 
         $server_name = \str_replace('www.', '', $server_name);
+        if (is_array($server_name)) {
+            $server_name = implode('', $server_name);
+        }
+        $server_name = (string) $server_name;
         $tmp = explode('.', $server_name);
         $subdomain = null;
         $domain = null;
@@ -54,7 +64,7 @@ class TenantService {
 
     //end function
 
-    public static function filePath($filename) {
+    public static function filePath(string $filename): string {
         $path = base_path('config/'.self::getName().'/'.$filename);
         $path = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $path);
 
@@ -63,7 +73,10 @@ class TenantService {
 
     //end function
 
-    public static function config($key) {
+    /**
+     * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
+     */
+    public static function config(string $key) {
         $group = implode('.', array_slice(explode('.', $key), 0, 2));
         /*
         if (in_admin() && Str::startsWith($key, 'xra.model')) {
@@ -95,7 +108,7 @@ class TenantService {
         return config($key);
     }
 
-    public static function saveConfig($params) {
+    public static function saveConfig(array $params): void {
         $name = 'xra';
         $data = [];
         extract($params);
@@ -129,14 +142,17 @@ class TenantService {
         File::put($path.'', $content);
     }
 
-    public static function model($name) {
+    /**
+     * @throws \ReflectionException
+     */
+    public static function model(string $name): ?Model {
         $name = Str::snake($name);
         $class = self::config('xra.model.'.$name);
         if ('' == $class) {
             $models = getAllModulesModels();
             if (! isset($models[$name])) {
                 //abort(403, 'Unauthorized path '.$name);
-                return false;
+                return null;
             }
             $class = $models[$name];
             $data = [];
@@ -160,9 +176,21 @@ class TenantService {
         return $model;
     }
 
-    public static function modelEager($name) {
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|null
+     */
+    public static function modelEager(string $name) {
         $model = self::model($name);
+        if (null == $model) {
+            return null;
+        }
         $panel = Panel::get($model);
+        if (null == $panel) {
+            return null;
+        }
         $with = $panel->with();
         //$model = $model->load($with);
         $model = $model->with($with);

@@ -1,0 +1,65 @@
+<?php
+
+namespace Modules\Xot\Models\Panels\Actions;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+//-------- models -----------
+//-------- services --------
+use Modules\Xot\Services\PanelService as Panel;
+//-------- bases -----------
+use ZipArchive;
+
+class PdfZipYearAction extends XotBasePanelAction {
+    public bool $onContainer = true;
+    public string $icon = '<i class="far fa-file-pdf"></i><i class="far fa-file-archive"></i>';
+    public $year = null;
+    public $pdf_view = null;
+
+    public function __construct($year, $pdf_view) {
+        $this->year = $year;
+        $this->pdf_view = $pdf_view;
+    }
+
+    public function handle() {
+        if (null == $this->year) {
+            die('<h3>Torna indietro e seleziona l\' anno </h3>');
+        }
+        $rows = $this->rows
+            ->where('ha_diritto', 1)
+            //->limit(5)
+            ->get();
+        $pdf_parz = [
+            'pdforientation' => 'L',
+            'view' => $this->pdf_view, //'progressioni::admin.schede.show.pdf',
+            'out' => 'content_PDF',
+        ];
+
+        $zip = new ZipArchive();
+        $filename_zip = '_'.$this->year.'.zip';
+        $filename_zip = Storage::disk('cache')->path($filename_zip);
+        if (true !== $zip->open($filename_zip, ZipArchive::CREATE)) {
+            dddx('NO');
+        }
+
+        //$zip->open(
+
+        foreach ($rows as $row) {
+            $panel = Panel::get($row);
+            $filename = 'Scheda_'.$row->id.'_'.$row->matr.'_'.$row->cognome.'_'.$row->nome.'_'.$row->anno.'_'.date('Ymd').'.pdf';
+
+            $path = Storage::disk('cache')->path($filename);
+            //if (! File::exists($path)) {
+            $pdf_parz['filename'] = $filename;
+            $pdf_content = $panel->pdf($pdf_parz);
+            die($pdf_content);
+            $res = Storage::disk('cache')->put($filename, $pdf_content);
+            //}
+            $zip->addFile($path, $filename);
+            //$zip->addFile($filename, $pdf_content);
+        }
+        $zip->close();
+
+        return response()->download($filename_zip);
+    }
+}

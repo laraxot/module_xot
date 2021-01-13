@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -11,33 +13,55 @@ use GuzzleHttp\Stream;
 //use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-use Psr\Http\Message\RequestInterface;
 //https://www.sitepoint.com/guzzle-php-http-client/
 ///*
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\DomCrawler\Crawler;
 
 //*/
 
+/**
+ * Class ImportService.
+ */
 class ImportService {
+    /**
+     * Undocumented variable.
+     *
+     * @var mixed
+     */
     protected static $client = null;
-    protected static $client_options = [];
+
+    /**
+     * @var array
+     */
+    protected static ?array $client_options = [];
+
+    /**
+     * @var mixed
+     */
     protected static $res = null;
+
+    /**
+     * Undocumented variable.
+     *
+     * @var mixed
+     */
     protected static $cookieJar = null;
 
-    public static function setClientOptions($data = []) {
+    public static function setClientOptions(array $data = []): void {
         self::$client_options = \array_merge(self::$client_options, $data);
         //ddd(self::$client_options);
     }
 
-    public static function initCookieJar() {
+    public static function initCookieJar(): void {
         $cookieFile = base_path('../jar.txt');
         self::$cookieJar = new FileCookieJar($cookieFile, true);
     }
 
-    public static function importInit() {
-        \ini_set('max_execution_time', 3000);
+    public static function importInit(): void {
+        \ini_set('max_execution_time', '3000');
         $params = \Route::current()->parameters();
         //$cookieJar = new CookieJar();
 
@@ -63,7 +87,7 @@ class ImportService {
     // google trend example
     //https://hotexamples.com/examples/guzzlehttp.cookie/CookieJar/setCookie/php-cookiejar-setcookie-method-examples.html
 
-    public static function enableCharles() {
+    public static function enableCharles(): void {
         $proxy = [
             //'http'  => 'tcp://127.0.0.1:8888', // Use this proxy with "http"
             //'https' => 'tcp://127.0.0.1:8888', // Use this proxy with "https",
@@ -79,7 +103,7 @@ class ImportService {
         //senza verify false errore = #message: "cURL error 60: SSL certificate problem: self signed certificate in certificate chain (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)"
     }
 
-    public static function enableCookie(array $cookies) {
+    public static function enableCookie(array $cookies): void {
         //$cookieJar->setCookie(SetCookie::fromString('SID="AuthKey 23ec5d03-86db-4d80-a378-6059139a7ead"; expires=Thu, 24 Nov 2016 13:52:20 GMT; path=/; domain=.sketchup.com'));
         if (null == self::$cookieJar) {
             self::initCookieJar();
@@ -99,7 +123,7 @@ class ImportService {
         self::$client_options['cookies'] = self::$cookieJar;
     }
 
-    public static function enableRedirect() {
+    public static function enableRedirect(): void {
         $onRedirect = function (RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
             echo '<hr/>Redirecting! '.$request->getUri().' to '.$uri."\n";
         };
@@ -115,17 +139,25 @@ class ImportService {
         //$client->followRedirects(true);
     }
 
-    public static function disableRedirect() {
+    public static function disableRedirect(): void {
         self::setClientOptions(['allow_redirects' => false]);
     }
 
+    /**
+     * @param mixed $x
+     *
+     * @return mixed
+     */
     public static function getConfig($x) {
         //$cookieJar = $client->getConfig('cookies');
         //$cookieJar->toArray();
         return self::$client->getConfig($x);
     }
 
-    public function getEffectiveUrl($method, $url, $attrs = []) {
+    /**
+     * @return mixed
+     */
+    public function getEffectiveUrl(string $method, string $url, array $attrs = []) {
         $attrs['allow_redirects'] = [
             'max' => 10,        // allow at most 10 redirects.
             'strict' => true,      // use "strict" RFC compliant redirects.
@@ -139,11 +171,16 @@ class ImportService {
         return $res->getHeaderLine('X-Guzzle-Redirect-History');
     }
 
-    public static function jqueryRequest($method, $url, $attrs = []) {
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public static function jqueryRequest(string $method, string $url, array $attrs = []) {
         return view('theme::jquery_request');
     }
 
-    public static function gRequest($method, $url, $attrs = [], $out = 'res') {
+    //ret \Exception|GuzzleException|string|Crawler
+
+    public static function gRequest(string $method, string $url, array $attrs = [], string $out = 'res'): string {
         if (null == self::$client) {
             self::importInit();
         }
@@ -162,43 +199,19 @@ class ImportService {
         }
         try {
             $res = self::$client->request($method, $url, \array_merge(self::$client_options, $attrs));
-        } catch (GuzzleException $e) {
-            //*
-            if (isset($proxy)) {
-                echo '<h3>Proxy :'.$proxy.'</h3>';
-            }
-            echo '['.__LINE__.']['.__FILE__.']<h3>getRequest ['.$url.']</h3>';
-            echo '<pre>';
-            \print_r($e->getRequest());
-            echo '</pre>';
-            echo '<h3>getResponse</h3>';
-            echo '<pre>';
-            \print_r($e->getResponse());
-            echo '</pre>';
-            if (null != $e->getResponse()) {
-                echo '<h3>getResponse->getBody</h3>';
-                echo '<pre>';
-                \print_r($e->getResponse()->getBody());
-                echo '</pre>';
-            }
-            //dd($e);
-            //*/
-            $e->is_error = 1;
+            self::$res = $res;
 
-            return $e;
-        } catch (GuzzleHttp\Exception\RequestException $e) {
-            ddd('ooo');
-        } catch (FatalThrowableError $e) {
-            ddd('qui');
-        } catch (GuzzleException\RequestException $e) {
-            ddd('3');
-        } catch (RequestException $e) {
-            ddd('4');
+            self::$client_options['headers']['Referer'] = self::$client_options['base_uri'].$url;
+            $html = (string) $res->getBody();
+        } catch (GuzzleException $e) {
+            $html = null;
         }
 
+        return $html;
         //echo $res->getStatusCode(); // 200
         //echo $res->getHeaderLine('X-Guzzle-Redirect-History');// http://first-redirect, http://second-redirect, etc...
         //echo $res->getHeaderLine('X-Guzzle-Redirect-Status-History');// 301, 302, etc...
+        /*
         self::$res = $res;
 
         self::$client_options['headers']['Referer'] = self::$client_options['base_uri'].$url;
@@ -216,23 +229,40 @@ class ImportService {
         }
 
         return $res;
+        */
     }
 
-    public static function getStatusCode() {
+    public static function getStatusCode(): string {
         return self::$res->getStatusCode();
     }
 
+    /**
+     * @return mixed
+     */
     public static function getRedirectHistory() {
         return self::$res->getHeaderLine('X-Guzzle-Redirect-History'); // http://first-redirect, http://second-redirect, etc...
         //echo $res->getHeaderLine('X-Guzzle-Redirect-Status-History');// 301, 302, etc...
     }
 
-    public static function submit($form, $vars, $out) {
+    /**
+     * @param mixed $form
+     * @param mixed $out
+     *
+     * @return \Exception|GuzzleException|string|Crawler
+     */
+    public static function submit($form, array $vars, $out) {
         $vars = \array_merge($form->getValues(), $vars);
 
         return self::gRequest($form->getMethod(), $form->getUri(), ['form_params' => $vars], $out);
     }
 
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array  $attrs
+     *
+     * @return string
+     */
     public static function getCacheKey($method, $url, $attrs = []) {
         $key = \json_encode(['method' => $method, 'url' => $url, 'attrs' => $attrs]);
         $key .= '_1';
@@ -240,22 +270,37 @@ class ImportService {
         return $key;
     }
 
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array  $attrs
+     *
+     * @return mixed
+     */
     public static function cacheRequest($method, $url, $attrs = []) {
         $key = self::getCacheKey($method, $url, $attrs = []);
-        $value = Cache::store('file')->rememberForever($key, function () use ($method,$url,$attrs) {
-            $res = self::gRequest($method, $url, $attrs);
-            if (isset($res->is_error)) {
-                return null;
-            }
-            $body = $res->getBody();
+        $value = Cache::store('file')->rememberForever(
+            $key,
+            function () use ($method,$url,$attrs) {
+                $body = self::gRequest($method, $url, $attrs);
 
-            return (string) $body;
-        });
+                return (string) $body;
+            }
+        );
         self::$client_options['headers']['referer'] = $url;
 
         return $value;
     }
 
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array  $attrs
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return string
+     */
     public static function cacheRequestFile($method, $url, $attrs = []) { //--- uguale ma al posto di usare il sistema cache usa i file
         if (! isset(self::$client_options['base_uri'])) {
             $url_info = \parse_url($url);
@@ -280,12 +325,14 @@ class ImportService {
 
             return $content;
         }
-        $gres = self::gRequest($method, $url, $attrs);
+        $body = self::gRequest($method, $url, $attrs);
+        /*
         if (isset($gres->is_error)) {
             $body = '';
         } else {
             $body = $gres->getBody();
         }
+        */
 
         $res = \Storage::disk('cache')->put($file_path, (string) $body);
         self::$client_options['headers']['referer'] = $url;
@@ -293,8 +340,20 @@ class ImportService {
         return (string) $body;
     }
 
+    /**
+     * @param array $params
+     *
+     * @throws \Exception
+     *
+     * @return array|void
+     */
     public static function getAddressFields($params) {
         \extract($params);
+        if (! isset($address)) {
+            dddx(['err' => 'address is missing']);
+
+            return;
+        }
         $linked = new \stdClass();
         $location_url = config('services.bing.url_location_api').'?query='.\urlencode($address).'&maxResults=5&key='.config('services.bing.maps_key');
         $location_url = config('services.google.url_location_api').'?address='.\urlencode($address).'&key='.config('services.google.maps_key');
@@ -358,10 +417,21 @@ class ImportService {
     */
 
     //https://phpnews.io/feeditem/chunked-transfer-encoding-in-php-with-guzzle
-    public static function download($params) {
+
+    public static function download(array $params): void {
         //$url
         //$filename
         extract($params);
+        if (! isset($filename)) {
+            dddx(['err' => 'filename is missing']);
+
+            return;
+        }
+        if (! isset($url)) {
+            dddx(['err' => 'url is missing']);
+
+            return;
+        }
         $resource = fopen($filename, 'w');
         $stream = \GuzzleHttp\Psr7\stream_for($resource);
         self::gRequest(
@@ -429,10 +499,16 @@ class ImportService {
     */
 
     //end function
+
+    /**
+     * @param array $params
+     *
+     * @return mixed|null
+     */
     public static function pixabay($params) {
         $lang = app()->getLocale();
         $image_type = 'photo';
-        //$q= necessary
+        $q = 'necessary';
         \extract($params);
         $pixabay_url = 'https://pixabay.com/api/?key=7945761-cdc8fef41b0600630fdabe778';
         $pixabay_url .= '&lang='.$lang;
@@ -449,8 +525,14 @@ class ImportService {
         return $ris;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed|null
+     */
     public static function pexels($params) {
         $lang = app()->getLocale();
+        $q = 'necessary';
         \extract($params);
         //--- devono mandare via mail api key ..
         //dd($this->client);
@@ -458,6 +540,12 @@ class ImportService {
     }
 
     //-------------------------------------------------------------------------
+
+    /**
+     * @param array $params
+     *
+     * @return mixed|string|void
+     */
     public static function trans($params) {
         $i = \rand(0, 20);
         if ($i > 0 && $i < 10) {
@@ -467,6 +555,11 @@ class ImportService {
         return self::mymemoryTrans($params);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed|null
+     */
     public static function apertiumTrans($params) {
         //https://github.com/24aitor/Laralang/blob/master/src/Builder/ApertiumTrans.php
         //$host = 'api.apertium.org';
@@ -474,8 +567,16 @@ class ImportService {
         //$data = json_decode($urldata, true);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public static function googleTrans($params) {
         $host = 'translate.googleapis.com';
+        $q = 'necessary';
+        $from = 'en';
+        $to = 'it';
         \extract($params);
         $q = \urlencode($q);
         $urldata = \file_get_contents("https://translate.googleapis.com/translate_a/single?client=gtx&sl=$from&tl=$to&dt=t&q=$q");
@@ -492,8 +593,16 @@ class ImportService {
         return \trim(\implode(' ', $trans));
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed|void
+     */
     public static function mymemoryTrans($params) {
         $host = 'api.mymemory.translated.net';
+        $q = 'necessary';
+        $from = 'en';
+        $to = 'it';
         \extract($params);
         $q = \urlencode($q);
         $urldata = \file_get_contents('http://'.$host.'/get?q='.$q.'&langpair='.$from.'|'.$to.'');
@@ -516,7 +625,14 @@ class ImportService {
 
     //end mymemoryTrans;
 
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
     public static function getForms($params) {
+        $html = '';
+        $node_tag = '';
         extract($params);
         $crawler = new Crawler((string) $html);
         $forms = $crawler->filter($node_tag)->each(function (Crawler $node) {
@@ -537,7 +653,13 @@ class ImportService {
         return $forms;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return \Exception|GuzzleException|string|Crawler
+     */
     public static function formRequest($params) {
+        $form = ['method' => '?', 'action' => '?', 'fields' => '?'];
         extract($params);
 
         return self::gRequest($form['method'], $form['action'], ['form_params' => $form['fields']]);

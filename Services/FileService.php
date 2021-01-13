@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
-use Illuminate\Support\Str;
+use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
+use Nwidart\Modules\Facades\Module;
 
-
-
+/**
+ * Class FileService.
+ */
 class FileService {
-
-
-    public static function asset($path) {
+    /**
+     * @return false|mixed|string
+     */
+    public static function asset(string $path) {
         if ('/' == $path[0]) {
             $path = \mb_substr($path, 1);
         }
@@ -53,10 +59,10 @@ class FileService {
         return asset(self::viewNamespaceToAsset($path));
     }
 
-
-
-
-    public static function viewNamespaceToDir($view) {
+    /**
+     * @return string|string[]
+     */
+    public static function viewNamespaceToDir(string $view) {
         $pos = \mb_strpos($view, '::');
         $pack = \mb_substr($view, 0, $pos);
         //relative from pack
@@ -72,18 +78,29 @@ class FileService {
         return $view_dir;
     }
 
-    public static function getViewNameSpacePath($ns) {
+    /**
+     * @return string
+     */
+    public static function getViewNameSpacePath(string $ns): ?string {
         if (null == $ns) {
             return null;
         }
         //dirname(\View::getFinder()->find('theme::includes.components.form.text'));
-        $viewHints = View::getFinder()->getHints();
+        //View::getFinder()
+        // View finder.
+        $finder = view()->getFinder();
+        $viewHints = [];
+        if (method_exists($finder, 'getHints')) {
+            $viewHints = $finder->getHints();
+        }
         if (isset($viewHints[$ns])) {
             return $viewHints[$ns][0];
         }
+
+        return null;
     }
 
-    public static function getViewNameSpaceUrl($ns, $path1) {
+    public static function getViewNameSpaceUrl(string $ns, string $path1): string {
         if (in_array($ns, ['pub_theme', 'adm_theme'])) {
             $path = self::getViewNameSpacePath($ns);
         } else {
@@ -107,19 +124,19 @@ class FileService {
             ddd($msg);
         }
         //*/
-        $url = \Module::asset($ns.':'.$path1);
+        $url = Module::asset($ns.':'.$path1);
         $filename_pub = \Module::assetPath($ns).DIRECTORY_SEPARATOR.$path1;
-        if (! \File::exists(\dirname($filename_pub))) {
+        if (! File::exists(\dirname($filename_pub))) {
             try {
-                \File::makeDirectory(\dirname($filename_pub), 0755, true, true);
+                File::makeDirectory(\dirname($filename_pub), 0755, true, true);
             } catch (Exception $e) {
                 dd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
             }
         }
-        if (\File::exists($filename)) {
+        if (File::exists($filename)) {
             try {
                 //echo '<hr>'.$filename.' >>>>  '.$filename_pub; //4 debug
-                \File::copy($filename, $filename_pub);
+                File::copy($filename, $filename_pub);
             } catch (Exception $e) {
                 dd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
             }
@@ -130,7 +147,7 @@ class FileService {
                 'filename' => $filename,
                 'msg' => 'Filename not Exists',
             ];
-            ddd($msg); //4 debug
+            dddx($msg); //4 debug
         }
 
         //$url=str_replace(url('/'),'',$url);
@@ -138,7 +155,7 @@ class FileService {
         return $url;
     }
 
-    public static function getViewNameSpaceUrl_nomodule($ns, $path1) {
+    public static function getViewNameSpaceUrl_nomodule(string $ns, string $path1): string {
         $path = self::getViewNameSpacePath($ns);
         /* 4 debug
         if(basename($path1)=='font-awesome.min.css'){
@@ -184,14 +201,14 @@ class FileService {
                 'filename' => $filename,
                 'msg' => 'Filename not Exists',
             ];
-            ddd($msg);
+            dddx($msg);
             //ddd('non esiste '.); //4 debug
         }
 
         return asset($path_pub);
     }
 
-    public static function path2Url($path, $ns) {
+    public static function path2Url(string $path, string $ns): string {
         if (Str::startsWith($path, public_path('/'))) {
             $relative = \mb_substr($path, \mb_strlen(public_path('/')));
 
@@ -224,7 +241,7 @@ class FileService {
         return asset($path_pub);
     }
 
-    public static function viewThemeNamespaceToAsset($key) {
+    public static function viewThemeNamespaceToAsset(string $key): string {
         $ns_name = Str::before($key, '::');
         //$ns_dir = View::getFinder()->getHints()[$ns_name][0];
         $ns_dir = self::getViewNameSpacePath($ns_name);
@@ -252,7 +269,7 @@ class FileService {
             try {
                 File::makeDirectory($dir_to, 0755, true, true);
             } catch (Exception $e) {
-                ddd('Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']');
+                dddx(['Caught exception: ', $e->getMessage(), '\n['.__LINE__.']['.__FILE__.']']);
             }
         }
 
@@ -265,14 +282,14 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                ddd('Caught exception: '.$e->getMessage());
+                dddx(['Caught exception: '.$e->getMessage()]);
             }
         }
 
         return $asset;
     }
 
-    public static function viewNamespaceToAsset($key) {
+    public static function viewNamespaceToAsset(string $key): string {
         $ns_name = Str::before($key, '::');
 
         //$ns_dir = View::getFinder()->getHints()[$ns_name][0];
@@ -341,7 +358,7 @@ class FileService {
             try {
                 File::copy($filename_from, $filename_to);
             } catch (Exception $e) {
-                ddd('Caught exception: '.$e->getMessage());
+                dddx(['Caught exception: '.$e->getMessage()]);
             }
         } else {
             //if (! File::exists($filename_from)) {
@@ -352,29 +369,60 @@ class FileService {
         return $asset;
     }
 
-     /*
+    /*
     public static function url($path)
     {
-        if($path=='') return $path;
-        if ('/' == $path[0]) {
+       if($path=='') return $path;
+       if ('/' == $path[0]) {
+           $path = \mb_substr($path, 1);
+       }
+       $str = 'theme/bc/';
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+       $str = 'theme/pub/';
+       $theme = config('xra.pub_theme');
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+       $str = 'theme/';
+       $theme = config('xra.adm_theme');
+       if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+           $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+           return $filename;
+       }
+
+       return ''.$path;
+    }
+    */
+    //*
+
+    public static function getFileUrl(string $path): string {
+        if (Str::startsWith($path, '//')) {
+        } elseif (Str::startsWith($path, '/')) {
             $path = \mb_substr($path, 1);
         }
         $str = 'theme/bc/';
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
         }
         $str = 'theme/pub/';
         $theme = config('xra.pub_theme');
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
         }
         $str = 'theme/';
         $theme = config('xra.adm_theme');
-        if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
             $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
 
             return $filename;
@@ -382,54 +430,31 @@ class FileService {
 
         return ''.$path;
     }
-    */
-    /*
-    public static function getFileUrl($path)
-    {
-        if(Str::startsWith($path, '//')) {
 
-        }elseif(Str::startsWith($path, '/')) {
-            $path = \mb_substr($path, 1);
-        }
-        $str = 'theme/bc/';
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/bc/'.\mb_substr($path, \mb_strlen($str)));
+    //*/
+    //*
 
-            return $filename;
-        }
-        $str = 'theme/pub/';
-        $theme = config('xra.pub_theme');
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
-
-            return $filename;
-        }
-        $str = 'theme/';
-        $theme = config('xra.adm_theme');
-        if (Str::startsWith($path, $str)) {
-            $filename = asset('/themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
-
-            return $filename;
-        }
-
-        return ''.$path;
-    }
-    */
-    /*
-    public static function viewNamespaceToUrl($files)
-    {
+    /**
+     * @param mixed[] $files
+     *
+     * @return mixed
+     */
+    public static function viewNamespaceToUrl($files) {
         foreach ($files as $k => $filePath) {
             //TODO testare con ARTISAN vendor:publish
             $pos = \mb_strpos($filePath, '::');
             if ($pos) {
                 $hints = \mb_substr($filePath, 0, $pos);
                 $filename = \mb_substr($filePath, $pos + 2);
+                $viewNamespace = self::getViewNameSpacePath($hints);
+                /*
                 $viewHints = View::getFinder()->getHints();
                 if (isset($viewHints[$hints][0])) {
                     $viewNamespace = $viewHints[$hints][0];
                 } else {
                     $viewNamespace = '---';
                 }
+                */
                 if ('pub_theme' == $hints) {
                     $tmp = \str_replace(public_path(''), '', $viewNamespace);
                     $tmp = \str_replace(\DIRECTORY_SEPARATOR, '/', $tmp);
@@ -446,7 +471,7 @@ class FileService {
                     $old_path = \str_replace('/', \DIRECTORY_SEPARATOR, $old_path);
                     $new_path = public_path('assets_packs'.\DIRECTORY_SEPARATOR.$hints.\DIRECTORY_SEPARATOR.$filename);
                     $new_path = \str_replace('/', \DIRECTORY_SEPARATOR, $new_path);
-                    if (!\File::exists(\dirname($new_path))) {
+                    if (! \File::exists(\dirname($new_path))) {
                         try {
                             \File::makeDirectory(\dirname($new_path), 0755, true, true);
                         } catch (Exception $e) {
@@ -470,6 +495,59 @@ class FileService {
 
         return $files;
     }
-    */
 
+    //*/
+
+    public static function getRealFile(string $path): string {
+        $filename = '';
+        if (Str::startsWith($path, asset(''))) {
+            return public_path(substr($path, strlen(asset(''))));
+        }
+        if ('/' == $path[0]) {
+            $path = \mb_substr($path, 1);
+        }
+        $str = 'theme/bc/';
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('bc/'.\mb_substr($path, \mb_strlen($str)));
+            //$filename=str_replace('\\/','/',$filename);
+            //$filename=realpath($filename);
+            return $filename;
+        }
+        $str = 'theme/pub/';
+        $theme = config('xra.pub_theme');
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+            //$filename=str_replace('\\/','/',$filename);
+            //$filename=realpath($filename);
+            return $filename;
+        }
+        $str = 'theme/';
+        $theme = config('xra.adm_theme');
+        //if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
+        if (Str::startsWith($path, $str)) {
+            $filename = public_path('themes/'.$theme.'/'.\mb_substr($path, \mb_strlen($str)));
+
+            return $filename;
+        }
+        $str = 'https://';
+        if (Str::startsWith($path, $str)) {
+            $info = pathinfo($path);
+            switch ($info['extension']) {
+                case 'css': $filename = public_path('/css/'.$info['basename']); break;
+                case 'js':  $filename = public_path('/js/'.$info['basename']); break;
+                default:
+                    echo '<h3>Unknown Extension</h3>';
+                    echo '<h3>['.$path.']</h3>';
+                    dddx($info);
+                break;
+            }
+            ImportService::download(['url' => $path, 'filename' => $filename]);
+
+            return $filename;
+        }
+
+        return ''.$path;
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
 use Illuminate\Support\Str;
@@ -9,9 +11,15 @@ use Nwidart\Modules\Support\Stub;
 use Nwidart\Modules\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class PanelMakeCommand.
+ */
 class PanelMakeCommand extends GeneratorCommand {
     use ModuleCommandTrait;
 
+    /**
+     * @var string
+     */
     protected $argumentName = 'name';
 
     /**
@@ -28,6 +36,9 @@ class PanelMakeCommand extends GeneratorCommand {
      */
     protected $description = 'Create a new panel class for the specified module';
 
+    /**
+     * @return string
+     */
     public function getTemplateContents() {
         $module = $this->laravel['modules']->findOrFail($this->getModuleName());
 
@@ -40,6 +51,9 @@ class PanelMakeCommand extends GeneratorCommand {
         */
     }
 
+    /**
+     * @return string
+     */
     public function getDestinationFilePath() {
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
 

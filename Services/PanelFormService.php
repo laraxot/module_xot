@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Collective\Html\FormFacade as Form;
@@ -7,14 +9,36 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Modules\FormX\Services\FormXService;
 use Modules\Theme\Services\ThemeService;
+use Modules\Xot\Contracts\PanelContract;
 
+/**
+ * Class PanelFormService.
+ */
 class PanelFormService {
-    protected $panel;
+    protected PanelContract $panel;
 
-    public function __construct($panel) {
+    /*
+    public function __construct(&$panel) {
         $this->panel = $panel;
     }
+    */
 
+    /**
+     * setPanel.
+     *
+     * @return $this
+     */
+    public function setPanel(PanelContract &$panel) {
+        $this->panel = $panel;
+
+        return $this;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public function formCreate($params = []) {
         $fields = $this->createFields();
         $row = $this->panel->row;
@@ -35,6 +59,11 @@ class PanelFormService {
         return $res;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public function formEdit($params = []) {
         $submit_btn = '<p class="form-submit">
             <input name="submit" type="submit" id="submit" value="Post your answer" class="button small color">
@@ -57,6 +86,7 @@ class PanelFormService {
         return $res;
     }
 
+    /*
     public function btnDelete($params = []) {
         $class = 'btn-primary mb-2';
         extract($params);
@@ -65,7 +95,7 @@ class PanelFormService {
         $parz = [
             'id' => $this->panel->row->getKey(),
             'btn_class' => 'btn '.$class,
-            'route' => $this->url(['act' => 'destroy']),
+            'route' => $this->panel->url(['act' => 'destroy']),
             'act' => $act,
             'title' => $title,
         ];
@@ -86,11 +116,17 @@ class PanelFormService {
 
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
+    */
 
+    /**
+     * @param array $params
+     *
+     * @return string
+     */
     public function btnCrud($params = []) {
         extract($params);
         $acts = ['edit', 'destroy', 'show'];
-        if (is_object($this->panel->row->panel)) {
+        if (is_object($this->panel->row->pivot)) {
             $acts = ['edit', 'destroy', 'detach', 'show'];
         }
 
@@ -111,9 +147,10 @@ class PanelFormService {
         return $html;
     }
 
-    public function btnHtml($params) {
+    public function btnHtml(array $params): ?string {
         $params['panel'] = $this->panel;
-        $params['url'] = RouteService::urlPanel($params);
+        //$params['url'] = RouteService::urlPanel($params);
+        $params['url'] = $this->panel->route->urlPanel($params);
         $params['method'] = Str::camel($params['act']);
         if ('index_order' == $params['act']) {
             //  dddx($params);
@@ -184,6 +221,7 @@ class PanelFormService {
         return FormXService::btnHtml($params);
     }
 
+    /*
     public function btn($act, $params = []) {
         dddx('deprecated');
         extract($params);
@@ -211,8 +249,93 @@ class PanelFormService {
 
         return view('formx::includes.components.btn.'.$act)->with($parz);
     }
-
+    */
+    /* deprecated
     public function btnSubmit($params = []) {
         return Form::bsSubmit(trans('xot::buttons.save'));
+    }
+    */
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    public function exceptFields($params = []) {
+        $act = 'show';
+        $panel = $this->panel;
+        extract($params);
+        $excepts = collect([]);
+        if (is_object($panel->rows)) {
+            $methods = [
+                'getForeignKeyName',
+                'getMorphType',
+                //'getLocalKeyName',
+                'getForeignPivotKeyName',
+                'getRelatedPivotKeyName',
+                'getRelatedKeyName',
+            ];
+            if ('index' != $act) { //nella lista voglio visualizzare l'id
+                $methods[] = 'getLocalKeyName';
+            }
+
+            foreach ($methods as $method) {
+                if (method_exists($panel->rows, $method)) {
+                    $excepts = $excepts->merge($panel->rows->$method());
+                }
+            }
+        }
+        $excepts = $excepts->unique()->all();
+
+        $fields = collect($panel->fields())
+            ->filter(
+                function ($item) use ($excepts, $act) {
+                    if (! isset($item->except)) {
+                        $item->except = [];
+                    }
+
+                    //!in_array($item->type,['Password']) &&
+                    return ! in_array($act, $item->except) &&
+                        ! in_array($item->name, $excepts);
+                }
+            )->all();
+
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function indexFields() {
+        $fields = $this->exceptFields(['act' => 'index']);
+
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function createFields() {
+        $fields = $this->exceptFields(['act' => 'create']);
+
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function editFields() {
+        $fields = $this->exceptFields(['act' => 'edit']);
+
+        return $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function indexEditFields() {
+        $fields = $this->exceptFields(['act' => 'index_edit']);
+
+        return $fields;
     }
 }

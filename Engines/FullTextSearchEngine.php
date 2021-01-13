@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Engines;
 
 use Illuminate\Database\Eloquent\Collection;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 
+/**
+ * Class FullTextSearchEngine.
+ */
 class FullTextSearchEngine extends Engine {
     /**
      * Update the given model in the index.
@@ -17,8 +22,6 @@ class FullTextSearchEngine extends Engine {
 
     /**
      * Remove the given model from the index.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection $models
      */
     public function delete($models) {
     }
@@ -42,7 +45,10 @@ class FullTextSearchEngine extends Engine {
         //DB::statement('ALTER TABLE users ADD FULLTEXT fulltext_index (first_name, last_name, email)');
         $model = $builder->model;
         //$columns = implode(',',$model->toSearchableArray());
-        $columns = \implode(', ', \array_keys($model->toSearchableArray())); // da scout
+        $columns = '';
+        if (method_exists($model, 'toSearchableArray')) {
+            $columns = \implode(', ', \array_keys($model->toSearchableArray())); // da scout
+        }
         //if($columns==''){
         //	$columns = \implode(', ',$model->getFillable());
             // ricerco sui campi che posso inserire prob fare "intersezione con campi reali"
@@ -81,11 +87,9 @@ class FullTextSearchEngine extends Engine {
     /**
      * Replaces spaces with full text search wildcards.
      *
-     * @param string $term
-     *
      * @return string
      */
-    protected function fullTextWildcards($term) {
+    protected function fullTextWildcards(string $term) {
         // removing symbols used by MySQL
         $reservedSymbols = ['-', '+', '<', '>', '@', '(', ')', '~'];
         $term = str_replace($reservedSymbols, '', $term);
@@ -117,7 +121,9 @@ class FullTextSearchEngine extends Engine {
      */
     public function paginate(Builder $builder, $perPage, $page) {
         $builder->limit = $perPage;
-        $builder->offset = ($perPage * $page) - $perPage;
+        if (property_exists($builder, 'offset')) {
+            $builder->offset = ($perPage * $page) - $perPage;
+        }
 
         return $this->search($builder);
     }

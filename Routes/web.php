@@ -55,13 +55,13 @@ Route::group(
         'middleware' => $middleware,
         'namespace' => $namespace.'\Admin',
     ],
-    function () use ($areas_prgs) {
+    function () {
         Route::get('/', 'BackendController@dashboard')->name('admin');
         //RouteTrait::dynamic_route($areas_prgs);
     }
 );
 
-if (inAdmin() || true) {
+if (inAdmin()) {
     //require_once(__DIR__.'/web_admin.php');  //WEB GENERICO
     $areas_adm = [
         //$item1,

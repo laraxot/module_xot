@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 
 //use Modules\Food\Models\Profile;
-//use Modules\Xot\Traits\FormRequestTrait;
 //--- Rules ---
 
+/**
+ * Class XotBaseRequest.
+ */
 abstract class XotBaseRequest extends FormRequest {
     //use FormRequestTrait;
 
@@ -17,6 +22,7 @@ abstract class XotBaseRequest extends FormRequest {
     //$this->setContainer(factory(Profile::class));
     //$this->setContainer(app());
     //}
+
     public $panel;
 
     /**
@@ -34,13 +40,20 @@ abstract class XotBaseRequest extends FormRequest {
      * @return array
      */
     public function rules() {
-        //return $rules;
+        return [];
     }
 
+    /**
+     * @param PanelContract $panel
+     */
     public function setPanel($panel) {
         $this->panel = $panel;
     }
 
+    /**
+     * @param PanelContract $panel
+     * @param string        $act
+     */
     public function validatePanel($panel, $act = '') {
         $this->setPanel($panel);
         $this->prepareForValidation();
@@ -69,10 +82,9 @@ abstract class XotBaseRequest extends FormRequest {
 
     /**
      * Cerco di rilevare quando viene chiamato.
-     *
-     **/
+     */
     public function modifyInput(array $data) {
-        ddd($data);
+        dddx($data);
     }
 
     public function prepareForValidation() {
@@ -96,11 +108,20 @@ abstract class XotBaseRequest extends FormRequest {
     /**
      * Cerco di rilevare quando viene chiamato.
      *
-     **/
+     * @return array
+     */
     public function validationData() {
-        ddd('aaa');
+        dddx('aaa');
+
+        return [];
     }
 
+    /**
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return Carbon|false|null
+     */
     public function ConvDate($field, $value) {
         if (null == $value) {
             return $value;
@@ -110,6 +131,12 @@ abstract class XotBaseRequest extends FormRequest {
         return $value_new;
     }
 
+    /**
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return Carbon|false|null
+     */
     public function ConvDateTime($field, $value) {
         if (null == $value) {
             return $value;
@@ -119,6 +146,12 @@ abstract class XotBaseRequest extends FormRequest {
         return $value_new;
     }
 
+    /**
+     * @param string $field
+     * @param mixed  $value
+     *
+     * @return Carbon|false|null
+     */
     public function ConvDateTime2Fields($field, $value) {
         if (null == $value) {
             return $value;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Providers;
 
 use Illuminate\Routing\Router;
@@ -13,14 +15,20 @@ use Modules\Xot\Http\Middleware\SetDefaultLocaleForUrlsMiddleware;
 class RouteServiceProvider extends XotBaseRouteServiceProvider {
     /**
      * The module namespace to assume when generating URLs to actions.
-     *
-     * @var string
      */
-    protected $moduleNamespace = 'Modules\Xot\Http\Controllers';
-    protected $module_dir = __DIR__;
-    protected $module_ns = __NAMESPACE__;
+    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
 
-    public function bootCallback() {
+    /**
+     * The module directory.
+     */
+    protected string $module_dir = __DIR__;
+
+    /**
+     * The module namespace.
+     */
+    protected string $module_ns = __NAMESPACE__;
+
+    public function bootCallback(): void {
         $router = $this->app['router'];
         //--- cambio lingua --
         $langs = array_keys(config('laravellocalization.supportedLocales'));
@@ -38,7 +46,7 @@ class RouteServiceProvider extends XotBaseRouteServiceProvider {
         $router->prependMiddlewareToGroup('web', SetDefaultLocaleForUrlsMiddleware::class);
     }
 
-    public function registerRoutePattern(Router $router) {
+    public function registerRoutePattern(Router $router): void {
         //---------- Lang Route Pattern
         $langs = config('laravellocalization.supportedLocales');
         $pattern = collect(\array_keys($langs))->implode('|');

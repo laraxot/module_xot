@@ -1,9 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Traits;
 
+/**
+ * Trait Getter.
+ */
 trait Getter {
-    public static function __merge($index, $value) {
+    public static function __merge(string $index, array $value): array {
         $tmp = self::__getStatic($index);
         if (! is_array($tmp)) {
             $tmp = [];
@@ -14,7 +19,10 @@ trait Getter {
         return $tmp;
     }
 
-    public static function __getStatic($index) {
+    /**
+     * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed
+     */
+    public static function __getStatic(string $index) {
         if (isset(self::$vars[$index])) {
             return self::$vars[$index];
         }
@@ -35,20 +43,30 @@ trait Getter {
 
     //end __set
 
-    public static function __setStatic($index, $value) {
+    /**
+     * @param mixed $value
+     */
+    public static function __setStatic(string $index, $value): void {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
         self::$vars[$index] = $value;
     }
 
     //end __set
 
-    public static function __concatBeforeStatic($index, $value) {
+    public static function __concatBeforeStatic(string $index, string $value): void {
         $tmp = self::__getStatic($index);
         $tmp = $value.$tmp;
         self::__setStatic($index, $tmp);
     }
 
-    //*
+    //* //se lo togli non funziona piu' le funzioni del themeservice
+
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return mixed|void
+     */
     public static function __callStatic($method, $args) {
         if (\preg_match('/^([gs]et)([A-Z])(.*)$/', $method, $match)) {
             $reflector = new \ReflectionClass(__CLASS__);
@@ -59,7 +77,9 @@ trait Getter {
                     case 'get':
                         return $property->getValue();
                     case 'set':
-                        return $property->setValue($args[0]);
+                        $property->setValue($args[0]);
+
+                        return;
                 }
             } else {
                 throw new \InvalidArgumentException("Property {$property} doesn't exist");
@@ -68,11 +88,20 @@ trait Getter {
     }
 
     //*/
+
+    /**
+     * @param string $index
+     *
+     * @return bool
+     */
     public function __isset($index) {
         return isset($this->vars[$index]);
     }
 
-    public function __concat($index, $value) { //default After
+    /**
+     * @param mixed $value
+     */
+    public function __concat(string $index, $value): void { //default After
         $tmp = $this->__get($index);
         $tmp = $tmp.$value;
         $this->__set($index, $tmp);
@@ -81,14 +110,18 @@ trait Getter {
     /**
      * @set undefined vars
      *
-     * @param string $index
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function __set($index, $value) {
+    public function __set(string $index, $value): void {
         //echo '<br/>SET ['.get_class($this).']['.$index.']['.round(memory_get_usage()/(1024*1024),2).' MB]';
         $this->vars[$index] = $value;
     }
 
+    /**
+     * @param string $index
+     *
+     * @return mixed|null
+     */
     public function __get($index) {
         if (isset($this->vars[$index])) {
             return $this->vars[$index];
@@ -97,7 +130,11 @@ trait Getter {
         return null;
     }
 
-    public function __concatBefore($index, $value) {
+    /**
+     * @param string $index
+     * @param mixed  $value
+     */
+    public function __concatBefore($index, $value): void {
         $tmp = $this->__get($index);
         $tmp = $value.$tmp;
         $this->__set($index, $tmp);
@@ -141,6 +178,11 @@ trait Getter {
         return $ris;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed|null
+     */
     public function __getVars($params = []) {
         $vars = $this->vars;
         $vars['smarty'] = '';

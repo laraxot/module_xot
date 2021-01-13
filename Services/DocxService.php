@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Carbon\Carbon;
@@ -21,11 +23,19 @@ https://code-boxx.com/convert-html-to-docx-using-php/
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\TemplateProcessor;
 
+/**
+ * Class DocxService.
+ */
 class DocxService {
-    public $docx_input;
+    public string $docx_input;
 
-    private static $instance = null;
+    public array $values;
 
+    private static ?DocxService $instance = null;
+
+    /**
+     * @return DocxService|null
+     */
     public static function getInstance() {
         if (null === self::$instance) {
             self::$instance = new self();
@@ -34,6 +44,11 @@ class DocxService {
         return self::$instance;
     }
 
+    /**
+     * @param string $filename
+     *
+     * @return DocxService|null
+     */
     public static function setDocxInput($filename) {
         $obj = self::getInstance();
         $obj->docx_input = $filename;
@@ -41,6 +56,11 @@ class DocxService {
         return $obj;
     }
 
+    /**
+     * @param mixed $values
+     *
+     * @return DocxService|null
+     */
     public static function setValues($values) {
         $obj = self::getInstance();
         $obj->values = $values;
@@ -48,6 +68,14 @@ class DocxService {
         return $obj;
     }
 
+    /**
+     * @param array $params
+     *
+     * @throws \PhpOffice\PhpWord\Exception\CopyFileException
+     * @throws \PhpOffice\PhpWord\Exception\CreateTemporaryFileException
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function out($params = []) {
         extract($params);
         include __DIR__.'/vendor/autoload.php'; //carico la mia libreria che uso solo qui..
@@ -64,12 +92,18 @@ class DocxService {
             $tpl->saveAs($filename_out_path);
         } catch (\Exception $e) {
             //handle exception
-            ddd($e);
+            dddx([$e]);
         }
 
         return response()->download($filename_out_path);
     }
 
+    /**
+     * @param object $row
+     * @param string $prefix
+     *
+     * @return array
+     */
     public static function rows2Data_test($row, $prefix) {
         if (! is_object($row)) {
             return [];
@@ -114,6 +148,12 @@ class DocxService {
         return $data;
     }
 
+    /**
+     * @param object $row
+     * @param string $prefix
+     *
+     * @return array
+     */
     public static function rows2Data($row, $prefix) {
         if (! is_object($row)) {
             return [];

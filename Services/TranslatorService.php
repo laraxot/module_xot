@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Illuminate\Support\Arr;
@@ -14,13 +16,18 @@ use Modules\Theme\Services\ThemeService;
 
 //ddd('leggo');
 
+/**
+ * Class TranslatorService.
+ */
 class TranslatorService extends BaseTranslator {
     /**
-     * @param string $key
-     * @param null   $locale
-     * @param bool   $fallback
+     * get.
      *
-     * @return array|string|void|null
+     * @param string      $key
+     * @param string|null $locale
+     * @param bool        $fallback
+     *
+     * @return array|string
      */
     public function get($key, array $replace = [], $locale = null, $fallback = true) {
         $translation = parent::get($key, $replace, $locale, $fallback);
@@ -42,13 +49,26 @@ class TranslatorService extends BaseTranslator {
         return $translation;
     }
 
+    /**
+     * getFromJson.
+     *
+     * @param mixed       $key
+     * @param string|null $locale
+     *
+     * @return array|string
+     */
     public function getFromJson($key, array $replace = [], $locale = null) {
         return $this->get($key, $replace, $locale);
     }
 
-    public static function parse($params) {
+    public static function parse(array $params): array {
         $lang = app()->getLocale();
         extract($params);
+        if (! isset($key)) {
+            dddx(['err' => 'key is missing']);
+
+            return [];
+        }
         $translator = app('translator');
         $tmp = ($translator->parseKey($key));
         $namespace = $tmp[0];
@@ -73,13 +93,18 @@ class TranslatorService extends BaseTranslator {
         ];
     }
 
-    public static function store($data) {
-        $data = collect($data)->map(function ($v, $k) {
-            $item = self::parse(['key' => $k]);
-            $item['value'] = $v;
+    /**
+     * @return void
+     */
+    public static function store(array $data) {
+        $data = collect($data)->map(
+            function ($v, $k) {
+                $item = self::parse(['key' => $k]);
+                $item['value'] = $v;
 
-            return $item;
-        })
+                return $item;
+            }
+        )
         //->dd()
         ->filter(function ($v, $k) {
             return $v['dir_exists'] && strlen($v['lang_dir']) > 3;
@@ -101,12 +126,23 @@ class TranslatorService extends BaseTranslator {
             }
 
             $data = $rows;
+            if (! isset($v)) {
+                dddx(['err' => 'v is missing']);
+
+                return;
+            }
             $filename = $v['filename'];
             //echo '<h3>['.$filename.']</h3>';
             ArrayService::save(['filename' => $filename, 'data' => $data]);
         }
     }
 
+    /**
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return void
+     */
     public static function set($key, $value) {
         $lang = app()->getLocale();
         if (trans($key) == $value) {

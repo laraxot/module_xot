@@ -1,6 +1,4 @@
-<?php
-
-return [
-    'all'  => 'Toate',
-    'date' => 'Dată',
-];
+<?php return array (
+  'all' => 'Toate',
+  'date' => 'Dată',
+);

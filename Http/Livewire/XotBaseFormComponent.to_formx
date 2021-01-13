@@ -50,7 +50,7 @@ abstract class XotBaseFormComponent extends Component {
         ]);
     }
 
-    public function fields() {
+    public function fields(): array {
         return [
             Field::make('Name')->input()->rules(['required', 'string', 'max:255']),
             Field::make('Email')->input('email')->rules(['required', 'string', 'email', 'max:255', 'unique:users,email']),

@@ -1,6 +1,4 @@
-<?php
-
-return [
-    'all'  => 'جميع',
-    'date' => 'تاريخ',
-];
+<?php return array (
+  'all' => 'جميع',
+  'date' => 'تاريخ',
+);

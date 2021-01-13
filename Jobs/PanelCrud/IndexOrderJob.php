@@ -1,30 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Jobs\PanelCrud;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Modules\Xot\Contracts\PanelContract;
 
 //----------- Requests ----------
 //------------ services ----------
 
-class IndexOrderJob implements ShouldQueue {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
-    //use Traits\CommonTrait;
-
-    protected $panel;
-
-    public function __construct($request, $panel) {
-        $this->panel = $panel;
-    }
-
-    public function handle() {
+/**
+ * Class IndexOrderJob.
+ */
+class IndexOrderJob extends XotBaseJob {
+    public function handle(): PanelContract {
         return $this->panel;
     }
 }

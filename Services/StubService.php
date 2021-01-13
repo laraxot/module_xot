@@ -1,17 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\PanelContract;
 
+/**
+ * Class StubService.
+ */
 class StubService {
     //-- model (object) or class (string)
     //-- stub_name name of stub
     //-- create yes or not
 
-    public static function fromModel($params) {
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     *
+     * @return false|string|void
+     */
+    public static function fromModel(array $params) {
         extract($params);
+        if (! isset($model)) {
+            dddx(['err' => 'model is missing']);
+
+            return;
+        }
+        if (! isset($stub)) {
+            dddx(['err' => 'stub is missing']);
+
+            return;
+        }
+
         if (! is_object($model)) {
             //dddx($model);
             return false;
@@ -41,6 +66,7 @@ class StubService {
         $params['fields'] = [];
         //ddd($params);
         $stub_name = $stub;
+        $file = '';
         switch ($stub_name) {
             case 'migration_morph_pivot':
                 $file = $dir.'/../Database/Migrations/'.date('Y_m_d_Hi00').'_create_'.Str::snake($class_name).'_table.php';
@@ -92,7 +118,7 @@ class StubService {
                 $params['class_name'] = $params['class_name'].'Policy';
                 break;
             default:
-                ddd('['.$stub_name.'] Unkwonn !');
+                dddx(['['.$stub_name.'] Unkwonn !']);
                 break;
         }
 
@@ -125,7 +151,15 @@ class StubService {
         \Session::flash($msg);
     }
 
-    public static function getByModel($model, $name, $create = false) {
+    /**
+     * @param ModelContract|Model $model
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     *
+     * @return PanelContract|null
+     */
+    public static function getByModel($model, string $name, bool $create = false) {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();
@@ -141,47 +175,44 @@ class StubService {
             self::create($model, $name);
         }
 
-        try {
-            return app($panel);
-        } catch (\Exception $e) {
-            /*
-            dd(['e' => $e,
-                'line' => __LINE__,
-                'file' => __FILE__,
-            ]);
-            */
-        }
-
-        /*
-        try {
-            if (class_exists($panel)) {
-                return new $panel();
-            }
-        } catch (\Exception $e) {
-            dd(['e' => $e,
-                'line' => __LINE__,
-                'file' => __FILE__,
-            ]);
-        }
-        */
-        if (! $create) {
-            ddd($panel.' NOT EXISTS !');
-        } else {
-            /* -- 4 debug
-        $t= new $panel;
-        ddd($t);
-        ddd('devo creare '.$panel);
-         */
-        }
-        self::create($model, $name);
-        //return new $panel;
-        ddd($name.' ['.$class_full.']['.$panel.'] is under creating , refresh page');
-        \Session::flash('status', $name.' created');
-        //return redirect()->back();
+        return app($panel);
     }
 
-    public static function replaces($params) {
+    /**
+     * @return array|void
+     */
+    public static function replaces(array $params) {
         extract($params);
+        if (! isset($namespace)) {
+            dddx(['err' => 'namespace is missing']);
+
+            return;
+        }
+        if (! isset($class_name)) {
+            dddx(['err' => 'class_name is missing']);
+
+            return;
+        }
+        if (! isset($class)) {
+            dddx(['err' => 'class is missing']);
+
+            return;
+        }
+        if (! isset($dummy_id)) {
+            dddx(['err' => 'dummy_id is missing']);
+
+            return;
+        }
+        if (! isset($search)) {
+            dddx(['err' => 'search is missing']);
+
+            return;
+        }
+        if (! isset($fields)) {
+            dddx(['err' => 'fields is missing']);
+
+            return;
+        }
         $replaces = [
             'DummyNamespace' => $namespace,
             'DummyClass' => $class_name,
@@ -197,7 +228,11 @@ class StubService {
         return $replaces;
     }
 
-    public static function create($model, $name) {
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
+    public static function create(ModelContract $model, string $name): void {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         //$class=Str::before($class_full,$class_name);
@@ -215,10 +250,13 @@ class StubService {
         $fields = self::fields($model);
 
         $dummy_id = $model->getRouteKeyName();
+        /*
+        Call to function is_array() with string will always evaluate to false.
         if (is_array($dummy_id)) {
             echo '<h3>not work with multiple keys</h3>';
             $dummy_id = var_export($dummy_id, true);
         }
+        */
         $replace = [
             'DummyNamespace' => $panel_namespace,
             'DummyClass' => $class_name.Str::studly($name),
@@ -244,11 +282,14 @@ class StubService {
             File::put($panel_file, $stub);
         } else {
             echo '<h3>['.$panel_file.'] Just exists</h3>';
-            ddd(debug_backtrace());
+            dddx(debug_backtrace());
         }
     }
 
-    public static function fields($model) {
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public static function fields(ModelContract $model): array {
         if (! method_exists($model, 'getFillable')) {
             return [];
         }
@@ -337,8 +378,22 @@ class StubService {
         return $fields;
     }
 
-    public static function updatePanel($params) {
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
+    public static function updatePanel(array $params): void {
         extract($params);
+        if (! isset($func)) {
+            dddx(['err' => 'func is missing']);
+
+            return;
+        }
+        if (! isset($panel)) {
+            dddx(['err' => 'panel is missing']);
+
+            return;
+        }
         $func_file = __DIR__.'/../Console/stubs/panels/'.$func.'.stub';
         $func_stub = File::get($func_file);
         $autoloader_reflector = new \ReflectionClass($panel);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Console;
 
 use Illuminate\Console\Command;
@@ -26,6 +28,9 @@ https://medium.com/@josepostiga/how-i-managed-to-control-chaos-with-laravel-d47b
 
 */
 
+/**
+ * Class CreateAllRepositoriesCommand.
+ */
 class CreateAllRepositoriesCommand extends Command {
     /**
      * The console command name.
@@ -63,7 +68,7 @@ class CreateAllRepositoriesCommand extends Command {
             $all = array_merge($all, $models);
         }
         foreach ($all as $k => $v) {
-            StubService::missingClass(['class' => $v, 'stub' => 'repository']);
+            //  StubService::missingClass(['class' => $v, 'stub' => 'repository']);
         }
     }
 

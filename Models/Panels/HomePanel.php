@@ -6,52 +6,62 @@ use Illuminate\Http\Request;
 
 //--- Services --
 
+/**
+ * Class HomePanel
+ * @package Modules\Xot\Models\Panels
+ */
 class HomePanel extends XotBasePanel {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = 'Modules\Xot\Models\Home';
+    public static string $model = 'Modules\Xot\Models\Home';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'title';
+    public static string $title = 'title';
 
     /**
      * The columns that should be searched.
      *
      * @var array
      */
-    public static $search = [];
+    public static array $search = [];
 
     /**
      * The relationships that should be eager loaded on index queries.
-     *
-     * @var array
      */
-    public function with() {
+    public function with():array {
         return ['widgets'];
     }
 
-    public function search() {
+    /**
+     * @return array
+     */
+    public function search() :array {
+
         return [];
     }
 
     /**
      * on select the option id.
+     * @param object $row
+     * @return mixed
      */
-    public function optionId($row) {
+    public function optionId(object $row) {
         return $row->area_id;
     }
 
     /**
      * on select the option label.
+     * @param object $row
+     * @return string
      */
-    public function optionLabel($row) {
+    public function optionLabel(object $row):string {
         return $row->area_define_name;
     }
 
@@ -68,7 +78,7 @@ class HomePanel extends XotBasePanel {
         'value'=>'..',
      */
 
-    public function fields() {
+    public function fields(): array {
         return [
         ];
     }

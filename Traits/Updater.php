@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Traits;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Trait Updater.
+ */
 trait Updater {
     /*
     public function myLog() {
@@ -34,8 +39,10 @@ trait Updater {
     }
     */
 
-    public function getTableColumns() {
-        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+    public function getTableColumns(): array {
+        return $this->getConnection()
+            ->getSchemaBuilder()
+            ->getColumnListing($this->getTable());
     }
 
     protected static function boot() {
@@ -46,14 +53,16 @@ trait Updater {
          **/
         static::creating(function ($model) {
             if (null != Auth::user()) {
-                $model->created_by = Auth::user()->handle;
-                $model->updated_by = Auth::user()->handle.'';
+                // Cannot call method getAttribute() on Modules\LU\Models\User|null.
+                // Cannot access property $handle on Modules\LU\Models\User|null.
+                $model->created_by = optional(Auth::user())->handle.'';
+                $model->updated_by = optional(Auth::user())->handle.'';
             }
         });
 
         static::updating(function ($model) {
             if (Auth::check()) {
-                $model->updated_by = Auth::user()->handle.'';
+                $model->updated_by = optional(Auth::user())->handle.'';
             }
         });
         //-------------------------------------------------------------------------------------

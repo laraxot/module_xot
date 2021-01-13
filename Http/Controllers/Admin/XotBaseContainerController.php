@@ -1,20 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\Controllers\Admin;
 
 use Illuminate\Routing\Controller;
 //--- services ---
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Http\Requests\XotRequest;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PolicyService;
 use Modules\Xot\Services\TenantService as Tenant;
 use Nwidart\Modules\Facades\Module;
 
-//use Modules\Xot\Traits\CrudContainerItemNoPostTrait as CrudTrait;
-
+/**
+ * Class XotBaseContainerController.
+ */
 abstract class XotBaseContainerController extends Controller {
+    protected $panel;
+
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|mixed
+     */
     public function __call($method, $args) {
         //dddx(['method' => $method, 'args' => $args]);
         $panel = Panel::getRequestPanel();
@@ -33,6 +45,9 @@ abstract class XotBaseContainerController extends Controller {
         return $this->__callRouteAct($method, $args);
     }
 
+    /**
+     * @return string
+     */
     public function getController() {
         list($containers, $items) = params2ContainerItem();
         $mod_name = $this->panel->getModuleName(); //forse da mettere container0
@@ -50,6 +65,12 @@ abstract class XotBaseContainerController extends Controller {
         return '\Modules\Xot\Http\Controllers\Admin\XotPanelController';
     }
 
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callRouteAct($method, $args) {
         $panel = $this->panel;
 
@@ -61,8 +82,9 @@ abstract class XotBaseContainerController extends Controller {
 
         $request = XotRequest::capture();
         $controller = $this->getController();
+        $data = $request->all();
 
-        $panel = app($controller)->$method($request, $panel);
+        $panel = app($controller)->$method($data, $panel);
 
         if (! method_exists($panel, 'out')) {
             return $panel;
@@ -76,6 +98,12 @@ abstract class XotBaseContainerController extends Controller {
         );
     }
 
+    /**
+     * @param string $method
+     * @param array  $args
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function __callPanelAct($method, $args) {
         $request = request();
         $act = $request->_act;
@@ -102,6 +130,12 @@ abstract class XotBaseContainerController extends Controller {
         return $panel->callAction($act);
     }
 
+    /**
+     * @param string        $method
+     * @param PanelContract $panel
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function notAuthorized($method, $panel) {
         $lang = app()->getLocale();
         if (! \Auth::check()) {
@@ -125,6 +159,7 @@ abstract class XotBaseContainerController extends Controller {
         $policy_class = PolicyService::get($panel)->createIfNotExists()->getClass();
         $msg = 'Auth Id ['.\Auth::id().'] not can ['.$method.'] on ['.$policy_class.']';
 
-        return abort(403, $msg);
+        //abort(403, $msg);
+        return response()->view('pub_theme::errors.403', ['msg' => $msg], 403);
     }
 }

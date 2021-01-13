@@ -6,7 +6,15 @@ use Modules\Xot\Database\Migrations\XotBaseMigration;
 
 //----- models -----
 
+/**
+ * Class CreateConfsTable
+ */
 class CreateConfsTable extends XotBaseMigration {
+/**
+* db up
+*
+* @return void
+*/
     public function up() {
         //-- CREATE --
         if (! $this->tableExists()) {

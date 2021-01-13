@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Services;
 
 use Cache;
@@ -9,15 +11,32 @@ use Intervention\Image\Facades\Image;
 
 //---- services ----
 
+/**
+ * Class ImageService.
+ */
 class ImageService {
-    private static $instance = null;
-    protected static $img = null;
-    protected static $width;
-    protected static $height;
-    protected static $src;
-    protected static $filename;
-    protected static $dirname = '/imgz';
+    private static ?ImageService $instance = null;
 
+    /**
+     * @var mixed
+     */
+    protected static $img = null;
+
+    protected static int $width;
+
+    protected static int $height;
+
+    protected static string $src;
+
+    protected static string $filename;
+
+    protected static string $dirname = '/imgz';
+
+    /**
+     * @param array $params
+     *
+     * @return ImageService|null
+     */
     public static function getInstance($params = []) {
         if (null === self::$instance) {
             self::$instance = new self($params);
@@ -26,12 +45,21 @@ class ImageService {
         return self::$instance;
     }
 
+    /**
+     * ImageService constructor.
+     *
+     * @param array $params
+     */
     public function __construct($params = []) {
         $this->init($params);
     }
 
     //---- setter
-    public static function init($params) {
+
+    /**
+     * @param array $params
+     */
+    public static function init($params): void {
         //$instance == self::getInstance();
         foreach ($params as $k => $v) {
             $func = 'set'.Str::studly($k);
@@ -44,11 +72,11 @@ class ImageService {
         //return self::getInstance();
     }
 
-    public static function setDirname($dirname) {
+    public static function setDirname(string $dirname): void {
         self::$dirname = $dirname;
     }
 
-    public static function setImg($val) {
+    public static function setImg(string $val): void {
         $nophoto_path = public_path('img/nophoto.jpg');
         if ('' == $val) {
             $val = $nophoto_path;
@@ -66,21 +94,24 @@ class ImageService {
         }
     }
 
-    public static function setWxh($val) {
+    public static function setWxh(string $val): void {
         list($w, $h) = \explode('x', $val);
-        self::setWidth($w);
-        self::setHeight($h);
+        self::setWidth((int) $w);
+        self::setHeight((int) $h);
     }
 
-    public static function setWidth($val) {
+    public static function setWidth(int $val): void {
         self::$width = $val;
     }
 
-    public static function setHeight($val) {
+    public static function setHeight(int $val): void {
         self::$height = $val;
     }
 
-    public static function setSrc($val) {
+    /**
+     * @param string|null $val
+     */
+    public static function setSrc($val): void {
         if ('' == $val) {
             $val = public_path('img/nophoto.jpg');
         }
@@ -97,11 +128,28 @@ class ImageService {
 
     //----------
 
+    /**
+     * Undocumented function.
+     *
+     * @return mixed
+     */
     public static function toHtml() {
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed
+     */
     public static function image_resized_cropped($params) {
+        $width = self::$width;
+        $height = self::$height;
         \extract($params);
+        if (! isset($image_path)) {
+            dddx(['err' => 'image_path is missing']);
+
+            return;
+        }
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
         if (null == $image_path) {
@@ -152,16 +200,16 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
 
         \File::makeDirectory(\dirname(public_path($image_resized)), 0775, true, true);
         $canvas->save(public_path($image_resized), 75);
-        ImageOptimizer::optimize(public_path($image_resized));
+        //ImageOptimizer::optimize(public_path($image_resized));
         //app(Spatie\ImageOptimizer\OptimizerChain::class)->optimize(public_path($image_resized));
         return $image_resized;
     }
 
-    public static function fit($params = []) {
+    public static function fit(array $params = []): self {
         $me = self::getInstance($params);
 
         $img = self::$img;
@@ -173,7 +221,7 @@ class ImageService {
         return self::getInstance();
     }
 
-    public static function crop($params = []) {
+    public static function crop(array $params = []): self {
         $me = self::getInstance($params);
 
         $img = self::$img;
@@ -218,12 +266,17 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
         self::$img = $canvas;
 
         return self::getInstance(); /// per il fluent, o chaining
     }
 
+    /**
+     * @param array $params
+     *
+     * @return ImageService|null
+     */
     public static function save($params = []) {
         //extract($params);
         $info = pathinfo(self::$src);
@@ -248,10 +301,20 @@ class ImageService {
         return self::getInstance();
     }
 
+    /**
+     * @param array $params
+     *
+     * @return mixed
+     */
     public static function out($params = []) {
         return self::$img->encode('jpg', 60);
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string|string[]
+     */
     public static function src($params = []) {
         $src = '/'.str_replace(public_path('/'), '', self::$filename);
         $src = str_replace('//', '/', $src);
@@ -259,8 +322,20 @@ class ImageService {
         return $src;
     }
 
+    /**
+     * @param array $params
+     *
+     * @return string|void|null
+     */
     public static function image_resized_canvas($params) {
+        $width = self::$width;
+        $height = self::$height;
         \extract($params);
+        if (! isset($image_path)) {
+            dddx(['err' => 'image_path is missing']);
+
+            return;
+        }
         $pathinfo = \pathinfo($image_path);
         //$image_resized='assets_packs/img/'.$width.'x'.$height.'/'.basename($image_path);
         if (null == $image_path) {
@@ -370,7 +445,7 @@ class ImageService {
         $canvas = Image::canvas($width, $height, '#fdfdfd');
         $x = \round(($width - $w0) / 2, 0);
         $y = \round(($height - $h0) / 2, 0);
-        $canvas->insert($img, null, $x, $y);
+        $canvas->insert($img, 'top-left', (int) $x, (int) $y);
 
         \File::makeDirectory(\dirname(public_path($image_resized)), 0775, true, true);
         $canvas->save(public_path($image_resized), 75);

@@ -9,11 +9,23 @@ use Illuminate\Http\Request;
 use Modules\Theme\Services\ThemeService;
 use Modules\Xot\Services\TranslatorService;
 
+/**
+ * Class TranslationController
+ * @package Modules\Xot\Http\Controllers
+ */
 class TranslationController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request) {
         return ThemeService::view();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request) {
         $data = $request->all();
         $trans = $data['trans'];

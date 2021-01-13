@@ -1,12 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Xot\Http\View\Composers;
 
 //use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\View\View;
 use Modules\LU\Services\ProfileService;
 
+/**
+ * Class XotComposer.
+ */
 class XotComposer {
     /**
      * The user repository implementation.
@@ -34,9 +40,16 @@ class XotComposer {
      * @return void
      */
     public function compose(View $view) {
-        //$view->with('count', $this->users->count());
         $profile = ProfileService::get(Auth::user());
-        //dddx($profile->avatar());
+        $lang = app()->getLocale();
+        $params = [];
+        $route_current = Route::current();
+        if (null != $route_current) {
+            $params = $route_current->parameters();
+        }
+
+        $view->with('params', $params);
+        $view->with('lang', $lang);
         $view->with('profile', $profile);
     }
 }

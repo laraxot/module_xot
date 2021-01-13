@@ -11,7 +11,15 @@ use Modules\Xot\Services\TenantService;
 
 //use Modules\Xot\Services\ArtisanService;
 
+/**
+ * Class HomeController
+ * @package Modules\Xot\Http\Controllers\Admin
+ */
 class HomeController extends Controller {
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request) {
         //$out = ArtisanService::act($request->act);
         //if ('' != $out) {
@@ -33,6 +41,10 @@ class HomeController extends Controller {
         return ThemeService::view('xot::admin.home');
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function redirect(Request $request) {
         return redirect($request->url);
     }
