@@ -20,10 +20,10 @@ use Modules\Xot\Services\PanelRouteService;
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- * @property ModelContract|null $row
- * @property bool               $in_admin
- * @property PanelRouteService  $route
- * @property HasMany            $rows
+ * @property ModelContract|null                 $row
+ * @property bool                               $in_admin
+ * @property PanelRouteService                  $route
+ * @property HasMany|BelongsToMany|HasOneOrMany $rows
  *
  * @method mixed                          findParentType($type)
  * @method string                         imgSrc($params)
