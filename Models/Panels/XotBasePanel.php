@@ -20,10 +20,10 @@ use Modules\Xot\Contracts\PanelPresenterContract;
 use Modules\Xot\Services\ChainService;
 use Modules\Xot\Services\HtmlService;
 use Modules\Xot\Services\ImageService;
-use Modules\Xot\Services\NavService;
 use Modules\Xot\Services\PanelActionService;
 use Modules\Xot\Services\PanelFormService;
 use Modules\Xot\Services\PanelRouteService;
+use Modules\Xot\Services\PanelService;
 use Modules\Xot\Services\PanelService as Panel;
 use Modules\Xot\Services\PanelTabService;
 use Modules\Xot\Services\RouteService;
@@ -126,6 +126,20 @@ abstract class XotBasePanel implements PanelContract {
         $this->parent = $parent;
 
         return $this;
+    }
+
+    // se uso in rows() getQuery il dato ottenuto e' una collezione di items non di modelli
+    public function getHydrate(object $data) {
+        if ('stdClass' == get_class($data)) {
+            //$row = $this->row->hydrate((array) $data);
+            $row = $this->row->forceFill((array) $data);
+        } else {
+            $row = $data;
+        }
+        $panel = PanelService::get($row);
+        $panel->setParent($this->getParent());
+
+        return $panel;
     }
 
     /**
@@ -878,24 +892,14 @@ abstract class XotBasePanel implements PanelContract {
     }
     */
 
-    //------- navigazioni ---
-    /*
-    public function yearNavRedirect() {
-        return NavService::yearNavRedirect();
-    }
-
-    public function yearNav() {
-        return NavService::yearNav();
-    }
-
-    public function monthYearNav() { //possiamo trasformarlo in una macro
-        return NavService::monthYearNav();
-    }
-    */
     //-- nella registrazione 1 tasto, nelle modifiche 3
 
     public function btnHtml(array $params): string {
-        return $this->form->btnHtml($params);
+        return $this->form->{__FUNCTION__}($params);
+    }
+
+    public function btnCrud(array $params = []) {
+        return $this->form->{__FUNCTION__}($params);
     }
 
     public function imageHtml(array $params): string { //usare PanelImageService
@@ -1300,7 +1304,10 @@ abstract class XotBasePanel implements PanelContract {
             dddx($with);
         }
         $query = $query->with($with);
-        $query = $query->getQuery(); //per prendere il builder
+        /**
+         * se prendo il builder perdo il modello.
+         */
+        //$query = $query->getQuery(); //per prendere il builder
         $query = $this->indexQuery($data, $query);
 
         //$query=$query->withPost('a');

@@ -41,8 +41,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *--- hasOne ----.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsHasOne(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsHasOne($model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             if (! is_array($data)) {
@@ -58,8 +60,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      *  belongsTo.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsBelongsTo(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsBelongsTo($model, string $name, array $data): void {
         $rows = $model->$name();
         if ($rows->exists()) {
             $model->$name()->update($data);
@@ -72,8 +76,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- hasMany ---.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsHasMany(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsHasMany($model, string $name, array $data): void {
         $rows = $model->$name();
         debug_getter_obj(['obj' => $rows]);
         //---------- TO DO ------------//
@@ -83,8 +89,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * --- belongsToMany.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsBelongsToMany(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsBelongsToMany($model, string $name, array $data): void {
         //$model->$name()->syncWithoutDetaching($data);
         $model->$name()->sync($data);
     }
@@ -97,8 +105,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphOne.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsMorphOne(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsMorphOne($model, string $name, array $data): void {
         /* con update or create crea sempre uno nuovo, con update e basta se non esiste non va a crearlo */
         $rows = $model->$name();
         if ($rows->exists()) {
@@ -113,8 +123,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphMany.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsMorphMany(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsMorphMany($model, string $name, array $data): void {
         //$res=$model->$name()->syncWithoutDetaching($data);
         foreach ($data as $k => $v) {
             if (! is_array($v)) {
@@ -131,8 +143,10 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * morphToMany.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsMorphToMany(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsMorphToMany($model, string $name, array $data): void {
         //dddx([\Request::all(), $params]);
         //$res=$model->$name()->syncWithoutDetaching($data);
         //dddx([$name, Arr::isAssoc($data)]);
@@ -190,12 +204,17 @@ class UpdateJob extends XotBaseJob {
 
     /**
      * pivot.
+     *
+     * @param ModelContract|Model $model
      */
-    public function updateRelationshipsPivot(ModelContract $model, string $name, array $data): void {
+    public function updateRelationshipsPivot($model, string $name, array $data): void {
         $model->$name->update($data);
     }
 
-    public function saveMultiselectTwoSides(ModelContract $model, string $name, array $data): void {
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function saveMultiselectTwoSides($model, string $name, array $data): void {
         $items = $model->$name();
         $related = $items->getRelated();
         $container_obj = $model;

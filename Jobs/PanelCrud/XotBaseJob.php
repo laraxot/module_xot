@@ -47,16 +47,16 @@ abstract class XotBaseJob implements ShouldQueue {
     }
 
     /**
-     * @param Model  $model
+     * @param ModelContract|Model  $model
      * @param array  $data
      * @param string $act
      */
-    public function manageRelationships($model, $data, $act) {
+    public function manageRelationships($model,array $data,string $act) {
         $relationships = ModelService::getRelationshipsAndData($model, $data);
         foreach ($relationships as $k => $v) {
             $func = $act.'Relationships'.$v->relationship_type;
             if (method_exists($this, $func)) {
-                self::$func($model, $v->name, $v->data);
+                static::$func($model, $v->name, $v->data);
             }
         }
         if (isset($data['pivot'])) {
