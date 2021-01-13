@@ -82,9 +82,6 @@ class PanelService {
         $panel_class = $class.'Panels\\'.$class_name.'Panel';
         //*
         if (! class_exists($panel_class)) {
-            return;
-            dddx(['panel_class' => $panel_class,
-                'self_model' => self::$model, ]);
             $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
         }
         //*/
