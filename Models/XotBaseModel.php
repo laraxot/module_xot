@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Xot\Traits\Updater;
 
 /**
- * Class XotBaseModel
- * @package Modules\Xot\Models
+ * Class XotBaseModel.
  */
 abstract class XotBaseModel extends Model {
     //use Searchable;
