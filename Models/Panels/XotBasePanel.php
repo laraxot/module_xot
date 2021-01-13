@@ -606,7 +606,7 @@ abstract class XotBasePanel implements PanelContract {
     */
 
     /**
-     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder|Illuminate\Database\Eloquent\Relations\HasMany $query
      *
      * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
      */

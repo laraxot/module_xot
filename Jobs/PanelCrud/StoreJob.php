@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Modules\Xot\Jobs\PanelCrud;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 //----------- Requests ----------
 //------------ services ----------
+use Illuminate\Support\Str;
 use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\PanelService as Panel;
