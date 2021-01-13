@@ -153,7 +153,10 @@ class StoreJob extends XotBaseJob {
     //end handle
     */
 
-    public function storeRelationshipsPivot(ModelContract $model, string $name, array $data): void {
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsPivot($model, string $name, array $data): void {
         /*
         extract($params);
         $types=Str::plural($container);
@@ -165,7 +168,10 @@ class StoreJob extends XotBaseJob {
         */
     }
 
-    public function storeRelationshipsHasOne(ModelContract $model, string $name, array $data): void {
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsHasOne($model, string $name, array $data): void {
         $rows = $model->$name();
         $related = $rows->getRelated();
 
@@ -196,11 +202,21 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    public function storeRelationshipsHasMany(ModelContract $model, string $name, array $data): void {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsHasMany($model, string $name, array $data): void {
         //$rows = $model->$name();
     }
 
-    public function storeRelationshipsBelongsTo(ModelContract $model, string $name, array $data): void {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsBelongsTo($model, string $name, array $data): void {
         $rows = $model->$name();
         //debug_getter_obj(['obj'=>$rows]);
         $related = $rows->create($data);
@@ -213,7 +229,12 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    public function storeRelationshipsMorphOne(ModelContract $model, string $name, array $data): void {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsMorphOne($model, string $name, array $data): void {
         if (! isset($data['lang']) /* && in_array('lang', $row->getFillable()) */) {
             $data['lang'] = app()->getLocale();
         }
@@ -224,7 +245,10 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    public function storeRelationshipsMorphToMany(ModelContract $model, string $name, array $data): void {
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsMorphToMany($model, string $name, array $data): void {
         //ddd(\Request::all());
         //return ;
 
@@ -275,14 +299,22 @@ class StoreJob extends XotBaseJob {
         }
     }
 
-    public function storeRelationshipsHasManyThrough(ModelContract $model, string $name, array $data): void {
+    /**
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsHasManyThrough($model, string $name, array $data): void {
         /*
         Call to undefined method Illuminate\Database\Eloquent\Relations\HasManyThrough::syncWithoutDetaching()
         */
         //$this->storeRelationshipsMorphToMany($params); //
     }
 
-    public function storeRelationshipsBelongsToMany(ModelContract $model, string $name, array $data): void {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public function storeRelationshipsBelongsToMany($model, string $name, array $data): void {
         if (isset($data['from']) || isset($data['to'])) {
             $this->saveMultiselectTwoSides($model, $name, $data);
 
@@ -291,7 +323,12 @@ class StoreJob extends XotBaseJob {
         $model->$name()->syncWithoutDetaching($data);
     }
 
-    public function saveMultiselectTwoSides(ModelContract $model, string $name, array $data): void {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public function saveMultiselectTwoSides($model, string $name, array $data): void {
         //passo request o direttamente data ?
 
         $items = $model->$name();

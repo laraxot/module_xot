@@ -13,7 +13,8 @@ use Modules\Xot\Contracts\PanelContract;
 /**
  * Class PanelService.
  */
-class PanelService {
+class PanelService
+{
     private static ?PanelService $_instance = null;
 
     /**
@@ -29,7 +30,8 @@ class PanelService {
     }
      */
 
-    public static function getInstance(): self {
+    public static function getInstance(): self
+    {
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
@@ -37,11 +39,13 @@ class PanelService {
         return self::$_instance;
     }
 
-    public static function setRequestPanel(?PanelContract $panel): void {
+    public static function setRequestPanel(?PanelContract $panel): void
+    {
         self::$panel = $panel;
     }
 
-    public static function getRequestPanel(): PanelContract {
+    public static function getRequestPanel(): ?PanelContract
+    {
         return self::$panel;
     }
 
@@ -53,14 +57,16 @@ class PanelService {
      *
      * @return Model|ModelContract
      */
-    public static function get($model): ?PanelContract {
+    public static function get($model): ?PanelContract
+    {
         return self::setModel($model)->panel();
     }
 
     /**
      * @param Model|ModelContract $model
      */
-    public static function setModel($model): self {
+    public static function setModel($model): self
+    {
         self::$model = $model;
 
         return self::getInstance();
@@ -72,7 +78,8 @@ class PanelService {
      *
      * @return \Illuminate\Contracts\Foundation\Application|mixed|null
      */
-    public static function panel() {
+    public static function panel()
+    {
         if (! is_object(self::$model)) {
             //dddx(['model'=>self::$model,'message'=>'is not an object']);
             return null;
@@ -102,18 +109,21 @@ class PanelService {
         return self::$panel;
     }
 
-    public function imageHtml(?array $params): string {
+    public function imageHtml(?array $params): string
+    {
         return optional(self::$model)->image_src;
     }
 
-    public function tabs(): array {
+    public function tabs(): array
+    {
         return self::panel()->tabs();
     }
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\Response|mixed|null
      */
-    public static function getByParams(?array $route_params) {
+    public static function getByParams(?array $route_params)
+    {
         [$containers, $items] = params2ContainerItem($route_params);
         $in_admin = null;
         if (isset($route_params['in_admin'])) {
@@ -190,7 +200,8 @@ class PanelService {
      *
      * @return \Illuminate\Http\RedirectResponse|mixed
      */
-    public static function getByModel(ModelContract $model) {
+    public static function getByModel(ModelContract $model)
+    {
         $class_full = get_class($model);
         $class_name = class_basename($model);
         $class = Str::before($class_full, $class_name);
@@ -212,7 +223,8 @@ class PanelService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function createPanel(ModelContract $model): void {
+    public static function createPanel(ModelContract $model): void
+    {
         if (! is_object($model)) {
             dddx(['da fare']);
         }
@@ -269,7 +281,8 @@ class PanelService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      */
-    public static function updatePanel(array $params = []): void {
+    public static function updatePanel(array $params = []): void
+    {
         extract($params);
         if (! isset($func)) {
             dddx(['err' => 'func is missing']);

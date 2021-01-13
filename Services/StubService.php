@@ -152,10 +152,12 @@ class StubService {
     }
 
     /**
+     * @param ModelContract|Model $model
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     * @return ModelContract|Model
      */
-    public static function getByModel(ModelContract $model, string $name, bool $create = false): ?PanelContract {
+    public static function getByModel( $model, string $name, bool $create = false) {
         if (! is_object($model)) {
             echo '<h3>Model: ['.$model.']</h3>';
             $params = \Route::current()->parameters();

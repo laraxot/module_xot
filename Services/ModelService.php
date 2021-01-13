@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Modules\Xot\Services;
 
 //----------- Requests ----------
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 use Modules\Xot\Contracts\ModelContract;
@@ -16,7 +17,12 @@ use Modules\Xot\Contracts\ModelContract;
  * Class ModelService.
  */
 class ModelService {
-    public static function getRelationshipsAndData(ModelContract $model, array $data): array {
+    /**
+     * Undocumented function.
+     *
+     * @param ModelContract|Model $model
+     */
+    public static function getRelationshipsAndData($model, array $data): array {
         $methods = get_class_methods($model);
         Relation::morphMap([$model->post_type => get_class($model)]);
         $data = collect($data)->filter(
