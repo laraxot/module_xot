@@ -894,11 +894,11 @@ abstract class XotBasePanel implements PanelContract {
 
     //-- nella registrazione 1 tasto, nelle modifiche 3
 
-    public function btnHtml(array $params): string {
+    public function btnHtml(array $params): ?string {
         return $this->form->{__FUNCTION__}($params);
     }
 
-    public function btnCrud(array $params = []) {
+    public function btnCrud(array $params = []): ?string {
         return $this->form->{__FUNCTION__}($params);
     }
 
