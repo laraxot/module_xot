@@ -147,12 +147,7 @@ class PanelFormService {
         return $html;
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string|void|null
-     */
-    public function btnHtml($params) {
+    public function btnHtml(array $params): ?string {
         $params['panel'] = $this->panel;
         //$params['url'] = RouteService::urlPanel($params);
         $params['url'] = $this->panel->route->urlPanel($params);
