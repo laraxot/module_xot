@@ -82,13 +82,51 @@ namespace Modules\Xot\Contracts;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereTokenCheck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedBy($value)
- * @method mixed  forceFill($params)
  * @mixin \Eloquent
+ *
+ * @property \Modules\Blog\Models\Profile|null $profile
+ * @property int|null                          $group_id
+ * @property int|null                          $banned_id
+ * @property int|null                          $country_id
+ * @property int|null                          $question_id
+ * @property string|null                       $nome
+ * @property string|null                       $cognome
+ * @property int|null                          $stabi
+ * @property int|null                          $repar
+ * @property string|null                       $provincia
+ * @property string|null                       $conosciuto
+ * @property string|null                       $news
+ * @property string|null                       $citta
+ * @property int|null                          $segno
+ * @property int|null                          $hmail
+ * @property int|null                          $bounce
+ * @property string|null                       $dataIscrizione
+ * @property int|null                          $dataCancellazione
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBannedId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBounce($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCitta($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCognome($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereConosciuto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDataCancellazione($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDataIscrizione($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGroupId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereHmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNews($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNome($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProvincia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereQuestionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRepar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSegno($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereStabi($value)
  *
  * @property \Modules\Blog\Models\Profile|null $profile
  *
  * @method bool  hasRole($value)
  * @method mixed role($value)
+ * @method mixed update($params)
+ * @method mixed forceFill($params)
  */
 interface UserContract {
     /*

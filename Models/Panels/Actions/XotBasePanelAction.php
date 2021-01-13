@@ -66,15 +66,16 @@ abstract class XotBasePanelAction {
         parent::__construct();
     }
     */
-
+    /*
     public function __construct() {
         $data = request()->all();
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
     }
+    */
 
-    public function setPanel(PanelContract &$panel) :$this{
+    public function setPanel(PanelContract &$panel): self {
         $this->panel = $panel;
 
         return $this;

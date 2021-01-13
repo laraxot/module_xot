@@ -38,6 +38,11 @@ use Modules\Food\Models\RestaurantOwner;
  * @method mixed  detach($params)
  * @method mixed  attach($params)
  * @method mixed  save($params)
+ * @method array  treeLabel()
+ * @method array  treeSons()
+ * @method int    treeSonsCount()
+ * @method mixed  bellBoys()
+ * @method array  toArray()
  * @mixin \Eloquent
  */
 interface ModelContract {

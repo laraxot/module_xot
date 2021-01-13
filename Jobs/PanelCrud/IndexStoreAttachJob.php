@@ -24,6 +24,7 @@ class IndexStoreAttachJob extends XotBaseJob {
         $related = $this->panel->rows->getRelated();
         $items_key = $related->getKeyName();
 
+        //Method Illuminate\Support\Collection<int,mixed>::get() invoked with 0 parameters, 1-2 required.
         $items_0 = $this->panel->rows->get()->pluck($items_key);
 
         $items_1 = collect($to);

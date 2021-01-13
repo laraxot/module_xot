@@ -116,7 +116,10 @@ class ArtisanService {
 
         foreach ($files as $file) {
             if ('log' == $file->getExtension()) {
-                File::delete($file);
+                //Parameter #1 $paths of static method Illuminate\Filesystem\Filesystem::delete() expects array|string, Symfony\Component\Finder\SplFileInfo given.
+                echo '<br/>'.$file->getRealPath();
+
+                File::delete($file->getRealPath());
             }
         }
 
@@ -130,7 +133,9 @@ class ArtisanService {
         $files = File::files(storage_path('debugbar'));
         foreach ($files as $file) {
             if ('json' == $file->getExtension()) {
-                File::delete($file);
+                echo '<br/>'.$file->getRealPath();
+
+                File::delete($file->getRealPath());
                 //$file->delete();
             }
         }

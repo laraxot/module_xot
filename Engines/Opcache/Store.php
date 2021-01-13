@@ -228,7 +228,7 @@ class Store extends TaggableStore implements StoreContract {
 
     /**
      * @param string $dir
-     * @param false  $removeDirectory
+     * @param bool   $removeDirectory
      *
      * @return bool
      */

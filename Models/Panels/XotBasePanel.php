@@ -879,71 +879,11 @@ abstract class XotBasePanel implements PanelContract {
     */
     //-- nella registrazione 1 tasto, nelle modifiche 3
 
-    /**
-     * @param array $params
-     *
-     * @return mixed
-     */
-    public function btnSubmit($params = []) {
-        return $this->form->btnSubmit($params);
-    }
-
-    /*
-     return $this->form->formCreate($params);
-    */
-
-    /**
-     * @param array $params
-     *
-     * @return mixed
-     */
-    public function btnDelete($params = []) {
-        return $this->form->btnDelete($params);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return mixed
-     */
-    public function btnDetach($params = []) {
-        return $this->form->btnDetach($params);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return mixed
-     */
-    public function btnCrud($params = []) {
-        return $this->form->btnCrud($params);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return mixed
-     */
-    public function btnHtml($params) {
+    public function btnHtml(array $params): string {
         return $this->form->btnHtml($params);
     }
 
-    /**
-     * @param string $act
-     * @param array  $params
-     *
-     * @return mixed
-     */
-    public function btn($act, $params = []) {
-        return $this->form->btn($act, $params);
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return string
-     */
-    public function imageHtml($params) { //usare PanelImageService
+    public function imageHtml(array $params): string { //usare PanelImageService
         /*
         * mettere imageservice, o quello di spatie ?
         *
@@ -955,12 +895,7 @@ abstract class XotBasePanel implements PanelContract {
         return '<img src="'.asset($src).'" >';
     }
 
-    /**
-     * @param array $params
-     *
-     * @return string|string[]
-     */
-    public function imgSrc($params) { //usare PanelImageService
+    public function imgSrc(array $params): string { //usare PanelImageService
         $row = $this->row;
         $src = $row->image_src;
 

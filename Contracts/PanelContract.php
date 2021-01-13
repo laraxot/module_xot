@@ -43,10 +43,12 @@ use Modules\Xot\Services\PanelRouteService;
  * @method self                           update($data)
  * @method mixed                          out($data=null)
  * @method mixed                          callItemActionWithGate($act)
- * @method mixed                          rules($params)
+ * @method mixed                          rules($params=[])
  * @method array                          rulesMessages()
  * @method array                          areas()
  * @method array                          indexFields()
+ * @method mixed                          relatedName($params)
+ * @method string                         showUrl()
  */
 interface PanelContract {
     public function setRows($rows);
