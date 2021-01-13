@@ -122,7 +122,7 @@ abstract class XotBasePanel implements PanelContract {
         return $this;
     }
 
-    public function setParent(PanelContract $parent): self {
+    public function setParent(?PanelContract $parent): self {
         $this->parent = $parent;
 
         return $this;
@@ -591,7 +591,12 @@ abstract class XotBasePanel implements PanelContract {
     }
     */
 
-    public function applyFilter(Builder $query, array $filters): Builder {
+    /**
+     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     *
+     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     */
+    public function applyFilter($query, array $filters) {
         //https://github.com/spatie/laravel-query-builder
         $lang = app()->getLocale();
         $filters_fields = $this->filters();
@@ -643,7 +648,12 @@ abstract class XotBasePanel implements PanelContract {
         return $query;
     }
 
-    public function applySearch(Builder $query, ?string $q): Builder {
+    /**
+     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     *
+     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     */
+    public function applySearch($query, ?string $q) {
         if (! isset($q)) {
             return $query;
         }
@@ -697,7 +707,12 @@ abstract class XotBasePanel implements PanelContract {
 
     //end applySearch
 
-    public function applySort(Builder $query, $sort): Builder {
+    /**
+     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     *
+     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     */
+    public function applySort($query, ?array $sort) {
         if (! is_array($sort)) {
             return $query;
         }
@@ -1248,7 +1263,10 @@ abstract class XotBasePanel implements PanelContract {
         return (new PanelTabService($this))->getTabs();
     }
 
-    public function rows(?array $data = null): Builder {
+    /**
+     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     */
+    public function rows(?array $data = null) {
         if (null == $data) {
             $data = request()->all();
         }
@@ -1259,12 +1277,19 @@ abstract class XotBasePanel implements PanelContract {
         //$act = isset($data['_act']) ? $data['_act'] : null;
 
         $query = $this->rows;
+        /*
+        dddx([
+            'getQuery' => $query->getQuery(),
+            'methods' => get_class_methods($query),
+        ]);
+        */
         if (! is_object($query)) {
             if (! is_object($this->row)) {
                 return $query;
             }
             $query = $this->row;
         }
+
         //dddx(get_class($this));
         $with = $this->with();
         if (! is_array($with)) {
@@ -1275,6 +1300,7 @@ abstract class XotBasePanel implements PanelContract {
             dddx($with);
         }
         $query = $query->with($with);
+        $query = $query->getQuery(); //per prendere il builder
         $query = $this->indexQuery($data, $query);
 
         //$query=$query->withPost('a');

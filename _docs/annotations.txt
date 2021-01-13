@@ -13,6 +13,11 @@ setting protected $scanWhenLocal = true.
 https://github.com/qsun/ModelAnnotation
 -- mi sembra una annotation diversa
 
+squizlabs/php_codesniffer
+phpmd/phpmd
+phpstan/phpstan
+
+
 //------------------
 https://github.com/barryvdh/laravel-ide-helper
 php artisan ide-helper:models

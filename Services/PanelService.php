@@ -16,7 +16,10 @@ use Modules\Xot\Contracts\PanelContract;
 class PanelService {
     private static ?PanelService $_instance = null;
 
-    private static ModelContract $model;
+    /**
+     * @var Model|ModelContract
+     */
+    private static $model;
 
     private static ?PanelContract $panel;
 
@@ -43,14 +46,21 @@ class PanelService {
     }
 
     /**
+     * @param Model|ModelContract $model
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return Model|ModelContract
      */
-    public static function get(ModelContract $model): ?PanelContract {
+    public static function get($model): ?PanelContract {
         return self::setModel($model)->panel();
     }
 
-    public static function setModel(ModelContract $model): self {
+    /**
+     * @param Model|ModelContract $model
+     */
+    public static function setModel($model): self {
         self::$model = $model;
 
         return self::getInstance();
@@ -74,6 +84,9 @@ class PanelService {
         $panel_class = $class.'Panels\\'.$class_name.'Panel';
         //*
         if (! class_exists($panel_class)) {
+            return;
+            dddx(['panel_class' => $panel_class,
+                'self_model' => self::$model, ]);
             $tmp = StubService::getByModel(self::$model, 'panel', $create = true);
         }
         //*/
