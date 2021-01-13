@@ -59,6 +59,9 @@ class ZipService {
 
         foreach ($rows as $row) {
             $panel = Panel::get($row);
+            if (null == $panel) {
+                return;
+            }
             //dddx($panel);
             //$filename = 'Perf_ind_'.$row->id.'_'.$row->matr.'_'.$row->cognome.'_'.$row->nome.'_'.$row->anno.'_'.date('Ymd').'.pdf';
             $filename = $panel->pdfFilename();

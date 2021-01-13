@@ -40,7 +40,9 @@ trait Updater {
     */
 
     public function getTableColumns(): array {
-        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        return $this->getConnection()
+            ->getSchemaBuilder()
+            ->getColumnListing($this->getTable());
     }
 
     protected static function boot() {
@@ -53,14 +55,14 @@ trait Updater {
             if (null != Auth::user()) {
                 // Cannot call method getAttribute() on Modules\LU\Models\User|null.
                 // Cannot access property $handle on Modules\LU\Models\User|null.
-                $model->created_by = Auth::user()->handle.'';
-                $model->updated_by = Auth::user()->handle.'';
+                $model->created_by = optional(Auth::user())->handle.'';
+                $model->updated_by = optional(Auth::user())->handle.'';
             }
         });
 
         static::updating(function ($model) {
             if (Auth::check()) {
-                $model->updated_by = Auth::user()->handle.'';
+                $model->updated_by = optional(Auth::user())->handle.'';
             }
         });
         //-------------------------------------------------------------------------------------

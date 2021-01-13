@@ -7,6 +7,7 @@ namespace Modules\Xot\Contracts;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Modules\Xot\Services\PanelRouteService;
 
@@ -14,13 +15,15 @@ use Modules\Xot\Services\PanelRouteService;
 
 //use Illuminate\Contracts\Auth\UserProvider;
 
+//prop Collection|BelongsToMany|HasOneOrMany|ModelContract[] $rows
+
 /**
  * Modules\Xot\Contracts\PanelContract.
  *
- * @property ModelContract|null                                    $row
- * @property bool                                                  $in_admin
- * @property PanelRouteService                                     $route
- * @property Collection|BelongsToMany|HasOneOrMany|ModelContract[] $rows
+ * @property ModelContract|null $row
+ * @property bool               $in_admin
+ * @property PanelRouteService  $route
+ * @property HasMany            $rows
  *
  * @method mixed                          findParentType($type)
  * @method string                         imgSrc($params)

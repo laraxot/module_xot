@@ -179,10 +179,18 @@ class TenantService {
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|null
      */
-    public static function modelEager(string $name): \Illuminate\Database\Eloquent\Builder {
+    public static function modelEager(string $name) {
         $model = self::model($name);
+        if (null == $model) {
+            return null;
+        }
         $panel = Panel::get($model);
+        if (null == $panel) {
+            return null;
+        }
         $with = $panel->with();
         //$model = $model->load($with);
         $model = $model->with($with);

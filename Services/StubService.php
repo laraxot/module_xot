@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Modules\Xot\Contracts\ModelContract;
+use Modules\Xot\Contracts\PanelContract;
 
 /**
  * Class StubService.
@@ -156,7 +157,7 @@ class StubService {
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \ReflectionException
      *
-     * @return ModelContract|Model|null
+     * @return PanelContract|null
      */
     public static function getByModel($model, string $name, bool $create = false) {
         if (! is_object($model)) {

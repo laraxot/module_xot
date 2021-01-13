@@ -606,9 +606,9 @@ abstract class XotBasePanel implements PanelContract {
     */
 
     /**
-     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder|Illuminate\Database\Eloquent\Relations\HasMany $query
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Relations\HasMany $query
      *
-     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function applyFilter($query, array $filters) {
         //https://github.com/spatie/laravel-query-builder
@@ -663,9 +663,9 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
      *
-     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function applySearch($query, ?string $q) {
         if (! isset($q)) {
@@ -722,9 +722,9 @@ abstract class XotBasePanel implements PanelContract {
     //end applySearch
 
     /**
-     * @param Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder $query
      *
-     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function applySort($query, ?array $sort) {
         if (! is_array($sort)) {
@@ -1268,7 +1268,7 @@ abstract class XotBasePanel implements PanelContract {
     }
 
     /**
-     * @return Illuminate\Database\Eloquent\Builder|Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Query\Builder
      */
     public function rows(?array $data = null) {
         if (null == $data) {

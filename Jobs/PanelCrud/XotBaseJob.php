@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Modules\Xot\Contracts\ModelContract;
 use Modules\Xot\Contracts\PanelContract;
 use Modules\Xot\Services\ModelService;
 
@@ -47,11 +48,9 @@ abstract class XotBaseJob implements ShouldQueue {
     }
 
     /**
-     * @param ModelContract|Model  $model
-     * @param array  $data
-     * @param string $act
+     * @param ModelContract|Model $model
      */
-    public function manageRelationships($model,array $data,string $act) {
+    public function manageRelationships($model, array $data, string $act): void {
         $relationships = ModelService::getRelationshipsAndData($model, $data);
         foreach ($relationships as $k => $v) {
             $func = $act.'Relationships'.$v->relationship_type;
