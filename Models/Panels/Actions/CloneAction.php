@@ -1,0 +1,28 @@
+<?php
+
+namespace Modules\Xot\Models\Panels\Actions;
+
+//-------- models -----------
+
+//-------- services --------
+
+//-------- bases -----------
+
+/**
+ * Class CloneAction.
+ */
+class CloneAction extends XotBasePanelAction {
+    public bool $onItem = true;
+
+    public string $icon = '<i class="far fa-clone"></i>';
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handle() {
+        $cloned = $this->row->replicate();
+        $cloned->push();
+
+        return redirect()->back();
+    }
+}

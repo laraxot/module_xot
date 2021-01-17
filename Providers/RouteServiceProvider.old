@@ -1,0 +1,200 @@
+<?php
+
+namespace Modules\Xot\Providers;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Str;
+//--- services ---
+use Modules\Xot\Services\TenantService as Tenant;
+
+//--- bases ---
+
+class RouteServiceProvider extends XotBaseRouteServiceProvider {
+    /**
+     * The module namespace to assume when generating URLs to actions.
+     *
+     * @var string
+     */
+    protected string $moduleNamespace = 'Modules\Xot\Http\Controllers';
+    protected string $module_dir = __DIR__;
+    protected string $module_ns = __NAMESPACE__;
+
+    public function bootCallback() {
+        $router = $this->app['router'];
+        //--- cambio lingua --
+        $langs = array_keys(config('laravellocalization.supportedLocales'));
+
+        if (in_array(\Request::segment(1), $langs)) {
+            $lang = \Request::segment(1);
+            \App::setLocale($lang);
+        }
+
+        $this->registerRoutePattern($router);
+        /*
+        if (config('xra.notUsePanelMiddleware')) {
+            //-- e' commentato perche' devo controllare se funziona --
+            if ('migrate' != \Request::input('act')) { //&& ! $this->app->runningInConsole()
+                $this->registerRouteBind($router);
+            }
+        } else {
+        }
+        */
+        //$route_params = \Route::current()->parameters();
+        //ddd($route_params);
+
+        //ddd('preso');
+    }
+
+    public function registerRoutePattern(Router $router) {
+        //---------- Lang Route Pattern
+        $langs = config('laravellocalization.supportedLocales');
+        $pattern = collect(\array_keys($langs))->implode('|');
+        $pattern = '/|'.$pattern.'|/i';
+        $router->pattern('lang', $pattern);
+        //---------- Container ROUTE PATTERN
+        $models = Tenant::config('xra.model');
+        $pattern = collect(\array_keys($models))->implode('|');
+        $pattern = '/|'.$pattern.'|/i';
+
+        $pattern_test = [
+            0 => $pattern, // working
+            1 => '^((?!create|edit).)*$', //eppa
+            2 => '[[:alnum:]_]+',
+            3 => '[^[\/]+', //error edits
+            4 => '^(?!.*(edit|create).*$)',
+            5 => '^(?:(?!\bedit\b).)*$',
+            6 => '^((?!\bedit\b).)*$',
+            7 => '[[:alnum:]_?!\bedit\b]+',
+        ];
+
+        for ($i = 0; $i < 5; ++$i) {
+            $container_name = 'container'.$i;
+            //$router->pattern($container_name,$pattern_test[0]);
+        }
+    }
+
+    //end registerRoutePattern
+
+    public function registerRouteBind(Router $router) {
+        //--------- ROUTE BIND
+
+        //*
+        $router->bind('lang', function ($value) {
+            \App::setLocale($value);
+
+            return $value;
+        });
+        $lang = app()->getLocale();
+        for ($i = 0; $i < 5; ++$i) {
+            $item_name = 'item'.$i;
+            $container_name = 'container'.$i;
+            $router->bind($item_name, function ($value) use ($container_name, $lang, $i) {
+                //request()->route()->parameter($container_name);
+                //dddx([request()->route()->parameter($container_name), request()->$container_name]);
+                $container_curr = request()->route()->parameter($container_name);
+                $types = Str::camel(Str::plural($container_curr));
+
+                if (0 == $i) {
+                    $model = xotModel($container_curr);
+                    //dddx($model);
+                    if (false == $model) {
+                        abort(404);
+                    }
+                    $rows = $model;
+                } else {
+                    $item_prev = request()->route()->parameter('item'.($i - 1));
+                    if (is_string($item_prev)) {
+                        //dddx($item_prev);
+                        $container_prev = request()->route()->parameter('container'.($i - 1));
+                        $container_prev_obj = xotModel($container_prev);
+                        $item_prev = $container_prev_obj->fixItemLang($item_prev);
+                    }
+                    $types = Str::camel(Str::plural($container_curr));
+                    /*
+                    if (! is_object($types)) {
+                        abort(404);
+                    }
+                    */
+                    if (null == $item_prev) {
+                        //die(response()->view('pub_theme::errors.404', [], 404));
+                        abort(404, 'aaa');
+                    }
+                    $rows = $item_prev->$types();
+                    $model = $rows->getRelated();
+                    if (! is_object($model)) {
+                        abort(404);
+                    }
+                }
+
+                if (method_exists($model, 'scopeWithPost')) {
+                    $rows = $rows->withPost($value); //scopeGlobal ?
+                }
+                try {
+                    $pk = $model->getRouteKeyName();
+                } catch (\Exception $e) {
+                    dddx(
+                        [
+                            'model' => $model,
+                        ]
+                    );
+                }
+                $pk_full = $model->getTable().'.'.$pk;
+                if ('guid' == $pk) {
+                    $pk_full = 'guid';
+                } // pezza momentanea
+
+                $value = Str::slug($value); //retrocompatibilita'
+                if ('guid' == $pk_full) {
+                    $rows = $rows->whereHas('post', function (Builder $query) use ($value) {
+                        $query->where('guid', $value);
+                    });
+                } else {
+                    $rows = $rows->where([$pk_full => $value]);
+                }
+                $row = $rows->first();
+
+                /*
+                try {
+                    $rows = $rows->where([$pk_full => $value]);
+                    $row = $rows->first();
+                } catch (\Exception $e) {
+                    //dddx($e->getMessage());
+                    $rows=$rows->whereHas('post', function (Builder $query) use ($value) {
+                        $query->where('guid', $value);
+                    })->first();
+                }
+                */
+
+                if (is_object($row)) {
+                    return $row;
+                }
+                if ($debug = 0) {
+                    /*
+                    echo PHP_EOL.'----------------------------------';
+                    echo PHP_EOL.' model class : '.get_class($model);
+                    echo PHP_EOL.' value : '.$value;
+                    echo PHP_EOL.' pk_full : '.$pk_full;
+                    echo PHP_EOL.'----------------------------------';
+                    */
+                    //$related = $rows->getRelated();
+                    $msg = [
+                        'pk_full' => $pk_full,
+                        'value' => $value,
+                        'rows' => $rows,
+                        //'related' => $related,
+                        //'related_class' => get_class($related),
+                        'lang' => app()->getLocale(),
+                        'row' => $rows->first(),
+                        'url' => url()->full(),
+                    ];
+                    dddx($msg);
+                }
+
+                return $value;
+            });
+        }
+    }
+
+    //end registerRouteBind
+}

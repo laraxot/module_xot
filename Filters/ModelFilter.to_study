@@ -1,0 +1,53 @@
+<?php
+
+
+class ModelFilter{
+    private $filters=['sort','search'];
+
+    public function __construct(Request $request){
+        $this->request=$request;
+    }
+
+    private function getFilters(){
+        return array_filter($this->request->only($this->filters));
+    }
+
+    function search(Builder $query,?string $search){
+        $query->when($search,
+            function($query) use ($search){
+                $query->where('name','like','%'.$search.'%');
+            }
+        );
+    }
+
+    function sort(Builder $query,?string $sort){
+        $query->when($sort,
+            function($query) use ($sort) {
+                $query->orderBy($sort, $this->request->dir =='desc'? 'desc' : 'asc');
+            }
+        );
+    }
+
+    public function apply(Bulder $query){
+        foreach ($this->getFilters() as $field => $value) {
+            if (method_exists($this, $fields)) {
+                $this->$field($query, $value);
+            }
+        }
+    }
+}
+
+
+/*---
+
+/**
+     * Scope a query to only include popular users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+
+public function scopeFilter(Builder $query,Request $request){
+    $filters=new ModelFilter($request);
+    $filters->apply();
+}
