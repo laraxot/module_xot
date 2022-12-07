@@ -9,7 +9,7 @@
         <meta property="og:site_name" content="Docs Starter Template"/>
         <meta property="og:title" content="ModelService | Docs Starter Template"/>
         <meta property="og:description" content="Handle models with ModelService"/>
-        <meta property="og:url" content="https://jigsaw-docs-template.tighten.co/docs/service/model"/>
+        <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/service/model"/>
         <meta property="og:image" content="/assets/img/logo.png"/>
         <meta property="og:type" content="website"/>
 
@@ -19,7 +19,7 @@
         
         <title>Docs Starter Template | ModelService</title>
 
-        <link rel="home" href="https://jigsaw-docs-template.tighten.co">
+        <link rel="home" href="https://laraxot.github.io/module_xot">
         <link rel="icon" href="/favicon.ico">
 
         
@@ -410,6 +410,10 @@ $post_type='press_post'*/
 
 <p>Example</p>
 
+<pre><code class="language-php">$profile=PressPost::get()-&gt;first();
+ModelService::make()-&gt;setModel($profile)-&gt;getRelations();
+</code></pre>
+
 <ul>
 <li>The reflection class is used to get information about the current state of the application.</li>
 <li>It's called reflection, because it looks at itself, and can tell you information about the program your running, at runtime.</li>
@@ -448,6 +452,29 @@ $post_type='press_post'*/
 }
 
 return $relations;
+</code></pre>
+
+<h3>Get relationships from <em>model</em></h3>
+
+<pre><code class="language-php">public function getRelationships(): array {
+</code></pre>
+
+<p>Example</p>
+
+<pre><code class="language-php">$profile=PressPost::get()-&gt;first();
+ModelService::make()-&gt;setModel($profile)-&gt;getRelationships();
+</code></pre>
+
+<pre><code class="language-php">$model = $this-&gt;model;
+$relationships = [];
+
+foreach ((new ReflectionClass($model))-&gt;getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+    if ($method-&gt;class !== \get_class($model)
+    || ! empty($method-&gt;getParameters())
+    || __FUNCTION__ === $method-&gt;getName()
+    ) {
+        continue;
+    }
 </code></pre>
         </div>
     </div>
