@@ -1,4 +1,8 @@
-<?php return array (
-  'name' => 'name',
-  'dove' => 'dove',
-);
+<?php
+
+declare(strict_types=1);
+
+return [
+    'name' => 'name',
+    'dove' => 'dove',
+];
