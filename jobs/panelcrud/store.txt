@@ -9,9 +9,9 @@ use Illuminate\Support\Arr;
 //----------- Requests ----------
 //------------ services ----------
 use Illuminate\Support\Str;
-use Modules\Xot\Contracts\PanelContract;
+use Modules\Cms\Contracts\PanelContract;
 use Modules\Xot\Services\ModelService;
-use Modules\Xot\Services\PanelService;
+use Modules\Cms\Services\PanelService;
 
 /**
  * Class StoreJob.
