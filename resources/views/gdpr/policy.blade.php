@@ -1,8 +1,8 @@
-<x-theme::layouts.guest>
+<x-layouts.guest>
     <div class="row justify-content-center pt-4">
         <div class="col-6">
             <div>
-                <x-theme::auth.card-logo />
+                <x-auth.card-logo />
             </div>
 
             <div class="card shadow-sm">
@@ -12,4 +12,4 @@
             </div>
         </div>
     </div>
-</x-theme::layouts.guest>
+</x-layouts.guest>
