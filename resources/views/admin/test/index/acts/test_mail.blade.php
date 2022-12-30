@@ -1,6 +1,7 @@
 @extends('adm_theme::layouts.app')
 @section('content')
-
+    WIP
+    {{--
     <form method="POST" action="{!!  \Request::fullUrl() !!}">
         @csrf
         @method('POST')
@@ -27,4 +28,5 @@
         ]) !!}
         <button type="submit" class="btn btn-primary">Test !</button>
     </form>
+    --}}
 @endsection
