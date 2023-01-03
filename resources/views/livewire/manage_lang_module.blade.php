@@ -18,6 +18,7 @@
             @endforeach
         <tbody>
     </table>
-
+    {{--  da mettere il nuovo modal
     <livewire:modal.form_array data="test" bodyView="xot::livewire.manage_lang_module.edit" />
+    --}}
 </div>
