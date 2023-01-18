@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="Custom Relation">
+
+        <meta property="og:site_name" content="Docs Starter Template"/>
+        <meta property="og:title" content="Custom Relation | Docs Starter Template"/>
+        <meta property="og:description" content="Custom Relation"/>
+        <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/custom-relation"/>
+        <meta property="og:image" content="/assets/img/logo.png"/>
+        <meta property="og:type" content="website"/>
+
+        <meta name="twitter:image:alt" content="Docs Starter Template">
+        <meta name="twitter:card" content="summary_large_image">
+
+        
+        <base href="https://laraxot.github.io/module_xot/docs/custom-relation" />
+
+        <title>Docs Starter Template | Custom Relation</title>
+
+        <link rel="home" href="https://laraxot.github.io/module_xot/">
+        <link rel="icon" href="/module_xot/favicon.ico">
+
+        
+                    <!-- Insert analytics code here -->
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,300i,400,400i,700,700i,800,800i" rel="stylesheet">
+        <link rel="stylesheet" href="/module_xot/assets/build/css/main.css?id=12c10017fa91ec9c02002a68f599828c">
+
+            </head>
+
+    <body class="flex flex-col justify-between min-h-screen bg-gray-100 text-gray-800 leading-normal font-sans">
+        <header class="flex items-center shadow bg-white border-b h-24 mb-8 py-4" role="banner">
+            <div class="container flex items-center max-w-8xl mx-auto px-4 lg:px-8">
+                <div class="flex items-center">
+                    <a href="/" title="Docs Starter Template home" class="inline-flex items-center">
+                        <img class="h-8 md:h-10 mr-3" src="/assets/img/logo.svg" alt="Docs Starter Template logo" />
+
+                        <h1 class="text-lg md:text-2xl text-blue-900 font-semibold hover:text-blue-600 my-0 pr-4">Docs Starter Template</h1>
+                    </a>
+                </div>
+
+                <div class="flex flex-1 justify-end items-center text-right md:pl-10">
+                                    </div>
+            </div>
+
+                <button class="flex justify-center items-center bg-blue-500 border border-blue-500 h-10 mr-4 px-5 rounded-full lg:hidden focus:outline-none"
+    onclick="navMenu.toggle()"
+>
+    <svg id="js-nav-menu-show" xmlns="http://www.w3.org/2000/svg"
+        class="fill-current text-white h-9 w-4" viewBox="0 0 32 32"
+    >
+        <path d="M4,10h24c1.104,0,2-0.896,2-2s-0.896-2-2-2H4C2.896,6,2,6.896,2,8S2.896,10,4,10z M28,14H4c-1.104,0-2,0.896-2,2  s0.896,2,2,2h24c1.104,0,2-0.896,2-2S29.104,14,28,14z M28,22H4c-1.104,0-2,0.896-2,2s0.896,2,2,2h24c1.104,0,2-0.896,2-2  S29.104,22,28,22z"/>
+    </svg>
+
+    <svg id="js-nav-menu-hide" xmlns="http://www.w3.org/2000/svg"
+        class="hidden fill-current text-white h-9 w-4" viewBox="0 0 36 30"
+    >
+        <polygon points="32.8,4.4 28.6,0.2 18,10.8 7.4,0.2 3.2,4.4 13.8,15 3.2,25.6 7.4,29.8 18,19.2 28.6,29.8 32.8,25.6 22.2,15 "/>
+    </svg>
+</button>
+
+        </header>
+
+        <main role="main" class="w-full flex-auto">
+            <section class="container max-w-8xl mx-auto px-6 md:px-8 py-4">
+    <div class="flex flex-col lg:flex-row">
+        <nav id="js-nav-menu" class="nav-menu hidden lg:block">
+            <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="/docs/getting-started"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Getting Started
+        </a>
+    
+            
+        <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="/docs/customizing-your-site"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Customizing Your Site
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/navigation"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Navigation
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/algolia-docsearch"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Algolia DocSearch
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/custom-404-page"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Custom 404 Page
+        </a>
+    
+    </li>
+    </ul>
+    </li>
+            <li class="pl-4">
+            
+        <a href="https://jigsaw.tighten.co/docs/installation"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Jigsaw Docs
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/model"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Model Actions
+        </a>
+    
+            
+        <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="/docs/model/action/destroy"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Destroy
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/model/action/detach"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Detach
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/model/action/filter-relations"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Filter Relations
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/model/action/store"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Store
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/model/action/update"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Update
+        </a>
+    
+    </li>
+    </ul>
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/service"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Services
+        </a>
+    
+            
+        <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="/docs/service/model"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Model
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/service/panel"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Panel
+        </a>
+    
+    </li>
+            <li class="pl-4">
+            
+        <a href="/docs/service/profile"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Profile
+        </a>
+    
+    </li>
+    </ul>
+    </li>
+    </ul>
+        </nav>
+
+        <div class="DocSearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
+            <h1 id="custom-relation">Come funzionano le custom relations?</h1>
+
+<p>Vediamo prima come funziona con le relazioni standard di laravel.</p>
+
+<h3>Dobbiamo mettere in relazione i modelli Contract > HabitantContract > Habitant > Person</h3>
+
+<ul>
+<li><p>Contract ha relazione ManyToMany con Habitant, passando per la Pivot HabitantContract.</p></li>
+<li><p>Habitant ha relazione HasOne con Person.</p></li>
+</ul>
+
+<h3>Quello che voglio è:</h3>
+
+<ul>
+<li><p>Vedere tutte le persone nel sistema</p></li>
+<li><p>Vedere per ogni persona la colonna con l'array degli eventuali contratti attivi.</p></li>
+</ul>
+
+<p>Potremmo utilizzare la relazione HasManyTrought, ma siamo a 4 livelli di profondità, quindi non si può.</p>
+
+<p>Potremmo fare un ciclo per ogni persona e leggere i contract, ma sarebbe lento.</p>
+
+<h3>L'alternativa migliore è fare le Relazioni Customizzate!</h3>
+
+<p>Vediamo come:</p>
+
+<p>Nel modello person creiamo la relazione, come tutte le altre, ma con il nome della relazione personalizzata:</p>
+
+<pre><code class="language-php">class Person extends Model
+{
+//ritorna una relazione come tutte le altre
+    public function activeContracts(): ActiveContractsRelation
+    {
+        return new ActiveContractsRelation($this);
+    }
+}
+</code></pre>
+
+<p>ActiveContractsRelation sarà quindi il nome della relazione personalizzata
+che leggerà i contratti attivi per ogni persona passando per Habitant.</p>
+
+<p>In Laravel esiste una relazione di base che viene utilzzata da tutte le altre relazioni, 
+che è <strong>Illuminate\Database\Eloquent\Relations\Relation</strong></p>
+
+<p>Quindi andiamo a vedere com'è fatta ed estendiamo la classe:</p>
+
+<pre><code class="language-php">class ActiveContractsRelation extends Relation
+{
+    /**
+     * Set the base constraints on the relation query.
+     *
+     * @return void
+     */
+    public function addConstraints() { /* … */ }
+
+    /**
+     * Set the constraints for an eager load of the relation.
+     *
+     * @param array $models
+     *
+     * @return void
+     */
+    public function addEagerConstraints(array $models) { /* … */ }
+
+    /**
+     * Initialize the relation on a set of models.
+     *
+     * @param array $models
+     * @param string $relation
+     *
+     * @return array
+     */
+    public function initRelation(array $models, $relation) { /* … */ }
+
+    /**
+     * Match the eagerly loaded results to their parents.
+     *
+     * @param array $models
+     * @param \Illuminate\Database\Eloquent\Collection $results
+     * @param string $relation
+     *
+     * @return array
+     */
+    public function match(array $models, Collection $results, $relation) { /* … */ }
+
+    /**
+     * Get the results of the relationship.
+     *
+     * @return mixed
+     */
+    public function getResults() { /* … */ }
+}
+</code></pre>
+
+<p>Inseriamo un costruttore all'interno della classe.</p>
+
+<p>Nel costruttore passiamo il modello Person ($parent - il modello related)</p>
+
+<p>Nella classe parent (Relation) passiamo l'Eloquent Builder o il modello Contract (per leggere i contratti attivi)</p>
+
+<p>Passare Models\Contract oppure Database\Eloquent\Builder serve per facilitare l'auto completamento dell'IDE</p>
+
+<pre><code class="language-php">    /** @var \App\Domain\Contract\Models\Contract|Illuminate\Database\Eloquent\Builder */
+    protected $query;
+
+    /** @var \App\Domain\People\Models\Person */
+    protected $parent;
+
+    public function __construct(Person $parent)
+    {
+    //qui usiamo sia il Builder che il modello Person
+//Questo consentirà all’IDE di avere un miglior completamento automatico 
+        parent::__construct(Contract::query(), $parent);
+    }
+</code></pre>
+
+<p>Quindi in pratica la relazione <strong>interrogherà il modello Contract e utilizzerà il modello Person come genitore</strong>.</p>
+
+<h3>Ora bisogna costruire la query della relazione.</h3>
+
+<p>E' qui che entra in gioco il metodo <strong>addConstraint</strong>.
+Serve per configurare la query di base. Imposterà la nostra query di relazione in modo specifico per le nostre esigenze.</p>
+
+<p>Questo è il luogo in cui sarà contenuta la maggior parte delle regole:</p>
+
+<ul>
+<li><p>Vogliamo che vengano visualizzati solo i contratti attivi</p></li>
+<li><p>Vogliamo caricare solo i contratti attivi che appartengono a una persona specificata (il $parent della nostra relazione)</p></li>
+<li><p>Potremmo voler caricare alcune altre relazioni, ma ne parleremo più avanti.</p></li>
+</ul>
+
+<p>Ecco come sarà per ora il metodo addConstraints:</p>
+
+<pre><code class="language-php">class ActiveContractsRelation extends Relation
+{
+    public function addConstraints()
+    {
+        //la query è su Contract Builder (query)
+        $this-&gt;query
+            -&gt;whereActive() //dove il contratto ha lo stato Attivo
+            -&gt;join(
+                'contract_habitants', 
+                'contract_habitants.contract_id', 
+                '=', 
+                'contracts.id'
+            ) //dove nella pivot contract_habitants.contract_id=contracts.id
+            -&gt;join(
+                'habitants', 
+                'habitants.id', 
+                '=', 
+                'contract_habitants.habitant_id'
+            ); //dove contract_habitants.habitant_id=habitants.id
+
+    //praticamente è una semplicissima relazione Many To Many da Contract ad Habitant
+    }
+}
+</code></pre>
+
+<p>A questo punto <strong>invece di fare una query per persona</strong> per caricare i suoi contratti, stiamo facendo una query per <strong>caricare tutti i contratti e collegare questi contratti alle persone corrette</strong> in seguito. Per questo si usa l’<strong>Eager Constraint</strong>.</p>
+
+<h3>Vediamo come creare il metodo addEagerConstraints</h3>
+
+<p>Partiamo con il dire che addEagerConstraints ci consente di modificare la query per <strong>pre-caricare tutti i contratti relativi a un insieme di persone</strong></p>
+
+<pre><code class="language-php">class ActiveContractsRelation extends Relation
+{
+    //array people è l’array dell’insieme di persone su cui leggere i contatti attivi
+    public function addEagerConstraints(array $people)
+    {
+        //whereIn significa che cercherà tutti i $people-&gt;id in habitants.contact_id
+        $this-&gt;query-&gt;whereIn(
+            'habitants.contact_id', 
+            //gli id delle persone sulle quali fare poi le relazioni
+            collect($people)-&gt;pluck('id')
+        );
+        //quindi habitants.contact_id dovrà essere uguale all'insieme $people-&gt;id
+        //e poi verrà concatenata la query in baseConstraints
+    }
+}
+</code></pre>
+
+<h3>Il metodo initRelation</h3>
+
+<p>Il metodo initRelation serve ad iniziare una relazione vuota, prima di riempirla facendo le query sopra.</p>
+
+<pre><code class="language-php">public function initRelation(array $people, $relation)
+    {
+        foreach ($people as $person) {
+            $person-&gt;setRelation(
+                $relation, 
+                //crea una relazione vuota sul modello related in questo caso è Contract
+                $this-&gt;related-&gt;newCollection()
+            );
+        }
+
+        return $people;
+    }
+</code></pre>
+
+<h3>Il metodo match</h3>
+
+<p>Ora bisogna collegare insieme tutte le persone con i contratti, ed è qui che entra in gioco il metodo match.</p>
+
+<pre><code class="language-php">public function match(array $people, Collection $contracts, $relation)
+    {
+        if ($contracts-&gt;isEmpty()) {
+            return $people;
+        }
+
+        foreach ($people as $person) {
+            $person-&gt;setRelation(
+                $relation, 
+                $contracts-&gt;filter(function (Contract $contract) use ($person) {
+                    //i contract di cui habitants-&gt;person_id contengono $person-&gt;id
+                    //verranno aggiunti alla relazione $person-&gt;activeContracts()
+                    return $contract-&gt;habitants-&gt;pluck('person_id')-&gt;contains($person-&gt;id);
+                })
+            );    
+        }
+
+        return $people;
+    }
+</code></pre>
+
+<p>Siccome però habitants non c'è nella relazione nel metodo addEagerConstraints, quindi non possiamo sapere i person_id
+andiamo ad aggiungerlo, e leggiamo solo i dati dalla tabella Contracts, ignorando i dati delle altre tabelle della query join.</p>
+
+<pre><code class="language-php">class ActiveContractsRelation extends Relation
+{
+//array people è l’array dell’insieme di persone 
+//su cui caricare i contatti
+    public function addEagerConstraints(array $people)
+    {
+        $this-&gt;query-&gt;whereIn(
+            'habitants.contact_id', 
+             collect($people)-&gt;pluck('id')
+        )-&gt;with('habitants')
+            //seleziona solo i dati della tabella contracts
+            //altrimenti i relativi dati di habitants verranno uniti nel modello Contract
+            -&gt;select('contracts.*');
+    }
+}
+</code></pre>
+
+<p>A questo punto basta fare:</p>
+
+<pre><code class="language-php">public function getResults()
+    {
+        return $this-&gt;query-&gt;get();
+    }
+</code></pre>
+
+<h2>Come fare la stessa relazione con CustomRelation?</h2>
+
+<pre><code class="language-php">use Modules\Xot\Traits\HasCustomRelations;
+use Modules\ModuleName\Models\Contract;
+
+class Person
+{
+    use HasCustomRelations;
+
+    /**
+     * Get the related permissions
+     *
+     * @return Illuminate\Database\Eloquent\Relations\Relation
+     */
+    public function activeContracts()
+    {
+        return $this-&gt;custom(
+            Contract::class,
+
+            // add constraints
+            function ($relation) {
+                $relation-&gt;getQuery()
+                -&gt;whereActive()
+                -&gt;join(
+                    'contract_habitants', 
+                    'contract_habitants.contract_id', 
+                    '=', 
+                    'contracts.id'
+                -&gt;join(
+                    'habitants', 
+                    'habitants.id', 
+                    '=', 
+                    'contract_habitants.habitant_id'
+            },
+
+            // add eager constraints
+            function ($relation, $models) {
+                $relation-&gt;getQuery()
+                whereIn('habitants.contact_id', $relation-&gt;getKeys($models))
+            }
+        );
+    }
+}
+</code></pre>
+        </div>
+    </div>
+</section>
+        </main>
+
+        <script src="/module_xot/assets/build/js/main.js?id=73af017f2129fa41a4b5f03922c4c99d"></script>
+
+        <script>
+    const navMenu = {
+        toggle() {
+            const menu = document.getElementById('js-nav-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('lg:block');
+            document.getElementById('js-nav-menu-hide').classList.toggle('hidden');
+            document.getElementById('js-nav-menu-show').classList.toggle('hidden');
+        },
+    }
+</script>
+
+        <footer class="bg-white text-center text-sm mt-12 py-4" role="contentinfo">
+            <ul class="flex flex-col md:flex-row justify-center">
+                <li class="md:mr-2">
+                    &copy; <a href="https://tighten.co" title="Tighten website">Tighten</a> 2023.
+                </li>
+
+                <li>
+                    Built with <a href="http://jigsaw.tighten.co" title="Jigsaw by Tighten">Jigsaw</a>
+                    and <a href="https://tailwindcss.com" title="Tailwind CSS, a utility-first CSS framework">Tailwind CSS</a>.
+                </li>
+            </ul>
+        </footer>
+    </body>
+</html>
