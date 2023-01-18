@@ -31,4 +31,5 @@ return [
             'Profile' => 'docs/service/profile',
         ],
     ],
+    'Custom Relation' => 'docs/custom-relation',
 ];
