@@ -17,7 +17,7 @@
         "laravelcollective/html": "^6.3",
         "livewire/livewire": "*",
         "mcamara/laravel-localization": "*",
-        "nwidart/laravel-modules": "^9.0",
+        "nwidart/laravel-modules": "^10.0",
         "phpdocumentor/type-resolver": "^1.5",
         "phpoffice/phpspreadsheet": "^1.25",
         "phpoffice/phpword": "^1.0",
