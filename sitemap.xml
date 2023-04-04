@@ -2,102 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/about</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model/action/detach</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model/action/update</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model/action/destroy</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model/action/filter-relations</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model/action/store</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/algolia-docsearch</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/custom-relation</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/service</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/custom-404-page</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/customizing-your-site</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/modules/test</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/getting-started</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/data/xotdata</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/navigation</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/service/panel</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/service/model</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/service/profile</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot/docs/model</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
  <url>
   <loc>https://laraxot.github.io/module_xot</loc>
-  <lastmod>2023-03-31T08:49:36+00:00</lastmod>
+  <lastmod>2023-04-04T12:10:44+00:00</lastmod>
   <changefreq>daily</changefreq>
  </url>
 </urlset>
