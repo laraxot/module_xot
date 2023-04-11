@@ -28,7 +28,7 @@ return [
         ],
     ],
     'general' => [
-        'cancel' => 'Cancel',
+        'cancel' => 'Annulla',
         'crud' => [
             'create' => 'Create',
             'delete' => 'Delete',
