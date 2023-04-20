@@ -305,7 +305,8 @@
 <li>the relation itself</li>
 </ul>
 
-<pre><code class="language-php">-&gt;map(function ($item) use ($model) {
+<pre><code class="language-php">-&gt;map(
+function ($item) use ($model) {
             $rows = $model-&gt;$item();
             $related = null;
             if (method_exists($rows, 'getRelated')) {
