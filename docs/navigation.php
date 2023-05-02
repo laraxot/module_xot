@@ -32,4 +32,10 @@ return [
         ],
     ],
     'Custom Relation' => 'docs/custom-relation',
+    'Links' => [
+        'url' => '#',
+        'children' => [
+            'Filter' => 'docs/links/filter',
+        ],
+    ],
 ];
