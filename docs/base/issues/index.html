@@ -298,33 +298,32 @@
         <div class="DocSearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
             <h1 id="issues">Come Risolvere gli Errori più Comuni</h1>
 
-<ul>
-<li>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</li>
-</ul>
+<h3>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</h3>
 
 <pre><code class="language-bash">php artisan jwt:secret
 </code></pre>
 
-<ul>
-<li>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</li>
-</ul>
+<h3>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</h3>
 
 <pre><code class="language-bash">composer dump autoload
 </code></pre>
 
 <ul>
-<li><p>alternativa: controllare se il namespace del file è giusto</p></li>
-<li><p>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</p></li>
-<li><p>mettere l'esensione della migrations FILE a .old</p></li>
-<li><p>Errore StubService riga 418 (StubService:418).</p></li>
+<li>alternativa: controllare se il namespace del file è giusto</li>
 </ul>
+
+<h3>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</h3>
+
+<ul>
+<li>mettere l'esensione della migrations FILE a .old</li>
+</ul>
+
+<h3>Errore StubService riga 418 (StubService:418).</h3>
 
 <p>Significa che devi spostare il modello dal vendor al nostro modulo ed estenderlo, e cambiare in config la path nel nostro modulo.
 Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri file di partenza.</p>
 
-<ul>
-<li>pagina 404</li>
-</ul>
+<h3>pagina 404</h3>
 
 <p>controlla le route con uno dei seguenti comandi e vedi se esistono:</p>
 
@@ -353,9 +352,7 @@ Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri 
 
 <p>potrebbe dare una spiegazione dell’errore nella variabile message. Ad esempio se è un nuovo modulo potrebbe mancare _ModulePanel e /Policies/_ModelPanelPolicy</p>
 
-<ul>
-<li>*pagina 403 su un modulo</li>
-</ul>
+<h3>pagina 403 su un modulo</h3>
 
 <p>controlla su XotBasePanelPolicy home se hai l’area abilitata.</p>
 
@@ -366,22 +363,16 @@ dddx($profile-&gt;hasArea('NOME_AREA'));
 @endphp
 </code></pre>
 
-<ul>
-<li>The "/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire" directory does not exist</li>
-</ul>
+<h3>The "/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire" directory does not exist</h3>
 
 <p>Aggiungere la cartella nel MODULO/Http/Livewire con dentro il file .gitkeep</p>
 
-<ul>
-<li>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</li>
-</ul>
+<h3>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</h3>
 
 <pre><code class="language-bash">sudo chmod PERMESSI_CORRETTI -R .
 </code></pre>
 
-<ul>
-<li>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</li>
-</ul>
+<h3>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</h3>
 
 <p>Ensure that the [name, id, data] of the Livewire component wasn't tampered with between requests.</p>
 
@@ -391,25 +382,31 @@ dddx($profile-&gt;hasArea('NOME_AREA'));
 
 <p>IMPORTANTE: sui modal pro non serve il mount, basta dichiarare le variabili nella classe e passarli come public tramite l’emit</p>
 
-<ul>
-<li>Errore “Unable to call component method. Public method [METODO] not found on component: [COMPONENTE ESTESO]”</li>
-</ul>
+<h3>Errore “Unable to call component method. Public method [METODO] not found on component: [COMPONENTE ESTESO]”</h3>
 
 <p>Il div nella view potrebbe non essere stato chiuso correttamente, o potrebbe essere stato chiuso due volte. Formattare view e controllare</p>
 
-<ul>
-<li>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
-Dalla cartella laravel:</li>
-</ul>
+<h3>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome</h3>
+
+<p>Dalla cartella laravel:</p>
 
 <pre><code class="language-bash">composer dumpautoload
 </code></pre>
 
-<ul>
-<li>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard `` instead of <code>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</li>
-</ul>
+<h3>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard `` instead of <code>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</h3>
 
 <pre><code class="language-php">protected $guard_name = 'web';
+</code></pre>
+
+<h3>TIPS</h3>
+
+<p>Altri trucchi e sistemi per risolvere errori o installare server sono scritti nella cartella ./bashscripts/tips/</p>
+
+<h3>BACKUP DEL PROGETTO</h3>
+
+<p>E' possibile fare un backup del progetto con il file</p>
+
+<pre><code class="language-bash">./bashscripts/backup.sh
 </code></pre>
         </div>
     </div>
