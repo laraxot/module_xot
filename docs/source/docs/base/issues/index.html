@@ -3,38 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736580764351">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736589489180">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 2.4.0">
 
     <!-- Primary Meta Tags -->
-    <title>Struttura</title>
-    <meta name="title" content="Struttura">
-    <meta name="description" content="Struttura della base e dei moduli" />
+    <title>Errori Comuni</title>
+    <meta name="title" content="Errori Comuni">
+    <meta name="description" content="Come Risolvere gli Errori più Comuni" />
 
     <!-- Canonical -->
-    <link rel="canonical" href="/docs/source/docs/bases/struttura/" />
+    <link rel="canonical" href="/docs/source/docs/base/issues/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="/docs/source/docs/bases/struttura/">
-    <meta property="og:title" content="Struttura">
-    <meta property="og:description" content="Struttura della base e dei moduli">
+    <meta property="og:url" content="/docs/source/docs/base/issues/">
+    <meta property="og:title" content="Errori Comuni">
+    <meta property="og:description" content="Come Risolvere gli Errori più Comuni">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="/docs/source/docs/bases/struttura/">
-    <meta property="twitter:title" content="Struttura">
-    <meta property="twitter:description" content="Struttura della base e dei moduli">
+    <meta property="twitter:url" content="/docs/source/docs/base/issues/">
+    <meta property="twitter:title" content="Errori Comuni">
+    <meta property="twitter:description" content="Come Risolvere gli Errori più Comuni">
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../../../../resources/css/retype.css?v=2.4.0.736580764351" rel="stylesheet" />
+    <link href="../../../../../resources/css/retype.css?v=2.4.0.736589489180" rel="stylesheet" />
 
-    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736580764351" data-turbo-eval="false" defer></script>
+    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736589489180" data-turbo-eval="false" defer></script>
     <script type="text/javascript" src="../../../../../resources/js/retype.js?v=2.4.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736580764351" data-turbo-eval="false" defer></script>
+    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736589489180" data-turbo-eval="false" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -166,61 +166,81 @@
                                 <div id="docs-sidebar-right-toggle"></div>
                 
                                 <!-- Page content  -->
-<doc-anchor-target id="struttura" class="break-words">
+<doc-anchor-target id="issues" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#struttura">#</doc-anchor-trigger>
-        <span>Struttura</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#issues">#</doc-anchor-trigger>
+        <span>Come Risolvere gli Errori più Comuni</span>
     </h1>
 </doc-anchor-target>
 <ul>
-<li>I nostri progetti hanno una struttura modulare.</li>
-</ul>
-<p>Questo significa che essendo progetti grossi, per tenere in ordine le basi suddividiamo i domini di funzionalità in moduli separati.</p>
-<p>Ogni base ha solamente i moduli necessari per il suo funzionamento (esempio: modulo Core, modulo UI, modulo Seo e modulo Dropshipping).</p>
-<ul>
-<li>I moduli sono gestiti dal pacchetto laravel-nwidart, quindi vi invitiamo a riferirvi alla loro documentazione.</li>
-</ul>
-<p>Ogni modulo è una repository a se stante.</p>
-<p>Quindi la base è la repository principale, e ogni modulo è un git submodule.</p>
-<ul>
-<li>I moduli sono dei git submodules e dei moduli nwidart, e sono nella cartella laravel/Modules</li>
-</ul>
-<p>Il modulo che fa da core a tutto il progetto è Xot.</p>
-<p>Il modulo che gestisce routes e pannelli è Cms.</p>
-<p>Il modulo che gestisce i temi è UI.</p>
-<p>Il modulo che gestisce l&#x27;autenticazione è LU.</p>
-<ul>
-<li>I temi sono sempre dei git submodules e dei moduli nwidart, e sono nella cartella laravel/Themes.</li>
-</ul>
-<p>Utilizziamo per ogni dominio un tema di backend e uno di frontend.</p>
-<ul>
-<li>Nella cartella laravel/config ci sono le confgurazioni di tutti i virtual hosts</li>
-</ul>
-<p>I file di configurazione del virtual host principali sono in laravel/config/</p>
-<p>Le altre configurazioni, che sovrascrivono quelle in laravel/config/, si trovano in laravel/config/EXT/DOMINIO/</p>
-<ul>
-<li><p>xra.php dove vengono indicati i temi di front-end e back-end di quel dominio, la lingua pricipale, il modulo principale e altri dati specifici per il vhost</p>
+<li><p>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</p>
+<p>php artisan jwt:secret</p>
 </li>
-<li><p>morph_map.php che associa i percorsi dei modelli ai nomi corti. Esempio:</p>
-<p>&#x27;article&#x27; =&gt; &#x27;Modules\Blog\Models\Article&#x27;,</p>
+<li><p>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</p>
+<p>composer dump autoload
+alternativa: controllare se il namespace è giusto</p>
+</li>
+<li><p>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</p>
+<p>mettere l&#x27;esensione della migrations FILE a .old</p>
+</li>
+<li><p>Errore StubService riga 418 (StubService:418).</p>
 </li>
 </ul>
-<p>quindi le relazioni verranno create utilizzando il MorphMap, ovvero la stringa &#x27;article&#x27; anzichè &#x27;Modules\Blog\Models\Article&#x27;</p>
+<p>Significa che devi spostare il modello dal vendor al nostro modulo ed estenderlo, e cambiare in config la path nel nostro modulo.
+Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri file di partenza.</p>
 <ul>
-<li><p>modules_statuses.json che è la lista dei moduli abilitati all&#x27;interno del vhost</p>
+<li>pagina 404</li>
+</ul>
+<p>controlla le route con uno dei seguenti comandi e vedi se esistono:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1
+
+VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist
+
+php artisan route:list</code></pre>
+</doc-codeblock></div>
+<p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p>
+<p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">{{ ERROR }}</code></pre>
+</doc-codeblock></div>
+<p>potrebbe dare una spiegazione dell’errore nella variabile message. Ad esempio se è un nuovo modulo potrebbe mancare _ModulePanel e /Policies/_ModelPanelPolicy</p>
+<ul>
+<li>*pagina 403 su un modulo</li>
+</ul>
+<p>controlla su XotBasePanelPolicy home se hai l’area abilitata.</p>
+<p>Per farlo puoi andare su pagina 403 e fare:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">@php
+    dddx($profile-&gt;hasArea('NOME_AREA'));
+@endphp</code></pre>
+</doc-codeblock></div>
+<ul>
+<li>The &quot;/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire&quot; directory does not exist</li>
+</ul>
+<p>Aggiungere la cartella nel MODULO/Http/Livewire con dentro il file .gitkeep</p>
+<ul>
+<li><p>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</p>
+<p>sudo chmod PERMESSI_CORRETTI -R .</p>
 </li>
-<li><p>metatag.php dove sono indicati i metatag principali del progetto, ad esempio il titolo del progetto</p>
+<li><p>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</p>
 </li>
-<li><p>menu_VARI.php dove vengono costruiti i menu di quel vhost</p>
+</ul>
+<p>Ensure that the [name, id, data] of the Livewire component wasn&#x27;t tampered with between requests.</p>
+<p>Vedere di non aver passato dati name, id e data o variabili riservate</p>
+<p>Analizzare che parametri siano stati passati con la richiesta.</p>
+<p>IMPORTANTE: sui modal pro non serve il mount, basta dichiarare le variabili nella classe e passarli come public tramite l’emit</p>
+<ul>
+<li>Errore “Unable to call component method. Public method [METODO] not found on component: [COMPONENTE ESTESO]”</li>
+</ul>
+<p>Il div nella view potrebbe non essere stato chiuso correttamente, o potrebbe essere stato chiuso due volte. Formattare view e controllare</p>
+<ul>
+<li><p>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
+Dalla cartella laravel:</p>
+<p>composer dumpautoload</p>
 </li>
-<li><p>filesystems.php dove si possono inserire nuovi nomi per accedere alle cartelle o a servizi di CDN esterni</p>
-</li>
-<li><p>database.php dove si possono inserire nuove connessioni ai database</p>
-</li>
-<li><p>app.php dove c&#x27;è scritta la lingua utilizzata. Esempio:</p>
-<p>&#x27;locale&#x27; =&gt; &#x27;it&#x27;,</p>
-</li>
-<li><p>altri files</p>
+<li><p>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard &#x60;&#x60; instead of <code v-pre>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</p>
+<p>protected $guard_name = &#x27;web&#x27;;</p>
 </li>
 </ul>
 
@@ -232,20 +252,20 @@
                             
                                 <nav class="flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../../../docs/source/docs/bases/issues/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../../../docs/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Issues</span>
+                                                <span class="block mt-1">Jigsaw Docs Starter Template</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../../../docs/source/docs/data/xotdata/">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../../../docs/source/docs/base/installation/">
                                             <span>
                                                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                                                <span class="block mt-1">Xot​Data</span>
+                                                <span class="block mt-1">Installazione</span>
                                             </span>
                                             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                         </a>
@@ -289,6 +309,6 @@
 
     <div id="docs-overlay-target"></div>
 
-    <script>window.__DOCS__ = { "title": "Struttura", level: 5, icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+    <script>window.__DOCS__ = { "title": "Errori Comuni", level: 5, icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>

@@ -13,6 +13,14 @@ return [
         ],
     ],
     'Jigsaw Docs' => 'https://jigsaw.tighten.co/docs/installation',
+    'Base' => [
+        'url' => 'docs/base',
+        'children' => [
+            'Installazione' => 'docs/base/installation',
+            'Errori Comuni' => 'docs/base/issues',
+            'Struttura' => 'docs/base/structure',
+        ],
+    ],
     'Model Actions' => [
         'url' => 'docs/model',
         'children' => [
