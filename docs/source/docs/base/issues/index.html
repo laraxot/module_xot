@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736589489180">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736590349126">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 2.4.0">
@@ -30,11 +30,12 @@
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../../../../resources/css/retype.css?v=2.4.0.736589489180" rel="stylesheet" />
+    <link href="../../../../../resources/css/retype.css?v=2.4.0.736590349126" rel="stylesheet" />
 
-    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736589489180" data-turbo-eval="false" defer></script>
+    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736590349126" data-turbo-eval="false" defer></script>
     <script type="text/javascript" src="../../../../../resources/js/retype.js?v=2.4.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736589489180" data-turbo-eval="false" defer></script>
+    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736590349126" data-turbo-eval="false" defer></script>
+    <script id="prism-js" type="text/javascript" src="../../../../../resources/js/prism.js?v=2.4.0.736590349126" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -173,18 +174,28 @@
     </h1>
 </doc-anchor-target>
 <ul>
-<li><p>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</p>
-<p>php artisan jwt:secret</p>
-</li>
-<li><p>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</p>
-<p>composer dump autoload
-alternativa: controllare se il namespace è giusto</p>
-</li>
-<li><p>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</p>
-<p>mettere l&#x27;esensione della migrations FILE a .old</p>
-</li>
-<li><p>Errore StubService riga 418 (StubService:418).</p>
-</li>
+<li>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">php artisan jwt:secret</code></pre>
+</doc-codeblock></div>
+<ul>
+<li>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">composer dump autoload</code></pre>
+</doc-codeblock></div>
+<ul>
+<li>alternativa: controllare se il namespace del file è giusto</li>
+</ul>
+<ul>
+<li>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</li>
+</ul>
+<ul>
+<li>mettere l&#x27;esensione della migrations FILE a .old</li>
+</ul>
+<ul>
+<li>Errore StubService riga 418 (StubService:418).</li>
 </ul>
 <p>Significa che devi spostare il modello dal vendor al nostro modulo ed estenderlo, e cambiare in config la path nel nostro modulo.
 Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri file di partenza.</p>
@@ -192,17 +203,26 @@ Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri 
 <li>pagina 404</li>
 </ul>
 <p>controlla le route con uno dei seguenti comandi e vedi se esistono:</p>
+<p>da url:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-none"><code v-pre class="language-none">VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1
-
-VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist
-
-php artisan route:list</code></pre>
+<pre class="language-bash"><code v-pre class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1</code></pre>
 </doc-codeblock></div>
-<p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p>
-<p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p>
+<p>oppure:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-none"><code v-pre class="language-none">{{ ERROR }}</code></pre>
+<pre class="language-bash"><code v-pre class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist</code></pre>
+</doc-codeblock></div>
+<p>oppure da terminale:</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">php artisan route:list</code></pre>
+</doc-codeblock></div>
+<ul>
+<li><p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p>
+</li>
+<li><p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p>
+</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-php"><code v-pre class="language-php">{{ ERROR }}</code></pre>
 </doc-codeblock></div>
 <p>potrebbe dare una spiegazione dell’errore nella variabile message. Ad esempio se è un nuovo modulo potrebbe mancare _ModulePanel e /Policies/_ModelPanelPolicy</p>
 <ul>
@@ -211,8 +231,8 @@ php artisan route:list</code></pre>
 <p>controlla su XotBasePanelPolicy home se hai l’area abilitata.</p>
 <p>Per farlo puoi andare su pagina 403 e fare:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-none"><code v-pre class="language-none">@php
-    dddx($profile-&gt;hasArea('NOME_AREA'));
+<pre class="language-php"><code v-pre class="language-php">@php
+dddx($profile-&gt;hasArea('NOME_AREA'));
 @endphp</code></pre>
 </doc-codeblock></div>
 <ul>
@@ -220,11 +240,13 @@ php artisan route:list</code></pre>
 </ul>
 <p>Aggiungere la cartella nel MODULO/Http/Livewire con dentro il file .gitkeep</p>
 <ul>
-<li><p>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</p>
-<p>sudo chmod PERMESSI_CORRETTI -R .</p>
-</li>
-<li><p>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</p>
-</li>
+<li>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">sudo chmod PERMESSI_CORRETTI -R .</code></pre>
+</doc-codeblock></div>
+<ul>
+<li>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</li>
 </ul>
 <p>Ensure that the [name, id, data] of the Livewire component wasn&#x27;t tampered with between requests.</p>
 <p>Vedere di non aver passato dati name, id e data o variabili riservate</p>
@@ -235,14 +257,18 @@ php artisan route:list</code></pre>
 </ul>
 <p>Il div nella view potrebbe non essere stato chiuso correttamente, o potrebbe essere stato chiuso due volte. Formattare view e controllare</p>
 <ul>
-<li><p>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
-Dalla cartella laravel:</p>
-<p>composer dumpautoload</p>
-</li>
-<li><p>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard &#x60;&#x60; instead of <code v-pre>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</p>
-<p>protected $guard_name = &#x27;web&#x27;;</p>
-</li>
+<li>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
+Dalla cartella laravel:</li>
 </ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">composer dumpautoload</code></pre>
+</doc-codeblock></div>
+<ul>
+<li>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard &#x60;&#x60; instead of <code v-pre>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-php"><code v-pre class="language-php">protected $guard_name = 'web';</code></pre>
+</doc-codeblock></div>
 
                                 
                                 <!-- Required only on API pages -->
@@ -309,6 +335,6 @@ Dalla cartella laravel:</p>
 
     <div id="docs-overlay-target"></div>
 
-    <script>window.__DOCS__ = { "title": "Errori Comuni", level: 5, icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+    <script>window.__DOCS__ = { "title": "Errori Comuni", level: 5, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
 </body>
 </html>
