@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736590349126">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="2.4.0.736590750211">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 2.4.0">
@@ -30,12 +30,12 @@
 
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="../../../../../resources/css/retype.css?v=2.4.0.736590349126" rel="stylesheet" />
+    <link href="../../../../../resources/css/retype.css?v=2.4.0.736590750211" rel="stylesheet" />
 
-    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736590349126" data-turbo-eval="false" defer></script>
+    <script type="text/javascript" src="../../../../../resources/js/config.js?v=2.4.0.736590750211" data-turbo-eval="false" defer></script>
     <script type="text/javascript" src="../../../../../resources/js/retype.js?v=2.4.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736590349126" data-turbo-eval="false" defer></script>
-    <script id="prism-js" type="text/javascript" src="../../../../../resources/js/prism.js?v=2.4.0.736590349126" defer></script>
+    <script id="lunr-js" type="text/javascript" src="../../../../../resources/js/lunr.js?v=2.4.0.736590750211" data-turbo-eval="false" defer></script>
+    <script id="prism-js" type="text/javascript" src="../../../../../resources/js/prism.js?v=2.4.0.736590750211" defer></script>
 </head>
 <body>
     <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -173,15 +173,21 @@
         <span>Installazione</span>
     </h1>
 </doc-anchor-target>
-<ul>
-<li>Clonare la base in locale nella cartella del server, scaricando i submodules, e senza la storia delle modifiche</li>
-</ul>
+<doc-anchor-target id="clonare-la-base-in-locale-nella-cartella-del-server-scaricando-i-submodules-e-senza-la-storia-delle-modifiche">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#clonare-la-base-in-locale-nella-cartella-del-server-scaricando-i-submodules-e-senza-la-storia-delle-modifiche">#</doc-anchor-trigger>
+        <span>Clonare la base in locale nella cartella del server, scaricando i submodules, e senza la storia delle modifiche</span>
+    </h3>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">git clone https://base.git –recurse-submodules –depth=1</code></pre>
 </doc-codeblock></div>
-<ul>
-<li>dalla cartella &quot;laravel&quot; creare il file delle variabili d&#x27;ambiente .env</li>
-</ul>
+<doc-anchor-target id="dalla-cartella-laravel-creare-il-file-delle-variabili-dambiente-env">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#dalla-cartella-laravel-creare-il-file-delle-variabili-dambiente-env">#</doc-anchor-trigger>
+        <span>dalla cartella &quot;laravel&quot; creare il file delle variabili d&#x27;ambiente .env</span>
+    </h3>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">cp .env.latest .env</code></pre>
 </doc-codeblock></div>
@@ -189,9 +195,12 @@
 <li>modificare parametri a seconda delle necessità</li>
 <li>dopo aver messo i nomi dei database, in phpmyadmin creare i database vuoti</li>
 </ul>
-<ul>
-<li>dalla cartella laravel, lanciare in bash il comando</li>
-</ul>
+<doc-anchor-target id="dalla-cartella-laravel-lanciare-in-bash-il-comando">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#dalla-cartella-laravel-lanciare-in-bash-il-comando">#</doc-anchor-trigger>
+        <span>dalla cartella laravel, lanciare in bash il comando</span>
+    </h3>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">composer init</code></pre>
 </doc-codeblock></div>
@@ -202,9 +211,12 @@ cd Modules/Xot/Services
 composer install
 php artisan key:generate</code></pre>
 </doc-codeblock></div>
-<ul>
-<li>vedere la lista dei moduli con il comando</li>
-</ul>
+<doc-anchor-target id="vedere-la-lista-dei-moduli-con-il-comando">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#vedere-la-lista-dei-moduli-con-il-comando">#</doc-anchor-trigger>
+        <span>vedere la lista dei moduli con il comando</span>
+    </h3>
+</doc-anchor-target>
 <p>da url:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-list</code></pre>
@@ -213,9 +225,12 @@ php artisan key:generate</code></pre>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">php artisan module:list </code></pre>
 </doc-codeblock></div>
-<ul>
-<li>abilitare tutti i moduli con il comando</li>
-</ul>
+<doc-anchor-target id="abilitare-tutti-i-moduli-con-il-comando">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#abilitare-tutti-i-moduli-con-il-comando">#</doc-anchor-trigger>
+        <span>abilitare tutti i moduli con il comando</span>
+    </h3>
+</doc-anchor-target>
 <p>da url:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-enable&amp;module=NOME_MODULO</code></pre>
@@ -224,9 +239,12 @@ php artisan key:generate</code></pre>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">php artisan module:enable NomeModulo</code></pre>
 </doc-codeblock></div>
-<ul>
-<li>fare la migration</li>
-</ul>
+<doc-anchor-target id="fare-la-migration">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#fare-la-migration">#</doc-anchor-trigger>
+        <span>fare la migration</span>
+    </h3>
+</doc-anchor-target>
 <p>da url:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=migrate</code></pre>
@@ -235,50 +253,51 @@ php artisan key:generate</code></pre>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">php artisan migrate</code></pre>
 </doc-codeblock></div>
-<ul>
-<li>per compilare il tema (da dentro la cartella laravel/Themes/NOME_TEMA)</li>
-</ul>
+<doc-anchor-target id="per-compilare-il-tema-da-dentro-la-cartella-laravelthemesnome_tema">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#per-compilare-il-tema-da-dentro-la-cartella-laravelthemesnome_tema">#</doc-anchor-trigger>
+        <span>per compilare il tema (da dentro la cartella laravel/Themes/NOME_TEMA)</span>
+    </h3>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">npm install
 npm run dev</code></pre>
 </doc-codeblock></div>
-<ul>
-<li>a questo punto bisogna crearsi il virtual host con il nome del dominio uguale a quello del file di configurazione. Esempio:</li>
-</ul>
+<doc-anchor-target id="a-questo-punto-bisogna-crearsi-il-virtual-host-con-il-nome-del-dominio-uguale-a-quello-del-file-di-configurazione-esempio">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#a-questo-punto-bisogna-crearsi-il-virtual-host-con-il-nome-del-dominio-uguale-a-quello-del-file-di-configurazione-esempio">#</doc-anchor-trigger>
+        <span>a questo punto bisogna crearsi il virtual host con il nome del dominio uguale a quello del file di configurazione. Esempio:</span>
+    </h3>
+</doc-anchor-target>
 <ul>
 <li><p>copio la cartella laravel/config/localhost in laravel/config/local/dominio/* e imposto i parametri nei file</p>
 </li>
 <li><p>questo significa che il virtual host deve chiamarsi dominio.local</p>
 </li>
 </ul>
-<ul>
-<li><strong>IMPORTANTISSIMO</strong> per sincronizzare la base si utilizzano i famosi TRE FILES.</li>
-</ul>
+<doc-anchor-target id="importantissimo-per-sincronizzare-la-base-si-utilizzano-i-famosi-tre-files">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#importantissimo-per-sincronizzare-la-base-si-utilizzano-i-famosi-tre-files">#</doc-anchor-trigger>
+        <span>IMPORTANTISSIMO per sincronizzare la base si utilizzano i famosi TRE FILES.</span>
+    </h3>
+</doc-anchor-target>
 <p>Questi file si trovano nella cartella BASE/bashscripts.</p>
 <p>Vanno lanciati dalla cartella della root della BASE.</p>
 <p>Si utilizzano così:</p>
-<ul>
-<li>./bashscripts/git_pull.sh &amp;&amp; ./bashscripts/git_branch.sh per fare il pull</li>
-<li>./bashscripts/git_pull.sh &amp;&amp; ./bashscripts/git_branch.sh per fare il push</li>
-</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-bash"><code v-pre class="language-bash">- ./bashscripts/git_pull.sh &amp;&amp; ./bashscripts/git_branch.sh per fare il pull
+- ./bashscripts/git_pull.sh &amp;&amp; ./bashscripts/git_branch.sh per fare il push</code></pre>
+</doc-codeblock></div>
 <p>Dopo aver fatto push, siccome su git ci sono delle azioni che possono modificare i file, bisogna rilanciare subito il pull, come scritto sopra</p>
-<ul>
-<li>TIPS</li>
-</ul>
-<p>Altri trucchi e sistemi per risolvere errori o installare server sono scritti nella cartella ./bashscripts/tips/</p>
-<ul>
-<li>FORMATTAZIONE DEL CODICE</li>
-</ul>
+<doc-anchor-target id="formattazione-del-codice">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#formattazione-del-codice">#</doc-anchor-trigger>
+        <span>FORMATTAZIONE DEL CODICE</span>
+    </h3>
+</doc-anchor-target>
 <p>Per formattare il codice in modo corretto bisogna usare cs-fixer global. Per installarlo seguire le istruzioni nel seguente file:</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-bash"><code v-pre class="language-bash">bashscripts/tips/cs-fixer.txt</code></pre>
-</doc-codeblock></div>
-<ul>
-<li>BACKUP DEL PROGETTO</li>
-</ul>
-<p>E&#x27; possibile fare un backup del progetto con il file</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-bash"><code v-pre class="language-bash">./bashscripts/backup.sh</code></pre>
 </doc-codeblock></div>
 
                                 
