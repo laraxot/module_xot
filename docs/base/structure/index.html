@@ -342,10 +342,11 @@
 
 <ul>
 <li><p>xra.php dove vengono indicati i temi di front-end e back-end di quel dominio, la lingua pricipale, il modulo principale e altri dati specifici per il vhost</p></li>
-<li><p>morph_map.php che associa i percorsi dei modelli ai nomi corti. Esempio:</p>
-
-<p>'article' => 'Modules\Blog\Models\Article',</p></li>
+<li><p>morph_map.php che associa i percorsi dei modelli ai nomi corti. Esempio:</p></li>
 </ul>
+
+<pre><code class="language-php">    'article' =&gt; 'Modules\Blog\Models\Article',
+</code></pre>
 
 <p>quindi le relazioni verranno create utilizzando il MorphMap, ovvero la stringa 'article' anzichè 'Modules\Blog\Models\Article'</p>
 
@@ -355,10 +356,14 @@
 <li><p>menu_VARI.php dove vengono costruiti i menu di quel vhost</p></li>
 <li><p>filesystems.php dove si possono inserire nuovi nomi per accedere alle cartelle o a servizi di CDN esterni</p></li>
 <li><p>database.php dove si possono inserire nuove connessioni ai database</p></li>
-<li><p>app.php dove c'è scritta la lingua utilizzata. Esempio:</p>
+<li><p>app.php dove c'è scritta la lingua utilizzata. Esempio:</p></li>
+</ul>
 
-<p>'locale' => 'it',</p></li>
-<li><p>altri files</p></li>
+<pre><code class="language-php">'locale' =&gt; 'it',
+</code></pre>
+
+<ul>
+<li>altri files</li>
 </ul>
         </div>
     </div>

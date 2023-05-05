@@ -299,16 +299,23 @@
             <h1 id="issues">Come Risolvere gli Errori più Comuni</h1>
 
 <ul>
-<li><p>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</p>
+<li>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</li>
+</ul>
 
-<p>php artisan jwt:secret</p></li>
-<li><p>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</p>
+<pre><code class="language-bash">php artisan jwt:secret
+</code></pre>
 
-<p>composer dump autoload
-alternativa: controllare se il namespace è giusto</p></li>
-<li><p>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</p>
+<ul>
+<li>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</li>
+</ul>
 
-<p>mettere l'esensione della migrations FILE a .old</p></li>
+<pre><code class="language-bash">composer dump autoload
+</code></pre>
+
+<ul>
+<li><p>alternativa: controllare se il namespace del file è giusto</p></li>
+<li><p>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</p></li>
+<li><p>mettere l'esensione della migrations FILE a .old</p></li>
 <li><p>Errore StubService riga 418 (StubService:418).</p></li>
 </ul>
 
@@ -321,18 +328,27 @@ Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri 
 
 <p>controlla le route con uno dei seguenti comandi e vedi se esistono:</p>
 
-<pre><code>VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1
+<p>da url:</p>
 
-VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist
-
-php artisan route:list
+<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1
 </code></pre>
 
-<p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p>
+<p>oppure:</p>
 
-<p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p>
+<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist
+</code></pre>
 
-<pre><code>{{ dddx(get_defined_vars()) }}
+<p>oppure da terminale:</p>
+
+<pre><code class="language-bash">php artisan route:list
+</code></pre>
+
+<ul>
+<li><p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p></li>
+<li><p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p></li>
+</ul>
+
+<pre><code class="language-php">{{ dddx(get_defined_vars()) }}
 </code></pre>
 
 <p>potrebbe dare una spiegazione dell’errore nella variabile message. Ad esempio se è un nuovo modulo potrebbe mancare _ModulePanel e /Policies/_ModelPanelPolicy</p>
@@ -345,8 +361,8 @@ php artisan route:list
 
 <p>Per farlo puoi andare su pagina 403 e fare:</p>
 
-<pre><code>@php
-    dddx($profile-&gt;hasArea('NOME_AREA'));
+<pre><code class="language-php">@php
+dddx($profile-&gt;hasArea('NOME_AREA'));
 @endphp
 </code></pre>
 
@@ -357,10 +373,14 @@ php artisan route:list
 <p>Aggiungere la cartella nel MODULO/Http/Livewire con dentro il file .gitkeep</p>
 
 <ul>
-<li><p>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</p>
+<li>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</li>
+</ul>
 
-<p>sudo chmod PERMESSI_CORRETTI -R .</p></li>
-<li><p>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</p></li>
+<pre><code class="language-bash">sudo chmod PERMESSI_CORRETTI -R .
+</code></pre>
+
+<ul>
+<li>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</li>
 </ul>
 
 <p>Ensure that the [name, id, data] of the Livewire component wasn't tampered with between requests.</p>
@@ -378,14 +398,19 @@ php artisan route:list
 <p>Il div nella view potrebbe non essere stato chiuso correttamente, o potrebbe essere stato chiuso due volte. Formattare view e controllare</p>
 
 <ul>
-<li><p>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
-Dalla cartella laravel:</p>
-
-<p>composer dumpautoload</p></li>
-<li><p>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard `` instead of <code>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</p>
-
-<p>protected $guard_name = 'web';</p></li>
+<li>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome
+Dalla cartella laravel:</li>
 </ul>
+
+<pre><code class="language-bash">composer dumpautoload
+</code></pre>
+
+<ul>
+<li>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard `` instead of <code>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</li>
+</ul>
+
+<pre><code class="language-php">protected $guard_name = 'web';
+</code></pre>
         </div>
     </div>
 </section>

@@ -299,43 +299,90 @@
             <h1 id="installation">Installazione</h1>
 
 <ul>
-<li><p>Clonare la base in locale nella cartella del server, scaricando i submodules, e senza la storia delle modifiche</p>
+<li>Clonare la base in locale nella cartella del server, scaricando i submodules, e senza la storia delle modifiche</li>
+</ul>
 
-<p>git clone https://base.git –recurse-submodules –depth=1</p></li>
-<li><p>dalla cartella "laravel" creare il file delle variabili d'ambiente .env</p>
+<pre><code class="language-bash">git clone https://base.git –recurse-submodules –depth=1
+</code></pre>
 
-<p>cp .env.latest .env
-modificare parametri a seconda delle necessità
-dopo aver messo i nomi dei database, in phpmyadmin creare i database vuoti</p></li>
-<li><p>dalla cartella laravel, lanciare in bash il comando</p>
+<ul>
+<li>dalla cartella "laravel" creare il file delle variabili d'ambiente .env</li>
+</ul>
 
-<p>composer init
-alternativa: composer update</p>
+<pre><code class="language-bash">cp .env.latest .env
+</code></pre>
 
-<p>cd Modules/Xot/Services
+<ul>
+<li>modificare parametri a seconda delle necessità</li>
+<li><p>dopo aver messo i nomi dei database, in phpmyadmin creare i database vuoti</p></li>
+<li><p>dalla cartella laravel, lanciare in bash il comando</p></li>
+</ul>
+
+<pre><code class="language-bash">composer init
+</code></pre>
+
+<p>alternativa:</p>
+
+<pre><code class="language-bash">composer update
+cd Modules/Xot/Services
 composer install
-php artisan key:generate</p></li>
-<li><p>vedere la lista dei moduli con il comando</p>
+php artisan key:generate
+</code></pre>
 
-<p>da url: VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-list
-php artisan module:list</p></li>
-<li><p>abilitare tutti i moduli con il comando</p>
+<ul>
+<li>vedere la lista dei moduli con il comando</li>
+</ul>
 
-<p>da url: VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-enable&amp;module=NOME_MODULO
-php artisan module:enable NomeModulo</p></li>
-<li><p>fare la migration</p>
+<p>da url:</p>
 
-<p>da url: VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=migrate
-in alternativa provare php artisan migrate</p></li>
-<li><p>per compilare il tema (da dentro la cartella laravel/Themes/NOME_TEMA)</p>
+<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-list
+</code></pre>
 
-<p>npm install (dove ci sono file package.json)
-npm run dev (se bisogna compilare il tema)</p></li>
-<li><p>a questo punto bisogna crearsi il virtual host con il nome del dominio uguale a quello del file di configurazione. Esempio:</p>
+<p>alternativa da terminale:</p>
 
-<p>copio la cartella laravel/config/localhost in laravel/config/local/dominio/* e imposto i parametri nei file</p>
+<pre><code class="language-bash">php artisan module:list 
+</code></pre>
 
-<p>questo significa che il virtual host deve chiamarsi dominio.local</p></li>
+<ul>
+<li>abilitare tutti i moduli con il comando</li>
+</ul>
+
+<p>da url:</p>
+
+<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=module-enable&amp;module=NOME_MODULO
+</code></pre>
+
+<p>alternativa da terminale:</p>
+
+<pre><code class="language-bash">php artisan module:enable NomeModulo
+</code></pre>
+
+<ul>
+<li>fare la migration</li>
+</ul>
+
+<p>da url:</p>
+
+<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=migrate
+</code></pre>
+
+<p>in alternativa da terminale:</p>
+
+<pre><code class="language-bash">php artisan migrate
+</code></pre>
+
+<ul>
+<li>per compilare il tema (da dentro la cartella laravel/Themes/NOME_TEMA)</li>
+</ul>
+
+<pre><code class="language-bash">npm install
+npm run dev
+</code></pre>
+
+<ul>
+<li><p>a questo punto bisogna crearsi il virtual host con il nome del dominio uguale a quello del file di configurazione. Esempio:</p></li>
+<li><p>copio la cartella laravel/config/localhost in laravel/config/local/dominio/* e imposto i parametri nei file</p></li>
+<li><p>questo significa che il virtual host deve chiamarsi dominio.local</p></li>
 <li><p><strong>IMPORTANTISSIMO</strong> per sincronizzare la base si utilizzano i famosi TRE FILES.</p></li>
 </ul>
 
@@ -364,7 +411,7 @@ npm run dev (se bisogna compilare il tema)</p></li>
 
 <p>Per formattare il codice in modo corretto bisogna usare cs-fixer global. Per installarlo seguire le istruzioni nel seguente file:</p>
 
-<pre><code>bashscripts/tips/cs-fixer.txt
+<pre><code class="language-bash">bashscripts/tips/cs-fixer.txt
 </code></pre>
 
 <ul>
@@ -373,7 +420,7 @@ npm run dev (se bisogna compilare il tema)</p></li>
 
 <p>E' possibile fare un backup del progetto con il file</p>
 
-<pre><code>./bashscripts/backup.sh
+<pre><code class="language-bash">./bashscripts/backup.sh
 </code></pre>
         </div>
     </div>
