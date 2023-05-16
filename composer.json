@@ -1,21 +1,13 @@
 {
     "name": "laraxot/module_xot",
-    "description": ":package_description",
-    "keywords": [
-        "laraxot",
-        "laravel",
-        "module_xot"
-    ],
-    "homepage": "https://github.com/laraxot/module_xot",
-    "license": "MIT",
+    "description": "",
     "authors": [{
-        "name": "marco sottana",
+        "name": "Marco Xot",
         "email": "marco.sottana@gmail.com",
         "role": "Developer"
     }],
     "require": {
         "php": "^8.1",
-<<<<<<< HEAD
         "calebporzio/sushi": "^2.4",
         "doctrine/dbal": "^3.5",
         "fidum/laravel-eloquent-morph-to-one": "^2.1",
@@ -68,50 +60,32 @@
 
             }
         }
-=======
-        "doctrine/dbal": "*",
-        "illuminate/contracts": "^10.0",
-        "livewire/livewire": "*",
-        "spatie/laravel-package-tools": "^1.14.0"
-    },
-    "require-dev": {
-        "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^7.9",
-        "nunomaduro/larastan": "^2.0.1",
-        "orchestra/testbench": "^8.0",
-        "pestphp/pest": "^2.0",
-        "pestphp/pest-plugin-arch": "^2.0",
-        "pestphp/pest-plugin-laravel": "^2.0",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
-        "phpstan/phpstan-phpunit": "^1.0",
-        "spatie/laravel-ray": "^1.26"
->>>>>>> 116b5a91 (.)
     },
     "autoload": {
         "psr-4": {
             "Modules\\Xot\\": ""
-        }
+        },
+        "files": [
+            "Helpers/Helper.php"
+        ]
     },
     "scripts": {
-
+        "post-autoload-dump": [
+            "@php vendor/bin/testbench package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate"
+        ],
         "analyse": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "test": "./vendor/bin/pest --no-coverage",
+        "test-coverage": "vendor/bin/pest --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
+            "phpstan/extension-installer": true,
             "pestphp/pest-plugin": true
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Modules\\Xot\\Provider\\XotServiceProvider"
-
-            ],
-            "aliases": {}
         }
     },
     "minimum-stability": "dev",
