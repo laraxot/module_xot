@@ -19,6 +19,7 @@ return [
             'Installazione' => 'docs/base/installation',
             'Errori Comuni' => 'docs/base/issues',
             'Struttura' => 'docs/base/structure',
+            'Url Not Found' => 'url-not-found',
         ],
     ],
     'Model Actions' => [
