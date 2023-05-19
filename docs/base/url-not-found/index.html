@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="Store Model with Queuable Action">
+    <meta name="description" content="Url Not Found">
 
     <meta property="og:site_name" content="Modulo Xot" />
-    <meta property="og:title" content="Store Action | Modulo Xot" />
-    <meta property="og:description" content="Store Model with Queuable Action" />
-    <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/model/action/store" />
+    <meta property="og:title" content="Url Not Found | Modulo Xot" />
+    <meta property="og:description" content="Url Not Found" />
+    <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/base/url-not-found" />
     <meta property="og:image" content="https://laraxot.github.io/module_xot/assets/img/logo.png" />
     <meta property="og:type" content="website" />
 
@@ -18,7 +18,7 @@
     <meta name="twitter:card" content="summary_large_image">
 
     
-    <title>Modulo Xot | Store Action</title>
+    <title>Modulo Xot | Url Not Found</title>
 
     <link rel="home" href="https://laraxot.github.io/module_xot/">
     <link rel="icon" href="/favicon.ico">
@@ -171,7 +171,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/url-not-found"
-            class="lvl1   nav-menu__item hover:text-blue-500"
+            class="lvl1  active font-semibold text-blue-500 nav-menu__item hover:text-blue-500"
         >
             Url Not Found
         </a>
@@ -182,7 +182,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/model"
-            class="lvl0 lvl0-active  nav-menu__item hover:text-blue-500"
+            class="lvl0   nav-menu__item hover:text-blue-500"
         >
             Model Actions
         </a>
@@ -219,7 +219,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/model/action/store"
-            class="lvl1  active font-semibold text-blue-500 nav-menu__item hover:text-blue-500"
+            class="lvl1   nav-menu__item hover:text-blue-500"
         >
             Store
         </a>
@@ -309,91 +309,18 @@
         </nav>
 
         <div class="DocSearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
-            <h1 id="store">Store Action</h1>
+            <h1 id="url-not-found">Url Not Found</h1>
 
-<p>This is Store quauable action</p>
+<h3>Errore</h3>
 
-<p>Action File Path:</p>
+<h4>Not Found</h4>
 
-<pre><code class="language-php">laravel/Modules/Xot/Actions/Model/StoreAction.php
-</code></pre>
+<p>The requested URL was not found on this server.
+Apache/2.4.54 (Ubuntu) Server at privacyfed.local Port 80</p>
 
-<h2>What it does:</h2>
+<h3>Soluzione</h3>
 
-<p>It takes three params:</p>
-
-<ul>
-<li>the <strong>model</strong> calling the store action</li>
-<li>the <strong>data</strong> array to store</li>
-<li>the <strong>rules</strong> needed to validate data</li>
-</ul>
-
-<pre><code class="language-php">public function execute(Model $row, array $data, array $rules): Model {
-</code></pre>
-
-<ul>
-<li>If there is a fillable field named <em>lang</em>;</li>
-<li>If <em>lang</em> is not set in data;</li>
-<li>Then data get <em>lang</em> from the website Locale configuration.</li>
-</ul>
-
-<pre><code class="language-php">if (! isset($data['lang']) &amp;&amp; \in_array('lang', $row-&gt;getFillable(), true)) {
-    $data['lang'] = app()-&gt;getLocale();
-}
-</code></pre>
-
-<ul>
-<li>If <em>user_id</em> is not set in data</li>
-<li>If <em>user_id</em> field is fillable in this table</li>
-<li>if <em>user_id</em> is not the Primary Key of this model</li>
-<li>Then data get user_id from the current authenticated user</li>
-</ul>
-
-<pre><code class="language-php">if (! isset($data['user_id'])
-    &amp;&amp; \in_array('user_id', $row-&gt;getFillable(), true)
-    &amp;&amp; 'user_id' !== $row-&gt;getKeyName()
-    ) {
-    data['user_id'] = \Auth::id();
-}
-</code></pre>
-
-<p>Data is validated with <strong>rules</strong> or throws a Validation error</p>
-
-<pre><code class="language-php">$validator = Validator::make($data, $rules);
-$validator-&gt;validate();
-</code></pre>
-
-<ul>
-<li>The model passed is filled with validated data</li>
-<li><strong>Fill</strong> fills the model with an array of attributes.</li>
-</ul>
-
-<pre><code class="language-php">$row = $row-&gt;fill($data);
-$row-&gt;save();
-</code></pre>
-
-<p>Checks if some data attributes belongs to any model relation</p>
-
-<pre><code class="language-php">$relations = app(FilterRelationsAction::class)-&gt;execute($row, array_keys($data));
-</code></pre>
-
-<p>If some attributes belong to relations, then it pass them to the related queuable action to store.</p>
-
-<pre><code class="language-php">foreach ($relations as $relation) {
-    $act = __NAMESPACE__.'\\Store\\'.$relation-&gt;relationship_type.'Action';
-    $relation-&gt;data = $data[$relation-&gt;name];
-    app($act)-&gt;execute($row, $relation);
-}
-</code></pre>
-
-<p>Send session flash messages to confirm that the model was created, and returns this model itself.</p>
-
-<pre><code class="language-php">$msg = 'created! ['.$row-&gt;getKey().']!';
-
-Session::flash('status', $msg); // .
-
-return $row;
-</code></pre>
+<p>Abilitare <strong>rewrite</strong> nei Modulo della configurazione globale di Apache Webserver su Webmin</p>
         </div>
     </div>
 </section>
