@@ -181,6 +181,27 @@
     </li>
             <li class="pl-4">
             
+        <a href="https://laraxot.github.io/module_xot/docs/config"
+            class="lvl0   nav-menu__item hover:text-blue-500"
+        >
+            Config
+        </a>
+    
+            
+        <ul class="my-0">
+            <li class="pl-4">
+            
+        <a href="https://laraxot.github.io/module_xot/docs/config/modules"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Configurazione modules.php
+        </a>
+    
+    </li>
+    </ul>
+    </li>
+            <li class="pl-4">
+            
         <a href="https://laraxot.github.io/module_xot/docs/model"
             class="lvl0   nav-menu__item hover:text-blue-500"
         >
@@ -324,6 +345,15 @@
         </a>
     
     </li>
+            <li class="pl-4">
+            
+        <a href="https://laraxot.github.io/module_xot/docs/filament/resource"
+            class="lvl1   nav-menu__item hover:text-blue-500"
+        >
+            Creazione di una Resource
+        </a>
+    
+    </li>
     </ul>
     </li>
     </ul>
@@ -369,40 +399,7 @@
 <li><p>php artisan module:use Modulo</p></li>
 <li></li>
 <li><p>php artisan module:make-filament-context Filament</p></li>
-<li><p>vedi doc savanna e crea le resource con:</p></li>
-</ul>
-
-<pre><code class="language-bash">#Page: Pass the Module name as an argument and the name of page.
-php artisan module:make-filament-page {module?} {name?} {--R|resource=} {--T|type=} {--F|force}
-
-#Resources: Pass the Module name as an argument and the name of resources.
-php artisan module:make-filament-resource {module?} {name?} {--soft-deletes} {--view} {--G|generate} {--S|simple} {--F|force}
-
-#Widgets: Pass the Module name as an argument and the name of widget.
-php artisan module:make-filament-widget {module?} {name?} {--R|resource=} {--C|chart} {--T|table} {--S|stats-overview} {--F|force}
-
-#RelationManagers: Pass the Module name as an argument and the name of RelationManager.
-php artisan module:make-filament-relation-manager {module?} {resource?} {relationship?} {recordTitleAttribute?} {--attach} {--associate} {--soft-deletes} {--view} {--F|force}
-</code></pre>
-
-<ul>
-<li>aggiungi Traits di Savanna alle resource:</li>
-</ul>
-
-<p>namespace YourNamespace\Resources;</p>
-
-<p>use Savannabits\FilamentModules\Concerns\ContextualResource;
-use Filament\Resources\Resource;</p>
-
-<pre><code class="language-bash">class UserResource extends Resource
-{
-    use ContextualResource;
-}
-
-</code></pre>
-
-<ul>
-<li>php artisan make:filament-user per creare utente</li>
+<li><p>php artisan make:filament-user per creare utente</p></li>
 </ul>
         </div>
     </div>
