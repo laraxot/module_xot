@@ -5,12 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="Come Risolvere gli Errori più Comuni">
+    <meta name="description" content="Installazione Filament">
 
     <meta property="og:site_name" content="Modulo Xot" />
-    <meta property="og:title" content="Errori Comuni | Modulo Xot" />
-    <meta property="og:description" content="Come Risolvere gli Errori più Comuni" />
-    <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/base/issues" />
+    <meta property="og:title" content="Installazione Filament | Modulo Xot" />
+    <meta property="og:description" content="Installazione Filament" />
+    <meta property="og:url" content="https://laraxot.github.io/module_xot/docs/filament/installation" />
     <meta property="og:image" content="https://laraxot.github.io/module_xot/assets/img/logo.png" />
     <meta property="og:type" content="website" />
 
@@ -18,7 +18,7 @@
     <meta name="twitter:card" content="summary_large_image">
 
     
-    <title>Modulo Xot | Errori Comuni</title>
+    <title>Modulo Xot | Installazione Filament</title>
 
     <link rel="home" href="https://laraxot.github.io/module_xot/">
     <link rel="icon" href="/favicon.ico">
@@ -134,7 +134,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/base"
-            class="lvl0 lvl0-active  nav-menu__item hover:text-blue-500"
+            class="lvl0   nav-menu__item hover:text-blue-500"
         >
             Base
         </a>
@@ -153,7 +153,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/base/issues"
-            class="lvl1  active font-semibold text-blue-500 nav-menu__item hover:text-blue-500"
+            class="lvl1   nav-menu__item hover:text-blue-500"
         >
             Errori Comuni
         </a>
@@ -308,7 +308,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/filament"
-            class="lvl0   nav-menu__item hover:text-blue-500"
+            class="lvl0 lvl0-active  nav-menu__item hover:text-blue-500"
         >
             Filament
         </a>
@@ -318,7 +318,7 @@
             <li class="pl-4">
             
         <a href="https://laraxot.github.io/module_xot/docs/filament/installation"
-            class="lvl1   nav-menu__item hover:text-blue-500"
+            class="lvl1  active font-semibold text-blue-500 nav-menu__item hover:text-blue-500"
         >
             Installazione
         </a>
@@ -330,118 +330,39 @@
         </nav>
 
         <div class="DocSearch-content w-full lg:w-3/5 break-words pb-16 lg:pl-4" v-pre>
-            <h1 id="issues">Come Risolvere gli Errori più Comuni</h1>
-
-<h3>Errore <strong>Secret is not set in JWTAuth</strong>. Dalla cartella laravel:</h3>
-
-<pre><code class="language-bash">php artisan jwt:secret
-</code></pre>
-
-<h3>Errore: include(/var/www/base_BASE/laravel/vendor/composer/../../Modules/NOME_MODULO/Models/FILE.php): Failed to open stream: No such file or directory se il file esiste. Dalla cartella laravel:</h3>
-
-<pre><code class="language-bash">composer dump autoload
-</code></pre>
+            <h1 id="installazione-filament">Installazione Filament</h1>
 
 <ul>
-<li>alternativa: controllare se il namespace del file è giusto</li>
+<li><p>composer require filament/filament</p></li>
+<li><p>php artisan vendor:publish --tag=filament-config</p></li>
+<li><p>php artisan migrate</p></li>
+<li><p>composer require artmin96/filament-jet</p></li>
+<li><p>php artisan filament-jet:install --teams</p></li>
+<li><p>npm run dev</p></li>
+<li><p>npm run build</p></li>
+<li><p>php artisan migrate</p></li>
+<li><p>php artisan vendor:publish --tag="filament-jet-views"</p></li>
+<li><p>mettere in composer</p>
+
+<p>"repositories": [
+    {
+        "type": "path",
+        "url": "./packages/ArtMin96/FilamentJet"
+    }
+],</p></li>
+<li><p>nella cartella /packages/ArtMin96/FilamentJet git submodule add https://github.com/laraxot/filament-jet.git FilamentJet</p></li>
+<li><p>nella cartella /laravel/Modules/ git submodule add https://github.com/laraxot/module-user.git User</p></li>
+<li><p>disabilitare tutti i moduli (soprattutto Cms)</p></li>
+<li><p>su xra disabilitare routes frontend e backend</p>
+
+<p>'disable_admin_dynamic_route' => true,
+'disable_frontend_dynamic_route' => true,</p></li>
+<li><p>composer require savannabits/filament-modules</p></li>
+<li><p>php artisan module:use Modulo</p></li>
+<li></li>
+<li><p>php artisan module:make-filament-context Filament</p></li>
+<li><p>php artisan make:filament-user per creare utente</p></li>
 </ul>
-
-<h3>Target class [\Modules\BASE\Models\FILE.php] does not exist. Dalla cartella laravel:</h3>
-
-<ul>
-<li>mettere l'esensione della migrations FILE a .old</li>
-</ul>
-
-<h3>Errore StubService riga 418 (StubService:418).</h3>
-
-<p>Significa che devi spostare il modello dal vendor al nostro modulo ed estenderlo, e cambiare in config la path nel nostro modulo.
-Gli stub sono dei file da dove poi vengono generati i modelli, pannelli e altri file di partenza.</p>
-
-<h3>pagina 404</h3>
-
-<p>controlla le route con uno dei seguenti comandi e vedi se esistono:</p>
-
-<p>da url:</p>
-
-<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist1
-</code></pre>
-
-<p>oppure:</p>
-
-<pre><code class="language-bash">http://VIRTUAL_HOST.EXT/?_act=artisan&amp;cmd=routelist
-</code></pre>
-
-<p>oppure da terminale:</p>
-
-<pre><code class="language-bash">php artisan route:list
-</code></pre>
-
-<ul>
-<li><p>Se vedi poche route solo di base allora devi abilitare tutti i moduli, forse anche in tutti i file modules_status.json</p></li>
-<li><p>Se non funzionasse metti in 404.blade.php (guarda il percorso nel quale ti trovi nella debug bar) il seguente codice:</p></li>
-</ul>
-
-<pre><code class="language-php">{{ dddx(get_defined_vars()) }}
-</code></pre>
-
-<p>potrebbe dare una spiegazione dell’errore nella variabile message. Ad esempio se è un nuovo modulo potrebbe mancare _ModulePanel e /Policies/_ModelPanelPolicy</p>
-
-<h3>pagina 403 su un modulo</h3>
-
-<p>controlla su XotBasePanelPolicy home se hai l’area abilitata.</p>
-
-<p>Per farlo puoi andare su pagina 403 e fare:</p>
-
-<pre><code class="language-php">@php
-dddx($profile-&gt;hasArea('NOME_AREA'));
-@endphp
-</code></pre>
-
-<h3>The "/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire" directory does not exist</h3>
-
-<p>Aggiungere la cartella nel MODULO/Http/Livewire con dentro il file .gitkeep</p>
-
-<h3>file_put_contents(/var/www/html/BASE/laravel/Modules/Test/Providers/../Http/Livewire/_components.json): Failed to open stream: Permission denied</h3>
-
-<pre><code class="language-bash">sudo chmod PERMESSI_CORRETTI -R .
-</code></pre>
-
-<h3>Errore: Livewire encountered corrupt data when trying to hydrate the [modules.MODULO.http.livewire.form.nexi.payment] component.</h3>
-
-<p>Ensure that the [name, id, data] of the Livewire component wasn't tampered with between requests.</p>
-
-<p>Vedere di non aver passato dati name, id e data o variabili riservate</p>
-
-<p>Analizzare che parametri siano stati passati con la richiesta.</p>
-
-<p>IMPORTANTE: sui modal pro non serve il mount, basta dichiarare le variabili nella classe e passarli come public tramite l’emit</p>
-
-<h3>Errore “Unable to call component method. Public method [METODO] not found on component: [COMPONENTE ESTESO]”</h3>
-
-<p>Il div nella view potrebbe non essere stato chiuso correttamente, o potrebbe essere stato chiuso due volte. Formattare view e controllare</p>
-
-<h3>Errore Cannot declare interface Modules\MODULO\Contracts\PanelContract, because the name is already in use, se non è vero che è già in uso il nome</h3>
-
-<p>Dalla cartella laravel:</p>
-
-<pre><code class="language-bash">composer dumpautoload
-</code></pre>
-
-<h3>Se lavorando con l’assegnazione dei ruoli hai l’errore “The given role or permission should use guard `` instead of <code>web</code>” a volte può essere risolto mettendo nel modello che ha il ruolo da associare:</h3>
-
-<pre><code class="language-php">protected $guard_name = 'web';
-</code></pre>
-
-<h3>TIPS</h3>
-
-<p>Altri trucchi e sistemi per risolvere errori o installare server sono scritti nella cartella ./bashscripts/tips/</p>
-
-<h3>BACKUP DEL PROGETTO</h3>
-
-<p>E' possibile fare un backup del progetto con il file</p>
-
-<pre><code class="language-bash">./bashscripts/backup.sh
-</code></pre>
         </div>
     </div>
 </section>
