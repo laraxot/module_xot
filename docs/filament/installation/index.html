@@ -369,7 +369,40 @@
 <li><p>php artisan module:use Modulo</p></li>
 <li></li>
 <li><p>php artisan module:make-filament-context Filament</p></li>
-<li><p>php artisan make:filament-user per creare utente</p></li>
+<li><p>vedi doc savanna e crea le resource con:</p></li>
+</ul>
+
+<pre><code class="language-bash">#Page: Pass the Module name as an argument and the name of page.
+php artisan module:make-filament-page {module?} {name?} {--R|resource=} {--T|type=} {--F|force}
+
+#Resources: Pass the Module name as an argument and the name of resources.
+php artisan module:make-filament-resource {module?} {name?} {--soft-deletes} {--view} {--G|generate} {--S|simple} {--F|force}
+
+#Widgets: Pass the Module name as an argument and the name of widget.
+php artisan module:make-filament-widget {module?} {name?} {--R|resource=} {--C|chart} {--T|table} {--S|stats-overview} {--F|force}
+
+#RelationManagers: Pass the Module name as an argument and the name of RelationManager.
+php artisan module:make-filament-relation-manager {module?} {resource?} {relationship?} {recordTitleAttribute?} {--attach} {--associate} {--soft-deletes} {--view} {--F|force}
+</code></pre>
+
+<ul>
+<li>aggiungi Traits di Savanna alle resource:</li>
+</ul>
+
+<p>namespace YourNamespace\Resources;</p>
+
+<p>use Savannabits\FilamentModules\Concerns\ContextualResource;
+use Filament\Resources\Resource;</p>
+
+<pre><code class="language-bash">class UserResource extends Resource
+{
+    use ContextualResource;
+}
+
+</code></pre>
+
+<ul>
+<li>php artisan make:filament-user per creare utente</li>
 </ul>
         </div>
     </div>
