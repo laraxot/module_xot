@@ -342,21 +342,29 @@
 <li><p>npm run build</p></li>
 <li><p>php artisan migrate</p></li>
 <li><p>php artisan vendor:publish --tag="filament-jet-views"</p></li>
-<li><p>mettere in composer</p>
+<li><p>mettere in composer</p></li>
+</ul>
 
-<p>"repositories": [
+<pre><code class="language-bash">"repositories": [
     {
         "type": "path",
         "url": "./packages/ArtMin96/FilamentJet"
     }
-],</p></li>
+],
+</code></pre>
+
+<ul>
 <li><p>nella cartella /packages/ArtMin96/FilamentJet git submodule add https://github.com/laraxot/filament-jet.git FilamentJet</p></li>
 <li><p>nella cartella /laravel/Modules/ git submodule add https://github.com/laraxot/module-user.git User</p></li>
 <li><p>disabilitare tutti i moduli (soprattutto Cms)</p></li>
-<li><p>su xra disabilitare routes frontend e backend</p>
+<li><p>su xra disabilitare routes frontend e backend</p></li>
+</ul>
 
-<p>'disable_admin_dynamic_route' => true,
-'disable_frontend_dynamic_route' => true,</p></li>
+<pre><code class="language-bash">'disable_admin_dynamic_route' =&gt; true,
+'disable_frontend_dynamic_route' =&gt; true,
+</code></pre>
+
+<ul>
 <li><p>composer require savannabits/filament-modules</p></li>
 <li><p>php artisan module:use Modulo</p></li>
 <li></li>
