@@ -423,6 +423,25 @@ dddx($profile-&gt;hasArea('NOME_AREA'));
 <pre><code class="language-php">protected $guard_name = 'web';
 </code></pre>
 
+<h3>Errore 500 e PAGINA BIANCA oppure PAGINA NERA</h3>
+
+<p>Leggeva un allegato pdf con l’id sbagliato (id di company invece di profile).</p>
+
+<p>Per scoprire il problema ho dovuto fare <strong>debug del file “laravel/vendor/laravel/framework/src/Illuminate/Mail/Mailer.php”</strong> sul <strong>metodo sendSymfonyMessage</strong> e aggiungere il <strong>catch(\Exception $e)</strong>.</p>
+
+<p>Poi tolto perchè <strong>non vanno mai modificati i vendor</strong>.</p>
+
+<h3>Errore delle tabelle temporanee di Sushi</h3>
+
+<p>Esempio:</p>
+
+<pre><code class="language-php">SQLSTATE[HY000]: General error: 1 no such table: homes (Connection: , SQL: select * from "homes" where ("id" = 1) limit 1)
+</code></pre>
+
+<p>Soluzione:</p>
+
+<p>Nella cartella <strong>STORAGE: cancellare le tabelle temporanee di Sushi</strong></p>
+
 <h3>TIPS</h3>
 
 <p>Altri trucchi e sistemi per risolvere errori o installare server sono scritti nella cartella ./bashscripts/tips/</p>
