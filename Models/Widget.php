@@ -92,7 +92,7 @@ class Widget extends BaseModel
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function toHtml(array $params = null)
+    public function toHtml(?array $params = null)
     {
         /**
          * @phpstan-var view-string

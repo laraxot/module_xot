@@ -13,10 +13,10 @@ class SqlService
 {
     public static function getCoalesceDateRange(
         Model $model,
-        int $date_min = null,
-        int $date_max = null,
-        string $from_field = null,
-        string $to_field = null
+        ?int $date_min = null,
+        ?int $date_max = null,
+        ?string $from_field = null,
+        ?string $to_field = null,
     ): string {
         if (null === $from_field) {
             $from_field = $model->getAttributeValue('from_field');

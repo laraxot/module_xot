@@ -156,9 +156,6 @@ class FileService
         return $view_dir;
     }
 
-    /**
-     * @return string
-     */
     public static function getViewNameSpacePath(string $ns): ?string
     {
         $finder = view()->getFinder();
@@ -630,6 +627,7 @@ class FileService
         // if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
         if (Str::startsWith($path, $str)) {
             $filename = public_path('bc/'.mb_substr($path, mb_strlen($str)));
+
             // $filename=str_replace('\\/','/',$filename);
             // $filename=realpath($filename);
             return $filename;
@@ -639,6 +637,7 @@ class FileService
         // if (\mb_substr($path, 0, \mb_strlen($str)) == $str) {
         if (Str::startsWith($path, $str)) {
             $filename = public_path('themes/'.$theme.'/'.mb_substr($path, mb_strlen($str)));
+
             // $filename=str_replace('\\/','/',$filename);
             // $filename=realpath($filename);
             return $filename;

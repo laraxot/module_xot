@@ -69,6 +69,7 @@ abstract class XotBaseMigration extends Migration
             return '';
         }
         $table = $this->model->getTable();
+
         /*
         if (Str::endsWith($table, '_pivot')) {
             $table = Str::before($table, '_pivot');
@@ -140,7 +141,7 @@ abstract class XotBaseMigration extends Migration
     /**
      * ---.
      */
-    public function tableExists(string $table = null): bool
+    public function tableExists(?string $table = null): bool
     {
         if (null === $table) {
             $table = $this->getTable();
@@ -195,6 +196,7 @@ abstract class XotBaseMigration extends Migration
 
         // $indexes=$this->getTableIndexes();
         $has_index = $doctrineTable->hasIndex($tbl.'_'.$index.'_index');
+
         // dddx(['indexes'=>$indexes,'has_index'=>$has_index]);
         return $has_index;
     }

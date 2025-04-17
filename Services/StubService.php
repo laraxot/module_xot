@@ -317,6 +317,7 @@ class StubService
                         line:['.$e->getLine().']
                         caller:['.__LINE__.']['.basename(__FILE__).']
                         ';
+
                     // throw new \Exception($msg);
                     return null;
                     /*

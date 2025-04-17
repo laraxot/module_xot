@@ -1,4 +1,5 @@
 <?php
+
 /**
  * https://laravelproject.com/laravel-filtering-query-using-pipelines/.
  * https://jeffochoa.me/understanding-laravel-pipelines.
@@ -55,7 +56,7 @@ class Search
                                 }
                             );
 
-                            // dddx($subquery);
+                        // dddx($subquery);
                         } else {
                             $subquery = $subquery->orWhere($v, 'like', '%'.$q.'%');
                         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://dev.to/jackmiras/laravels-exceptions-part-2-custom-exceptions-1367
  */

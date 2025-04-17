@@ -12,7 +12,7 @@ use Intervention\Image\Image;
 class Small implements FilterInterface
 {
     /**
-     * @return \Intervention\Image\Image
+     * @return Image
      */
     public function applyFilter(Image $image)
     {

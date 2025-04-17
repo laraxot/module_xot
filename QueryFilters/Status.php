@@ -1,4 +1,5 @@
 <?php
+
 /**
  * https://laravelproject.com/laravel-filtering-query-using-pipelines/.
  * https://jeffochoa.me/understanding-laravel-pipelines.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://dev.to/jackmiras/laravel-delete-actions-simplified-4h8b
  */

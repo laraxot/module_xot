@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://stackoverflow.com/questions/39213022/custom-laravel-relations
  * @see https://github.com/johnnyfreeman/laravel-custom-relation
@@ -19,7 +20,7 @@ use Webmozart\Assert\Assert;
  */
 trait HasCustomRelations
 {
-    public function customRelation(string $related, \Closure $baseConstraints, \Closure $eagerConstraints = null, \Closure $eagerMatcher = null): CustomRelation
+    public function customRelation(string $related, \Closure $baseConstraints, ?\Closure $eagerConstraints = null, ?\Closure $eagerMatcher = null): CustomRelation
     {
         $instance = new $related();
         // Call to an undefined method object::newQuery()

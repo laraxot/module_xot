@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ---.
  *
@@ -34,15 +35,11 @@ class CustomRelation extends Relation
 
     /**
      * The eagerConstraints callback.
-     *
-     * @var \Closure
      */
     protected ?\Closure $eagerConstraints;
 
     /**
      * The eager constraints model matcher.
-     *
-     * @var \Closure
      */
     protected ?\Closure $eagerMatcher;
 
@@ -128,7 +125,7 @@ class CustomRelation extends Relation
      *
      * @param array $columns
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function get($columns = ['*'])
     {

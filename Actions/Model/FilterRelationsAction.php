@@ -20,7 +20,7 @@ class FilterRelationsAction
     }
 
     /**
-     * @return \Spatie\LaravelData\DataCollection<(int|string), \Modules\Xot\DTOs\RelationDTO>
+     * @return DataCollection<(int|string), RelationDTO>
      */
     public function execute(Model $model, array $data): DataCollection
     {
@@ -44,6 +44,7 @@ class FilterRelationsAction
                     // if (method_exists($rows, 'getRelated')) {
                     // Cannot call method getRelated() on class-string|object
                     $related = $rows->getRelated();
+
                     // }
                     // if(!is_array($value)){
                     //    dddx(['item'=>$item,'value'=>$value]);

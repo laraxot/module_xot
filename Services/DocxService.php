@@ -132,6 +132,7 @@ class DocxService
                             $data[$prefix.'.'.$key.'_'.$k] = $v;
                         }
                     }
+
                     // dddx($data);
                     return $data;
                 }
@@ -187,6 +188,7 @@ class DocxService
                                 $prefix.'.'.$key => $item,
                             ];
                         }
+
                         // Carbon::setLocale('it');
                         return [
                             $prefix.'.'.$key => $item,
@@ -207,6 +209,7 @@ class DocxService
                             $data[$prefix.'.'.$key.'_'.$k] = $v;
                         }
                     }
+
                     // dddx($data);
                     return $data;
                 }

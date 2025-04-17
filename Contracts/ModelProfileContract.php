@@ -41,7 +41,7 @@ interface ModelProfileContract extends ModelContract
      *
      * @param string|int|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
      */
-    public function hasRole($roles, string $guard = null): bool;
+    public function hasRole($roles, ?string $guard = null): bool;
 
     /**
      * Determine if the model has any of the given role(s).

@@ -72,6 +72,7 @@ class HtmlService
             dddx($formatter->getHtmlMessage());
             echo $formatter->getHtmlMessage();
         }
+
         // } catch (HTML2PDF_exception $e) {
         // } catch (Html2PdfException $e) {
         //    echo '<pre>';

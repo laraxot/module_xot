@@ -26,6 +26,7 @@ class PolicyService
         if (null === self::$instance) {
             self::$instance = new self();
         }
+
         /*
         if (null == self::$instance) {
             throw new \Exception('something gone bad');

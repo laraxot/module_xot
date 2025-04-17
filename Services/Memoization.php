@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://medium.com/@parvej.code/how-to-create-simple-memoization-helper-in-php-1eb3cdbfde7c
  */

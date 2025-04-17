@@ -1,4 +1,5 @@
 <?php
+
 /**
  * https://whysoawesome.com/posts/pipelines-in-laravel.
  */

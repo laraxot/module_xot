@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://github.com/lazychaser/laravel-nestedset/blob/v5/src/NodeTrait.php
  */
@@ -53,10 +54,8 @@ trait HasParent
      * {@inheritdoc}
      *
      * Use `children` key on `$attributes` to create child nodes.
-     *
-     * @param self $parent
      */
-    public static function create(array $attributes = [], self $parent = null)
+    public static function create(array $attributes = [], ?self $parent = null)
     {
         $children = Arr::pull($attributes, 'children');
 
@@ -137,7 +136,7 @@ trait HasParent
     /**
      * Get the node siblings and the node itself.
      *
-     * @return \Kalnoy\Nestedset\QueryBuilder
+     * @return QueryBuilder
      */
     public function siblingsAndSelf()
     {
@@ -753,9 +752,9 @@ trait HasParent
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return Model
      */
-    public function replicate(array $except = null)
+    public function replicate(?array $except = null)
     {
         $defaults = [
             $this->getParentIdName(),

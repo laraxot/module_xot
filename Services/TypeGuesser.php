@@ -16,7 +16,7 @@ class TypeGuesser
      */
     protected static $default = 'word';
     /**
-     * @var \Faker\Generator
+     * @var Faker
      */
     protected $generator;
 

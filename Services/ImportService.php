@@ -386,6 +386,7 @@ class ImportService
 
         $res = \Storage::disk('cache')->put($file_path, (string) $body);
         $this->client_options['headers']['referer'] = $url;
+
         // echo '<br/>da sito ['.$url.']';
         return (string) $body;
     }

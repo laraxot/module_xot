@@ -171,7 +171,7 @@ if (! function_exists('debug_methods')) {
                 $value = 'Undefined';
                 try {
                     $value = $rows->{$item}();
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $value = $e->getMessage();
                 } catch (ArgumentCountError $e) {
                     $value = $e->getMessage();
@@ -247,10 +247,10 @@ if (! function_exists('inAdmin')) {
             return config()->get('in_admin');
         }
         */
-        if ('admin' === \Request::segment(1)) {
+        if ('admin' === Request::segment(1)) {
             return true;
         }
-        $segments = \Request::segments();
+        $segments = Request::segments();
         if (\count($segments) > 0 && 'livewire' === $segments[0]) {
             if (true === session('in_admin')) {
                 return true;
@@ -372,11 +372,9 @@ if (! function_exists('isItem')) {
 
 if (! function_exists('params2ContainerItem')) {
     /**
-     * @param array $params
-     *
      * @return array[]
      */
-    function params2ContainerItem(array $params = null)
+    function params2ContainerItem(?array $params = null)
     {
         if (null === $params) {
             // Call to static method current() on an unknown class Route.
@@ -470,7 +468,7 @@ if (! function_exists('getModuleFromModel')) {
     /**
      * @param object $model
      *
-     * @return \Nwidart\Modules\Module|null
+     * @return Nwidart\Modules\Module|null
      */
     function getModuleFromModel($model)
     {
@@ -495,7 +493,7 @@ if (! function_exists('getModuleNameFromModel')) {
     {
         if (! is_object($model)) {
             dddx(['model' => $model]);
-            throw new \Exception('model is not an object');
+            throw new Exception('model is not an object');
         }
         $class = get_class($model);
         $module_name = Str::before(Str::after($class, 'Modules\\'), '\\Models\\');
@@ -722,7 +720,7 @@ function ($item) use ($obj) {
         )->all();
         // dddx($methods);
         foreach ($methods as $method) {
-            $reflection = new \ReflectionMethod($obj, $method);
+            $reflection = new ReflectionMethod($obj, $method);
             $args = $reflection->getParameters();
             if (0 === count($args) && $reflection->class === get_class($obj)) {
                 try {
@@ -824,18 +822,18 @@ if (! function_exists('url_queries')) {
      *
      * @return string The updated query string
      */
-    function url_queries(array $queries, string $url = null)
+    function url_queries(array $queries, ?string $url = null)
     {
         // If a URL isn't supplied, use the current one
         if (! $url) {
-            $url = \Request::fullUrl();
+            $url = Request::fullUrl();
         }
 
         // Split the URL down into an array with all the parts separated out
         $url_parsed = parse_url($url);
 
         if (false === $url_parsed) {
-            throw new \Exception('error parsing url ['.$url.']');
+            throw new Exception('error parsing url ['.$url.']');
         }
         // Turn the query string into an array
         $url_params = [];
@@ -897,14 +895,14 @@ if (! function_exists('getRelationships')) {
             return $data;
         }
         foreach ($methods as $method) {
-            $reflection = new \ReflectionMethod($model, $method);
+            $reflection = new ReflectionMethod($model, $method);
             $args = $reflection->getParameters();
             if (0 === count($args) && $reflection->class === get_class($model)) {
                 try {
                     $return = $reflection->invoke($model);
-                    $check = $return instanceof \Illuminate\Database\Eloquent\Relations\Relation;
+                    $check = $return instanceof Illuminate\Database\Eloquent\Relations\Relation;
                     if ($check) {
-                        $related_model = (new \ReflectionClass($return->getRelated()))->getName();
+                        $related_model = (new ReflectionClass($return->getRelated()))->getName();
                         $msg = [
                             'name' => $reflection->name,
                             'type' => class_basename($return),
@@ -972,6 +970,7 @@ if (! function_exists('removeQueryParams')) {
         foreach ($params as $param) {
             unset($query[$param]); // loop through the array of parameters we wish to remove and unset the parameter from the query array
         }
+
         // 924    Parameter #1 $querydata of function http_build_query expects array|object, array|string given.
         return $query ? $url.'?'.http_build_query($query) : $url; // rebuild the URL with the remaining parameters, don't append the "?" if there aren't any query parameters left
     }
@@ -1052,7 +1051,7 @@ if (! function_exists('getRouteParameters')) {
     function getRouteParameters(): array
     {
         /**
-         * @var \Illuminate\Routing\Route|null
+         * @var Illuminate\Routing\Route|null
          */
         $route = request()->route();
         if (null === $route) {
@@ -1072,7 +1071,7 @@ if (! function_exists('getRouteName')) {
     {
         // getRouteName();
         /**
-         * @var \Illuminate\Routing\Route|null
+         * @var Illuminate\Routing\Route|null
          */
         $route = request()->route();
         if (null === $route) {
@@ -1162,7 +1161,7 @@ if (! function_exists('debugStack')) {
     function debugStack()
     {
         if (! extension_loaded('xdebug')) {
-            throw new \RuntimeException('XDebug must be installed to use this function');
+            throw new RuntimeException('XDebug must be installed to use this function');
         }
 
         xdebug_set_filter(
@@ -1197,7 +1196,7 @@ if (! function_exists('rowsToSql')) {
     /**
      * Undocumented function.
      *
-     * @param \Illuminate\Database\Eloquent\Relations\HasOne|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder $rows
+     * @param Illuminate\Database\Eloquent\Relations\HasOne|Illuminate\Database\Query\Builder|Illuminate\Database\Eloquent\Builder $rows
      */
     function rowsToSql($rows): string
     {

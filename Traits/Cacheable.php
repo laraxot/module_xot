@@ -15,8 +15,6 @@ trait Cacheable
 {
     /**
      * Cache instance.
-     *
-     * @var CacheManager
      */
     protected static ?CacheManager $cache = null;
 
