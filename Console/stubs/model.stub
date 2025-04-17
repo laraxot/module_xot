@@ -1,0 +1,75 @@
+<?php
+
+namespace DummyNamespace;
+
+use Illuminate\Contracts\Support\Renderable;
+
+/**
+* Model DummyClass.
+*
+*/
+class DummyClass extends BaseModel {
+
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'DummyTable';
+
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'dummy_id';
+
+    /**
+     * Attributes that should be mass-assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = dummy_fields ;
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     * da fare
+     * @var array<string, string>
+     */
+    protected $casts = [];
+
+
+    /**
+     * The attributes that should be mutated to dates.
+
+     *  da fare
+     * @var array<string>
+     */
+    protected $dates = [
+
+    ];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var boolean
+     */
+    public $timestamps = dummy_timestamps;
+
+    // Scopes...
+
+    // Functions ...
+
+    // Relations ...
+}
+

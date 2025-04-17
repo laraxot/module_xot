@@ -1,0 +1,15 @@
+{
+    "name": "Xot",
+    "alias": "xot",
+    "description": "",
+    "keywords": [],
+    "priority": 2,
+    "active": 1,
+    "order": 2,
+    "providers": [
+        "Modules\\Xot\\Providers\\XotServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

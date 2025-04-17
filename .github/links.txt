@@ -1,0 +1,7 @@
+https://gist.github.com/stevebauman/90e4190202e4262951f9339b99f895dc
+
+
+https://stefanzweifel.dev/posts/2019/09/22/run-prettier-or-php-cs-fixer-with-github-actions
+
+
+

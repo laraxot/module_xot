@@ -1,0 +1,105 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Cms\Models\Panels;
+
+use Illuminate\Http\Request;
+
+// --- Services --
+
+/**
+ * Class MetatagPanel.
+ */
+class MetatagPanel extends XotBasePanel {
+    /**
+     * The model the resource corresponds to.
+     */
+    public static string $model = 'Modules\Xot\Models\Metatag';
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     */
+    public static string $title = 'title';
+
+    /**
+     * @return object[]
+     */
+    public function fields(): array {
+        return [
+            (object) [
+                'type' => 'Id',
+                'name' => 'id',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'String',
+                'name' => 'title',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'Text',
+                'name' => 'subtitle',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'String',
+                'name' => 'charset',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'String',
+                'name' => 'author',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'Text',
+                'name' => 'meta_description',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'Text',
+                'name' => 'meta_keywords',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'UploadImage',
+                'name' => 'logo_src',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'Text',
+                'name' => 'logo_footer_src',
+                'comment' => null,
+            ],
+
+            (object) [
+                'type' => 'String',
+                'name' => 'tennant_name',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'String',
+                'name' => 'sitename',
+                'comment' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Get the actions available for the resource.
+     */
+    public function actions(Request $request = null): array {
+        return [
+            // new Actions\StoreFileMetatagAction(),
+        ];
+    }
+}

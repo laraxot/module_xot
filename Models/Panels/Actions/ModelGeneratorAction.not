@@ -1,0 +1,42 @@
+<?php
+/**
+ * @see https://www.itsolutionstuff.com/post/laravel-9-import-export-excel-and-csv-file-tutorialexample.html
+ */
+
+declare(strict_types=1);
+
+namespace Modules\Cms\Models\Panels\Actions;
+
+use Modules\UI\Services\ThemeService;
+
+/**
+ * Class ModelGeneratorAction.
+ */
+class ModelGeneratorAction extends XotBasePanelAction {
+    public bool $onItem = true;
+
+    public string $icon = '<i class="fa fa-table"></i>';
+
+    /**
+     * @return mixed
+     */
+    public function handle() {
+        /*
+        $view = ThemeService::g1etView(); // xot::admin.home.acts.xls_import
+        $view_params = [
+            'view' => $view,
+        ];
+
+        return view($view, $view_params);
+        */
+        return $this->panel->out();
+    }
+
+    /**
+     * Undocumented function.
+     *
+     * @return mixed
+     */
+    public function postHandle() {
+    }
+}

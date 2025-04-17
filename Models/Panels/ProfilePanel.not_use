@@ -1,0 +1,126 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Cms\Models\Panels;
+
+use Illuminate\Http\Request;
+
+
+// --- Services --
+
+class ProfilePanel extends XotBasePanel {
+    /**
+     * The model the resource corresponds to.
+     */
+    public static string $model = 'Modules\Xot\Models\Profile';
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     */
+    public static string $title = 'title';
+
+    /**
+     * Get the fields displayed by the resource.
+        'value'=>'..',
+     */
+    public function fields(): array {
+        return [
+            (object) [
+                'type' => 'Id',
+                'name' => 'id',
+                'comment' => null,
+            ],
+            (object) [
+                'type' => 'Integer',
+                'name' => 'user_id',
+                'comment' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Get the tabs available.
+     */
+    public function tabs(): array {
+        $tabs_name = [];
+
+        return $tabs_name;
+    }
+
+    /**
+     * Get the cards available for the request.
+     */
+    public function cards(Request $request): array {
+        return [];
+    }
+
+    /**
+     * Get the filters available for the resource.
+     *
+     * @param \Illuminate\Http\Request $request
+     */
+    public function filters(Request $request = null): array {
+        return [];
+    }
+
+    /**
+     * Get the lenses available for the resource.
+     */
+    public function lenses(Request $request): array {
+        return [];
+    }
+
+    /**
+     * Get the actions available for the resource.
+     */
+    public function actions(): array {
+        return [];
+    }
+
+    /**
+     * Undocumented function.
+     */
+    public function isSuperAdmin(): bool {
+        // 232 Access to an undefined property Illuminate\Database\Eloquent\Model::$user.
+
+        // $user = $this->row->getRelationValue('user');
+        // 89     Access to an undefined property object::$perm_type
+        // $user_id = $this->row->getAttributeValue('user_id');
+        // $user = User::where('id', $user_id)->first();
+        // coi metodi sopra fa contento phpstan ma fa troppe query
+        $user = $this->row->user;
+        try {
+            if (\is_object($user->perm) && $user->perm->perm_type >= 4) {  // superadmin
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return false;
+    }
+
+    /**
+     * Avatar function.
+     */
+    public function avatar(int $size = 100): ?string {
+        if (null === $this->row) {
+            throw new \Exception('row is null');
+        }
+        $user = $this->row->user;
+
+        if (! \is_object($user) && \is_object($this->row)) {
+            if (isset($this->row->user_id) && method_exists($this->row, 'user')) {
+                $this->row->user()->create();
+            }
+            // dddx($this->row);
+            return null;
+        }
+
+        $email = md5(mb_strtolower(trim((string) $user->email)));
+        $default = urlencode('https://tracker.moodle.org/secure/attachment/30912/f3.png');
+
+        return "https://www.gravatar.com/avatar/$email?d=$default&s=$size";
+    }
+}

@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Cms\Models\Panels\Actions\Try;
+
+use Modules\Cms\Models\Panels\Actions\XotBasePanelAction;
+use Modules\Xot\Services\ArrayService;
+
+// -------- models -----------
+
+// -------- services --------
+// -------- bases -----------
+
+/**
+ * Class ArtisanAction.
+ */
+class TryArrayToXlsAction extends XotBasePanelAction {
+    public bool $onItem = true;
+
+    public string $icon = '<i class="far fa-file-excel fa-1x"></i>';
+
+    /**
+     * ArtisanAction constructor.
+     */
+    public function __construct() {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function handle() {
+        $data = [
+            [
+                'name' => 'paperino',
+                'dove' => 'http://www.google.com',
+            ],
+            [
+                'name' => 'nonna papera',
+                'dove' => 'https://www.libero.it',
+            ],
+        ];
+
+        return ArrayService::make()
+            ->setArray($data)
+            ->toXLS();
+    }
+
+    // end handle
+}

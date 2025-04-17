@@ -1,0 +1,86 @@
+{
+    "name": "laraxot/module_xot",
+    "description": ":package_description",
+    "keywords": [
+        "laraxot",
+        "laravel",
+        "module_xot"
+    ],
+    "homepage": "https://github.com/laraxot/module_xot",
+    "license": "MIT",
+    "authors": [{
+        "name": "marco sottana",
+        "email": "marco.sottana@gmail.com",
+        "role": "Developer"
+    }],
+    "require": {
+        "php": "^8.1",
+        "doctrine/dbal": "*",
+        "fidum/laravel-eloquent-morph-to-one": "*",
+        "guzzlehttp/guzzle": "*",
+        "illuminate/support": "*",
+        "filament/filament": "*",
+        "illuminate/contracts": "*",
+        "livewire/livewire": "*",
+        "nwidart/laravel-modules": "*",
+        "spatie/laravel-data": "*",
+        "spatie/laravel-model-status": "*",
+        "spatie/laravel-package-tools": "*",
+        "spatie/laravel-permission": "*",
+        "spatie/laravel-queueable-action": "*",
+        "spatie/laravel-tags": "*",
+        "savannabits/filament-modules": "dev-main",
+        "thecodingmachine/safe": "*"
+    },
+    "require-dev": {
+        "barryvdh/laravel-ide-helper": "*",
+        "fakerphp/faker": "*",
+        "friendsofphp/php-cs-fixer": "*",
+        "laravel/pint": "*",
+        "nunomaduro/collision": "*",
+        "nunomaduro/larastan": "*",
+        "orchestra/testbench": "*",
+        "pestphp/pest": "*",
+        "pestphp/pest-plugin-arch": "*",
+        "pestphp/pest-plugin-laravel": "*",
+        "phpstan/phpstan-deprecation-rules": "*",
+        "phpstan/phpstan-phpunit": "*",
+        "psalm/plugin-laravel": "^2.8",
+        "spatie/laravel-ray": "*",
+        "thecodingmachine/phpstan-safe-rule": "*",
+        "tightenco/duster": "^2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Xot\\": ""
+        },
+        "files": [
+            "Helpers/Helper.php"
+        ]
+    },
+    "scripts": {
+
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Xot\\Provider\\XotServiceProvider"
+
+            ],
+            "aliases": {}
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

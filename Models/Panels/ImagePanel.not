@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Modules\Cms\Models\Panels;
+
+use Illuminate\Http\Request;
+
+// --- Services --
+
+/**
+ * Class ImagePanel.
+ */
+class ImagePanel extends XotBasePanel {
+    /**
+     * The model the resource corresponds to.
+     */
+    protected static string $model = 'Modules\Xot\Models\Image';
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     */
+    protected static string $title = 'title';
+
+    /**
+     * Get the actions available for the resource.
+     */
+    public function actions(Request $request = null): array {
+        return [
+            new Actions\ChunkUpload(),
+        ];
+    }
+}

@@ -1,0 +1,4 @@
+providers:
+  - Modules\Xot\Providers\XotServiceProvider
+  - Collective\Html\HtmlServiceProvider
+  - Nwidart\Modules\LaravelModulesServiceProvider

@@ -1,0 +1,9 @@
+<?php
+
+declare(strict_types=1);
+/*
+ * @see https://github.com/akaunting/laravel-money/tree/master/src/Casts
+ * @see https://laravelpackages.net/brokeyourbike/money-casts-laravel
+ * @see https://medium.com/@SlyFireFox/laravel-models-3-common-custom-cast-examples-6d0518ecd799
+ * @see https://www.twilio.com/blog/create-currency-data-type-custom-casts-laravel-7
+ */
